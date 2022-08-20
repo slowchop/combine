@@ -1,8 +1,8 @@
+use crate::level::{TextureDefinition, Textures};
+use image::io::Reader as ImageReader;
+use miette::IntoDiagnostic;
 use std::fs::File;
 use std::path::Path;
-use crate::level::{TextureDefinition, Textures};
-use miette::IntoDiagnostic;
-use image::io::Reader as ImageReader;
 
 pub fn update_texture_sizes() -> miette::Result<()> {
     let path = "assets/textures.yaml";
@@ -14,8 +14,11 @@ pub fn update_texture_sizes() -> miette::Result<()> {
         dbg!(&entry);
         let path = entry.into_diagnostic()?;
         let path = Path::new(&path);
-        let non_asset_path = path.strip_prefix("assets").unwrap();
-        let i = ImageReader::open(path).into_diagnostic()?.decode().into_diagnostic()?;
+        let non_asset_path = path.strip_prefix("../assets").unwrap();
+        let i = ImageReader::open(path)
+            .into_diagnostic()?
+            .decode()
+            .into_diagnostic()?;
         println!("{:?} {:?} {}", path, i.width(), i.height());
 
         let mut found = false;

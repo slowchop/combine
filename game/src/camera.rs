@@ -1,7 +1,6 @@
 use crate::settings::Settings;
 use bevy::input::mouse::{MouseMotion, MouseWheel};
 use bevy::prelude::*;
-use std::cmp::max;
 
 #[derive(Component, Debug)]
 pub struct GameCamera {
@@ -60,7 +59,6 @@ pub fn move_camera(
         }
 
         game_camera.zoom += zoom * game_camera.zoom * time.delta_seconds();
-        dbg!(game_camera.zoom);
         if game_camera.zoom < 10.0 {
             game_camera.zoom += game_camera.zoom * 3.0 * time.delta_seconds();
         }

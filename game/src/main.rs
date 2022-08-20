@@ -1,21 +1,19 @@
-mod level;
-mod bottom_quad;
-mod shader;
-mod textures;
-mod camera;
 mod app;
+mod bottom_quad;
+mod camera;
+mod level;
 mod other_systems;
 mod settings;
+mod shader;
+mod textures;
 
+use crate::camera::move_camera;
+use crate::level::{spawn_level, Level, LevelLoadState, Textures};
+use crate::shader::BillboardMaterial;
+use crate::textures::update_texture_sizes;
 use bevy::asset::AssetServerSettings;
 use bevy::prelude::*;
-use bevy_common_assets::yaml::YamlAssetPlugin;
-use crate::level::{Level, LevelLoadState, spawn_level, TextureDefinition, Textures};
-use crate::textures::update_texture_sizes;
 use clap::Parser;
-use crate::shader::BillboardMaterial;
-use bevy_inspector_egui::WorldInspectorPlugin;
-use crate::camera::move_camera;
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]

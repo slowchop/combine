@@ -45,6 +45,21 @@
     }
 
     run();
+
+    // TODO: This doesn't work, must be a race condition.
+    // Disable right click so the context menu doesn't show up.
+    let canvas = document.getElementsByTagName('canvas')[0];
+    console.log(3);
+    console.log(canvas);
+    canvas.addEventListener('contextmenu', function (e) {
+        console.log(1);
+        if (e.button === 2) {
+            console.log(2);
+            e.preventDefault();
+            return false;
+        }
+    }, false);
+
 </script>
 </body>
 </html>
