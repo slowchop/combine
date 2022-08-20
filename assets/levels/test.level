@@ -1,0 +1,8 @@
+name: Hide the pain
+entities:
+  - texture: "harold.png"
+    position: [0, 0]
+  - texture: "harold.png"
+    position: [1, 0]
+  - texture: "harold.png"
+    position: [2, 0]

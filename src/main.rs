@@ -1,12 +1,41 @@
 mod level;
+mod bottom_quad;
+mod shader;
+mod textures;
 
 use bevy::app::AppExit;
 use bevy::asset::AssetServerSettings;
 use bevy::prelude::*;
 use bevy_common_assets::yaml::YamlAssetPlugin;
-use crate::level::Level;
+use crate::level::{Level, LevelLoadState, spawn_level, TextureDefinition, Textures};
+use crate::textures::update_texture_sizes;
+use clap::Parser;
+use crate::shader::BillboardMaterial;
+use bevy_inspector_egui::WorldInspectorPlugin;
 
-fn main() {
+/// Simple program to greet a person
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    #[clap(subcommand)]
+    command: Option<Command>,
+}
+
+#[derive(Debug, clap::Subcommand)]
+enum Command {
+    UpdateTextureSizes,
+}
+
+fn main() -> miette::Result<()> {
+    let args = Args::parse();
+    match args.command {
+        None => play(),
+        Some(Command::UpdateTextureSizes) => update_texture_sizes()?,
+    }
+    Ok(())
+}
+
+fn play() {
     App::new()
         .insert_resource(WindowDescriptor {
             resizable: false,
@@ -25,10 +54,15 @@ fn main() {
             color: Color::BISQUE,
             brightness: 0.2,
         })
+        .insert_resource(LevelLoadState::Loading)
         .add_plugins(DefaultPlugins)
-        // .add_plugin(YamlAssetPlugin::<Level>::new(&["level.yaml"]))
+        .add_plugin(YamlAssetPlugin::<Textures>::new(&["textures"]))
+        .add_plugin(YamlAssetPlugin::<Level>::new(&["level"]))
+        .add_plugin(WorldInspectorPlugin::new())
+        .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
         .add_startup_system(init)
         .add_system(quit_on_escape)
+        .add_system(spawn_level)
         .run();
 }
 
@@ -40,9 +74,12 @@ fn quit_on_escape(
     }
 }
 
-fn init(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
+fn init(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn_bundle(Camera3dBundle {
-        transform: Transform::default(),
+        transform: Transform::from_xyz(0., 10., 10.).looking_at(Vec3::ZERO, Vec3::Y),
         ..Default::default()
     });
+
+    commands.insert_resource(asset_server.load::<Textures, _>("game.textures"));
+    commands.insert_resource(asset_server.load::<Level, _>("levels/test.level"));
 }
