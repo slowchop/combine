@@ -1,7 +1,8 @@
-use crate::camera::GameCamera;
 use crate::net::{connect_event, disconnect_event, receive_message_event};
 use crate::other_systems::quit_on_escape;
 use crate::settings::Settings;
+use crate::states::playing::camera::GameCamera;
+use crate::states::{loading, main_menu, playing};
 use crate::textures::update_texture_sizes;
 use crate::{
     move_camera, spawn_level, AmbientLight, App, AssetServer, AssetServerSettings,
@@ -12,51 +13,101 @@ use bevy::prelude::*;
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_inspector_egui::WorldInspectorPlugin;
 use clap::Parser;
+use iyes_loopless::prelude::*;
 use naia_bevy_client::Plugin as ClientPlugin;
 use naia_bevy_client::{Client, ClientConfig, Stage as NaiaStage};
 use shared::{shared_config, Auth, Channels, Protocol, UDP_PORT};
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum GameState {
+    Loading,
+    PickName,
+    MainMenu,
+    Settings,
+
+    // Friends
+    ConnectingFriend,
+    VsFriend,
+    WaitForFriend,
+
+    // Random friend
+    ConnectingRandom,
+    WaitingForRandom,
+
+    // In game!
+    Playing,
+}
+
 pub fn play() {
-    App::new()
-        .insert_resource(WindowDescriptor {
-            resizable: false,
-            width: 1024f32,
-            height: 768f32,
-            title: "Combined Towers".to_string(),
-            ..Default::default()
-        })
-        .insert_resource(AssetServerSettings {
-            watch_for_changes: true,
-            ..Default::default()
-        })
-        .insert_resource(Settings::default())
-        .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
-        .insert_resource(Msaa { samples: 4 })
-        .insert_resource(AmbientLight {
-            color: Color::BISQUE,
-            brightness: 0.2,
-        })
-        .insert_resource(LevelLoadState::Loading)
-        .add_plugins(DefaultPlugins)
-        .add_plugin(ClientPlugin::<Protocol, Channels>::new(
-            ClientConfig::default(),
-            shared_config(),
-        ))
-        .add_plugin(YamlAssetPlugin::<Textures>::new(&["textures"]))
-        .add_plugin(YamlAssetPlugin::<Level>::new(&["level"]))
-        .add_plugin(WorldInspectorPlugin::new())
-        .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
-        .add_system_to_stage(NaiaStage::Connection, connect_event)
-        .add_system_to_stage(NaiaStage::Disconnection, disconnect_event)
-        .add_system_to_stage(NaiaStage::ReceiveEvents, receive_message_event)
-        .add_system_to_stage(NaiaStage::Tick, tick)
-        .add_system_to_stage(NaiaStage::Frame, input)
-        .add_system_to_stage(NaiaStage::PostFrame, sync)
-        .add_startup_system(init)
-        .add_system(quit_on_escape)
-        .add_system(move_camera)
-        .add_system(spawn_level)
-        .run();
+    let mut app = App::new();
+
+    app.insert_resource(WindowDescriptor {
+        resizable: false,
+        width: 1024f32,
+        height: 768f32,
+        title: "Combined Towers".to_string(),
+        ..Default::default()
+    })
+    .insert_resource(AssetServerSettings {
+        watch_for_changes: true,
+        ..Default::default()
+    })
+    .insert_resource(Settings::default())
+    .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
+    .insert_resource(Msaa { samples: 4 })
+    .add_loopless_state(GameState::Loading)
+    .add_plugins(DefaultPlugins)
+    .add_plugin(ClientPlugin::<Protocol, Channels>::new(
+        ClientConfig::default(),
+        shared_config(),
+    ))
+    .add_plugin(YamlAssetPlugin::<Textures>::new(&["textures"]))
+    .add_plugin(YamlAssetPlugin::<Level>::new(&["level"]))
+    .add_plugin(WorldInspectorPlugin::new())
+    .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
+    .add_system_to_stage(NaiaStage::Connection, connect_event)
+    .add_system_to_stage(NaiaStage::Disconnection, disconnect_event)
+    .add_system_to_stage(NaiaStage::ReceiveEvents, receive_message_event)
+    .add_system_to_stage(NaiaStage::Tick, tick)
+    .add_system_to_stage(NaiaStage::Frame, input)
+    .add_system_to_stage(NaiaStage::PostFrame, sync);
+
+    // Loading
+    app.add_enter_system(GameState::Loading, loading::init);
+    app.add_system_set(
+        ConditionSet::new()
+            .run_in_state(GameState::Loading)
+            .with_system(loading::update)
+            .into(),
+    );
+
+    // Main Menu
+    app.add_enter_system(GameState::MainMenu, main_menu::init);
+    app.add_system_set(
+        ConditionSet::new()
+            .run_in_state(GameState::MainMenu)
+            .with_system(main_menu::update)
+            .into(),
+    );
+
+    // Playing
+    app.add_system_set(
+        ConditionSet::new()
+            .run_in_state(GameState::Playing)
+            .with_system(playing::quit_on_escape)
+            .with_system(playing::move_camera)
+            .into(),
+    );
+    // .add_system(spawn_level)
+
+    app.run()
+}
+
+/// Despawn all entities with a given component type
+fn despawn_with<T: Component>(mut commands: Commands, q: Query<Entity, With<T>>) {
+    for e in q.iter() {
+        commands.entity(e).despawn_recursive();
+    }
 }
 
 fn input() {}

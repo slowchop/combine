@@ -1,6 +1,7 @@
 use crate::state::State;
 use bevy_ecs::{event::EventReader, system::ResMut};
 use bevy_log::info;
+use naia_bevy_server::shared::BigMapKey;
 use naia_bevy_server::{
     events::{AuthorizationEvent, ConnectionEvent, DisconnectionEvent, MessageEvent},
     shared::Random,
@@ -17,6 +18,7 @@ pub fn authorization_event(
     for event in event_reader.iter() {
         println!("got authorize event");
         if let AuthorizationEvent(user_key, Protocol::Auth(auth)) = event {
+            println!("accept!");
             server.accept_connection(user_key);
         }
     }
@@ -75,14 +77,13 @@ pub fn receive_message_event(
 ) {
     for event in event_reader.iter() {
         println!("got message event");
-        // if let MessageEvent(_user_key, Channels::PlayerCommand, Protocol::KeyCommand(key_command)) =
-        //     event
-        // {
-        //     if let Some(entity) = &key_command.entity.get(&server) {
-        //         // global
-        //         //     .player_last_command
-        //         //     .insert(*entity, key_command.clone());
-        //     }
-        // }
+        if let MessageEvent(user_key, Channels::PlayerCommand, Protocol::Auth(_)) = event {
+            info!(key = ?user_key.to_u64())
+            //     if let Some(entity) = &key_command.entity.get(&server) {
+            //         // global
+            //         //     .player_last_command
+            //         //     .insert(*entity, key_command.clone());
+            //     }
+        }
     }
 }

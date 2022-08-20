@@ -1,4 +1,4 @@
-use crate::level::{TextureDefinition, Textures};
+use crate::states::playing::level::{TextureDefinition, Textures};
 use image::io::Reader as ImageReader;
 use miette::IntoDiagnostic;
 use std::fs::File;

@@ -1,10 +1,10 @@
+use crate::shader::BillboardMaterial;
+use crate::states::playing::bottom_quad::BottomQuad;
+use bevy::asset::LoadState;
 use bevy::prelude::*;
 use bevy::reflect::TypeUuid;
 use serde::{Deserialize, Serialize};
 use std::f32::consts::TAU;
-use bevy::asset::LoadState;
-use crate::bottom_quad::BottomQuad;
-use crate::shader::BillboardMaterial;
 
 const PIXELS_PER_METER: f32 = 250.;
 
@@ -129,4 +129,3 @@ pub enum LevelLoadState {
     Loading,
     Loaded,
 }
-

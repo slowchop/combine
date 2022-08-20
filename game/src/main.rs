@@ -1,20 +1,18 @@
 mod app;
-mod bottom_quad;
-mod camera;
-mod level;
 mod net;
 mod other_systems;
 mod settings;
 mod shader;
+mod states;
 mod textures;
 
-use crate::camera::move_camera;
-use crate::level::{spawn_level, Level, LevelLoadState, Textures};
 use crate::shader::BillboardMaterial;
 use crate::textures::update_texture_sizes;
 use bevy::asset::AssetServerSettings;
 use bevy::prelude::*;
 use clap::Parser;
+use states::playing::camera::move_camera;
+use states::playing::level::{spawn_level, Level, LevelLoadState, Textures};
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]

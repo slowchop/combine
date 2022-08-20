@@ -17,7 +17,7 @@ pub fn receive_message_event(
     // mut global: ResMut<Global>,
     client: Client<Protocol, Channels>,
 ) {
-    dbg!(client.is_connecting(), client.is_connected());
+    // dbg!(client.is_connected());
     for event in event_reader.iter() {
         println!("event");
         // if let MessageEvent(Channels::EntityAssignment, Protocol::EntityAssignment(message)) = event
