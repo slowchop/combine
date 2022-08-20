@@ -6,3 +6,20 @@ entities:
     position: [1, 0]
   - texture: "harold.png"
     position: [2, 0]
+
+  - texture: "harold.png"
+    type: ground
+    position: [0, 0]
+  - texture: "harold.png"
+    type: ground
+    position: [20, 0]
+  - texture: "harold.png"
+    type: ground
+    position: [-20, 0]
+  - texture: "harold.png"
+    type: ground
+    position: [0, 20]
+  - texture: "harold.png"
+    type: ground
+    position: [0, -20]
+
