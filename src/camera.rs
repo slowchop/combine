@@ -56,9 +56,11 @@ pub fn move_camera(
         // Mouse zoom.
         for mouse_wheel in scroll_events.iter() {
             zoom -= mouse_wheel.y * settings.mouse_scroll_speed;
+            dbg!(zoom);
         }
 
         game_camera.zoom += zoom * game_camera.zoom * time.delta_seconds();
+        dbg!(game_camera.zoom);
         if game_camera.zoom < 10.0 {
             game_camera.zoom += game_camera.zoom * 3.0 * time.delta_seconds();
         }
