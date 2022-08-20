@@ -91,11 +91,13 @@ pub fn play() {
     );
 
     // Playing
+    app.add_enter_system(GameState::Playing, init);
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::Playing)
-            .with_system(playing::quit_on_escape)
-            .with_system(playing::move_camera)
+            .with_system(quit_on_escape)
+            .with_system(move_camera)
+            .with_system(spawn_level)
             .into(),
     );
     // .add_system(spawn_level)

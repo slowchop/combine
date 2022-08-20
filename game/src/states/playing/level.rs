@@ -14,15 +14,15 @@ pub fn spawn_level(
     mut level_assets: ResMut<Assets<Level>>,
     textures: Res<Handle<Textures>>,
     mut textures_assets: ResMut<Assets<Textures>>,
-    mut state: ResMut<LevelLoadState>,
     asset_server: Res<AssetServer>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut standard_materials: ResMut<Assets<StandardMaterial>>,
     mut billboard_materials: ResMut<Assets<BillboardMaterial>>,
 ) {
-    if *state == LevelLoadState::Loaded {
-        return;
-    }
+    todo!("Just load once!");
+    // if *state == LevelLoadState::Loaded {
+    //     return;
+    // }
     if asset_server.get_load_state(&*level) != LoadState::Loaded {
         return;
     }
@@ -81,7 +81,7 @@ pub fn spawn_level(
         });
     }
 
-    *state = LevelLoadState::Loaded;
+    // *state = LevelLoadState::Loaded;
     println!("Loading level done!");
 }
 
