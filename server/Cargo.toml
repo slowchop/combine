@@ -3,6 +3,20 @@ name = "server"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+use-udp = [ "naia-bevy-server/use-udp" ]
+use-webrtc = [ "naia-bevy-server/use-webrtc" ]
 
 [dependencies]
+shared = { path = "../shared" }
+
+naia-bevy-server = "0.10.2"
+
+bevy_app = { version = "0.8.0", default-features = false }
+bevy_core = { version = "0.8.0", default-features = false }
+bevy_ecs = { version = "0.8.0", default-features = false }
+bevy_log = { version = "0.8.0", default-features = false }
+bevy_time = { version = "0.8.0", default-features = false }
+
+#tracing = "0.1.36"
+#tracing-subscriber = "0.3.15"
