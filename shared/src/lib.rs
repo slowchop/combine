@@ -1,14 +1,20 @@
-mod protocol;
+mod auth;
+mod join_game;
 
-use crate::protocol::JoinGame;
+pub use auth::Auth;
+pub use join_game::JoinGame;
 use naia_shared::{
     derive_channels, Channel, ChannelDirection, ChannelMode, LinkConditionerConfig, Protocolize,
     SharedConfig, SocketConfig, TickBufferSettings,
 };
 use std::time::Duration;
 
+pub const UDP_PORT: u16 = 24191;
+pub const WEB_PORT: u16 = 24192;
+
 #[derive(Protocolize)]
 pub enum Protocol {
+    Auth(Auth),
     JoinGame(JoinGame),
 }
 

@@ -17,6 +17,3 @@ bevy_core = { version = "0.8.0", default-features = false }
 bevy_ecs = { version = "0.8.0", default-features = false }
 bevy_log = { version = "0.8.0", default-features = false }
 bevy_time = { version = "0.8.0", default-features = false }
-
-#tracing = "0.1.36"
-#tracing-subscriber = "0.3.15"

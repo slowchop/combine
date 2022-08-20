@@ -1,5 +1,5 @@
 [package]
-name = "combine"
+name = "towercombo"
 version = "0.1.0"
 edition = "2021"
 
@@ -12,6 +12,9 @@ opt-level = 1
 opt-level = 3
 
 [dependencies]
+shared = { path = "../shared" }
+naia-bevy-client = "0.10.2"
+
 bevy = "0.8.0"
 bevy_common_assets = { version = "0.3.0", features = ["yaml"] }
 bevy_egui = "0.15.1"

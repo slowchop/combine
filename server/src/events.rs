@@ -34,6 +34,7 @@ pub fn connection_event<'world, 'state>(
     mut server: Server<'world, 'state, Protocol, Channels>,
 ) {
     for event in event_reader.iter() {
+        println!("got connection event");
         let ConnectionEvent(user_key) = event;
         let address = server
             .user_mut(user_key)
