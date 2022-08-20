@@ -2,6 +2,7 @@ mod app;
 mod bottom_quad;
 mod camera;
 mod level;
+mod net;
 mod other_systems;
 mod settings;
 mod shader;

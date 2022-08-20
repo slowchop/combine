@@ -1,4 +1,5 @@
 use crate::camera::GameCamera;
+use crate::net::{connect_event, disconnect_event, receive_message_event};
 use crate::other_systems::quit_on_escape;
 use crate::settings::Settings;
 use crate::textures::update_texture_sizes;
@@ -12,7 +13,7 @@ use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_inspector_egui::WorldInspectorPlugin;
 use clap::Parser;
 use naia_bevy_client::Plugin as ClientPlugin;
-use naia_bevy_client::{Client, ClientConfig};
+use naia_bevy_client::{Client, ClientConfig, Stage as NaiaStage};
 use shared::{shared_config, Auth, Channels, Protocol, UDP_PORT};
 
 pub fn play() {
@@ -45,11 +46,44 @@ pub fn play() {
         .add_plugin(YamlAssetPlugin::<Level>::new(&["level"]))
         .add_plugin(WorldInspectorPlugin::new())
         .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
+        .add_system_to_stage(NaiaStage::Connection, connect_event)
+        .add_system_to_stage(NaiaStage::Disconnection, disconnect_event)
+        .add_system_to_stage(NaiaStage::ReceiveEvents, receive_message_event)
+        .add_system_to_stage(NaiaStage::Tick, tick)
+        .add_system_to_stage(NaiaStage::Frame, input)
+        .add_system_to_stage(NaiaStage::PostFrame, sync)
         .add_startup_system(init)
         .add_system(quit_on_escape)
         .add_system(move_camera)
         .add_system(spawn_level)
         .run();
+}
+
+fn input() {}
+
+fn sync() {}
+
+fn tick(
+    // mut global: ResMut<Global>,
+    mut client: Client<Protocol, Channels>,
+) {
+    if let Some(client_tick) = client.client_tick() {
+        println!("{:?}", client_tick);
+        // if global.command_history.can_insert(&client_tick) {
+        // Record command
+        // global.command_history.insert(client_tick, command.clone());
+
+        // Send command
+        // client.send_message(Channels::PlayerCommand, &command);
+        let command = Auth::new();
+        client.send_message(Channels::PlayerCommand, &command);
+
+        // Apply command
+        // if let Ok(mut position) = position_query.get_mut(predicted_entity) {
+        //     shared_behavior::process_command(&command, &mut position);
+        // }
+        // }
+    }
 }
 
 fn init(
@@ -58,7 +92,9 @@ fn init(
     mut client: Client<Protocol, Channels>,
 ) {
     client.auth(Auth::new());
-    client.connect(&format!("http://127.0.0.1:{}", UDP_PORT));
+    client.connect(&format!("http://10.0.4.14:{}", UDP_PORT));
+    // let command = Auth::new();
+    // client.send_message(Channels::PlayerCommand, &command);
 
     commands
         .spawn_bundle(Camera3dBundle {

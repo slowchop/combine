@@ -16,15 +16,9 @@ pub fn authorization_event(
 ) {
     for event in event_reader.iter() {
         println!("got authorize event");
-        // if let AuthorizationEvent(user_key, Protocol::Auth(auth)) = event {
-        //     if *auth.username == "charlie" && *auth.password == "12345" {
-        //         // Accept incoming connection
-        //         server.accept_connection(user_key);
-        //     } else {
-        //         // Reject incoming connection
-        //         server.reject_connection(user_key);
-        //     }
-        // }
+        if let AuthorizationEvent(user_key, Protocol::Auth(auth)) = event {
+            server.accept_connection(user_key);
+        }
     }
 }
 
@@ -34,7 +28,8 @@ pub fn connection_event<'world, 'state>(
     mut server: Server<'world, 'state, Protocol, Channels>,
 ) {
     for event in event_reader.iter() {
-        println!("got connection event");
+        println!("????????");
+        info!("got connection event");
         let ConnectionEvent(user_key) = event;
         let address = server
             .user_mut(user_key)

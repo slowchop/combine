@@ -1,16 +1,17 @@
 mod events;
 mod init;
 mod state;
+mod tick;
 
 use bevy_app::{App, ScheduleRunnerPlugin};
 use bevy_core::CorePlugin;
 use bevy_ecs::prelude::*;
 use bevy_log::{info, LogPlugin};
 use bevy_time::{Time, TimePlugin};
+use init::init;
 use naia_bevy_server::{Plugin as ServerPlugin, ServerConfig, Stage};
 use shared::{shared_config, Channels, Protocol};
-// use systems::{events, init, tick};
-use init::init;
+use tick::tick;
 
 fn main() {
     info!("Server starting...");
@@ -37,12 +38,4 @@ fn main() {
         .add_system_to_stage(Stage::Tick, tick)
         // Run App
         .run();
-}
-
-fn tick(time: Res<Time>, mut last_time: Local<f64>) {
-    let s = time.seconds_since_startup();
-    if s - *last_time > 1.0 {
-        info!(?s, "tick");
-        *last_time = s;
-    }
 }
