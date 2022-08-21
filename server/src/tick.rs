@@ -18,16 +18,16 @@ pub fn tick(
     }
 
     // Update scopes of entities
-    for (_, user_key, entity) in server.scope_checks() {
-        // You'd normally do whatever checks you need to in here..
-        // to determine whether each Entity should be in scope or not.
-
-        // This indicates the Entity should be in this scope.
-        server.user_scope(&user_key).include(&entity);
-
-        // And call this if Entity should NOT be in this scope.
-        // server.user_scope(..).exclude(..);
-    }
+    // for (_, user_key, entity) in server.scope_checks() {
+    //     // You'd normally do whatever checks you need to in here..
+    //     // to determine whether each Entity should be in scope or not.
+    //
+    //     // This indicates the Entity should be in this scope.
+    //     server.user_scope(&user_key).include(&entity);
+    //
+    //     // And call this if Entity should NOT be in this scope.
+    //     // server.user_scope(..).exclude(..);
+    // }
 
     // Process all received commands
     // for (entity, last_command) in global.player_last_command.drain() {

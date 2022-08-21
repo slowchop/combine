@@ -2635,8 +2635,7 @@ dependencies = [
 [[package]]
 name = "naia-bevy-client"
 version = "0.10.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d122fd3a0cde197f7081065859d6b302b5c5877e449e12010e769078f361175a"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 dependencies = [
  "bevy_app",
  "bevy_ecs",
@@ -2647,8 +2646,7 @@ dependencies = [
 [[package]]
 name = "naia-bevy-server"
 version = "0.10.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b6bc3b39e6fe87cc58e17452133a7b371257e3236445930a7ae0eb4fefba9f0"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 dependencies = [
  "bevy_app",
  "bevy_ecs",
@@ -2659,8 +2657,7 @@ dependencies = [
 [[package]]
 name = "naia-bevy-shared"
 version = "0.10.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d5f7ea4a73b6d173c0c5e8028985e7ac7594549539899d446aa7a97ee39960e5"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 dependencies = [
  "bevy_ecs",
  "naia-shared",
@@ -2669,8 +2666,7 @@ dependencies = [
 [[package]]
 name = "naia-client"
 version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e556a73f15055fd84b012cf9d636b27c35c1004e96c6dcabc123dece0edfcabc"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 dependencies = [
  "cfg-if 1.0.0",
  "log",
@@ -2681,8 +2677,7 @@ dependencies = [
 [[package]]
 name = "naia-client-socket"
 version = "0.11.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1d1ebc417aba6bad70e8b4fe368b3cf147f9dc76d319b560b4bf46311264fdac"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 dependencies = [
  "cfg-if 1.0.0",
  "js-sys",
@@ -2698,8 +2693,7 @@ dependencies = [
 [[package]]
 name = "naia-derive"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ac0afde39541a40c7c9ee4cc04d6af37fe3d0b1d1e1336139b9220e3df85b9d9"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 dependencies = [
  "naia-parse",
  "naia-serde-derive",
@@ -2711,14 +2705,12 @@ dependencies = [
 [[package]]
 name = "naia-parse"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "868aabdd8cc541ce30f3db89b61fb57a15dc9139d6ab88a772e4d5b30a68af77"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 
 [[package]]
 name = "naia-serde"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8215479a3e99d86c86ff4df320d226b65879823de4d74a9647707c3149ddc914"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 dependencies = [
  "cfg-if 1.0.0",
  "log",
@@ -2728,8 +2720,7 @@ dependencies = [
 [[package]]
 name = "naia-serde-derive"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b54880b7d9a96304c806159b0cacbf5e68c0e595a76ca54b4635fd6c361c0388"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 dependencies = [
  "cfg-if 1.0.0",
  "log",
@@ -2739,8 +2730,7 @@ dependencies = [
 [[package]]
 name = "naia-server"
 version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2a0a72a485512417ed633a0f7b42f45bc6253417ed2f7fa493e2576793024b79"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 dependencies = [
  "cfg-if 1.0.0",
  "fastrand",
@@ -2753,8 +2743,7 @@ dependencies = [
 [[package]]
 name = "naia-server-socket"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1fbcc6d9ddcf954067edb11675d3dc95c405c480f9932231927a240dc7a8ed92"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 dependencies = [
  "async-dup",
  "async-io",
@@ -2774,8 +2763,7 @@ dependencies = [
 [[package]]
 name = "naia-shared"
 version = "0.10.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c9b963a7dba2484f651f19b605ccc02566f8066a89bf567057aa4121c2abb95e"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 dependencies = [
  "bevy_ecs",
  "cfg-if 1.0.0",
@@ -2789,8 +2777,7 @@ dependencies = [
 [[package]]
 name = "naia-socket-shared"
 version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec7b3d72be4877fcca744be1b87f30a04b54f9bd8c98e5b7aeef6c0e0bb8eb36"
+source = "git+https://github.com/naia-lib/naia?rev=397f2c4586f0e43e50e97363e9381a79eaec618b#397f2c4586f0e43e50e97363e9381a79eaec618b"
 dependencies = [
  "cfg-if 1.0.0",
  "js-sys",

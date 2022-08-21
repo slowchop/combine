@@ -9,6 +9,7 @@ use naia_bevy_server::{
     Server,
 };
 use shared::player_name::PlayerName;
+use shared::protocol::game_ready::GameReady;
 use shared::protocol::Protocol;
 use shared::Channels;
 
@@ -90,11 +91,17 @@ pub fn receive_message_event(
                 }
                 Protocol::JoinRandomGame(random_game) => {
                     let name = (*random_game.name).clone();
-                    let name = PlayerName::new(name.as_str());
-                    let player = ServerPlayer { name };
+                    let player_name = PlayerName::new(name.as_str());
+                    let player = ServerPlayer { name: player_name };
                     println!("player requesting random game! {:?}", &player);
                     player_info.0.insert(user_key.clone(), player);
                     player_queue.add(user_key.clone());
+
+                    println!("HACK Sending GameReady to {}", name.clone());
+                    let name = PlayerName::new(name.as_str());
+                    let message =
+                        GameReady::new([name.clone(), name.clone()], 0, "test".to_string());
+                    server.send_message(user_key, Channels::ServerCommand, &message);
                 }
                 Protocol::JoinFriendGame(_) => {
                     todo!()
