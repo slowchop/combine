@@ -4,8 +4,9 @@ use bevy::input::mouse::MouseMotion;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
 use naia_bevy_client::Client;
-use shared::protocol::place_tower::PlaceTower;
+use shared::protocol::request_tower_placement::RequestTowerPlacement;
 use shared::protocol::Protocol;
+use shared::towers::Tower;
 use shared::Channels;
 
 pub fn left_click(
@@ -35,6 +36,9 @@ pub fn left_click(
     };
     dbg!(position);
 
-    let mut place_tower = PlaceTower::new(position);
+    let mut place_tower = RequestTowerPlacement::new(position, Tower::MachineGun, 1230);
     client.send_message(Channels::PlayerCommand, &mut place_tower);
+
+    // commands.spawn_bundle()
+    todo!()
 }

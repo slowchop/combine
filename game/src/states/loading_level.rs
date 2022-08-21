@@ -1,9 +1,11 @@
 use crate::app::{GameState, MyRaycastSet};
 use crate::states::playing::bottom_quad::BottomQuad;
-use crate::states::playing::level::{EntityType, PIXELS_PER_METER};
+use crate::states::playing::level::{EntityType, LevelEntity, PIXELS_PER_METER};
 use crate::states::playing::GameInfo;
 use crate::{BillboardMaterial, Level, Textures};
 use bevy::asset::LoadState;
+use bevy::ecs::system::EntityCommands;
+use bevy::ecs::world::EntityMut;
 use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
 use iyes_loopless::prelude::*;
@@ -55,13 +57,7 @@ pub fn spawn_level(
             .ok_or_else(|| format!("Could not find {} in texture defs.", e.texture))
             .unwrap();
 
-        let x = e.position[0];
-        let y = e.position[1];
-        let mut transform = Transform::from_xyz(x, 0., y).with_scale(Vec3::new(
-            texture_def.size[0] as f32 / PIXELS_PER_METER,
-            texture_def.size[1] as f32 / PIXELS_PER_METER,
-            1.0,
-        ));
+        let mut transform = e.transform(texture_def);
         match e.entity_type {
             EntityType::Ground => {}
             _ => {

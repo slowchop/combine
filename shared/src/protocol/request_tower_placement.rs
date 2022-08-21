@@ -5,7 +5,7 @@ use naia_shared::{Property, Replicate};
 
 #[derive(Component, Replicate)]
 #[protocol_path = "crate::protocol::Protocol"]
-pub struct PlaceTower {
+pub struct RequestTowerPlacement {
     /// Contains a u64 that the client generates.
     ///
     /// This is used for the client to place the building instantly, and then removing it or
@@ -21,9 +21,9 @@ pub struct PlaceTower {
     pub tower: Property<u8>,
 }
 
-impl PlaceTower {
+impl RequestTowerPlacement {
     pub fn new(p: Vec2, tower: Tower, placeholder: u64) -> Self {
-        PlaceTower::new_complete(placeholder, p.x, p.y, tower as u8)
+        RequestTowerPlacement::new_complete(placeholder, p.x, p.y, tower as u8)
     }
 
     pub fn position(&self) -> Vec2 {

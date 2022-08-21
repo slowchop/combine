@@ -25,6 +25,18 @@ pub struct LevelEntity {
     pub entity_type: EntityType,
 }
 
+impl LevelEntity {
+    pub fn transform(&self, texture_def: &TextureDefinition) -> Transform {
+        let x = self.position[0];
+        let y = self.position[1];
+        Transform::from_xyz(x, 0., y).with_scale(Vec3::new(
+            texture_def.size[0] as f32 / PIXELS_PER_METER,
+            texture_def.size[1] as f32 / PIXELS_PER_METER,
+            1.0,
+        ))
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum EntityType {

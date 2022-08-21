@@ -102,7 +102,7 @@ pub fn receive_message_event(
                 Protocol::GameReady(_) => {
                     // Server message. Ignored.
                 }
-                Protocol::PlaceTower(place_tower) => {
+                Protocol::RequestTowerPlacement(place_tower) => {
                     // TODO: Check if possible
                     let position: Vec2 = place_tower.position();
                 }
