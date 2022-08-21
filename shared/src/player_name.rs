@@ -4,7 +4,7 @@ use rand::{thread_rng, Rng, RngCore};
 use serde::Serde;
 use std::hash::Hasher;
 
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, Copy, PartialEq, Debug, Default)]
 pub struct PlayerName(u8, u8);
 
 impl PlayerName {

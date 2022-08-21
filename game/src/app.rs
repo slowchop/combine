@@ -2,13 +2,16 @@ use crate::net::{connect_event, disconnect_event, receive_message_event};
 use crate::other_systems::quit_on_escape;
 use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
-use crate::states::{connecting, loading, main_menu, playing, waiting_for_random, ContinueState};
+use crate::states::{
+    connecting, loading, loading_level, main_menu, playing, waiting_for_random, ContinueState,
+};
 use crate::textures::update_texture_sizes;
 use crate::{
-    move_camera, spawn_level, AmbientLight, App, AssetServer, AssetServerSettings,
-    BillboardMaterial, Camera3dBundle, ClearColor, Color, Commands, DefaultPlugins, Level,
-    LevelLoadState, MaterialPlugin, Msaa, Res, Textures, Transform, Vec3, WindowDescriptor,
+    move_camera, AmbientLight, App, AssetServer, AssetServerSettings, BillboardMaterial,
+    Camera3dBundle, ClearColor, Color, Commands, DefaultPlugins, Level, LevelLoadState,
+    MaterialPlugin, Msaa, Res, Textures, Transform, Vec3, WindowDescriptor,
 };
+use bevy::app::AppExit;
 use bevy::prelude::*;
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_inspector_egui::WorldInspectorPlugin;
@@ -16,12 +19,13 @@ use clap::Parser;
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Plugin as ClientPlugin;
 use naia_bevy_client::{Client, ClientConfig, Stage as NaiaStage};
+use shared::game_info::GameInfo;
 use shared::protocol::Protocol;
 use shared::{shared_config, Auth, Channels, UDP_PORT};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum GameState {
-    Loading,
+    Splash,
     PickName,
     MainMenu,
     Settings,
@@ -36,6 +40,7 @@ pub enum GameState {
     WaitingForRandom,
 
     // In game!
+    LoadingLevel,
     Playing,
 }
 
@@ -57,7 +62,8 @@ pub fn play() {
     .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
     .insert_resource(Msaa { samples: 4 })
     .insert_resource(ContinueState(None))
-    .add_loopless_state(GameState::Loading)
+    .insert_resource(GameInfo::default())
+    .add_loopless_state(GameState::Splash)
     .add_plugins(DefaultPlugins)
     .add_plugin(ClientPlugin::<Protocol, Channels>::new(
         ClientConfig::default(),
@@ -72,13 +78,15 @@ pub fn play() {
     .add_system_to_stage(NaiaStage::ReceiveEvents, receive_message_event)
     .add_system_to_stage(NaiaStage::Tick, tick)
     .add_system_to_stage(NaiaStage::Frame, input)
-    .add_system_to_stage(NaiaStage::PostFrame, sync);
+    .add_system_to_stage(NaiaStage::PostFrame, sync)
+    // .add_system(check_for_exit)
+    ;
 
-    // Loading
-    app.add_enter_system(GameState::Loading, loading::init);
+    // Splash
+    app.add_enter_system(GameState::Splash, loading::init);
     app.add_system_set(
         ConditionSet::new()
-            .run_in_state(GameState::Loading)
+            .run_in_state(GameState::Splash)
             .with_system(loading::update)
             .into(),
     );
@@ -110,14 +118,21 @@ pub fn play() {
             .into(),
     );
 
+    // Loading level
+    app.add_enter_system(GameState::LoadingLevel, loading_level::init);
+    app.add_system_set(
+        ConditionSet::new()
+            .run_in_state(GameState::LoadingLevel)
+            .with_system(loading_level::spawn_level)
+            .into(),
+    );
+
     // Playing
     app.add_enter_system(GameState::Playing, init);
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::Playing)
-            .with_system(quit_on_escape)
             .with_system(move_camera)
-            .with_system(spawn_level)
             .into(),
     );
     // .add_system(spawn_level)
@@ -131,6 +146,16 @@ fn despawn_with<T: Component>(mut commands: Commands, q: Query<Entity, With<T>>)
         commands.entity(e).despawn_recursive();
     }
 }
+
+// fn check_for_exit(
+//     mut app_exit_events: EventReader<AppExit>,
+//     mut client: Client<Protocol, Channels>,
+// ) {
+//     for event in app_exit_events.iter() {
+//         println!("App exit event: {:?}", event);
+//         client.disconnect();
+//     }
+// }
 
 fn input() {}
 
@@ -169,7 +194,4 @@ fn init(
             ..Default::default()
         })
         .insert(GameCamera::default());
-
-    commands.insert_resource(asset_server.load::<Textures, _>("game.textures"));
-    commands.insert_resource(asset_server.load::<Level, _>("levels/test.level"));
 }

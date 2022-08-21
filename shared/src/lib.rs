@@ -1,3 +1,4 @@
+pub mod game_info;
 pub mod player_name;
 pub mod protocol;
 

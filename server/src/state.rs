@@ -1,4 +1,4 @@
-use crate::game_info::GameInfo;
+use crate::game_info::ServerGameInfo;
 use bevy_utils::HashMap;
 use naia_bevy_server::{RoomKey, UserKey};
 use shared::player_name::PlayerName;
@@ -17,14 +17,14 @@ impl PlayerQueue {
         self.0.push_back(user_key);
     }
 
-    pub fn pair(&mut self) -> Option<(UserKey, UserKey)> {
+    pub fn pair(&mut self) -> Option<[UserKey; 2]> {
         if self.0.len() < 2 {
             return None;
         }
 
         let first = self.0.pop_front().unwrap();
         let second = self.0.pop_front().unwrap();
-        Some((first, second))
+        Some([first, second])
     }
 }
 
@@ -41,7 +41,7 @@ impl Default for PlayerInfo {
     }
 }
 
-pub struct Games(pub HashMap<RoomKey, GameInfo>);
+pub struct Games(pub HashMap<RoomKey, ServerGameInfo>);
 impl Default for Games {
     fn default() -> Self {
         Games(HashMap::new())

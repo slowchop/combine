@@ -95,7 +95,12 @@ pub fn receive_message_event(
                     player_info.0.insert(user_key.clone(), player);
                     player_queue.add(user_key.clone());
                 }
-                Protocol::JoinFriendGame(_) => {}
+                Protocol::JoinFriendGame(_) => {
+                    todo!()
+                }
+                Protocol::GameReady(_) => {
+                    // Server message. Ignored.
+                }
             }
             info!(key = ?user_key.to_u64())
             //     if let Some(entity) = &key_command.entity.get(&server) {
