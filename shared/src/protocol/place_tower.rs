@@ -9,6 +9,12 @@ pub struct PlaceTower {
     pub y: Property<f32>,
 }
 
+impl PlaceTower {
+    pub fn new(p: Vec2) -> Self {
+        p.into()
+    }
+}
+
 impl From<Vec2> for PlaceTower {
     fn from(v: Vec2) -> Self {
         PlaceTower::new_complete(v.x, v.y)

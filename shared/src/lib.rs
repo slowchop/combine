@@ -1,7 +1,6 @@
 pub mod game_info;
 pub mod player_name;
 pub mod protocol;
-pub mod replicate;
 
 use naia_shared::{
     derive_channels, Channel, ChannelDirection, ChannelMode, LinkConditionerConfig,

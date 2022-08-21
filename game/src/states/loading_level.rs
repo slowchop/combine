@@ -1,10 +1,11 @@
-use crate::app::GameState;
+use crate::app::{GameState, MyRaycastSet};
 use crate::states::playing::bottom_quad::BottomQuad;
 use crate::states::playing::level::{EntityType, PIXELS_PER_METER};
 use crate::states::playing::GameInfo;
 use crate::{BillboardMaterial, Level, Textures};
 use bevy::asset::LoadState;
 use bevy::prelude::*;
+use bevy_mod_raycast::RayCastMesh;
 use iyes_loopless::prelude::*;
 use std::f32::consts::TAU;
 
@@ -86,12 +87,16 @@ pub fn spawn_level(
             color: Color::ORANGE_RED,
         });
 
-        commands.spawn_bundle(MaterialMeshBundle {
+        let mut c = commands.spawn_bundle(MaterialMeshBundle {
             mesh: meshes.add(mesh),
             material,
             transform,
             ..Default::default()
         });
+
+        if let EntityType::Ground = e.entity_type {
+            c.insert(RayCastMesh::<MyRaycastSet>::default());
+        }
     }
 
     commands.insert_resource(NextState(GameState::Playing));

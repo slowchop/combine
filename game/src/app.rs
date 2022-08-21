@@ -1,8 +1,9 @@
 use crate::net::{connect_event, disconnect_event, receive_message_event};
 use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
+use crate::states::playing::left_click::left_click;
 use crate::states::{
-    connecting, loading, loading_level, main_menu, playing, waiting_for_random, ContinueState,
+    connecting, loading_level, main_menu, playing, splash, waiting_for_random, ContinueState,
 };
 use crate::{
     move_camera, AmbientLight, App, AssetServer, AssetServerSettings, BillboardMaterial,
@@ -10,8 +11,13 @@ use crate::{
     MaterialPlugin, Msaa, Res, Textures, Transform, Vec3, WindowDescriptor,
 };
 use bevy::prelude::*;
+use bevy::window::PresentMode;
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_inspector_egui::WorldInspectorPlugin;
+use bevy_mod_raycast::{
+    DefaultPluginState, DefaultRaycastingPlugin, RayCastMesh, RayCastMethod, RayCastSource,
+    RaycastSystem,
+};
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Plugin as ClientPlugin;
 use naia_bevy_client::{Client, ClientConfig, Stage as NaiaStage};
@@ -47,6 +53,7 @@ pub fn play() {
         width: 1024f32,
         height: 768f32,
         title: "Combined Towers".to_string(),
+        present_mode: PresentMode::AutoNoVsync,
         ..Default::default()
     })
     .insert_resource(AssetServerSettings {
@@ -58,7 +65,25 @@ pub fn play() {
     .insert_resource(Msaa { samples: 4 })
     .insert_resource(ContinueState(None))
     .add_loopless_state(GameState::Splash)
-    .add_plugins(DefaultPlugins)
+    .add_plugins(DefaultPlugins);
+
+    app
+        // The DefaultRaycastingPlugin bundles all the functionality you might need into a single
+        // plugin. This includes building rays, casting them, and placing a debug cursor at the
+        // intersection. For more advanced uses, you can compose the systems in this plugin however
+        // you need. For example, you might exclude the debug cursor system.
+        .add_plugin(DefaultRaycastingPlugin::<MyRaycastSet>::default())
+        // You will need to pay attention to what order you add systems! Putting them in the wrong
+        // order can result in multiple frames of latency. Ray casting should probably happen near
+        // start of the frame. For example, we want to be sure this system runs before we construct
+        // any rays, hence the ".before(...)". You can use these provided RaycastSystem labels to
+        // order your systems with the ones provided by the raycasting plugin.
+        .add_system_to_stage(
+            CoreStage::First,
+            update_raycast_with_cursor.before(RaycastSystem::BuildRays::<MyRaycastSet>),
+        );
+
+    app
     .add_plugin(ClientPlugin::<Protocol, Channels>::new(
         ClientConfig::default(),
         shared_config(),
@@ -77,11 +102,11 @@ pub fn play() {
     ;
 
     // Splash
-    app.add_enter_system(GameState::Splash, loading::init);
+    app.add_enter_system(GameState::Splash, splash::init);
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::Splash)
-            .with_system(loading::update)
+            .with_system(splash::update)
             .into(),
     );
 
@@ -126,6 +151,7 @@ pub fn play() {
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::Playing)
+            .with_system(left_click)
             .with_system(move_camera)
             .into(),
     );
@@ -137,6 +163,27 @@ pub fn play() {
 fn despawn_with<T: Component>(mut commands: Commands, q: Query<Entity, With<T>>) {
     for e in q.iter() {
         commands.entity(e).despawn_recursive();
+    }
+}
+
+/// This is a unit struct we will use to mark our generic `RayCastMesh`s and `RayCastSource` as part
+/// of the same group, or "RayCastSet". For more complex use cases, you might use this to associate
+/// some meshes with one ray casting source, and other meshes with a different ray casting source."
+pub struct MyRaycastSet;
+
+// Update our `RayCastSource` with the current cursor position every frame.
+fn update_raycast_with_cursor(
+    mut cursor: EventReader<CursorMoved>,
+    mut query: Query<&mut RayCastSource<MyRaycastSet>>,
+) {
+    // Grab the most recent cursor event if it exists:
+    let cursor_position = match cursor.iter().last() {
+        Some(cursor_moved) => cursor_moved.position,
+        None => return,
+    };
+
+    for mut pick_source in &mut query {
+        pick_source.cast_method = RayCastMethod::Screenspace(cursor_position);
     }
 }
 
@@ -182,5 +229,8 @@ fn init(
         .spawn_bundle(Camera3dBundle {
             ..Default::default()
         })
-        .insert(GameCamera::default());
+        .insert(GameCamera::default())
+        .insert(RayCastSource::<MyRaycastSet>::new());
+
+    commands.insert_resource(DefaultPluginState::<MyRaycastSet>::default().with_debug_cursor());
 }
