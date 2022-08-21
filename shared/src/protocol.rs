@@ -1,4 +1,5 @@
 use crate::protocol::game_ready::GameReady;
+use crate::protocol::place_tower::PlaceTower;
 use crate::{Auth, JoinFriendGame};
 pub use join_random_game::JoinRandomGame;
 use naia_shared::{
@@ -10,6 +11,7 @@ pub mod auth;
 pub mod game_ready;
 pub mod join_friend_game;
 pub mod join_random_game;
+pub mod place_tower;
 
 #[derive(Protocolize)]
 pub enum Protocol {
@@ -17,4 +19,5 @@ pub enum Protocol {
     JoinRandomGame(JoinRandomGame),
     JoinFriendGame(JoinFriendGame),
     GameReady(GameReady),
+    PlaceTower(PlaceTower),
 }

@@ -35,6 +35,9 @@ pub fn receive_message_event(
                     commands.spawn().insert(game_info);
                     commands.insert_resource(NextState(GameState::LoadingLevel));
                 }
+                Protocol::PlaceTower(_) => {
+                    todo!("place tower")
+                }
             }
         }
     }

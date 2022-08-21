@@ -3692,6 +3692,7 @@ name = "shared"
 version = "0.1.0"
 dependencies = [
  "bevy_ecs",
+ "bevy_math",
  "cfg-if 1.0.0",
  "naia-shared",
  "rand",
