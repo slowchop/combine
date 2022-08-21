@@ -1,5 +1,6 @@
 mod events;
 mod init;
+mod match_randoms;
 mod state;
 mod tick;
 
@@ -7,8 +8,9 @@ use bevy_app::{App, ScheduleRunnerPlugin};
 use bevy_core::CorePlugin;
 use bevy_ecs::prelude::*;
 use bevy_log::{info, LogPlugin};
-use bevy_time::{Time, TimePlugin};
+use bevy_time::TimePlugin;
 use init::init;
+use match_randoms::match_randoms;
 use naia_bevy_server::{Plugin as ServerPlugin, ServerConfig, Stage};
 use shared::{shared_config, Channels, Protocol};
 use tick::tick;
@@ -37,5 +39,6 @@ fn main() {
         // Gameplay Loop on Tick
         .add_system_to_stage(Stage::Tick, tick)
         // Run App
+        .add_system(match_randoms)
         .run();
 }

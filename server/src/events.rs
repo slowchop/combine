@@ -1,12 +1,13 @@
-use crate::state::State;
+use crate::state::{Player, PlayerInfo, PlayerQueue, State};
 use bevy_ecs::{event::EventReader, system::ResMut};
-use bevy_log::info;
+use bevy_log::{info, warn};
 use naia_bevy_server::shared::BigMapKey;
 use naia_bevy_server::{
     events::{AuthorizationEvent, ConnectionEvent, DisconnectionEvent, MessageEvent},
     shared::Random,
     Server,
 };
+use shared::player_name::PlayerName;
 use shared::{Channels, Protocol};
 
 // use crate::resources::Global;
@@ -30,7 +31,6 @@ pub fn connection_event<'world, 'state>(
     mut server: Server<'world, 'state, Protocol, Channels>,
 ) {
     for event in event_reader.iter() {
-        println!("????????");
         info!("got connection event");
         let ConnectionEvent(user_key) = event;
         let address = server
@@ -56,6 +56,7 @@ pub fn disconnection_event(
     mut event_reader: EventReader<DisconnectionEvent>,
     // mut global: ResMut<Global>,
     mut server: Server<Protocol, Channels>,
+    mut player_queue: ResMut<PlayerQueue>,
 ) {
     for event in event_reader.iter() {
         let DisconnectionEvent(user_key, user) = event;
@@ -72,12 +73,31 @@ pub fn disconnection_event(
 
 pub fn receive_message_event(
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
-    // mut global: ResMut<Global>,
+    mut player_queue: ResMut<PlayerQueue>,
+    mut player_info: ResMut<PlayerInfo>,
     server: Server<Protocol, Channels>,
 ) {
+    for key in server.user_keys() {
+        let user = server.user(&key);
+    }
+
     for event in event_reader.iter() {
         println!("got message event");
-        if let MessageEvent(user_key, Channels::PlayerCommand, Protocol::Auth(_)) = event {
+        if let MessageEvent(user_key, Channels::PlayerCommand, cmd) = event {
+            match cmd {
+                Protocol::Auth(_) => {
+                    warn!("Auth on already connected?")
+                }
+                Protocol::JoinRandomGame(random_game) => {
+                    let name = *random_game.name;
+                    let name = PlayerName::from(name);
+                    let player = Player { name };
+                    println!("player requesting random game! {:?}", &player);
+                    player_info.0.insert(user_key.clone(), player);
+                    player_queue.add(user_key.clone());
+                }
+                Protocol::JoinFriendGame(_) => {}
+            }
             info!(key = ?user_key.to_u64())
             //     if let Some(entity) = &key_command.entity.get(&server) {
             //         // global

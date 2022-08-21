@@ -1,3 +1,6 @@
+play:
+    cd game && cargo run --features bevy/dynamic
+
 watch_server:
     cargo watch -s "cargo run --package server --features use-udp"
 

@@ -1,4 +1,4 @@
-use crate::state::State;
+use crate::state::{PlayerInfo, PlayerQueue, State};
 use bevy_ecs::system::Commands;
 use bevy_log::info;
 use naia_bevy_server::{Server, ServerAddrs};
@@ -29,9 +29,7 @@ pub fn init(mut commands: Commands, mut server: Server<Protocol, Channels>) {
     // dbg!(&main_room_key);
 
     // Resources
-    commands.insert_resource(State {
-        main_room_key,
-        // user_to_prediction_map: HashMap::new(),
-        // player_last_command: HashMap::new(),
-    })
+    commands.insert_resource(State { main_room_key });
+    commands.insert_resource(PlayerQueue::default());
+    commands.insert_resource(PlayerInfo::default());
 }

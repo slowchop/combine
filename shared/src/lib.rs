@@ -1,11 +1,15 @@
 mod auth;
 mod join_game;
+pub mod player_name;
+mod random_game;
 
+pub use crate::random_game::JoinRandomGame;
 pub use auth::Auth;
-pub use join_game::JoinGame;
+pub use join_game::JoinFriendGame;
 use naia_shared::{
-    derive_channels, Channel, ChannelDirection, ChannelMode, LinkConditionerConfig, Protocolize,
-    ReliableSettings, SharedConfig, SocketConfig, TickBufferSettings,
+    derive_channels, Channel, ChannelDirection, ChannelMode, LinkConditionerConfig,
+    OrderedReliableReceiver, Protocolize, ReliableSettings, SharedConfig, SocketConfig,
+    TickBufferSettings,
 };
 use std::time::Duration;
 
@@ -15,7 +19,8 @@ pub const WEB_PORT: u16 = 24192;
 #[derive(Protocolize)]
 pub enum Protocol {
     Auth(Auth),
-    JoinGame(JoinGame),
+    JoinRandomGame(JoinRandomGame),
+    JoinFriendGame(JoinFriendGame),
 }
 
 pub fn shared_config() -> SharedConfig<Channels> {
@@ -39,26 +44,18 @@ pub fn shared_config() -> SharedConfig<Channels> {
 #[derive_channels]
 pub enum Channels {
     PlayerCommand,
-    EntityAssignment,
+    ServerCommand,
 }
 
 pub const CHANNEL_CONFIG: &[Channel<Channels>] = &[
     Channel {
         index: Channels::PlayerCommand,
         direction: ChannelDirection::ClientToServer,
-        mode: ChannelMode::TickBuffered(TickBufferSettings::default()),
+        mode: ChannelMode::OrderedReliable(ReliableSettings::default()),
     },
     Channel {
-        index: Channels::EntityAssignment,
+        index: Channels::ServerCommand,
         direction: ChannelDirection::ServerToClient,
-        mode: ChannelMode::UnorderedReliable(ReliableSettings::default()),
+        mode: ChannelMode::OrderedReliable(ReliableSettings::default()),
     },
 ];
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test() {
-        assert!(true);
-    }
-}

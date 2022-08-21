@@ -8,4 +8,4 @@ bevy_ecs = { version = "0.8", default-features = false }
 naia-shared = "0.10.2"
 cfg-if = { version = "1.0" }
 tracing = "0.1.36"
-
+rand = "0.8.5"

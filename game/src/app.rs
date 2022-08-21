@@ -2,7 +2,7 @@ use crate::net::{connect_event, disconnect_event, receive_message_event};
 use crate::other_systems::quit_on_escape;
 use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
-use crate::states::{connecting, loading, main_menu, playing, ContinueState};
+use crate::states::{connecting, loading, main_menu, playing, waiting_for_random, ContinueState};
 use crate::textures::update_texture_sizes;
 use crate::{
     move_camera, spawn_level, AmbientLight, App, AssetServer, AssetServerSettings,
@@ -100,6 +100,15 @@ pub fn play() {
             .into(),
     );
 
+    // Wait for random
+    app.add_enter_system(GameState::WaitingForRandom, waiting_for_random::init);
+    app.add_system_set(
+        ConditionSet::new()
+            .run_in_state(GameState::WaitingForRandom)
+            .with_system(waiting_for_random::update)
+            .into(),
+    );
+
     // Playing
     app.add_enter_system(GameState::Playing, init);
     app.add_system_set(
@@ -138,8 +147,8 @@ fn tick(
 
         // Send command
         // client.send_message(Channels::PlayerCommand, &command);
-        let command = Auth::new();
-        client.send_message(Channels::PlayerCommand, &command);
+        // let command = Auth::new();
+        // client.send_message(Channels::PlayerCommand, &command);
 
         // Apply command
         // if let Ok(mut position) = position_query.get_mut(predicted_entity) {

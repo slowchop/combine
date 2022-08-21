@@ -3693,6 +3693,7 @@ dependencies = [
  "bevy_ecs",
  "cfg-if 1.0.0",
  "naia-shared",
+ "rand",
  "tracing",
 ]
 

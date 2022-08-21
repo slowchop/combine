@@ -8,7 +8,7 @@ use shared::{Auth, Channels, Protocol, UDP_PORT};
 pub fn init(mut commands: Commands, time: Res<Time>, mut client: Client<Protocol, Channels>) {
     println!("Connecting...");
 
-    client.auth(Auth::new());
+    client.auth(Auth {});
     client.connect(&format!("http://10.0.4.14:{}", UDP_PORT));
     // let command = Auth::new();
     // client.send_message(Channels::PlayerCommand, &command);
