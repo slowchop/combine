@@ -2,7 +2,8 @@ use bevy_ecs::prelude::*;
 use bevy_log::info;
 use bevy_time::Time;
 use naia_bevy_server::Server;
-use shared::{Channels, Protocol};
+use shared::protocol::Protocol;
+use shared::Channels;
 
 pub fn tick(
     time: Res<Time>,

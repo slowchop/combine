@@ -16,7 +16,8 @@ use clap::Parser;
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Plugin as ClientPlugin;
 use naia_bevy_client::{Client, ClientConfig, Stage as NaiaStage};
-use shared::{shared_config, Auth, Channels, Protocol, UDP_PORT};
+use shared::protocol::Protocol;
+use shared::{shared_config, Auth, Channels, UDP_PORT};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum GameState {

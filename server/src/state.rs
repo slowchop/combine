@@ -1,6 +1,8 @@
+use crate::game_info::GameInfo;
+use bevy_utils::HashMap;
 use naia_bevy_server::{RoomKey, UserKey};
 use shared::player_name::PlayerName;
-use std::collections::{HashMap, VecDeque};
+use std::collections::VecDeque;
 
 pub struct State {
     pub main_room_key: RoomKey,
@@ -36,5 +38,12 @@ pub struct PlayerInfo(pub HashMap<UserKey, Player>);
 impl Default for PlayerInfo {
     fn default() -> Self {
         PlayerInfo(HashMap::new())
+    }
+}
+
+pub struct Games(pub HashMap<RoomKey, GameInfo>);
+impl Default for Games {
+    fn default() -> Self {
+        Games(HashMap::new())
     }
 }

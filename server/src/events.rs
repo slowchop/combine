@@ -8,9 +8,8 @@ use naia_bevy_server::{
     Server,
 };
 use shared::player_name::PlayerName;
-use shared::{Channels, Protocol};
-
-// use crate::resources::Global;
+use shared::protocol::Protocol;
+use shared::Channels;
 
 pub fn authorization_event(
     mut event_reader: EventReader<AuthorizationEvent<Protocol>>,

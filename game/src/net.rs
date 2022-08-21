@@ -1,7 +1,8 @@
 use bevy::prelude::*;
 use naia_bevy_client::events::MessageEvent;
 use naia_bevy_client::{Client, CommandsExt};
-use shared::{Channels, Protocol};
+use shared::protocol::Protocol;
+use shared::Channels;
 
 pub fn connect_event(client: Client<Protocol, Channels>) {
     println!("Client connected to: {}", client.server_address());

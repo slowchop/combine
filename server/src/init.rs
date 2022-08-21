@@ -2,7 +2,8 @@ use crate::state::{PlayerInfo, PlayerQueue, State};
 use bevy_ecs::system::Commands;
 use bevy_log::info;
 use naia_bevy_server::{Server, ServerAddrs};
-use shared::{Channels, Protocol, UDP_PORT, WEB_PORT};
+use shared::protocol::Protocol;
+use shared::{Channels, UDP_PORT, WEB_PORT};
 use std::collections::HashMap;
 
 pub fn init(mut commands: Commands, mut server: Server<Protocol, Channels>) {

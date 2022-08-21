@@ -1,9 +1,11 @@
 use crate::state::{PlayerQueue, State};
 use bevy_ecs::prelude::Res;
 use bevy_ecs::system::ResMut;
+use bevy_log::info;
 use naia_bevy_server::shared::BigMapKey;
-use naia_bevy_server::Server;
-use shared::{Channels, Protocol};
+use naia_bevy_server::{Server, UserKey};
+use shared::protocol::Protocol;
+use shared::Channels;
 
 pub fn match_randoms(
     mut player_queue: ResMut<PlayerQueue>,
@@ -23,6 +25,7 @@ pub fn match_randoms(
 
         let mut b = server.user_mut(&b);
         b.enter_room(&room_key);
-        println!("Joined room");
+
+        info!("Joined room");
     }
 }

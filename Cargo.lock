@@ -3673,6 +3673,7 @@ dependencies = [
  "bevy_ecs",
  "bevy_log",
  "bevy_time",
+ "bevy_utils",
  "naia-bevy-server",
  "shared",
 ]

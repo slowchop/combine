@@ -1,4 +1,5 @@
 mod events;
+mod game_info;
 mod init;
 mod match_randoms;
 mod state;
@@ -12,7 +13,8 @@ use bevy_time::TimePlugin;
 use init::init;
 use match_randoms::match_randoms;
 use naia_bevy_server::{Plugin as ServerPlugin, ServerConfig, Stage};
-use shared::{shared_config, Channels, Protocol};
+use shared::protocol::Protocol;
+use shared::{shared_config, Channels};
 use tick::tick;
 
 fn main() {
