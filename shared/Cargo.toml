@@ -10,3 +10,4 @@ naia-shared = "0.10.2"
 cfg-if = { version = "1.0" }
 tracing = "0.1.36"
 rand = "0.8.5"
+strum = { version = "0.24.1", features = ["derive"] }

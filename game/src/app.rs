@@ -1,4 +1,3 @@
-use crate::net::{connect_event, disconnect_event, receive_message_event};
 use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::left_click::left_click;
@@ -6,7 +5,7 @@ use crate::states::{
     connecting, loading_level, main_menu, playing, splash, waiting_for_random, ContinueState,
 };
 use crate::{
-    move_camera, AmbientLight, App, AssetServer, AssetServerSettings, BillboardMaterial,
+    move_camera, net, AmbientLight, App, AssetServer, AssetServerSettings, BillboardMaterial,
     Camera3dBundle, ClearColor, Color, Commands, DefaultPlugins, Level, LevelLoadState,
     MaterialPlugin, Msaa, Res, Textures, Transform, Vec3, WindowDescriptor,
 };
@@ -92,9 +91,13 @@ pub fn play() {
     .add_plugin(YamlAssetPlugin::<Level>::new(&["level"]))
     .add_plugin(WorldInspectorPlugin::new())
     .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
-    .add_system_to_stage(NaiaStage::Connection, connect_event)
-    .add_system_to_stage(NaiaStage::Disconnection, disconnect_event)
-    .add_system_to_stage(NaiaStage::ReceiveEvents, receive_message_event)
+    .add_system_to_stage(NaiaStage::Connection, net::connect_event)
+    .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
+    .add_system_to_stage(NaiaStage::ReceiveEvents, net::receive_message_event)
+        .add_system_to_stage(NaiaStage::ReceiveEvents, net::spawn_entity_event)
+        .add_system_to_stage(NaiaStage::ReceiveEvents, net::insert_component_event)
+        .add_system_to_stage(NaiaStage::ReceiveEvents, net::update_component_event)
+        .add_system_to_stage(NaiaStage::ReceiveEvents, net::receive_message_event)
     .add_system_to_stage(NaiaStage::Tick, tick)
     // .add_system_to_stage(NaiaStage::Frame, input)
     // .add_system_to_stage(NaiaStage::PostFrame, sync)

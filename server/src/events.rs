@@ -1,6 +1,7 @@
 use crate::state::{PlayerQueue, Players, ServerPlayer, State};
 use bevy_ecs::{event::EventReader, system::ResMut};
 use bevy_log::{info, warn};
+use bevy_math::Vec2;
 use naia_bevy_server::shared::BigMapKey;
 use naia_bevy_server::{
     events::{AuthorizationEvent, ConnectionEvent, DisconnectionEvent, MessageEvent},
@@ -74,7 +75,7 @@ pub fn receive_message_event(
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
     mut player_queue: ResMut<PlayerQueue>,
     mut player_info: ResMut<Players>,
-    server: Server<Protocol, Channels>,
+    mut server: Server<Protocol, Channels>,
 ) {
     for key in server.user_keys() {
         let user = server.user(&key);
@@ -100,6 +101,10 @@ pub fn receive_message_event(
                 }
                 Protocol::GameReady(_) => {
                     // Server message. Ignored.
+                }
+                Protocol::PlaceTower(place_tower) => {
+                    // TODO: Check if possible
+                    let position: Vec2 = place_tower.position();
                 }
             }
             info!(key = ?user_key.to_u64())
