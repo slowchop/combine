@@ -22,19 +22,6 @@ pub fn init(mut commands: Commands, time: Res<Time>) {
 
 pub fn update(mut commands: Commands, mut egui_context: ResMut<EguiContext>) {
     egui::Window::new("Combo Towers").show(egui_context.ctx_mut(), |ui| {
-        if ui.button("AI").clicked() {
-            println!("AI");
-
-            let info = GameInfo {
-                level: "test".to_string(),
-                players: [Player::human(PlayerName::random()), Player::ai()],
-                you_are: Owner::new(0),
-                multiplayer: false,
-            };
-            commands.spawn().insert(info);
-
-            commands.insert_resource(NextState(GameState::LoadingLevel));
-        };
         if ui.button("Multiplayer").clicked() {
             println!("Multiplayer");
             commands.insert_resource(ContinueState(Some(GameState::WaitingForRandom)));

@@ -6,7 +6,7 @@ pub mod spawn_entities;
 
 use bevy::prelude::*;
 use shared::game::game_info::Owner;
-use shared::game::player::{Controller, Player};
+use shared::game::player::Player;
 use shared::game::player_name::PlayerName;
 use shared::protocol::game_ready::GameReady;
 
@@ -15,7 +15,6 @@ pub struct GameInfo {
     pub level: String,
     pub players: [Player; 2],
     pub you_are: Owner,
-    pub multiplayer: bool,
 }
 
 impl From<&GameReady> for GameInfo {
@@ -25,7 +24,6 @@ impl From<&GameReady> for GameInfo {
             .iter()
             .map(|p| Player {
                 name: PlayerName::new(p),
-                controller: Controller::Human,
             })
             .collect::<Vec<_>>()
             .try_into()
@@ -34,7 +32,6 @@ impl From<&GameReady> for GameInfo {
             players,
             level: (*g.level).clone(),
             you_are: Owner::new(*g.you_are),
-            multiplayer: true,
         }
     }
 }

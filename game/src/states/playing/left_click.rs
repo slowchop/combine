@@ -57,37 +57,6 @@ pub fn left_click(
         return;
     }
 
-    if game_info.multiplayer {
-        let mut place_tower = RequestTowerPlacement::new(position, Tower::MachineGun, 1230);
-        client.send_message(Channels::PlayerCommand, &mut place_tower);
-    } else {
-        spawn_entities.send(SpawnEntity(LevelEntity {
-            texture: "harold.png".to_string(),
-            entity_type: EntityType::Sprite,
-            position,
-            owner: Some(game_info.you_are),
-            radius: None,
-        }));
-    }
-
-    //     spawn_entities.send(SpawnEntity(LevelEntity {
-    //         entity_type: EntityType::Tower,
-    //         position,
-    //     }));
-    //     client.send(RequestTowerPlacement {
-    //         tower: Tower::new(position),
-    //     });
-    // }
-    //
-    // let mut place_tower = RequestTowerPlacement::new(position, Tower::MachineGun, 1230);
-    // client.send_message(Channels::PlayerCommand, &mut place_tower);
-    //
-    // let level_entity = LevelEntity {
-    //     texture: "harold.png".to_string(),
-    //     position: position.into(),
-    //     test: Default::default(),
-    //     entity_type: EntityType::Sprite,
-    //     owner: None,
-    // };
-    // spawn_entities.send(SpawnEntity(level_entity));
+    let mut place_tower = RequestTowerPlacement::new(position, Tower::MachineGun, 1230);
+    client.send_message(Channels::PlayerCommand, &mut place_tower);
 }
