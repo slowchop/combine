@@ -15,8 +15,11 @@ use std::time::Duration;
 pub const UDP_PORT: u16 = 24191;
 pub const WEB_PORT: u16 = 24192;
 
+// 1000 / 20fps = 50ms
+pub const MS_PER_FRAME: u64 = 50;
+
 pub fn shared_config() -> SharedConfig<Channels> {
-    let tick_interval = Some(Duration::from_millis(50)); // 1000 / 20fps = 50ms
+    let tick_interval = Some(Duration::from_millis(MS_PER_FRAME as u64));
 
     let link_condition = None;
     // let link_condition = Some(LinkConditionerConfig::average_condition());
@@ -51,3 +54,17 @@ pub const CHANNEL_CONFIG: &[Channel<Channels>] = &[
         mode: ChannelMode::OrderedReliable(ReliableSettings::default()),
     },
 ];
+
+pub struct Ticks(pub u64);
+
+impl Ticks {
+    pub fn new(ticks: u64) -> Self {
+        Ticks(ticks)
+    }
+}
+
+impl From<Duration> for Ticks {
+    fn from(duration: Duration) -> Self {
+        Ticks(duration.as_millis() as u64 / MS_PER_FRAME)
+    }
+}

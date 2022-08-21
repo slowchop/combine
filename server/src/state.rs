@@ -29,15 +29,15 @@ impl PlayerQueue {
 }
 
 #[derive(Debug)]
-pub struct Player {
+pub struct ServerPlayer {
     pub name: PlayerName,
 }
 
-pub struct PlayerInfo(pub HashMap<UserKey, Player>);
+pub struct Players(pub HashMap<UserKey, ServerPlayer>);
 
-impl Default for PlayerInfo {
+impl Default for Players {
     fn default() -> Self {
-        PlayerInfo(HashMap::new())
+        Players(HashMap::new())
     }
 }
 

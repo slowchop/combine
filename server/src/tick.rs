@@ -13,7 +13,7 @@ pub fn tick(
 ) {
     let s = time.seconds_since_startup();
     if s - *last_time > 1.0 {
-        info!(?s, "tick");
+        info!(?s, ticks = ?server.server_tick(), "tick");
         *last_time = s;
     }
 

@@ -12,15 +12,24 @@ use bevy_log::{info, LogPlugin};
 use bevy_time::TimePlugin;
 use init::init;
 use match_randoms::match_randoms;
+use naia_bevy_server::shared::ConnectionConfig;
 use naia_bevy_server::{Plugin as ServerPlugin, ServerConfig, Stage};
 use shared::protocol::Protocol;
 use shared::{shared_config, Channels};
+use std::time::Duration;
 use tick::tick;
 
 fn main() {
     info!("Server starting...");
 
-    // Build App
+    let server_config = ServerConfig {
+        connection: ConnectionConfig {
+            disconnection_timeout_duration: Duration::from_secs(10),
+            ..Default::default()
+        },
+        require_auth: true,
+    };
+
     App::default()
         // Plugins
         .add_plugin(CorePlugin::default())
@@ -28,7 +37,7 @@ fn main() {
         .add_plugin(ScheduleRunnerPlugin::default())
         .add_plugin(LogPlugin::default())
         .add_plugin(ServerPlugin::<Protocol, Channels>::new(
-            ServerConfig::default(),
+            server_config,
             shared_config(),
         ))
         // Startup System

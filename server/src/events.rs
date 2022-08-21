@@ -1,4 +1,4 @@
-use crate::state::{Player, PlayerInfo, PlayerQueue, State};
+use crate::state::{PlayerQueue, Players, ServerPlayer, State};
 use bevy_ecs::{event::EventReader, system::ResMut};
 use bevy_log::{info, warn};
 use naia_bevy_server::shared::BigMapKey;
@@ -73,7 +73,7 @@ pub fn disconnection_event(
 pub fn receive_message_event(
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
     mut player_queue: ResMut<PlayerQueue>,
-    mut player_info: ResMut<PlayerInfo>,
+    mut player_info: ResMut<Players>,
     server: Server<Protocol, Channels>,
 ) {
     for key in server.user_keys() {
@@ -90,7 +90,7 @@ pub fn receive_message_event(
                 Protocol::JoinRandomGame(random_game) => {
                     let name = *random_game.name;
                     let name = PlayerName::from(name);
-                    let player = Player { name };
+                    let player = ServerPlayer { name };
                     println!("player requesting random game! {:?}", &player);
                     player_info.0.insert(user_key.clone(), player);
                     player_queue.add(user_key.clone());

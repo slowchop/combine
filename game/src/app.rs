@@ -77,8 +77,8 @@ pub fn play() {
     .add_system_to_stage(NaiaStage::Disconnection, disconnect_event)
     .add_system_to_stage(NaiaStage::ReceiveEvents, receive_message_event)
     .add_system_to_stage(NaiaStage::Tick, tick)
-    .add_system_to_stage(NaiaStage::Frame, input)
-    .add_system_to_stage(NaiaStage::PostFrame, sync)
+    // .add_system_to_stage(NaiaStage::Frame, input)
+    // .add_system_to_stage(NaiaStage::PostFrame, sync)
     // .add_system(check_for_exit)
     ;
 
@@ -135,7 +135,6 @@ pub fn play() {
             .with_system(move_camera)
             .into(),
     );
-    // .add_system(spawn_level)
 
     app.run()
 }
@@ -156,10 +155,6 @@ fn despawn_with<T: Component>(mut commands: Commands, q: Query<Entity, With<T>>)
 //         client.disconnect();
 //     }
 // }
-
-fn input() {}
-
-fn sync() {}
 
 fn tick(
     // mut global: ResMut<Global>,

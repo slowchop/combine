@@ -140,7 +140,7 @@ const FIRST_NAMES: [&str; 256] = [
     "Vladimir",
     "Barbara",
     "Angela",
-    "George",
+    "Gerald",
     "Roberto",
     "Peng",
     "Ivan",

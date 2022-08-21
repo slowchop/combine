@@ -1,4 +1,4 @@
-use crate::state::{PlayerInfo, PlayerQueue, State};
+use crate::state::{PlayerQueue, Players, State};
 use bevy_ecs::prelude::Res;
 use bevy_ecs::system::ResMut;
 use bevy_log::{error, info};
@@ -12,7 +12,7 @@ use shared::Channels;
 pub fn match_randoms(
     mut player_queue: ResMut<PlayerQueue>,
     mut server: Server<Protocol, Channels>,
-    player_info: Res<PlayerInfo>,
+    player_info: Res<Players>,
 ) {
     loop {
         let players = match player_queue.pair() {
