@@ -8,7 +8,7 @@ use naia_bevy_server::{
     shared::Random,
     Server,
 };
-use shared::player_name::PlayerName;
+use shared::game::player_name::PlayerName;
 use shared::protocol::game_ready::GameReady;
 use shared::protocol::Protocol;
 use shared::Channels;

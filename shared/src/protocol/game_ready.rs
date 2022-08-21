@@ -1,5 +1,5 @@
-use crate::game_info::Owner;
-use crate::player_name::PlayerName;
+use crate::game::game_info::Owner;
+use crate::game::player_name::PlayerName;
 use crate::seen_hack;
 use bevy_ecs::prelude::Component;
 use naia_shared::{Property, Replicate};

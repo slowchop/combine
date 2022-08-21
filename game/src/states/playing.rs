@@ -5,8 +5,9 @@ pub mod level;
 pub mod spawn_entities;
 
 use bevy::prelude::*;
-use shared::game_info::Owner;
-use shared::player_name::PlayerName;
+use shared::game::game_info::Owner;
+use shared::game::player::{Controller, Player};
+use shared::game::player_name::PlayerName;
 use shared::protocol::game_ready::GameReady;
 
 #[derive(Component)]
@@ -36,32 +37,4 @@ impl From<&GameReady> for GameInfo {
             multiplayer: true,
         }
     }
-}
-
-#[derive(Clone, Debug)]
-pub struct Player {
-    pub name: PlayerName,
-    pub controller: Controller,
-}
-
-impl Player {
-    pub fn human(name: PlayerName) -> Self {
-        Player {
-            name,
-            controller: Controller::Human,
-        }
-    }
-
-    pub fn ai() -> Self {
-        Player {
-            name: PlayerName::new("BOT"),
-            controller: Controller::Ai,
-        }
-    }
-}
-
-#[derive(Clone, Debug)]
-pub enum Controller {
-    Human,
-    Ai,
 }

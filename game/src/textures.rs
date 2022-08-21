@@ -1,7 +1,8 @@
 use crate::states::playing::level::Textures;
+use bevy::prelude::Vec2;
 use image::io::Reader as ImageReader;
 use miette::IntoDiagnostic;
-use shared::level::TextureDefinition;
+use shared::game::managed_game::TextureDefinition;
 use std::fs::File;
 use std::path::Path;
 
@@ -25,7 +26,7 @@ pub fn update_texture_sizes() -> miette::Result<()> {
         let mut found = false;
         textures.0.iter_mut().for_each(|mut td| {
             if td.path == non_asset_path.to_str().unwrap() {
-                td.size = [i.width(), i.height()];
+                td.size = Vec2::new(i.width() as f32, i.height() as f32);
                 found = true;
             }
         });
@@ -33,7 +34,7 @@ pub fn update_texture_sizes() -> miette::Result<()> {
         if !found {
             textures.0.push(TextureDefinition {
                 path: non_asset_path.to_str().unwrap().to_string(),
-                size: [i.width(), i.height()],
+                size: Vec2::new(i.width() as f32, i.height() as f32),
             });
         }
     }

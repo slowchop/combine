@@ -4,9 +4,9 @@ use bevy::asset::LoadState;
 use bevy::prelude::*;
 use bevy::reflect::TypeUuid;
 use serde::{Deserialize, Serialize};
-use shared::game_info::Owner;
-use shared::level::{LevelEntity, TextureDefinition};
-use shared::player_name::PlayerName;
+use shared::game::game_info::Owner;
+use shared::game::managed_game::{LevelEntity, TextureDefinition};
+use shared::game::player_name::PlayerName;
 use std::f32::consts::TAU;
 
 pub const PIXELS_PER_METER: f32 = 250.;

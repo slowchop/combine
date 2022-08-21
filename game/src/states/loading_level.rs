@@ -10,6 +10,7 @@ use bevy::ecs::world::EntityMut;
 use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
 use iyes_loopless::prelude::*;
+use shared::game::managed_game::ManagedGame;
 use std::f32::consts::TAU;
 
 pub fn init(
@@ -28,9 +29,11 @@ pub fn init(
 
 pub fn spawn_level(
     mut commands: Commands,
+    game_info: Query<&GameInfo>,
     level: Res<Handle<YamlLevel>>,
     level_assets: ResMut<Assets<YamlLevel>>,
     textures: Res<Handle<Textures>>,
+    textures_assets: ResMut<Assets<Textures>>,
     asset_server: Res<AssetServer>,
     mut new_entities: EventWriter<SpawnEntity>,
 ) {
@@ -46,6 +49,17 @@ pub fn spawn_level(
 
     println!("Loading level...");
     let level: &YamlLevel = level_assets.get(&level).unwrap();
+    let textures: &Textures = textures_assets.get(&textures).unwrap();
+
+    let game_info = game_info.single();
+
+    let managed_game = ManagedGame::from_players_level_textures(
+        game_info.players.clone(),
+        level.entities.as_slice(),
+        textures.0.as_slice(),
+    );
+    commands.spawn().insert(managed_game);
+
     new_entities.send_batch(level.entities.iter().map(|e| SpawnEntity(e.clone())));
 
     commands.insert_resource(NextState(GameState::Playing));

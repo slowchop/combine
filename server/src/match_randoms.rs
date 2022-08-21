@@ -4,7 +4,7 @@ use bevy_ecs::system::ResMut;
 use bevy_log::{error, info};
 use naia_bevy_server::shared::BigMapKey;
 use naia_bevy_server::{Server, UserKey};
-use shared::player_name::PlayerName;
+use shared::game::player_name::PlayerName;
 use shared::protocol::game_ready::GameReady;
 use shared::protocol::Protocol;
 use shared::Channels;

@@ -1,7 +1,7 @@
 use crate::game_info::ServerGameInfo;
 use bevy_utils::HashMap;
 use naia_bevy_server::{RoomKey, UserKey};
-use shared::player_name::PlayerName;
+use shared::game::player_name::PlayerName;
 use std::collections::VecDeque;
 
 pub struct State {

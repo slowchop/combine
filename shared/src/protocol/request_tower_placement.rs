@@ -1,4 +1,4 @@
-use crate::towers::Tower;
+use crate::game::towers::Tower;
 use bevy_ecs::prelude::Component;
 use bevy_math::Vec2;
 use naia_shared::{Property, Replicate};

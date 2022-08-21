@@ -8,7 +8,7 @@ use crate::{
 use bevy::asset::LoadState;
 use bevy_mod_raycast::RayCastMesh;
 use iyes_loopless::prelude::NextState;
-use shared::level::{EntityType, LevelEntity};
+use shared::game::managed_game::{EntityType, LevelEntity};
 use std::f32::consts::TAU;
 
 #[derive(Debug, Clone)]

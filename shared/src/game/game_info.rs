@@ -1,4 +1,4 @@
-use crate::player_name::PlayerName;
+use crate::game::player_name::PlayerName;
 use bevy_ecs::prelude::*;
 use serde::{Deserialize, Serialize};
 
@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 pub struct Room(u64);
 
 /// 0 or 1.
-#[derive(Component, Default, Serialize, Deserialize, Clone, Debug)]
+#[derive(Component, Default, Serialize, Deserialize, Copy, Clone, Debug)]
 pub struct Owner(u8);
 
 impl Owner {

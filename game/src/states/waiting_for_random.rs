@@ -4,7 +4,7 @@ use bevy::prelude::*;
 use bevy_egui::{egui, EguiContext};
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Client;
-use shared::player_name::PlayerName;
+use shared::game::player_name::PlayerName;
 use shared::protocol::Protocol;
 use shared::{Auth, Channels, JoinRandomGame, UDP_PORT};
 
