@@ -1,0 +1,24 @@
+[package]
+name = "naia-hecs-client"
+version = "0.10.1"
+authors = ["connorcarpenter <connorcarpenter@gmail.com>"]
+workspace = "../../.."
+description = "Library to faciliate naia_client & Hecs interop"
+homepage = "https://github.com/naia-rs/naia"
+repository = "https://github.com/naia-rs/naia"
+keywords = ["wasm", "webrtc", "udp", "networking", "gamedev"]
+categories = ["network-programming", "game-development", "wasm", "web-programming"]
+license = "MIT OR Apache-2.0"
+edition = "2021"
+
+[badges]
+maintenance = { status = "actively-developed" }
+
+[features]
+wbindgen = [ "naia-client/wbindgen", "naia-hecs-shared/wbindgen" ]
+mquad = [ "naia-client/mquad", "naia-hecs-shared/mquad" ]
+
+[dependencies]
+naia-client = { version = "0.10", path = "../../../client" }
+naia-hecs-shared = { version = "0.10", path = "../shared" }
+hecs = { version = "0.9" }

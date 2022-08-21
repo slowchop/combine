@@ -1,0 +1,16 @@
+[package]
+name = "naia-macroquad-client-demo"
+version = "0.1.0"
+authors = ["connorcarpenter <connorcarpenter@gmail.com>"]
+workspace = "../../.."
+edition = "2021"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[features]
+
+[dependencies]
+naia-client = { path = "../../../client", features = [ "mquad" ] }
+naia-macroquad-demo-shared = { path = "../shared" }
+naia-demo-world = { path = "../../demo_utils/demo_world" }
+macroquad = { version = "=0.3.23", features = ["audio"] }
