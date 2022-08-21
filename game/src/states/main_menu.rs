@@ -1,4 +1,5 @@
 use crate::app::GameState;
+use crate::states::ContinueState;
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContext};
 use iyes_loopless::prelude::*;
@@ -22,11 +23,13 @@ pub fn update(mut commands: Commands, mut egui_context: ResMut<EguiContext>) {
         };
         if ui.button("Multiplayer").clicked() {
             println!("Multiplayer");
-            commands.insert_resource(NextState(GameState::ConnectingRandom));
+            commands.insert_resource(ContinueState(Some(GameState::VsFriend)));
+            commands.insert_resource(NextState(GameState::Connecting));
         };
         if ui.button("Friend").clicked() {
             println!("Friend");
-            commands.insert_resource(NextState(GameState::ConnectingFriend));
+            commands.insert_resource(ContinueState(Some(GameState::WaitingForRandom)));
+            commands.insert_resource(NextState(GameState::Connecting));
         };
     });
 }

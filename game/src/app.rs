@@ -2,7 +2,7 @@ use crate::net::{connect_event, disconnect_event, receive_message_event};
 use crate::other_systems::quit_on_escape;
 use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
-use crate::states::{loading, main_menu, playing};
+use crate::states::{connecting, loading, main_menu, playing, ContinueState};
 use crate::textures::update_texture_sizes;
 use crate::{
     move_camera, spawn_level, AmbientLight, App, AssetServer, AssetServerSettings,
@@ -25,13 +25,13 @@ pub enum GameState {
     MainMenu,
     Settings,
 
+    Connecting,
+
     // Friends
-    ConnectingFriend,
     VsFriend,
     WaitForFriend,
 
     // Random friend
-    ConnectingRandom,
     WaitingForRandom,
 
     // In game!
@@ -55,6 +55,7 @@ pub fn play() {
     .insert_resource(Settings::default())
     .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
     .insert_resource(Msaa { samples: 4 })
+    .insert_resource(ContinueState(None))
     .add_loopless_state(GameState::Loading)
     .add_plugins(DefaultPlugins)
     .add_plugin(ClientPlugin::<Protocol, Channels>::new(
@@ -87,6 +88,15 @@ pub fn play() {
         ConditionSet::new()
             .run_in_state(GameState::MainMenu)
             .with_system(main_menu::update)
+            .into(),
+    );
+
+    // Connecting
+    app.add_enter_system(GameState::Connecting, connecting::init);
+    app.add_system_set(
+        ConditionSet::new()
+            .run_in_state(GameState::Connecting)
+            .with_system(connecting::update)
             .into(),
     );
 
@@ -144,11 +154,6 @@ fn init(
     asset_server: Res<AssetServer>,
     mut client: Client<Protocol, Channels>,
 ) {
-    client.auth(Auth::new());
-    client.connect(&format!("http://10.0.4.14:{}", UDP_PORT));
-    // let command = Auth::new();
-    // client.send_message(Channels::PlayerCommand, &command);
-
     commands
         .spawn_bundle(Camera3dBundle {
             ..Default::default()
