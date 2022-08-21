@@ -7,9 +7,9 @@ edition = "2021"
 bevy_ecs = { version = "0.8", default-features = false }
 bevy_math = { version = "0.8", default-features = false }
 
-#naia-shared = "0.10.2"
-#naia-shared = { path = "../naia/shared" }
-naia-shared = { git = "https://github.com/naia-lib/naia", rev = "397f2c4586f0e43e50e97363e9381a79eaec618b" }
+naia-shared = "0.10.2"
+#naia-shared = { path = "../../naia/shared" }
+#naia-shared = { git = "https://github.com/naia-lib/naia", rev = "397f2c4586f0e43e50e97363e9381a79eaec618b" }
 
 cfg-if = { version = "1.0" }
 tracing = "0.1.36"

@@ -1,11 +1,13 @@
 use crate::game_info::Owner;
 use crate::player_name::PlayerName;
+use crate::seen_hack;
 use bevy_ecs::prelude::Component;
 use naia_shared::{Property, Replicate};
 
 #[derive(Component, Replicate)]
 #[protocol_path = "crate::protocol::Protocol"]
 pub struct GameReady {
+    pub seen: Property<u64>,
     pub player_names: Property<[String; 2]>,
     /// Sent to a player to tell them which player ID they are.
     pub you_are: Property<u8>,
@@ -20,6 +22,6 @@ impl GameReady {
             .collect::<Vec<_>>()
             .try_into()
             .unwrap();
-        GameReady::new_complete(player_names, you_are, level)
+        GameReady::new_complete(seen_hack(), player_names, you_are, level)
     }
 }

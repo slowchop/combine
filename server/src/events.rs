@@ -96,12 +96,6 @@ pub fn receive_message_event(
                     println!("player requesting random game! {:?}", &player);
                     player_info.0.insert(user_key.clone(), player);
                     player_queue.add(user_key.clone());
-
-                    println!("HACK Sending GameReady to {}", name.clone());
-                    let name = PlayerName::new(name.as_str());
-                    let message =
-                        GameReady::new([name.clone(), name.clone()], 0, "test".to_string());
-                    server.send_message(user_key, Channels::ServerCommand, &message);
                 }
                 Protocol::JoinFriendGame(_) => {
                     todo!()
@@ -110,6 +104,7 @@ pub fn receive_message_event(
                     // Server message. Ignored.
                 }
                 Protocol::RequestTowerPlacement(place_tower) => {
+                    println!("REQQQQQQQQ");
                     // TODO: Check if possible
                     let position: Vec2 = place_tower.position();
                 }

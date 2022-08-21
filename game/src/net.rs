@@ -1,6 +1,7 @@
 use crate::app::GameState;
 use crate::states::playing::GameInfo;
 use bevy::prelude::*;
+use bevy::utils::HashSet;
 use iyes_loopless::prelude::NextState;
 use naia_bevy_client::events::{
     InsertComponentEvent, MessageEvent, SpawnEntityEvent, UpdateComponentEvent,
@@ -17,10 +18,31 @@ pub fn disconnect_event(client: Client<Protocol, Channels>) {
     println!("Client disconnected from: {}", client.server_address());
 }
 
+/// The server always sends two of the same packet to the client.
+///
+/// I'm sure that the higher level server code isn't sending anything so it seems like naia is
+/// doing it. I don't know why, since it should be "ordered reliable".
+///
+/// This is to track duplicate packets.
+#[derive(Default)]
+pub struct SeenHack(HashSet<u64>);
+
+impl SeenHack {
+    fn seen(&mut self, id: u64) -> bool {
+        if self.0.contains(&id) {
+            true
+        } else {
+            self.0.insert(id);
+            false
+        }
+    }
+}
+
 pub fn receive_message_event(
     mut commands: Commands,
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
     client: Client<Protocol, Channels>,
+    mut seen_hack: ResMut<SeenHack>,
 ) {
     // dbg!(client.is_connected());
     for event in event_reader.iter() {
@@ -31,8 +53,12 @@ pub fn receive_message_event(
                 Protocol::JoinRandomGame(_) => {}
                 Protocol::JoinFriendGame(_) => {}
                 Protocol::GameReady(game_ready) => {
+                    if seen_hack.seen(*game_ready.seen) {
+                        continue;
+                    }
+
                     println!(
-                        "Client got a game ready! {} {:?} {}",
+                        "-------- Client got a game ready! {} {:?} {}",
                         *game_ready.level, *game_ready.player_names, *game_ready.you_are
                     );
                     let game_info: GameInfo = game_ready.into();

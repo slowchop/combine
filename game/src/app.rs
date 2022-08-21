@@ -1,3 +1,4 @@
+use crate::net::SeenHack;
 use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::left_click::left_click;
@@ -83,21 +84,17 @@ pub fn play() {
     .add_plugin(WorldInspectorPlugin::new());
 
     // Ours!
-    app
-    .add_event::<SpawnEntity>()
-    .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
-    .add_system_to_stage(NaiaStage::Connection, net::connect_event)
-    .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
-    .add_system_to_stage(NaiaStage::ReceiveEvents, net::receive_message_event)
+    app.add_event::<SpawnEntity>()
+        .insert_resource(SeenHack::default())
+        .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
+        .add_system_to_stage(NaiaStage::Connection, net::connect_event)
+        .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
+        .add_system_to_stage(NaiaStage::ReceiveEvents, net::receive_message_event)
         .add_system_to_stage(NaiaStage::ReceiveEvents, net::spawn_entity_event)
         .add_system_to_stage(NaiaStage::ReceiveEvents, net::insert_component_event)
         .add_system_to_stage(NaiaStage::ReceiveEvents, net::update_component_event)
         .add_system_to_stage(NaiaStage::ReceiveEvents, net::receive_message_event)
-    .add_system_to_stage(NaiaStage::Tick, tick)
-    // .add_system_to_stage(NaiaStage::Frame, input)
-    // .add_system_to_stage(NaiaStage::PostFrame, sync)
-    // .add_system(check_for_exit)
-    ;
+        .add_system_to_stage(NaiaStage::Tick, tick);
 
     // Splash
     app.add_enter_system(GameState::Splash, splash::init);

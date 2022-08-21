@@ -11,6 +11,7 @@ use naia_shared::{
 pub use protocol::auth::Auth;
 pub use protocol::join_friend_game::JoinFriendGame;
 pub use protocol::join_random_game::JoinRandomGame;
+use rand::{thread_rng, Rng};
 use std::time::Duration;
 
 pub const UDP_PORT: u16 = 24191;
@@ -35,6 +36,10 @@ pub fn shared_config() -> SharedConfig<Channels> {
         tick_interval,
         None,
     )
+}
+
+pub fn seen_hack() -> u64 {
+    thread_rng().gen()
 }
 
 #[derive_channels]

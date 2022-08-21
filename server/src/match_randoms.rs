@@ -20,8 +20,6 @@ pub fn match_randoms(
             Some(p) => p,
         };
 
-        println!("????");
-
         let player_names: [PlayerName; 2] = players
             .iter()
             .map(|&u| player_info.0.get(&u).unwrap().name.clone())
