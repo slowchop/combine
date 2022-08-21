@@ -4,6 +4,7 @@ use bevy::asset::LoadState;
 use bevy::prelude::*;
 use bevy::reflect::TypeUuid;
 use serde::{Deserialize, Serialize};
+use shared::game_info::Owner;
 use shared::player_name::PlayerName;
 use std::f32::consts::TAU;
 
@@ -16,13 +17,15 @@ pub struct Level {
     pub entities: Vec<LevelEntity>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct LevelEntity {
     pub texture: String,
     pub position: [f32; 2],
 
     #[serde(default, rename = "type")]
     pub entity_type: EntityType,
+
+    pub owner: Option<Owner>,
 }
 
 impl LevelEntity {
@@ -37,7 +40,7 @@ impl LevelEntity {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum EntityType {
     Sprite,

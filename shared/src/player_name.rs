@@ -1,7 +1,6 @@
 use naia_shared::serde;
 use naia_shared::serde::{BitReader, BitWrite, SerdeErr};
 use rand::{thread_rng, Rng, RngCore};
-use serde::Serde;
 use std::fmt::Display;
 use std::hash::Hasher;
 

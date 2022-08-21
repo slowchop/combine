@@ -3712,6 +3712,7 @@ dependencies = [
  "cfg-if 1.0.0",
  "naia-shared",
  "rand",
+ "serde",
  "strum",
  "tracing",
 ]

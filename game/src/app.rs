@@ -1,8 +1,10 @@
 use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::left_click::left_click;
+use crate::states::spawn_entities::SpawnEntity;
 use crate::states::{
-    connecting, loading_level, main_menu, playing, splash, waiting_for_random, ContinueState,
+    connecting, loading_level, main_menu, playing, spawn_entities, splash, waiting_for_random,
+    ContinueState,
 };
 use crate::{
     move_camera, net, AmbientLight, App, AssetServer, AssetServerSettings, BillboardMaterial,
@@ -82,14 +84,17 @@ pub fn play() {
             update_raycast_with_cursor.before(RaycastSystem::BuildRays::<MyRaycastSet>),
         );
 
-    app
-    .add_plugin(ClientPlugin::<Protocol, Channels>::new(
+    app.add_plugin(ClientPlugin::<Protocol, Channels>::new(
         ClientConfig::default(),
         shared_config(),
     ))
     .add_plugin(YamlAssetPlugin::<Textures>::new(&["textures"]))
     .add_plugin(YamlAssetPlugin::<Level>::new(&["level"]))
-    .add_plugin(WorldInspectorPlugin::new())
+    .add_plugin(WorldInspectorPlugin::new());
+
+    // Ours!
+    app
+        .add_event::<SpawnEntity>()
     .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
     .add_system_to_stage(NaiaStage::Connection, net::connect_event)
     .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
@@ -146,6 +151,7 @@ pub fn play() {
         ConditionSet::new()
             .run_in_state(GameState::LoadingLevel)
             .with_system(loading_level::spawn_level)
+            .with_system(spawn_entities::spawn_entities)
             .into(),
     );
 
@@ -156,6 +162,7 @@ pub fn play() {
             .run_in_state(GameState::Playing)
             .with_system(left_click)
             .with_system(move_camera)
+            .with_system(spawn_entities::spawn_entities)
             .into(),
     );
 
