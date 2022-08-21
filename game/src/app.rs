@@ -7,9 +7,9 @@ use crate::states::{
     ContinueState,
 };
 use crate::{
-    move_camera, net, AmbientLight, App, AssetServer, AssetServerSettings, BillboardMaterial,
-    Camera3dBundle, ClearColor, Color, Commands, DefaultPlugins, Level, LevelLoadState,
-    MaterialPlugin, Msaa, Res, Textures, Transform, Vec3, WindowDescriptor,
+    move_camera, net, App, AssetServer, AssetServerSettings, BillboardMaterial, Camera3dBundle,
+    ClearColor, Color, Commands, DefaultPlugins, Level, LevelLoadState, MaterialPlugin, Msaa, Res,
+    Textures, Transform, Vec3, WindowDescriptor,
 };
 use bevy::prelude::*;
 use bevy::window::PresentMode;
@@ -68,17 +68,7 @@ pub fn play() {
     .add_loopless_state(GameState::Splash)
     .add_plugins(DefaultPlugins);
 
-    app
-        // The DefaultRaycastingPlugin bundles all the functionality you might need into a single
-        // plugin. This includes building rays, casting them, and placing a debug cursor at the
-        // intersection. For more advanced uses, you can compose the systems in this plugin however
-        // you need. For example, you might exclude the debug cursor system.
-        .add_plugin(DefaultRaycastingPlugin::<MyRaycastSet>::default())
-        // You will need to pay attention to what order you add systems! Putting them in the wrong
-        // order can result in multiple frames of latency. Ray casting should probably happen near
-        // start of the frame. For example, we want to be sure this system runs before we construct
-        // any rays, hence the ".before(...)". You can use these provided RaycastSystem labels to
-        // order your systems with the ones provided by the raycasting plugin.
+    app.add_plugin(DefaultRaycastingPlugin::<MyRaycastSet>::default())
         .add_system_to_stage(
             CoreStage::First,
             update_raycast_with_cursor.before(RaycastSystem::BuildRays::<MyRaycastSet>),
@@ -94,7 +84,7 @@ pub fn play() {
 
     // Ours!
     app
-        .add_event::<SpawnEntity>()
+    .add_event::<SpawnEntity>()
     .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
     .add_system_to_stage(NaiaStage::Connection, net::connect_event)
     .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
@@ -151,7 +141,7 @@ pub fn play() {
         ConditionSet::new()
             .run_in_state(GameState::LoadingLevel)
             .with_system(loading_level::spawn_level)
-            .with_system(spawn_entities::spawn_entities)
+            // .with_system(spawn_entities::spawn_entities)
             .into(),
     );
 

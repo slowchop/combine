@@ -1,6 +1,6 @@
 use crate::app::MyRaycastSet;
-use crate::states::playing::GameInfo;
-use bevy::input::mouse::MouseMotion;
+use crate::states::playing::level::{EntityType, LevelEntity};
+use crate::states::spawn_entities::SpawnEntity;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
 use naia_bevy_client::Client;
@@ -14,6 +14,7 @@ pub fn left_click(
     mut client: Client<Protocol, Channels>,
     buttons: Res<Input<MouseButton>>,
     query: Query<&Intersection<MyRaycastSet>>,
+    mut spawn_entities: EventWriter<SpawnEntity>,
 ) {
     if !(buttons.just_released(MouseButton::Left)) {
         return;
@@ -39,6 +40,11 @@ pub fn left_click(
     let mut place_tower = RequestTowerPlacement::new(position, Tower::MachineGun, 1230);
     client.send_message(Channels::PlayerCommand, &mut place_tower);
 
-    // commands.spawn_bundle()
-    todo!()
+    let level_entity = LevelEntity {
+        texture: "harold.png".to_string(),
+        position: position.into(),
+        entity_type: EntityType::Sprite,
+        owner: None,
+    };
+    spawn_entities.send(SpawnEntity(level_entity));
 }

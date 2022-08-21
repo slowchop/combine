@@ -18,7 +18,15 @@ pub fn init(
     asset_server: Res<AssetServer>,
     game_info_query: Query<&GameInfo>,
 ) {
-    let game_info = game_info_query.single();
+    // let game_info = game_info_query.get_single();
+    // let game_info = if let Ok(game_info) = game_info {
+    //     game_info
+    // } else {
+    //     println!("Exiting loading_level::init early");
+    //     return;
+    // };
+    let game_info = game_info_query.iter().next().unwrap();
+
     let level_path = format!("levels/{}.level", game_info.level);
     println!("Loading level... {}", level_path);
 

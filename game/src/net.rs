@@ -31,7 +31,10 @@ pub fn receive_message_event(
                 Protocol::JoinRandomGame(_) => {}
                 Protocol::JoinFriendGame(_) => {}
                 Protocol::GameReady(game_ready) => {
-                    println!("Client got a game ready! {}", *game_ready.level);
+                    println!(
+                        "Client got a game ready! {} {:?} {}",
+                        *game_ready.level, *game_ready.player_names, *game_ready.you_are
+                    );
                     let game_info: GameInfo = game_ready.into();
                     commands.spawn().insert(game_info);
                     commands.insert_resource(NextState(GameState::LoadingLevel));

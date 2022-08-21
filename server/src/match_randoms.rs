@@ -20,6 +20,8 @@ pub fn match_randoms(
             Some(p) => p,
         };
 
+        println!("????");
+
         let player_names: [PlayerName; 2] = players
             .iter()
             .map(|&u| player_info.0.get(&u).unwrap().name.clone())
@@ -29,9 +31,11 @@ pub fn match_randoms(
 
         let room = server.make_room();
         let room_key = room.key();
+        println!("Creating room {}", room_key.to_u64());
         for (idx, player) in players.iter().enumerate() {
             server.user_mut(&player).enter_room(&room_key);
 
+            println!("Sending GameReady to {}", player.to_u64());
             let message = GameReady::new(player_names.clone(), idx as u8, "test".to_string());
             server.send_message(player, Channels::ServerCommand, &message);
         }

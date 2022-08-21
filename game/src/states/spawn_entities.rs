@@ -15,7 +15,6 @@ pub struct SpawnEntity(pub LevelEntity);
 
 pub fn spawn_entities(
     mut commands: Commands,
-    level: Res<Handle<Level>>,
     textures: Res<Handle<Textures>>,
     textures_assets: ResMut<Assets<Textures>>,
     asset_server: Res<AssetServer>,
@@ -23,12 +22,6 @@ pub fn spawn_entities(
     mut billboard_materials: ResMut<Assets<BillboardMaterial>>,
     mut new_entities: EventReader<SpawnEntity>,
 ) {
-    println!("2 Waiting for level info to load...");
-    if asset_server.get_load_state(&*level) != LoadState::Loaded {
-        return;
-    }
-
-    println!("2 Waiting for texture info to load...");
     if asset_server.get_load_state(&*textures) != LoadState::Loaded {
         return;
     }
