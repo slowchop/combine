@@ -1,7 +1,7 @@
 use crate::app::GameState;
 use crate::states::playing::bottom_quad::BottomQuad;
-use crate::states::playing::level::{EntityType, PIXELS_PER_METER};
-use crate::{BillboardMaterial, Level, Textures};
+use crate::states::playing::level::PIXELS_PER_METER;
+use crate::{BillboardMaterial, Textures, YamlLevel};
 use bevy::asset::LoadState;
 use bevy::prelude::*;
 use iyes_loopless::prelude::*;

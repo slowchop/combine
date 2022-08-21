@@ -2,7 +2,6 @@ pub mod connecting;
 pub mod loading_level;
 pub mod main_menu;
 pub mod playing;
-pub mod spawn_entities;
 pub mod splash;
 pub mod waiting_for_random;
 

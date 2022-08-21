@@ -1,13 +1,14 @@
 use crate::app::{GameState, MyRaycastSet};
 use crate::states::playing::bottom_quad::BottomQuad;
-use crate::states::playing::level::{EntityType, LevelEntity};
+use crate::states::playing::level::level_entity_transform;
 use crate::{
     shape, AlphaMode, AssetServer, Assets, BillboardMaterial, Color, Commands, EventReader, Handle,
-    Level, MaterialMeshBundle, Mesh, Quat, Res, ResMut, StandardMaterial, Textures, Vec2,
+    MaterialMeshBundle, Mesh, Quat, Res, ResMut, StandardMaterial, Textures, Vec2, YamlLevel,
 };
 use bevy::asset::LoadState;
 use bevy_mod_raycast::RayCastMesh;
 use iyes_loopless::prelude::NextState;
+use shared::level::{EntityType, LevelEntity};
 use std::f32::consts::TAU;
 
 #[derive(Debug, Clone)]
@@ -28,6 +29,7 @@ pub fn spawn_entities(
 
     let textures: &Textures = textures_assets.get(&textures).unwrap();
     for spawn in new_entities.iter() {
+        dbg!(&spawn);
         let level_entity: &LevelEntity = &spawn.0;
         let texture_def = textures
             .0
@@ -36,7 +38,7 @@ pub fn spawn_entities(
             .ok_or_else(|| format!("Could not find {} in texture defs.", level_entity.texture))
             .unwrap();
 
-        let mut transform = level_entity.transform(texture_def);
+        let mut transform = level_entity_transform(level_entity, texture_def);
         match level_entity.entity_type {
             EntityType::Ground => {}
             _ => {

@@ -2,15 +2,14 @@ use crate::net::SeenHack;
 use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::left_click::left_click;
-use crate::states::spawn_entities::SpawnEntity;
+use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntity};
 use crate::states::{
-    connecting, loading_level, main_menu, playing, spawn_entities, splash, waiting_for_random,
-    ContinueState,
+    connecting, loading_level, main_menu, playing, splash, waiting_for_random, ContinueState,
 };
 use crate::{
     move_camera, net, App, AssetServer, AssetServerSettings, BillboardMaterial, Camera3dBundle,
-    ClearColor, Color, Commands, DefaultPlugins, Level, LevelLoadState, MaterialPlugin, Msaa, Res,
-    Textures, Transform, Vec3, WindowDescriptor,
+    ClearColor, Color, Commands, DefaultPlugins, LevelLoadState, MaterialPlugin, Msaa, Res,
+    Textures, Transform, Vec3, WindowDescriptor, YamlLevel,
 };
 use bevy::prelude::*;
 use bevy::window::PresentMode;
@@ -80,7 +79,7 @@ pub fn play() {
         shared_config(),
     ))
     .add_plugin(YamlAssetPlugin::<Textures>::new(&["textures"]))
-    .add_plugin(YamlAssetPlugin::<Level>::new(&["level"]))
+    .add_plugin(YamlAssetPlugin::<YamlLevel>::new(&["level"]))
     .add_plugin(WorldInspectorPlugin::new());
 
     // Ours!
@@ -149,7 +148,7 @@ pub fn play() {
             .run_in_state(GameState::Playing)
             .with_system(left_click)
             .with_system(move_camera)
-            .with_system(spawn_entities::spawn_entities)
+            .with_system(spawn_entities)
             .into(),
     );
 
@@ -199,7 +198,7 @@ fn tick(
     mut client: Client<Protocol, Channels>,
 ) {
     if let Some(client_tick) = client.client_tick() {
-        println!("{:?}", client_tick);
+        // println!("{:?}", client_tick);
         // if global.command_history.can_insert(&client_tick) {
         // Record command
         // global.command_history.insert(client_tick, command.clone());

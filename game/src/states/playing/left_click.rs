@@ -1,9 +1,9 @@
 use crate::app::MyRaycastSet;
-use crate::states::playing::level::{EntityType, LevelEntity};
-use crate::states::spawn_entities::SpawnEntity;
+use crate::states::playing::spawn_entities::SpawnEntity;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
 use naia_bevy_client::Client;
+use shared::level::{EntityType, LevelEntity};
 use shared::protocol::request_tower_placement::RequestTowerPlacement;
 use shared::protocol::Protocol;
 use shared::towers::Tower;
@@ -43,6 +43,7 @@ pub fn left_click(
     let level_entity = LevelEntity {
         texture: "harold.png".to_string(),
         position: position.into(),
+        test: Default::default(),
         entity_type: EntityType::Sprite,
         owner: None,
     };

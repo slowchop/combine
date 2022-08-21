@@ -26,6 +26,7 @@ pub fn update(mut commands: Commands, mut egui_context: ResMut<EguiContext>) {
                 level: "test".to_string(),
                 players: [Player::human(PlayerName::random()), Player::ai()],
                 you_are: Owner::new(0),
+                multiplayer: false,
             });
             commands.insert_resource(NextState(GameState::LoadingLevel));
         };
