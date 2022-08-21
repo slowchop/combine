@@ -88,8 +88,8 @@ pub fn receive_message_event(
                     warn!("Auth on already connected?")
                 }
                 Protocol::JoinRandomGame(random_game) => {
-                    let name = *random_game.name;
-                    let name = PlayerName::from(name);
+                    let name = (*random_game.name).clone();
+                    let name = PlayerName::new(name.as_str());
                     let player = ServerPlayer { name };
                     println!("player requesting random game! {:?}", &player);
                     player_info.0.insert(user_key.clone(), player);

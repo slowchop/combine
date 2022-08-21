@@ -22,7 +22,7 @@ pub fn match_randoms(
 
         let player_names: [PlayerName; 2] = players
             .iter()
-            .map(|&u| player_info.0.get(&u).unwrap().name)
+            .map(|&u| player_info.0.get(&u).unwrap().name.clone())
             .collect::<Vec<_>>()
             .try_into()
             .unwrap();
@@ -32,7 +32,7 @@ pub fn match_randoms(
         for (idx, player) in players.iter().enumerate() {
             server.user_mut(&player).enter_room(&room_key);
 
-            let message = GameReady::new(player_names, idx as u8, "test".to_string());
+            let message = GameReady::new(player_names.clone(), idx as u8, "test".to_string());
             server.send_message(player, Channels::ServerCommand, &message);
         }
 

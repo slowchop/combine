@@ -1,25 +1,20 @@
 use crate::net::{connect_event, disconnect_event, receive_message_event};
-use crate::other_systems::quit_on_escape;
 use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
 use crate::states::{
     connecting, loading, loading_level, main_menu, playing, waiting_for_random, ContinueState,
 };
-use crate::textures::update_texture_sizes;
 use crate::{
     move_camera, AmbientLight, App, AssetServer, AssetServerSettings, BillboardMaterial,
     Camera3dBundle, ClearColor, Color, Commands, DefaultPlugins, Level, LevelLoadState,
     MaterialPlugin, Msaa, Res, Textures, Transform, Vec3, WindowDescriptor,
 };
-use bevy::app::AppExit;
 use bevy::prelude::*;
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_inspector_egui::WorldInspectorPlugin;
-use clap::Parser;
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Plugin as ClientPlugin;
 use naia_bevy_client::{Client, ClientConfig, Stage as NaiaStage};
-use shared::game_info::GameInfo;
 use shared::protocol::Protocol;
 use shared::{shared_config, Auth, Channels, UDP_PORT};
 
@@ -62,7 +57,6 @@ pub fn play() {
     .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
     .insert_resource(Msaa { samples: 4 })
     .insert_resource(ContinueState(None))
-    .insert_resource(GameInfo::default())
     .add_loopless_state(GameState::Splash)
     .add_plugins(DefaultPlugins)
     .add_plugin(ClientPlugin::<Protocol, Channels>::new(

@@ -1,9 +1,9 @@
 use crate::app::GameState;
+use crate::states::playing::GameInfo;
 use bevy::prelude::*;
 use iyes_loopless::prelude::NextState;
 use naia_bevy_client::events::MessageEvent;
 use naia_bevy_client::{Client, CommandsExt};
-use shared::game_info::GameInfo;
 use shared::protocol::Protocol;
 use shared::Channels;
 
@@ -32,7 +32,7 @@ pub fn receive_message_event(
                 Protocol::GameReady(game_ready) => {
                     println!("Client got a game ready! {}", *game_ready.level);
                     let game_info: GameInfo = game_ready.into();
-                    commands.insert_resource(game_info);
+                    commands.spawn().insert(game_info);
                     commands.insert_resource(NextState(GameState::LoadingLevel));
                 }
             }
