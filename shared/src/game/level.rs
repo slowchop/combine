@@ -1,4 +1,5 @@
-use crate::game::managed_game::{LevelEntity, TextureDefinition};
+use crate::game::defs::TextureDefinition;
+use crate::game::managed_game::LevelEntity;
 use bevy_math::Vec3;
 use bevy_transform::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -10,8 +11,6 @@ pub struct YamlLevel {
     pub name: String,
     pub entities: Vec<LevelEntity>,
 }
-
-pub struct Textures(pub Vec<TextureDefinition>);
 
 pub fn level_entity_transform(
     level_entity: &LevelEntity,

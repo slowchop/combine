@@ -9,11 +9,10 @@ use crate::states::{
 use crate::{
     move_camera, net, App, Args, AssetServer, AssetServerSettings, BillboardMaterial,
     Camera3dBundle, ClearColor, Color, Commands, DefaultPlugins, LevelLoadState, MaterialPlugin,
-    Msaa, Res, Textures, Transform, Vec3, WindowDescriptor, YamlLevel,
+    Msaa, Res, Transform, Vec3, WindowDescriptor, YamlLevel,
 };
 use bevy::prelude::*;
 use bevy::window::PresentMode;
-use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_inspector_egui::WorldInspectorPlugin;
 use bevy_mod_raycast::{
     DefaultPluginState, DefaultRaycastingPlugin, RayCastMesh, RayCastMethod, RayCastSource,
@@ -61,8 +60,6 @@ pub fn play(args: &Args) {
         settings.start_multiplayer_immediately = true;
     }
 
-    let defs = Defs::load();
-
     app.insert_resource(WindowDescriptor {
         resizable: false,
         width: 1024f32,
@@ -77,7 +74,7 @@ pub fn play(args: &Args) {
         ..Default::default()
     })
     .insert_resource(settings)
-    .insert_resource(defs)
+    .insert_resource(Defs::load())
     .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
     .insert_resource(Msaa { samples: 4 })
     .insert_resource(ContinueState(None))

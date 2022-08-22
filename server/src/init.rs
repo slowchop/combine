@@ -3,6 +3,7 @@ use bevy_ecs::prelude::*;
 use bevy_ecs::system::Commands;
 use bevy_log::info;
 use naia_bevy_server::{Server, ServerAddrs};
+use shared::game::defs::Defs;
 use shared::protocol::Protocol;
 use shared::{Channels, UDP_PORT, WEB_PORT};
 use std::collections::HashMap;
@@ -28,8 +29,11 @@ pub fn init(mut commands: Commands, mut server: Server<Protocol, Channels>) {
     // Create a new, singular room, which will contain Users and Entities that they
     // can receive updates from
     let main_room_key = server.make_room().key();
+    commands.insert_resource(Global { main_room_key });
 
-    let textures = serde_yaml::commands.insert_resource(Global { main_room_key });
+    let defs = Defs::load();
+    commands.insert_resource(defs);
+
     commands.insert_resource(PlayerQueue::default());
     commands.insert_resource(Players::default());
 }

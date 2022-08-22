@@ -29,9 +29,9 @@ pub fn match_randoms(
             .try_into()
             .unwrap();
 
-        println!("Creating room {}", room_key.to_u64());
         let room = server.make_room();
         let room_key = room.key();
+        println!("Created room #{}", room_key.to_u64());
 
         println!("Creating managed game.");
         // commands.spawn().insert(ManagedGame::from_players_level_textures())

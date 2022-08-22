@@ -2,13 +2,14 @@ use crate::app::{GameState, MyRaycastSet};
 use crate::states::playing::bottom_quad::BottomQuad;
 use crate::states::playing::spawn_entities::SpawnEntity;
 use crate::states::playing::GameInfo;
-use crate::{BillboardMaterial, Textures, YamlLevel};
+use crate::{BillboardMaterial, YamlLevel};
 use bevy::asset::LoadState;
 use bevy::ecs::system::EntityCommands;
 use bevy::ecs::world::EntityMut;
 use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
 use iyes_loopless::prelude::*;
+use shared::game::defs::Defs;
 use shared::game::level::PIXELS_PER_METER;
 use shared::game::managed_game::ManagedGame;
 use std::f32::consts::TAU;
@@ -30,22 +31,12 @@ pub fn init(
 pub fn spawn_level(
     mut commands: Commands,
     game_info: Query<&GameInfo>,
-    level: Res<Handle<YamlLevel>>,
-    level_assets: ResMut<Assets<YamlLevel>>,
-    textures: Res<Handle<Textures>>,
-    textures_assets: ResMut<Assets<Textures>>,
     asset_server: Res<AssetServer>,
     mut new_entities: EventWriter<SpawnEntity>,
+    defs: Res<Defs>,
 ) {
-    println!("Waiting for level info to load...");
-    if asset_server.get_load_state(&*level) != LoadState::Loaded {
-        return;
-    }
-
-    println!("Waiting for texture info to load...");
-    if asset_server.get_load_state(&*textures) != LoadState::Loaded {
-        return;
-    }
+    let game_info = game_info.single();
+    let level = defs.levels[&game_info.level];
 
     println!("Loading level...");
     let level: &YamlLevel = level_assets.get(&level).unwrap();
