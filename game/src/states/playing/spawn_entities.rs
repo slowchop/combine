@@ -25,6 +25,7 @@ pub fn spawn_entities(
     defs: Res<Defs>,
 ) {
     for spawn in new_entities.iter() {
+        println!("---------------------------------------------");
         let entity_def = &spawn.entity_def;
         let mut texture = entity_def.texture.clone();
 
@@ -70,6 +71,7 @@ pub fn spawn_entities(
             texture = Some(tower.texture.clone());
         };
 
+        info!(?texture);
         let material = texture.as_ref().map(|texture_name| {
             billboard_materials.add(BillboardMaterial {
                 alpha_mode,
@@ -77,16 +79,19 @@ pub fn spawn_entities(
                 color: Color::WHITE,
             })
         });
+        info!(?material);
 
-        let transform: Option<Transform> =
-            defs.level_entity_transform(entity_def)
-                .map(|mut transform| match entity_def.entity_type {
-                    EntityType::Ground => transform,
-                    _ => {
-                        transform.rotation = Quat::from_rotation_x(TAU * -0.125);
-                        transform
-                    }
-                });
+        info!(?entity_def, "??");
+        let transform: Option<Transform> = defs
+            .level_entity_transform(&texture, &entity_def.position.as_ref().map(|p| p.into()))
+            .map(|mut transform| match entity_def.entity_type {
+                EntityType::Ground => transform,
+                _ => {
+                    transform.rotation = Quat::from_rotation_x(TAU * -0.125);
+                    transform
+                }
+            });
+        info!(?transform);
 
         let mut entity = match (transform, material) {
             (Some(transform), Some(material)) => commands.spawn_bundle(MaterialMeshBundle {

@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::Write;
 use strum::FromRepr;
+use tracing::info;
 
 pub const PIXELS_PER_METER: f32 = 250.;
 
@@ -37,15 +38,21 @@ impl Defs {
             .unwrap();
     }
 
-    pub fn level_entity_transform(&self, level_entity: &EntityDef) -> Option<Transform> {
-        let texture_def = level_entity
-            .texture
+    pub fn level_entity_transform(
+        &self,
+        texture: &Option<String>,
+        position: &Option<Vec2>,
+    ) -> Option<Transform> {
+        let texture_def = texture
             .as_ref()
             .and_then(|texture| self.textures.get(texture.as_str()))?;
 
-        let position = level_entity.position.as_ref()?;
-        let x = position.0.x;
-        let y = position.0.y;
+        info!("{:?}", texture_def);
+
+        let position = position.as_ref()?;
+        info!("{:?}", position);
+        let x = position.x;
+        let y = position.y;
         Some(Transform::from_xyz(x, 0., y).with_scale(Vec3::new(
             texture_def.size[0] as f32 / PIXELS_PER_METER,
             texture_def.size[1] as f32 / PIXELS_PER_METER,
@@ -181,6 +188,12 @@ impl From<Vec2> for NetVec2 {
 
 impl From<&NetVec2> for Vec2 {
     fn from(nv: &NetVec2) -> Self {
+        nv.0
+    }
+}
+
+impl From<NetVec2> for Vec2 {
+    fn from(nv: NetVec2) -> Self {
         nv.0
     }
 }
