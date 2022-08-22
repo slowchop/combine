@@ -33,6 +33,22 @@ impl Defs {
             .write_all(bytes)
             .unwrap();
     }
+
+    pub fn level_entity_transform(&self, level_entity: &EntityDef) -> Option<Transform> {
+        let texture_def = level_entity
+            .texture
+            .as_ref()
+            .and_then(|texture| self.textures.get(texture.as_str()))?;
+
+        let position = level_entity.position?;
+        let x = position.x;
+        let y = position.y;
+        Some(Transform::from_xyz(x, 0., y).with_scale(Vec3::new(
+            texture_def.size[0] as f32 / PIXELS_PER_METER,
+            texture_def.size[1] as f32 / PIXELS_PER_METER,
+            1.0,
+        )))
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -71,20 +87,6 @@ pub struct LevelDef {
     pub entities: Vec<EntityDef>,
 }
 
-pub fn level_entity_transform(
-    level_entity: &EntityDef,
-    texture_def: &TextureDefinition,
-) -> Option<Transform> {
-    let position = level_entity.position?;
-    let x = position.x;
-    let y = position.y;
-    Some(Transform::from_xyz(x, 0., y).with_scale(Vec3::new(
-        texture_def.size[0] as f32 / PIXELS_PER_METER,
-        texture_def.size[1] as f32 / PIXELS_PER_METER,
-        1.0,
-    )))
-}
-
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct EntityDef {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -99,6 +101,10 @@ pub struct EntityDef {
     pub radius: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub steps: Option<Vec<Vec2>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tower: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creep: Option<String>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -109,6 +115,8 @@ pub enum EntityType {
     Spawn,
     Base,
     Path,
+    Tower,
+    Creep,
 }
 
 impl Default for EntityType {

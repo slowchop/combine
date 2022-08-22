@@ -13,9 +13,9 @@ pub fn init(
     mut new_entities: EventWriter<SpawnEntity>,
     defs: Res<Defs>,
 ) {
-    println!("Loading level...");
-
     let game_info = game_info.single();
+    println!("Loading level: {}", game_info.level);
+
     let level = &defs.levels[&game_info.level];
 
     // let textures: &Textures = textures_assets.get(&textures).unwrap();

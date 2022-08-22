@@ -1,7 +1,10 @@
 levels:
-  hide:
+  test:
     name: Hide the pain
     entities:
+    - type: tower
+      position: [20, 0]
+      tower: cold
     - position:
       - 10.0
       - 0.0

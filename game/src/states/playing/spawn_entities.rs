@@ -4,9 +4,9 @@ use crate::{
     shape, AlphaMode, AssetServer, Assets, BillboardMaterial, Color, Commands, EventReader, Handle,
     MaterialMeshBundle, Mesh, Quat, Res, ResMut, StandardMaterial, Vec2,
 };
-use bevy::asset::LoadState;
+use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
-use shared::game::defs::{level_entity_transform, Defs, EntityDef, EntityType};
+use shared::game::defs::{Defs, EntityDef, EntityType};
 use std::f32::consts::TAU;
 
 #[derive(Debug, Clone)]
@@ -24,7 +24,51 @@ pub fn spawn_entities(
         dbg!(&spawn);
         let level_entity: &EntityDef = &spawn.0;
 
-        todo!();
+        let mesh = match level_entity.entity_type {
+            EntityType::Ground => Mesh::from(shape::Plane { size: 10.0 }),
+            _ => Mesh::from(BottomQuad {
+                size: Vec2::new(1., 1.),
+            }),
+        };
+        let alpha_mode = match level_entity.entity_type {
+            EntityType::Ground => AlphaMode::Opaque,
+            _ => AlphaMode::Blend,
+        };
+
+        let material = level_entity.texture.as_ref().map(|texture_name| {
+            billboard_materials.add(BillboardMaterial {
+                alpha_mode,
+                color_texture: Some(asset_server.load(texture_name.as_str())),
+                color: Color::WHITE,
+            })
+        });
+
+        let transform: Option<Transform> =
+            defs.level_entity_transform(level_entity)
+                .map(|mut transform| match level_entity.entity_type {
+                    EntityType::Ground => transform,
+                    _ => {
+                        transform.rotation = Quat::from_rotation_x(TAU * -0.125);
+                        transform
+                    }
+                });
+
+        let mut entity = match (transform, material) {
+            (Some(transform), Some(material)) => commands.spawn_bundle(MaterialMeshBundle {
+                mesh: meshes.add(mesh),
+                material,
+                transform,
+                ..Default::default()
+            }),
+            _ => {
+                warn!("no transform or material for entity {:?}", level_entity);
+                continue;
+            }
+        };
+
+        if let EntityType::Ground = level_entity.entity_type {
+            entity.insert(RayCastMesh::<MyRaycastSet>::default());
+        }
 
         // match level_entity.entity_type {
         //     EntityType::Ground => {}
