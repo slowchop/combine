@@ -18,7 +18,7 @@ levels:
       owner: 1
     - type: path
       owner: 0
-      steps:
+      path:
       - - 0.0
         - -10.0
       - - 0.0

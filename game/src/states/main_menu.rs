@@ -1,6 +1,5 @@
 use crate::app::GameState;
 use crate::settings::Settings;
-use crate::states::playing::GameInfo;
 use crate::states::ContinueState;
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContext};

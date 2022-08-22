@@ -4,9 +4,11 @@ use bevy_ecs::prelude::Component;
 use bevy_math::{Vec2, Vec3};
 use bevy_transform::prelude::Transform;
 use bevy_utils::HashMap;
+use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::Write;
+use strum::FromRepr;
 
 pub const PIXELS_PER_METER: f32 = 250.;
 
@@ -41,9 +43,9 @@ impl Defs {
             .as_ref()
             .and_then(|texture| self.textures.get(texture.as_str()))?;
 
-        let position = level_entity.position?;
-        let x = position.x;
-        let y = position.y;
+        let position = level_entity.position.as_ref()?;
+        let x = position.0.x;
+        let y = position.0.y;
         Some(Transform::from_xyz(x, 0., y).with_scale(Vec3::new(
             texture_def.size[0] as f32 / PIXELS_PER_METER,
             texture_def.size[1] as f32 / PIXELS_PER_METER,
@@ -88,20 +90,20 @@ pub struct LevelDef {
     pub entities: Vec<EntityDef>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct EntityDef {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub texture: Option<String>,
     #[serde(default, rename = "type")]
     pub entity_type: EntityType,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<Vec2>,
+    pub position: Option<NetVec2>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<Owner>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub radius: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub steps: Option<Vec<Vec2>>,
+    pub path: Option<Vec<NetVec2>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tower: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -110,8 +112,74 @@ pub struct EntityDef {
     pub server_entity_id: Option<ServerEntityId>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+impl Serde for EntityDef {
+    fn ser(&self, writer: &mut dyn BitWrite) {
+        self.texture.ser(writer);
+        self.entity_type.ser(writer);
+        self.position.ser(writer);
+        self.owner.ser(writer);
+        self.radius.ser(writer);
+        self.path.ser(writer);
+        self.tower.ser(writer);
+        self.creep.ser(writer);
+        self.server_entity_id.ser(writer);
+    }
+
+    fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
+        let texture: Option<String> = Serde::de(reader)?;
+        let entity_type: EntityType = Serde::de(reader)?;
+        let position: Option<NetVec2> = Serde::de(reader)?;
+        let owner: Option<Owner> = Serde::de(reader)?;
+        let radius: Option<f32> = Serde::de(reader)?;
+        let path: Option<Vec<NetVec2>> = Serde::de(reader)?;
+        let tower: Option<String> = Serde::de(reader)?;
+        let creep: Option<String> = Serde::de(reader)?;
+        let server_entity_id: Option<ServerEntityId> = Serde::de(reader)?;
+        Ok(EntityDef {
+            texture,
+            entity_type,
+            position,
+            owner,
+            radius,
+            path,
+            tower,
+            creep,
+            server_entity_id,
+        })
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+pub struct NetVec2(pub Vec2);
+
+impl Serde for NetVec2 {
+    fn ser(&self, writer: &mut dyn BitWrite) {
+        self.0.x.ser(writer);
+        self.0.y.ser(writer);
+    }
+
+    fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
+        let x: f32 = Serde::de(reader)?;
+        let y: f32 = Serde::de(reader)?;
+        Ok(NetVec2(Vec2::new(x, y)))
+    }
+}
+
+impl From<Vec2> for NetVec2 {
+    fn from(v: Vec2) -> Self {
+        NetVec2(v)
+    }
+}
+
+impl From<&NetVec2> for Vec2 {
+    fn from(nv: &NetVec2) -> Self {
+        nv.0
+    }
+}
+
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, Eq, PartialEq, FromRepr)]
 #[serde(rename_all = "snake_case")]
+#[repr(u8)]
 pub enum EntityType {
     Sprite,
     Ground,
@@ -125,5 +193,47 @@ pub enum EntityType {
 impl Default for EntityType {
     fn default() -> Self {
         EntityType::Sprite
+    }
+}
+
+impl Serde for EntityType {
+    fn ser(&self, writer: &mut dyn BitWrite) {
+        writer.write_byte(*self as u8);
+    }
+
+    fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
+        EntityType::from_repr(reader.read_byte()).ok_or(SerdeErr {})
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use naia_shared::serde::BitWriter;
+
+    #[test]
+    fn test_entity_def() {
+        let mut writer = BitWriter::new();
+        let entity_def_1 = EntityDef {
+            texture: Some("texture".to_string()),
+            entity_type: EntityType::Tower,
+            position: Some(Vec2::new(1.0, 2.0).into()),
+            owner: Some(Owner::new(0)),
+            radius: Some(3.0),
+            path: Some(vec![Vec2::new(1.0, 2.0).into(), Vec2::new(3.0, 4.0).into()]),
+            tower: Some("tower".to_string()),
+            creep: None,
+            server_entity_id: Some(ServerEntityId(1)),
+        };
+
+        entity_def_1.ser(&mut writer);
+        let (buffer_length, buffer) = writer.flush();
+
+        dbg!(buffer_length, buffer);
+
+        let mut reader = BitReader::new(&buffer[..buffer_length]);
+        let entity_def_2 = EntityDef::de(&mut reader).unwrap();
+
+        assert_eq!(entity_def_1, entity_def_2);
     }
 }

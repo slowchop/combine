@@ -4,11 +4,21 @@ use crate::game::towers::Tower;
 use bevy_ecs::prelude::*;
 use bevy_math::Vec2;
 use bevy_utils::{HashMap, HashSet};
+use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 
 #[derive(Component, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub struct ServerEntityId(pub u32);
+
+impl Serde for ServerEntityId {
+    fn ser(&self, writer: &mut dyn BitWrite) {
+        self.0.ser(writer);
+    }
+    fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
+        Ok(ServerEntityId(Serde::de(reader)?))
+    }
+}
 
 #[derive(Component)]
 pub struct SharedGame {

@@ -1,11 +1,11 @@
 use crate::app::MyRaycastSet;
 use crate::states::playing::spawn_entities::SpawnEntityEvent;
-use crate::states::playing::GameInfo;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
 use naia_bevy_client::Client;
 use shared::game::shared_game::{CanBuild, SharedGame};
 use shared::game::towers::Tower;
+use shared::game::ClientGameInfo;
 use shared::protocol::request_tower_placement::RequestTowerPlacement;
 use shared::protocol::Protocol;
 use shared::Channels;
@@ -25,7 +25,7 @@ pub fn left_click(
     query: Query<&Intersection<MyRaycastSet>>,
     mut spawn_entities: EventWriter<SpawnEntityEvent>,
     // game: Query<&mut ManagedGame>,
-    game_info: Query<&GameInfo>,
+    game_info: Query<&ClientGameInfo>,
 ) {
     if !(buttons.just_released(MouseButton::Left)) {
         return;

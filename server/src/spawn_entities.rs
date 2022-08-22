@@ -31,7 +31,7 @@ pub fn spawn_entities(
             EntityType::Base => {}
 
             EntityType::Spawn => {
-                let position = match entity_def.position {
+                let position = match &entity_def.position {
                     Some(p) => p,
                     None => {
                         warn!("Spawn entity has no position!");
@@ -48,7 +48,7 @@ pub fn spawn_entities(
 
                 let id = commands
                     .spawn()
-                    .insert(Position::new(position))
+                    .insert(Position::new(position.into()))
                     .insert(SpawnPoint)
                     .insert(owner)
                     .insert(game_id)
@@ -59,7 +59,7 @@ pub fn spawn_entities(
             }
             EntityType::Path => {}
             EntityType::Tower => {
-                let position = match entity_def.position {
+                let position = match &entity_def.position {
                     Some(p) => p,
                     None => {
                         warn!("Spawn entity has no position: {:?}", entity_def);
@@ -83,7 +83,7 @@ pub fn spawn_entities(
 
                 let id = commands
                     .spawn()
-                    .insert(Position::new(position))
+                    .insert(Position::new(position.into()))
                     .insert(TowerRef(tower.clone()))
                     .insert(owner)
                     .insert(game_id)

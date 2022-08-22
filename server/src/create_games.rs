@@ -4,8 +4,10 @@ use bevy_ecs::prelude::*;
 use bevy_log::{error, warn};
 use naia_bevy_server::{Server, UserKey};
 use shared::game::defs::{Defs, EntityType};
+use shared::game::owner::Owner;
 use shared::game::player::{PlayerName, SharedPlayer};
 use shared::game::shared_game::SharedGame;
+use shared::game::ClientGameInfo;
 use shared::protocol::game_ready::GameReady;
 use shared::protocol::Protocol;
 use shared::Channels;
@@ -36,7 +38,7 @@ pub fn create_games(
             .map(|n| SharedPlayer::new(n.clone()))
             .collect::<Vec<_>>();
         let map_name = "test";
-        let game = SharedGame::new(map_name.to_string(), shared_players);
+        let game = SharedGame::new(map_name.to_string(), shared_players.clone());
 
         // Create GameId.
         let game_id = game_user_lookup.create_game_reference(create_game_event.user_keys.clone());
@@ -45,7 +47,12 @@ pub fn create_games(
         // Send GameReady to each player.
         for (idx, player) in create_game_event.user_keys.iter().enumerate() {
             println!("Sending GameReady to {}", player_names[idx]);
-            let message = GameReady::new(player_names.clone(), idx as u8, map_name.to_string());
+            let client_game_info = ClientGameInfo {
+                i_am: Owner::new(idx as u8),
+                map: map_name.to_string(),
+                players: shared_players.clone(),
+            };
+            let message = GameReady::new(client_game_info);
             server.send_message(player, Channels::ServerCommand, &message);
         }
 

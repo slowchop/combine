@@ -1,12 +1,12 @@
 use crate::app::GameState;
 use crate::states::playing::spawn_entities::SpawnEntityEvent;
-use crate::states::playing::GameInfo;
 use bevy::prelude::*;
 use bevy::utils::HashSet;
 use iyes_loopless::prelude::NextState;
 use naia_bevy_client::events::{InsertComponentEvent, MessageEvent, UpdateComponentEvent};
 use naia_bevy_client::{Client, CommandsExt};
 use shared::game::shared_game::SharedGame;
+use shared::game::ClientGameInfo;
 use shared::protocol::{Protocol, ProtocolKind};
 use shared::Channels;
 
@@ -51,33 +51,25 @@ pub fn receive_message_event(
         if let MessageEvent(Channels::ServerCommand, msg) = event {
             match msg {
                 Protocol::SpawnEntity(spawn_entity) => {
-                    let spawn_entity = match spawn_entity.to_entity_def() {
-                        Ok(s) => s,
-                        Err(e) => {
-                            error!("Error decoding spawn entity: {:?}", e);
-                            continue;
-                        }
-                    };
+                    let spawn_entity = &*spawn_entity.entity_def;
                     dbg!(&spawn_entity);
                     spawn_entity_event.send(SpawnEntityEvent {
                         server_entity_id: None,
-                        entity_def: spawn_entity,
+                        entity_def: spawn_entity.clone(),
                     });
                 }
                 Protocol::Auth(_) => {}
                 Protocol::JoinRandomGame(_) => {}
                 Protocol::JoinFriendGame(_) => {}
                 Protocol::GameReady(game_ready) => {
-                    println!(
-                        "-------- Client got a game ready! {} {:?} {}",
-                        *game_ready.map, *game_ready.player_names, *game_ready.i_am
-                    );
+                    let game_info = &*game_ready.game_info;
+                    println!("-------- Client got a game ready! {:?}", game_info);
 
-                    // let game_info: GameInfo = game_ready.into();
-                    // commands.spawn().insert(game_info);
+                    commands.spawn().insert(game_info.clone());
 
                     let shared_game =
-                        SharedGame::new((*game_ready.map).clone(), game_ready.player_names());
+                        SharedGame::new(game_info.map.clone(), game_info.players.clone());
+                    warn!("shared game!");
 
                     commands.insert_resource(NextState(GameState::LoadingLevel));
                 }

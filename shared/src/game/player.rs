@@ -1,7 +1,8 @@
+use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use rand::{thread_rng, Rng};
 use std::fmt::Display;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct SharedPlayer {
     pub name: PlayerName,
     pub gold: u32,
@@ -18,7 +19,22 @@ impl SharedPlayer {
     }
 }
 
-#[derive(Clone, Debug, Default)]
+impl Serde for SharedPlayer {
+    fn ser(&self, writer: &mut dyn BitWrite) {
+        self.name.ser(writer);
+        self.gold.ser(writer);
+        self.lives.ser(writer);
+    }
+    fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
+        Ok(SharedPlayer {
+            name: Serde::de(reader)?,
+            gold: Serde::de(reader)?,
+            lives: Serde::de(reader)?,
+        })
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct PlayerName(String);
 
 impl PlayerName {
@@ -46,5 +62,14 @@ impl PlayerName {
 impl Display for PlayerName {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "{}", self.0)
+    }
+}
+
+impl Serde for PlayerName {
+    fn ser(&self, writer: &mut dyn BitWrite) {
+        self.0.ser(writer);
+    }
+    fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
+        Ok(PlayerName(Serde::de(reader)?))
     }
 }

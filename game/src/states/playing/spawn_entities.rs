@@ -25,7 +25,6 @@ pub fn spawn_entities(
     defs: Res<Defs>,
 ) {
     for spawn in new_entities.iter() {
-        dbg!(&spawn);
         let level_entity: &EntityDef = &spawn.entity_def;
 
         match level_entity.entity_type {

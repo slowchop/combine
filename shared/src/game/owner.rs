@@ -1,9 +1,10 @@
 use crate::game::player::PlayerName;
 use bevy_ecs::prelude::*;
+use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use serde::{Deserialize, Serialize};
 
 /// 0 or 1.
-#[derive(Component, Default, Serialize, Deserialize, Copy, Clone, Debug)]
+#[derive(Component, Default, Serialize, Deserialize, Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Owner(u8);
 
 impl Owner {
@@ -18,5 +19,15 @@ impl Owner {
 impl From<Owner> for u8 {
     fn from(o: Owner) -> Self {
         o.0
+    }
+}
+
+impl Serde for Owner {
+    fn ser(&self, writer: &mut dyn BitWrite) {
+        self.0.ser(writer);
+    }
+
+    fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
+        Ok(Owner(Serde::de(reader)?))
     }
 }
