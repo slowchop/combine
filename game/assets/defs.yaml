@@ -13,6 +13,8 @@ towers:
     texture: "harold.png"
     cold_gun: true
     building_radius: 1
+    damage: 1
+    range: 1
   flame:
     name: Flame
     combo: [ machine, cold ]
@@ -26,6 +28,8 @@ towers:
     texture: "harold.png"
     laser: true
     building_radius: 1
+    damage: 1
+    range: 1
 
 creeps:
   monster:
