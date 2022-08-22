@@ -24,7 +24,7 @@ pub fn left_click(
     buttons: Res<Input<MouseButton>>,
     query: Query<&Intersection<MyRaycastSet>>,
     mut spawn_entities: EventWriter<SpawnEntity>,
-    game: Query<&mut ManagedGame>,
+    // game: Query<&mut ManagedGame>,
     game_info: Query<&GameInfo>,
 ) {
     if !(buttons.just_released(MouseButton::Left)) {
@@ -47,14 +47,14 @@ pub fn left_click(
         return;
     };
 
-    let game = game.single();
-    let game_info = game_info.single();
-    if let CanBuild::No(reason) =
-        game.can_build_tower(&game_info.you_are, &position, &Tower::MachineGun)
-    {
-        info!("Can't build! {}", reason);
-        return;
-    }
+    // let game = game.single();
+    // let game_info = game_info.single();
+    // if let CanBuild::No(reason) =
+    //     game.can_build_tower(&game_info.you_are, &position, &Tower::MachineGun)
+    // {
+    //     info!("Can't build! {}", reason);
+    //     return;
+    // }
 
     let place_tower = RequestTowerPlacement::new(position, Tower::MachineGun, 1230);
     client.send_message(Channels::PlayerCommand, &place_tower);
