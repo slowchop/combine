@@ -1,4 +1,4 @@
-use crate::game::game_info::Owner;
+use crate::game::owner::Owner;
 use bevy_ecs::prelude::Component;
 use bevy_math::{Vec2, Vec3};
 use bevy_transform::prelude::Transform;

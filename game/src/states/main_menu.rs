@@ -5,10 +5,10 @@ use crate::states::ContinueState;
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContext};
 use iyes_loopless::prelude::*;
-use shared::game::game_info::Owner;
-use shared::game::managed_game::ManagedGame;
-use shared::game::player::Player;
-use shared::game::player_name::PlayerName;
+use shared::game::owner::Owner;
+use shared::game::player::PlayerName;
+use shared::game::player::SharedPlayer;
+use shared::game::shared_game::SharedGame;
 
 pub fn init(mut commands: Commands, time: Res<Time>) {
     println!("Main menu...");

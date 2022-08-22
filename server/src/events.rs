@@ -1,18 +1,13 @@
-use crate::server_player::ServerPlayer;
-use crate::state::{Global, PlayerQueue, Players};
-use bevy_ecs::prelude::Res;
+use crate::state::PlayerLookup;
+use crate::state::PlayerQueue;
 use bevy_ecs::{event::EventReader, system::ResMut};
 use bevy_log::{info, warn};
-use bevy_math::Vec2;
 use naia_bevy_server::shared::BigMapKey;
 use naia_bevy_server::{
     events::{AuthorizationEvent, ConnectionEvent, DisconnectionEvent, MessageEvent},
-    shared::Random,
     Server,
 };
-use shared::game::player_name::PlayerName;
-use shared::protocol::entity_assignment::EntityAssignment;
-use shared::protocol::game_ready::GameReady;
+use shared::game::player::{PlayerName, SharedPlayer};
 use shared::protocol::position::Position;
 use shared::protocol::Protocol;
 use shared::Channels;
@@ -32,28 +27,14 @@ pub fn authorization_event(
 
 pub fn connection_event<'world, 'state>(
     mut event_reader: EventReader<ConnectionEvent>,
-    mut state: ResMut<Global>,
     mut server: Server<'world, 'state, Protocol, Channels>,
 ) {
     for event in event_reader.iter() {
         info!("got connection event");
         let ConnectionEvent(user_key) = event;
-        let address = server
-            .user_mut(user_key)
-            // Add User to the main Room
-            .enter_room(&state.main_room_key)
-            // Get User's address for logging
-            .address();
+        let address = server.user_mut(user_key).address();
 
         info!("Naia Server connected to: {}", address);
-
-        // global.user_to_prediction_map.insert(*user_key, entity);
-
-        // Send an Entity Assignment message to the User that owns the Square
-        // let mut assignment_message = EntityAssignment::new(true);
-        // assignment_message.entity.set(&server, &entity);
-
-        // server.send_message(user_key, Channels::EntityAssignment, &assignment_message);
     }
 }
 
@@ -79,14 +60,9 @@ pub fn disconnection_event(
 pub fn receive_message_event(
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
     mut player_queue: ResMut<PlayerQueue>,
-    mut players: ResMut<Players>,
+    mut player_lookup: ResMut<PlayerLookup>,
     mut server: Server<Protocol, Channels>,
-    mut global: Res<Global>,
 ) {
-    for key in server.user_keys() {
-        let user = server.user(&key);
-    }
-
     for event in event_reader.iter() {
         println!("got message event");
         if let MessageEvent(user_key, Channels::PlayerCommand, cmd) = event {
@@ -94,15 +70,18 @@ pub fn receive_message_event(
                 Protocol::Auth(_) => {
                     warn!("Auth on already connected?")
                 }
-                Protocol::JoinRandomGame(random_game) => {
-                    let name = (*random_game.name).clone();
+                Protocol::JoinRandomGame(join_random_game) => {
+                    let name = (*join_random_game.name).clone();
                     let player_name = PlayerName::new(name.as_str());
-                    let player = ServerPlayer {
+                    println!("player requesting random game! {:?}", &player_name);
+
+                    let player = SharedPlayer {
                         name: player_name,
-                        room: global.main_room_key,
+                        gold: 0,
+                        lives: 0,
                     };
-                    println!("player requesting random game! {:?}", &player.name);
-                    players.0.insert(user_key.clone(), player);
+                    player_lookup.0.insert(user_key.clone(), player);
+
                     player_queue.add(user_key.clone());
                 }
                 Protocol::JoinFriendGame(_) => {
@@ -116,47 +95,10 @@ pub fn receive_message_event(
                     println!("REQQQQQQQQ");
                     // TODO: Check if possible
                     let position = Position::new(place_tower.position());
+                    let server_player = &player_lookup.0[&user_key];
+                    todo!()
 
-                    let server_player = &players.0[&user_key];
-                    dbg!(server_player.room.to_u64());
-
-                    let entity = server
-                        // Spawn new Square Entity
-                        .spawn()
-                        // Add Entity to main Room
-                        .enter_room(&server_player.room)
-                        // Insert Position component
-                        .insert(position)
-                        // Insert Color component
-                        // .insert(color)
-                        // return Entity id
-                        .id();
-
-                    println!("sending event");
-
-                    let mut assignment_message = EntityAssignment::new(true);
-                    assignment_message.entity.set(&server, &entity);
-                    server.send_message(user_key, Channels::ServerCommand, &assignment_message);
-
-                    /*
-
-                    Create:
-                    * C Request build tower
-                    * S Create server entity
-                    * S Broadcast new entity with EntityDef
-                    * C Create tower
-
-                    Combine:
-                    * C Request combine towers
-                    * S Delete old server towers
-                    * S Broadcast combine towers
-                    * C Delete old server towers
-
-                     */
-                }
-                Protocol::EntityAssignment(_) => {
-                    panic!();
-                    // Server message.
+                    // server.send_message(user_key, Channels::ServerCommand, &assignment_message);
                 }
                 Protocol::Position(_) => {
                     panic!();

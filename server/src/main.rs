@@ -1,13 +1,15 @@
+mod create_games;
 mod events;
-mod game_info;
 mod init;
 mod match_randoms;
-mod server_player;
 mod spawn_entities;
 mod state;
 mod tick;
 
-use crate::spawn_entities::{spawn_entities, SpawnServerEntity};
+use crate::create_games::create_games;
+use crate::create_games::CreateGameEvent;
+use crate::spawn_entities::{spawn_entities, SpawnServerEntityEvent};
+use crate::state::{GameLookup, GameUserLookup, PlayerLookup, PlayerQueue};
 use bevy_app::{App, ScheduleRunnerPlugin};
 use bevy_core::CorePlugin;
 use bevy_ecs::prelude::*;
@@ -45,7 +47,12 @@ fn main() {
             shared_config(),
         ))
         .insert_resource(Defs::load())
-        .add_event::<SpawnServerEntity>()
+        .insert_resource(PlayerQueue::default())
+        .insert_resource(PlayerLookup::default())
+        .insert_resource(GameLookup::default())
+        .insert_resource(GameUserLookup::default())
+        .add_event::<SpawnServerEntityEvent>()
+        .add_event::<CreateGameEvent>()
         .add_startup_system(init)
         .add_system_to_stage(Stage::ReceiveEvents, events::authorization_event)
         .add_system_to_stage(Stage::ReceiveEvents, events::connection_event)
@@ -53,6 +60,7 @@ fn main() {
         .add_system_to_stage(Stage::ReceiveEvents, events::receive_message_event)
         .add_system_to_stage(Stage::Tick, tick)
         .add_system(match_randoms)
+        .add_system(create_games)
         .add_system(spawn_entities)
         .run();
 }

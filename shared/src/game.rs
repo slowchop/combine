@@ -1,6 +1,5 @@
 pub mod defs;
-pub mod game_info;
-pub mod managed_game;
+pub mod owner;
 pub mod player;
-pub mod player_name;
+pub mod shared_game;
 pub mod towers;

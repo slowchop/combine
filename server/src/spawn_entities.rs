@@ -3,9 +3,12 @@ use bevy_log::warn;
 use shared::game::defs::{EntityDef, EntityType};
 
 #[derive(Debug, Clone)]
-pub struct SpawnServerEntity(pub EntityDef);
+pub struct SpawnServerEntityEvent(pub EntityDef);
 
-pub fn spawn_entities(mut commands: Commands, mut spawn_entities: EventReader<SpawnServerEntity>) {
+pub fn spawn_entities(
+    mut commands: Commands,
+    mut spawn_entities: EventReader<SpawnServerEntityEvent>,
+) {
     for spawn in spawn_entities.iter() {
         let entity_def = &spawn.0;
         let mut spawned = commands.spawn();

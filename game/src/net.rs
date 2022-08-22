@@ -59,7 +59,7 @@ pub fn receive_message_event(
 
                     println!(
                         "-------- Client got a game ready! {} {:?} {}",
-                        *game_ready.level, *game_ready.player_names, *game_ready.i_am
+                        *game_ready.map, *game_ready.player_names, *game_ready.i_am
                     );
                     let game_info: GameInfo = game_ready.into();
                     commands.spawn().insert(game_info);
@@ -68,22 +68,22 @@ pub fn receive_message_event(
                 Protocol::RequestTowerPlacement(_) => {
                     todo!("place tower")
                 }
-                Protocol::EntityAssignment(message) => {
-                    //
-                    println!("got ent assiiiiiiiign");
-                    let entity = message.entity.get(&client).unwrap();
-                    CommandsExt::<Protocol>::duplicate_entity(&mut commands, entity).insert_bundle(
-                        SpriteBundle {
-                            sprite: Sprite {
-                                custom_size: Some(Vec2::new(100., 1000.)),
-                                color: Color::WHITE,
-                                ..Default::default()
-                            },
-                            transform: Transform::from_xyz(0.0, 0.0, 0.0),
-                            ..Default::default()
-                        },
-                    );
-                }
+                // Protocol::EntityAssignment(message) => {
+                //     //
+                //     println!("got ent assiiiiiiiign");
+                //     let entity = message.entity.get(&client).unwrap();
+                //     CommandsExt::<Protocol>::duplicate_entity(&mut commands, entity).insert_bundle(
+                //         SpriteBundle {
+                //             sprite: Sprite {
+                //                 custom_size: Some(Vec2::new(100., 1000.)),
+                //                 color: Color::WHITE,
+                //                 ..Default::default()
+                //             },
+                //             transform: Transform::from_xyz(0.0, 0.0, 0.0),
+                //             ..Default::default()
+                //         },
+                //     );
+                // }
                 Protocol::Position(_) => {
                     println!("C got a position event from the server?")
                 }

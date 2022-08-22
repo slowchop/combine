@@ -1,13 +1,11 @@
-use crate::game_info::ServerGameInfo;
-use crate::server_player::ServerPlayer;
+use bevy_ecs::prelude::*;
 use bevy_utils::HashMap;
 use naia_bevy_server::{RoomKey, UserKey};
-use shared::game::player_name::PlayerName;
+use rand::{thread_rng, Rng};
+use shared::game::player::PlayerName;
+use shared::game::player::SharedPlayer;
+use shared::game::shared_game::SharedGame;
 use std::collections::VecDeque;
-
-pub struct Global {
-    pub main_room_key: RoomKey,
-}
 
 /// Next in queue is the first entry. Last to join is the last entry.
 #[derive(Default)]
@@ -18,36 +16,60 @@ impl PlayerQueue {
         self.0.push_back(user_key);
     }
 
-    pub fn pair(&mut self) -> Option<[UserKey; 2]> {
-        if self.0.len() < 2 {
+    pub fn find(&mut self, count: usize) -> Option<Vec<UserKey>> {
+        if self.0.len() < count {
             return None;
         }
 
-        let first = self.0.pop_front().unwrap();
-        let second = self.0.pop_front().unwrap();
-        Some([first, second])
+        let mut found = Vec::new();
+        for _ in 0..count {
+            let player = self.0.pop_front().unwrap();
+            found.push(player);
+        }
+        Some(found)
     }
 }
 
-pub struct Players(pub HashMap<UserKey, ServerPlayer>);
+#[derive(Default)]
+pub struct PlayerLookup(pub HashMap<UserKey, SharedPlayer>);
 
-impl Default for Players {
-    fn default() -> Self {
-        Players(HashMap::new())
+#[derive(Component, Default, Debug, Clone, Copy, Hash, PartialOrd, PartialEq, Eq)]
+pub struct GameId(u32);
+
+#[derive(Default)]
+pub struct GameUserLookup {
+    game_to_user: HashMap<GameId, Vec<UserKey>>,
+    user_to_game: HashMap<UserKey, GameId>,
+}
+
+impl GameUserLookup {
+    pub fn new_game_id(&mut self) -> GameId {
+        loop {
+            let id = GameId(thread_rng().gen());
+            if self.game_to_user.contains_key(&id) {
+                continue;
+            }
+            return id;
+        }
+    }
+
+    pub fn create_game_reference(&mut self, user_keys: Vec<UserKey>) -> GameId {
+        let game_id = self.new_game_id();
+        self.game_to_user.insert(game_id, user_keys.clone());
+        for user_key in user_keys.iter() {
+            self.user_to_game.insert(user_key.clone(), game_id);
+        }
+        game_id
+    }
+
+    pub fn get_player_game(&self, user_key: &UserKey) -> Option<&GameId> {
+        self.user_to_game.get(user_key)
+    }
+
+    pub fn get_game_players(&self, game_id: &GameId) -> Option<&Vec<UserKey>> {
+        self.game_to_user.get(game_id)
     }
 }
 
-impl Players {
-    pub fn set_room(&mut self, user_key: &UserKey, room_key: RoomKey) {
-        let mut player = self.0.get_mut(user_key).unwrap();
-        player.room = room_key;
-    }
-}
-
-pub struct Games(pub HashMap<RoomKey, ServerGameInfo>);
-
-impl Default for Games {
-    fn default() -> Self {
-        Games(HashMap::new())
-    }
-}
+#[derive(Default)]
+pub struct GameLookup(pub HashMap<GameId, SharedGame>);

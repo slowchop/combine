@@ -1,5 +1,5 @@
-use crate::game::game_info::Owner;
-use crate::game::player::Player;
+use crate::game::owner::Owner;
+use crate::game::player::SharedPlayer;
 use crate::game::towers::Tower;
 use bevy_ecs::prelude::*;
 use bevy_math::Vec2;
@@ -7,18 +7,20 @@ use bevy_utils::{HashMap, HashSet};
 use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
-pub struct ManagedEntityId(pub u32);
+#[derive(Component, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub struct ServerEntityId(pub u32);
 
 #[derive(Component)]
-pub struct ManagedGame {
+pub struct SharedGame {
+    pub map: String,
     pub entities: HashSet<Entity>,
-    pub players: Vec<Player>,
+    pub players: Vec<SharedPlayer>,
 }
 
-impl ManagedGame {
-    pub fn new(players: Vec<Player>) -> Self {
+impl SharedGame {
+    pub fn new(map: String, players: Vec<SharedPlayer>) -> Self {
         Self {
+            map,
             entities: HashSet::with_capacity(1024),
             players,
         }

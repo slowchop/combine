@@ -4,7 +4,7 @@ use crate::states::playing::GameInfo;
 use bevy::prelude::*;
 use iyes_loopless::prelude::*;
 use shared::game::defs::{Defs, LevelDef};
-use shared::game::managed_game::ManagedGame;
+use shared::game::shared_game::SharedGame;
 
 pub fn init(
     mut commands: Commands,

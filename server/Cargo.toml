@@ -24,3 +24,4 @@ bevy_math = { version = "0.8.0", default-features = false }
 
 serde = { version = "1.0.144", features = ["derive"] }
 serde_yaml = "0.9.10"
+rand = "0.8.5"

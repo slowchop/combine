@@ -4,15 +4,15 @@ pub mod left_click;
 pub mod spawn_entities;
 
 use bevy::prelude::*;
-use shared::game::game_info::Owner;
-use shared::game::player::Player;
-use shared::game::player_name::PlayerName;
+use shared::game::owner::Owner;
+use shared::game::player::PlayerName;
+use shared::game::player::SharedPlayer;
 use shared::protocol::game_ready::GameReady;
 
 #[derive(Component)]
 pub struct GameInfo {
     pub level: String,
-    pub players: [Player; 2],
+    pub players: [SharedPlayer; 2],
     pub i_am: Owner,
 }
 
@@ -21,15 +21,13 @@ impl From<&GameReady> for GameInfo {
         let players = g
             .player_names
             .iter()
-            .map(|p| Player {
-                name: PlayerName::new(p),
-            })
+            .map(|p| SharedPlayer::new(PlayerName::new(p)))
             .collect::<Vec<_>>()
             .try_into()
             .unwrap();
         GameInfo {
             players,
-            level: (*g.level).clone(),
+            level: (*g.map).clone(),
             i_am: Owner::new(*g.i_am),
         }
     }

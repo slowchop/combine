@@ -1,4 +1,4 @@
-use crate::state::{Global, PlayerQueue, Players};
+use crate::state::{GameUserLookup, PlayerLookup, PlayerQueue};
 use bevy_ecs::prelude::*;
 use bevy_ecs::system::Commands;
 use bevy_log::info;
@@ -25,12 +25,4 @@ pub fn init(mut commands: Commands, mut server: Server<Protocol, Channels>) {
     );
 
     server.listen(&server_addresses);
-
-    // Create a new, singular room, which will contain Users and Entities that they
-    // can receive updates from
-    let main_room_key = server.make_room().key();
-    commands.insert_resource(Global { main_room_key });
-
-    commands.insert_resource(PlayerQueue::default());
-    commands.insert_resource(Players::default());
 }

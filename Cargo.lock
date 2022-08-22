@@ -3679,6 +3679,7 @@ dependencies = [
  "bevy_time",
  "bevy_utils",
  "naia-bevy-server",
+ "rand",
  "serde",
  "serde_yaml",
  "shared",

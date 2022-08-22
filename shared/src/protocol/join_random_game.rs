@@ -1,4 +1,4 @@
-use crate::game::player_name::PlayerName;
+use crate::game::player::PlayerName;
 use bevy_ecs::prelude::Component;
 use naia_shared::{Property, Replicate};
 
