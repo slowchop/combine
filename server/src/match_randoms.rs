@@ -5,17 +5,18 @@ use bevy_log::{error, info};
 use naia_bevy_server::shared::BigMapKey;
 use naia_bevy_server::{Server, UserKey};
 use shared::game::managed_game::ManagedGame;
+use shared::game::player::Player;
 use shared::game::player_name::PlayerName;
 use shared::protocol::game_ready::GameReady;
 use shared::protocol::Protocol;
 use shared::Channels;
-use shared::game::player::Player;
 
 pub fn match_randoms(
     mut commands: Commands,
     mut player_queue: ResMut<PlayerQueue>,
     mut server: Server<Protocol, Channels>,
     mut players: ResMut<Players>,
+    mut spawn_entities: EventWriter<SpawnServerEntity>,
 ) {
     loop {
         let found_players = match player_queue.pair() {
@@ -33,7 +34,10 @@ pub fn match_randoms(
         println!("Created room #{}", room_key.to_u64());
 
         println!("Creating managed game.");
-        let player_set = player_names.iter().map(|pn| Player::new(pn.clone())).collect::<Vec<_>>();
+        let player_set = player_names
+            .iter()
+            .map(|pn| Player::new(pn.clone()))
+            .collect::<Vec<_>>();
         commands.spawn().insert(ManagedGame::new(player_set));
 
         for (idx, player) in found_players.iter().enumerate() {

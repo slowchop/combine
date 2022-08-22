@@ -31,9 +31,6 @@ pub fn init(mut commands: Commands, mut server: Server<Protocol, Channels>) {
     let main_room_key = server.make_room().key();
     commands.insert_resource(Global { main_room_key });
 
-    let defs = Defs::load();
-    commands.insert_resource(defs);
-
     commands.insert_resource(PlayerQueue::default());
     commands.insert_resource(Players::default());
 }
