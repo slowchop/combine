@@ -42,6 +42,7 @@ pub struct Tower {
     texture: String,
     damage: f32,
     range: f32,
+    cost: u32,
 }
 
 #[derive(Component)]
@@ -50,6 +51,10 @@ pub struct TowerRef(String);
 #[derive(Component, Debug, Clone, Serialize, Deserialize)]
 pub struct Creep {
     name: String,
+    combo: Vec<String>,
+    texture: String,
+    speed: f32,
+    cost: u32,
 }
 
 #[derive(Component)]
@@ -88,6 +93,7 @@ pub struct EntityDef {
     pub entity_type: EntityType,
     pub owner: Option<Owner>,
     pub radius: Option<f32>,
+    pub steps: Option<Vec<Vec2>>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

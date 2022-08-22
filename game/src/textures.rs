@@ -11,7 +11,8 @@ pub fn update_texture_sizes() -> miette::Result<()> {
         dbg!(&entry);
         let path = entry.into_diagnostic()?;
         let path = Path::new(&path);
-        let non_asset_path = path.strip_prefix("../assets").unwrap();
+        dbg!(&path);
+        let non_asset_path = path.strip_prefix("assets").unwrap();
         let i = ImageReader::open(path)
             .into_diagnostic()?
             .decode()

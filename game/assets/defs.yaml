@@ -7,6 +7,7 @@ towers:
     range: 1
     machine_gun: true
     building_radius: 1
+    cost: 100
   cold:
     name: Cold
     combo: [ machine, machine ]
@@ -15,6 +16,7 @@ towers:
     building_radius: 1
     damage: 1
     range: 1
+    cost: 100
   flame:
     name: Flame
     combo: [ machine, cold ]
@@ -22,6 +24,7 @@ towers:
     damage: 3
     range: 3
     building_radius: 1
+    cost: 100
   laser:
     name: Laser
     combo: [ machine, flame ]
@@ -30,6 +33,7 @@ towers:
     building_radius: 1
     damage: 1
     range: 1
+    cost: 100
 
 creeps:
   monster:
@@ -37,21 +41,25 @@ creeps:
     texture: "harold.png"
     speed: 1
     combo: [ ]
+    cost: 100
   robot:
     name: Robot
     texture: "harold.png"
     speed: 1
     combo: [ ]
+    cost: 100
   strong:
     name: Strong
     texture: "harold.png"
     speed: 1
     combo: [ robot, robot ]
+    cost: 100
   fast:
     name: Fast
     texture: "harold.png"
     speed: 2
     combo: [ monster, monster ]
+    cost: 100
 
 textures:
   harold.png:
@@ -71,7 +79,7 @@ levels:
         position: [ 0, 10 ]
         owner: 1
 
-      - type: waypoint
+      - type: path
         steps:
           - [ 0, -10 ]
           - [ 0, 10 ]
