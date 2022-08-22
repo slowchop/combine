@@ -1,6 +1,5 @@
 use crate::app::{GameState, MyRaycastSet};
 use crate::states::playing::bottom_quad::BottomQuad;
-use crate::states::playing::level::level_entity_transform;
 use crate::{
     shape, AlphaMode, AssetServer, Assets, BillboardMaterial, Color, Commands, EventReader, Handle,
     MaterialMeshBundle, Mesh, Quat, Res, ResMut, StandardMaterial, Textures, Vec2, YamlLevel,
@@ -8,6 +7,7 @@ use crate::{
 use bevy::asset::LoadState;
 use bevy_mod_raycast::RayCastMesh;
 use iyes_loopless::prelude::NextState;
+use shared::game::level::level_entity_transform;
 use shared::game::managed_game::{EntityType, LevelEntity};
 use std::f32::consts::TAU;
 

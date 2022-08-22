@@ -1,0 +1,59 @@
+levels:
+  - test
+
+towers:
+  machine:
+    name: Machine Gun
+    combo: [ ]
+    texture: "harold.png"
+    damage: 1
+    range: 1
+    machine_gun: true
+    building_radius: 1
+  cold:
+    name: Cold
+    combo: [ machine, machine ]
+    texture: "harold.png"
+    cold_gun: true
+    building_radius: 1
+  flame:
+    name: Flame
+    combo: [ machine, cold ]
+    texture: "harold.png"
+    damage: 3
+    range: 3
+    building_radius: 1
+  laser:
+    name: Laser
+    combo: [ machine, flame ]
+    texture: "harold.png"
+    laser: true
+    building_radius: 1
+
+creeps:
+  monster:
+    name: Monster
+    texture: "harold.png"
+    speed: 1
+    combo: [ ]
+  robot:
+    name: Robot
+    texture: "harold.png"
+    speed: 1
+    combo: [ ]
+  strong:
+    name: Strong
+    texture: "harold.png"
+    speed: 1
+    combo: [ robot, robot ]
+  fast:
+    name: Fast
+    texture: "harold.png"
+    speed: 2
+    combo: [ monster, monster ]
+
+textures:
+  harold.png:
+    size:
+      - 846
+      - 1199

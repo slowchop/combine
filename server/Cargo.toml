@@ -21,3 +21,6 @@ bevy_log = { version = "0.8.0", default-features = false }
 bevy_time = { version = "0.8.0", default-features = false }
 bevy_utils = { version = "0.8.0", default-features = false }
 bevy_math = { version = "0.8.0", default-features = false }
+
+serde = { version = "1.0.144", features = ["derive"] }
+serde_yaml = "0.9.10"

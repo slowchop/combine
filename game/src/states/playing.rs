@@ -1,7 +1,6 @@
 pub mod bottom_quad;
 pub mod camera;
 pub mod left_click;
-pub mod level;
 pub mod spawn_entities;
 
 use bevy::prelude::*;

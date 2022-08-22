@@ -1,6 +1,5 @@
 use crate::app::{GameState, MyRaycastSet};
 use crate::states::playing::bottom_quad::BottomQuad;
-use crate::states::playing::level::PIXELS_PER_METER;
 use crate::states::playing::spawn_entities::SpawnEntity;
 use crate::states::playing::GameInfo;
 use crate::{BillboardMaterial, Textures, YamlLevel};
@@ -10,6 +9,7 @@ use bevy::ecs::world::EntityMut;
 use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
 use iyes_loopless::prelude::*;
+use shared::game::level::PIXELS_PER_METER;
 use shared::game::managed_game::ManagedGame;
 use std::f32::consts::TAU;
 

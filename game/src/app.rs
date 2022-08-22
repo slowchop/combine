@@ -22,6 +22,7 @@ use bevy_mod_raycast::{
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Plugin as ClientPlugin;
 use naia_bevy_client::{Client, ClientConfig, Stage as NaiaStage};
+use shared::game::defs::Defs;
 use shared::protocol::Protocol;
 use shared::{shared_config, Auth, Channels, UDP_PORT};
 
@@ -60,6 +61,8 @@ pub fn play(args: &Args) {
         settings.start_multiplayer_immediately = true;
     }
 
+    let defs = Defs::load();
+
     app.insert_resource(WindowDescriptor {
         resizable: false,
         width: 1024f32,
@@ -74,6 +77,7 @@ pub fn play(args: &Args) {
         ..Default::default()
     })
     .insert_resource(settings)
+    .insert_resource(defs)
     .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
     .insert_resource(Msaa { samples: 4 })
     .insert_resource(ContinueState(None))

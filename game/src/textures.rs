@@ -1,7 +1,7 @@
-use crate::states::playing::level::Textures;
 use bevy::prelude::Vec2;
 use image::io::Reader as ImageReader;
 use miette::IntoDiagnostic;
+use shared::game::level::Textures;
 use shared::game::managed_game::TextureDefinition;
 use std::fs::File;
 use std::path::Path;

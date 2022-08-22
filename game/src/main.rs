@@ -13,8 +13,8 @@ use crate::textures::update_texture_sizes;
 use bevy::asset::AssetServerSettings;
 use bevy::prelude::*;
 use clap::Parser;
+use shared::game::level::{LevelLoadState, Textures, YamlLevel};
 use states::playing::camera::move_camera;
-use states::playing::level::{LevelLoadState, Textures, YamlLevel};
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]

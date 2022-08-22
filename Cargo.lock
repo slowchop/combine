@@ -414,18 +414,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bevy_common_assets"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3f7be9ee39085d8319d5cd853447b0b5c4f8b4bfd647aec91e2bd996e9db67ef"
-dependencies = [
- "anyhow",
- "bevy",
- "serde",
- "serde_yaml",
-]
-
-[[package]]
 name = "bevy_core"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3637,18 +3625,18 @@ checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
 
 [[package]]
 name = "serde"
-version = "1.0.143"
+version = "1.0.144"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53e8e5d5b70924f74ff5c6d64d9a5acd91422117c60f48c4e07855238a254553"
+checksum = "0f747710de3dcd43b88c9168773254e809d8ddbdf9653b84e2554ab219f17860"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.143"
+version = "1.0.144"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d3d8e8de557aee63c26b85b947f5e59b690d0454c753f3adeb5cd7835ab88391"
+checksum = "94ed3a816fb1d101812f83e789f888322c34e291f894f19590dc310963e87a00"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3668,9 +3656,9 @@ dependencies = [
 
 [[package]]
 name = "serde_yaml"
-version = "0.9.9"
+version = "0.9.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f50845f68d5c693aac7d72a25415ddd21cb8182c04eafe447b73af55a05f9e1b"
+checksum = "7a09f551ccc8210268ef848f0bab37b306e87b85b2e017b899e7fb815f5aed62"
 dependencies = [
  "indexmap",
  "itoa",
@@ -3691,6 +3679,8 @@ dependencies = [
  "bevy_time",
  "bevy_utils",
  "naia-bevy-server",
+ "serde",
+ "serde_yaml",
  "shared",
 ]
 
@@ -3709,11 +3699,13 @@ version = "0.1.0"
 dependencies = [
  "bevy_ecs",
  "bevy_math",
+ "bevy_transform",
  "bevy_utils",
  "cfg-if 1.0.0",
  "naia-shared",
  "rand",
  "serde",
+ "serde_yaml",
  "strum",
  "tracing",
 ]
@@ -4013,7 +4005,6 @@ version = "0.1.0"
 dependencies = [
  "bevy",
  "bevy-inspector-egui",
- "bevy_common_assets",
  "bevy_egui",
  "bevy_mod_raycast",
  "clap",
