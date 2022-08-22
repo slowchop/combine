@@ -87,12 +87,17 @@ pub fn level_entity_transform(
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct EntityDef {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub texture: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<Vec2>,
     #[serde(default, rename = "type")]
     pub entity_type: EntityType,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<Owner>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub radius: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub steps: Option<Vec<Vec2>>,
 }
 

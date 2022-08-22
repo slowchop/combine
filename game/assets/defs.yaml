@@ -1,110 +1,134 @@
-towers:
-  machine:
-    name: Machine Gun
-    combo: [ ]
-    texture: "harold.png"
-    damage: 1
-    range: 1
-    machine_gun: true
-    building_radius: 1
-    cost: 100
-  cold:
-    name: Cold
-    combo: [ machine, machine ]
-    texture: "harold.png"
-    cold_gun: true
-    building_radius: 1
-    damage: 1
-    range: 1
-    cost: 100
-  flame:
-    name: Flame
-    combo: [ machine, cold ]
-    texture: "harold.png"
-    damage: 3
-    range: 3
-    building_radius: 1
-    cost: 100
-  laser:
-    name: Laser
-    combo: [ machine, flame ]
-    texture: "harold.png"
-    laser: true
-    building_radius: 1
-    damage: 1
-    range: 1
-    cost: 100
-
-creeps:
-  monster:
-    name: Monster
-    texture: "harold.png"
-    speed: 1
-    combo: [ ]
-    cost: 100
-  robot:
-    name: Robot
-    texture: "harold.png"
-    speed: 1
-    combo: [ ]
-    cost: 100
-  strong:
-    name: Strong
-    texture: "harold.png"
-    speed: 1
-    combo: [ robot, robot ]
-    cost: 100
-  fast:
-    name: Fast
-    texture: "harold.png"
-    speed: 2
-    combo: [ monster, monster ]
-    cost: 100
-
-textures:
-  harold.png:
-    size:
-      - 846
-      - 1199
-
 levels:
   hide:
     name: Hide the pain
     entities:
-      - type: base
-        position: [ 10, 0 ]
-        owner: 0
-
-      - type: spawn
-        position: [ 0, 10 ]
-        owner: 1
-
-      - type: path
-        steps:
-          - [ 0, -10 ]
-          - [ 0, 10 ]
-        owner: 0
-
-      - texture: "harold.png"
-        position: [-1, 0]
-      - texture: "harold.png"
-        position: [0, 0]
-      - texture: "harold.png"
-        position: [1, 0]
-
-      - texture: "harold.png"
-        type: ground
-        position: [-1, 0]
-      - texture: "harold.png"
-        type: ground
-        position: [19, 0]
-      - texture: "harold.png"
-        type: ground
-        position: [-21, 0]
-      - texture: "harold.png"
-        type: ground
-        position: [-1, 20]
-      - texture: "harold.png"
-        type: ground
-        position: [-1, -20]
-
+    - position:
+      - 10.0
+      - 0.0
+      type: base
+      owner: 0
+    - position:
+      - 0.0
+      - 10.0
+      type: spawn
+      owner: 1
+    - type: path
+      owner: 0
+      steps:
+      - - 0.0
+        - -10.0
+      - - 0.0
+        - 10.0
+    - texture: harold.png
+      position:
+      - -1.0
+      - 0.0
+      type: sprite
+    - texture: harold.png
+      position:
+      - 0.0
+      - 0.0
+      type: sprite
+    - texture: harold.png
+      position:
+      - 1.0
+      - 0.0
+      type: sprite
+    - texture: harold.png
+      position:
+      - -1.0
+      - 0.0
+      type: ground
+    - texture: harold.png
+      position:
+      - 19.0
+      - 0.0
+      type: ground
+    - texture: harold.png
+      position:
+      - -21.0
+      - 0.0
+      type: ground
+    - texture: harold.png
+      position:
+      - -1.0
+      - 20.0
+      type: ground
+    - texture: harold.png
+      position:
+      - -1.0
+      - -20.0
+      type: ground
+towers:
+  cold:
+    name: Cold
+    combo:
+    - machine
+    - machine
+    texture: harold.png
+    damage: 1.0
+    range: 1.0
+    cost: 100
+  laser:
+    name: Laser
+    combo:
+    - machine
+    - flame
+    texture: harold.png
+    damage: 1.0
+    range: 1.0
+    cost: 100
+  flame:
+    name: Flame
+    combo:
+    - machine
+    - cold
+    texture: harold.png
+    damage: 3.0
+    range: 3.0
+    cost: 100
+  machine:
+    name: Machine Gun
+    combo: []
+    texture: harold.png
+    damage: 1.0
+    range: 1.0
+    cost: 100
+creeps:
+  strong:
+    name: Strong
+    combo:
+    - robot
+    - robot
+    texture: harold.png
+    speed: 1.0
+    cost: 100
+  monster:
+    name: Monster
+    combo: []
+    texture: harold.png
+    speed: 1.0
+    cost: 100
+  robot:
+    name: Robot
+    combo: []
+    texture: harold.png
+    speed: 1.0
+    cost: 100
+  fast:
+    name: Fast
+    combo:
+    - monster
+    - monster
+    texture: harold.png
+    speed: 2.0
+    cost: 100
+textures:
+  harold.png:
+    size:
+    - 846.0
+    - 1199.0
+  hover.png:
+    size:
+    - 256.0
+    - 256.0
