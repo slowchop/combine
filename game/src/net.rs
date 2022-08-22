@@ -59,7 +59,7 @@ pub fn receive_message_event(
 
                     println!(
                         "-------- Client got a game ready! {} {:?} {}",
-                        *game_ready.level, *game_ready.player_names, *game_ready.you_are
+                        *game_ready.level, *game_ready.player_names, *game_ready.i_am
                     );
                     let game_info: GameInfo = game_ready.into();
                     commands.spawn().insert(game_info);

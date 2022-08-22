@@ -9,6 +9,7 @@ use shared::game::player_name::PlayerName;
 use shared::protocol::game_ready::GameReady;
 use shared::protocol::Protocol;
 use shared::Channels;
+use shared::game::player::Player;
 
 pub fn match_randoms(
     mut commands: Commands,
@@ -22,19 +23,18 @@ pub fn match_randoms(
             Some(p) => p,
         };
 
-        let player_names: [PlayerName; 2] = found_players
+        let player_names: Vec<PlayerName> = found_players
             .iter()
             .map(|&u| players.0.get(&u).unwrap().name.clone())
-            .collect::<Vec<_>>()
-            .try_into()
-            .unwrap();
+            .collect::<Vec<_>>();
 
         let room = server.make_room();
         let room_key = room.key();
         println!("Created room #{}", room_key.to_u64());
 
         println!("Creating managed game.");
-        // commands.spawn().insert(ManagedGame::from_players_level_textures())
+        let player_set = player_names.iter().map(|pn| Player::new(pn.clone())).collect::<Vec<_>>();
+        commands.spawn().insert(ManagedGame::new(player_set));
 
         for (idx, player) in found_players.iter().enumerate() {
             players.set_room(player, room_key);

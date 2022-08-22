@@ -50,7 +50,7 @@ pub fn left_click(
     let game = game.single();
     let game_info = game_info.single();
     if let CanBuild::No(reason) =
-        game.can_build_tower(&game_info.you_are, &position, &Tower::MachineGun)
+        game.can_build_tower(&game_info.i_am, &position, &Tower::MachineGun)
     {
         info!("Can't build! {}", reason);
         return;
