@@ -106,10 +106,11 @@ pub fn receive_message_event(
                     player_queue.add(user_key.clone());
                 }
                 Protocol::JoinFriendGame(_) => {
-                    todo!()
+                    todo!();
                 }
                 Protocol::GameReady(_) => {
                     // Server message. Ignored.
+                    panic!();
                 }
                 Protocol::RequestTowerPlacement(place_tower) => {
                     println!("REQQQQQQQQ");
@@ -138,9 +139,11 @@ pub fn receive_message_event(
                     server.send_message(user_key, Channels::ServerCommand, &assignment_message);
                 }
                 Protocol::EntityAssignment(_) => {
+                    panic!();
                     // Server message.
                 }
                 Protocol::Position(_) => {
+                    panic!();
                     println!("S got a position event from client")
                 }
             }

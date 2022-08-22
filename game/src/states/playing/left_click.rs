@@ -46,7 +46,6 @@ pub fn left_click(
     } else {
         return;
     };
-    dbg!(position);
 
     let game = game.single();
     let game_info = game_info.single();
@@ -57,6 +56,8 @@ pub fn left_click(
         return;
     }
 
-    let mut place_tower = RequestTowerPlacement::new(position, Tower::MachineGun, 1230);
-    client.send_message(Channels::PlayerCommand, &mut place_tower);
+    let place_tower = RequestTowerPlacement::new(position, Tower::MachineGun, 1230);
+    client.send_message(Channels::PlayerCommand, &place_tower);
+
+    println!("sent place tower request");
 }
