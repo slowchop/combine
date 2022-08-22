@@ -14,6 +14,11 @@ impl Owner {
         }
         Self(owner)
     }
+
+    // Bit of a hack!
+    pub fn waiting() -> Self {
+        Self(42)
+    }
 }
 
 impl From<Owner> for u8 {

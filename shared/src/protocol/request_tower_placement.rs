@@ -1,4 +1,3 @@
-use crate::game::towers::Tower;
 use bevy_ecs::prelude::Component;
 use bevy_math::Vec2;
 use naia_shared::{Property, Replicate};
@@ -18,12 +17,12 @@ pub struct RequestTowerPlacement {
     pub x: Property<f32>,
     pub y: Property<f32>,
 
-    pub tower: Property<u8>,
+    pub tower: Property<String>,
 }
 
 impl RequestTowerPlacement {
-    pub fn new(p: Vec2, tower: Tower, placeholder: u64) -> Self {
-        RequestTowerPlacement::new_complete(placeholder, p.x, p.y, tower as u8)
+    pub fn new(p: Vec2, tower: &str, placeholder: u64) -> Self {
+        RequestTowerPlacement::new_complete(placeholder, p.x, p.y, tower.to_string())
     }
 
     pub fn position(&self) -> Vec2 {
@@ -34,7 +33,7 @@ impl RequestTowerPlacement {
         *self.placeholder
     }
 
-    pub fn tower(&self) -> Option<Tower> {
-        Tower::from_repr(*self.tower as usize)
+    pub fn tower(&self) -> String {
+        (*self.tower).clone()
     }
 }

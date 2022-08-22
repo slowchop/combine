@@ -1,3 +1,4 @@
+use crate::game::owner::Owner;
 use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use rand::{thread_rng, Rng};
 use std::fmt::Display;
@@ -5,14 +6,16 @@ use std::fmt::Display;
 #[derive(Clone, Debug, PartialEq)]
 pub struct SharedPlayer {
     pub name: PlayerName,
+    pub owner: Owner,
     pub gold: u32,
     pub lives: u32,
 }
 
 impl SharedPlayer {
-    pub fn new(name: PlayerName) -> Self {
+    pub fn new(name: PlayerName, owner: Owner) -> Self {
         SharedPlayer {
             name,
+            owner,
             gold: 1000,
             lives: 20,
         }
@@ -22,19 +25,21 @@ impl SharedPlayer {
 impl Serde for SharedPlayer {
     fn ser(&self, writer: &mut dyn BitWrite) {
         self.name.ser(writer);
+        self.owner.ser(writer);
         self.gold.ser(writer);
         self.lives.ser(writer);
     }
     fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
         Ok(SharedPlayer {
             name: Serde::de(reader)?,
+            owner: Serde::de(reader)?,
             gold: Serde::de(reader)?,
             lives: Serde::de(reader)?,
         })
     }
 }
 
-#[derive(Clone, Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct PlayerName(String);
 
 impl PlayerName {

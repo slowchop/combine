@@ -3,7 +3,7 @@ use crate::state::GameId;
 use crate::GameLookup;
 use bevy_ecs::prelude::*;
 use bevy_log::{info, warn};
-use shared::game::defs::{EntityDef, EntityType, TowerRef};
+use shared::game::defs::{Defs, EntityDef, EntityType, TowerRef};
 use shared::game::owner::Owner;
 use shared::game::SpawnPoint;
 use shared::protocol::position::Position;
@@ -18,6 +18,7 @@ pub fn spawn_entities(
     mut commands: Commands,
     mut spawn_entities: EventReader<SpawnServerEntityEvent>,
     mut new_entity_events: EventWriter<NewEntityEvent>,
+    defs: Res<Defs>,
 ) {
     for spawn in spawn_entities.iter() {
         let entity_def = &spawn.entity_def;
@@ -59,6 +60,21 @@ pub fn spawn_entities(
             }
             EntityType::Path => {}
             EntityType::Tower => {
+                let tower_name = match &entity_def.tower {
+                    Some(t) => t,
+                    None => {
+                        warn!("Tower entity has no tower name: {:?}", entity_def);
+                        continue;
+                    }
+                };
+                let tower = match defs.tower(tower_name.as_str()) {
+                    Some(t) => t,
+                    None => {
+                        warn!("Tower not found: {:?} {:?}", tower_name, entity_def);
+                        continue;
+                    }
+                };
+
                 let position = match &entity_def.position {
                     Some(p) => p,
                     None => {

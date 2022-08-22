@@ -35,7 +35,8 @@ pub fn create_games(
         // Create SharedPlayers.
         let shared_players: Vec<SharedPlayer> = player_names
             .iter()
-            .map(|n| SharedPlayer::new(n.clone()))
+            .enumerate()
+            .map(|(idx, n)| SharedPlayer::new(n.clone(), Owner::new(idx as u8)))
             .collect::<Vec<_>>();
         let map_name = "test";
         let game = SharedGame::new(map_name.to_string(), shared_players.clone());

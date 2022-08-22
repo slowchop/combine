@@ -37,6 +37,9 @@ pub struct PlayerLookup(pub HashMap<UserKey, SharedPlayer>);
 pub struct GameId(pub u32);
 
 #[derive(Default)]
+pub struct GameLookup(pub HashMap<GameId, SharedGame>);
+
+#[derive(Default)]
 pub struct GameUserLookup {
     game_to_user: HashMap<GameId, Vec<UserKey>>,
     user_to_game: HashMap<UserKey, GameId>,
@@ -70,6 +73,3 @@ impl GameUserLookup {
         self.game_to_user.get(game_id)
     }
 }
-
-#[derive(Default)]
-pub struct GameLookup(pub HashMap<GameId, SharedGame>);

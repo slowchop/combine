@@ -28,9 +28,9 @@ pub fn spawn_entities(
         let level_entity: &EntityDef = &spawn.entity_def;
 
         match level_entity.entity_type {
-            EntityType::Path => {
-                warn!("TODO: Path");
-                return;
+            EntityType::Path | EntityType::Spawn => {
+                warn!(?level_entity.entity_type, "TODO");
+                continue;
             }
             _ => {}
         }

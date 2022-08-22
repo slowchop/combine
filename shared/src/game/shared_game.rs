@@ -1,6 +1,5 @@
 use crate::game::owner::Owner;
 use crate::game::player::SharedPlayer;
-use crate::game::towers::Tower;
 use bevy_ecs::prelude::*;
 use bevy_math::Vec2;
 use bevy_utils::{HashMap, HashSet};
@@ -47,7 +46,7 @@ impl SharedGame {
         }
     }
 
-    pub fn can_build_tower(&self, owner: &Owner, position: &Vec2, tower: &Tower) -> CanBuild {
+    pub fn can_build_tower(&self, owner: &Owner, position: &Vec2, tower: &str) -> CanBuild {
         CanBuild::Yes
         // for (id, entity) in &self.entities {
         //     entity.definition.

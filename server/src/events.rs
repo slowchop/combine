@@ -1,5 +1,7 @@
-use crate::state::PlayerLookup;
 use crate::state::PlayerQueue;
+use crate::state::{GameId, PlayerLookup};
+use crate::{GameLookup, GameUserLookup, SpawnServerEntityEvent};
+use bevy_ecs::prelude::{EventWriter, Res};
 use bevy_ecs::{event::EventReader, system::ResMut};
 use bevy_log::{info, warn};
 use naia_bevy_server::shared::BigMapKey;
@@ -7,6 +9,8 @@ use naia_bevy_server::{
     events::{AuthorizationEvent, ConnectionEvent, DisconnectionEvent, MessageEvent},
     Server,
 };
+use shared::game::defs::{EntityDef, EntityType};
+use shared::game::owner::Owner;
 use shared::game::player::{PlayerName, SharedPlayer};
 use shared::protocol::position::Position;
 use shared::protocol::Protocol;
@@ -47,6 +51,7 @@ pub fn disconnection_event(
     for event in event_reader.iter() {
         let DisconnectionEvent(user_key, user) = event;
         info!("Disconnected: {:?}", user.address);
+        warn!("TODO: Cleanup");
 
         // if let Some(entity) = global.user_to_prediction_map.remove(user_key) {
         //     server
@@ -61,7 +66,10 @@ pub fn receive_message_event(
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
     mut player_queue: ResMut<PlayerQueue>,
     mut player_lookup: ResMut<PlayerLookup>,
+    game_user_lookup: Res<GameUserLookup>,
+    game_lookup: Res<GameLookup>,
     mut server: Server<Protocol, Channels>,
+    mut spawn_entity_events: EventWriter<SpawnServerEntityEvent>,
 ) {
     for event in event_reader.iter() {
         info!("Got message event!");
@@ -79,6 +87,7 @@ pub fn receive_message_event(
                         name: player_name,
                         gold: 0,
                         lives: 0,
+                        owner: Owner::waiting(),
                     };
                     player_lookup.0.insert(user_key.clone(), player);
 
@@ -91,11 +100,42 @@ pub fn receive_message_event(
                     warn!("Got a game ready event from client");
                 }
                 Protocol::RequestTowerPlacement(place_tower) => {
-                    println!("REQQQQQQQQ");
                     // TODO: Check if possible
-                    let position = Position::new(place_tower.position());
-                    let server_player = &player_lookup.0[&user_key];
-                    todo!()
+                    todo!("Check if building is possible");
+                    let position = Some(place_tower.position().into());
+                    // let shared_player = u
+                    let game_id = match game_user_lookup.get_player_game(user_key) {
+                        None => {
+                            warn!("User not found getting game.");
+                            continue;
+                        }
+                        Some(a) => a,
+                    };
+                    let game = match game_lookup.0.get(&game_id) {
+                        None => {
+                            warn!("Game not found in lookup");
+                            continue;
+                        }
+                        Some(a) => a,
+                    };
+                    let player = match player_lookup.0.get(&user_key) {
+                        None => {
+                            warn!("Player not found in lookup");
+                            continue;
+                        }
+                        Some(a) => a,
+                    };
+
+                    spawn_entity_events.send(SpawnServerEntityEvent {
+                        game_id: Default::default(),
+                        entity_def: EntityDef {
+                            entity_type: EntityType::Tower,
+                            position,
+                            owner: Some(player.owner.clone()),
+                            tower: Some("machine".to_string()),
+                            ..Default::default()
+                        },
+                    })
 
                     // server.send_message(user_key, Channels::ServerCommand, &assignment_message);
                 }

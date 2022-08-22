@@ -52,6 +52,14 @@ impl Defs {
             1.0,
         )))
     }
+
+    pub fn tower(&self, name: &str) -> Option<Tower> {
+        self.towers.get(name).cloned()
+    }
+
+    pub fn creep(&self, name: &str) -> Option<Creep> {
+        self.creeps.get(name).cloned()
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -90,7 +98,7 @@ pub struct LevelDef {
     pub entities: Vec<EntityDef>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct EntityDef {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub texture: Option<String>,

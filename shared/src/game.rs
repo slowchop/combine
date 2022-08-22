@@ -2,7 +2,6 @@ pub mod defs;
 pub mod owner;
 pub mod player;
 pub mod shared_game;
-pub mod towers;
 
 use crate::game::owner::Owner;
 use crate::game::player::SharedPlayer;
