@@ -1,4 +1,4 @@
-use crate::state::{PlayerQueue, Players, State};
+use crate::state::{Global, PlayerQueue, Players};
 use bevy_ecs::prelude::Res;
 use bevy_ecs::system::ResMut;
 use bevy_log::{error, info};
@@ -12,17 +12,17 @@ use shared::Channels;
 pub fn match_randoms(
     mut player_queue: ResMut<PlayerQueue>,
     mut server: Server<Protocol, Channels>,
-    player_info: Res<Players>,
+    mut players: ResMut<Players>,
 ) {
     loop {
-        let players = match player_queue.pair() {
+        let found_players = match player_queue.pair() {
             None => return,
             Some(p) => p,
         };
 
-        let player_names: [PlayerName; 2] = players
+        let player_names: [PlayerName; 2] = found_players
             .iter()
-            .map(|&u| player_info.0.get(&u).unwrap().name.clone())
+            .map(|&u| players.0.get(&u).unwrap().name.clone())
             .collect::<Vec<_>>()
             .try_into()
             .unwrap();
@@ -30,7 +30,8 @@ pub fn match_randoms(
         let room = server.make_room();
         let room_key = room.key();
         println!("Creating room {}", room_key.to_u64());
-        for (idx, player) in players.iter().enumerate() {
+        for (idx, player) in found_players.iter().enumerate() {
+            players.set_room(player, room_key);
             server.user_mut(&player).enter_room(&room_key);
 
             println!("Sending GameReady to {}", player.to_u64());

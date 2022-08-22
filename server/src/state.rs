@@ -1,10 +1,11 @@
 use crate::game_info::ServerGameInfo;
+use crate::server_player::ServerPlayer;
 use bevy_utils::HashMap;
 use naia_bevy_server::{RoomKey, UserKey};
 use shared::game::player_name::PlayerName;
 use std::collections::VecDeque;
 
-pub struct State {
+pub struct Global {
     pub main_room_key: RoomKey,
 }
 
@@ -28,11 +29,6 @@ impl PlayerQueue {
     }
 }
 
-#[derive(Debug)]
-pub struct ServerPlayer {
-    pub name: PlayerName,
-}
-
 pub struct Players(pub HashMap<UserKey, ServerPlayer>);
 
 impl Default for Players {
@@ -41,7 +37,15 @@ impl Default for Players {
     }
 }
 
+impl Players {
+    pub fn set_room(&mut self, user_key: &UserKey, room_key: RoomKey) {
+        let mut player = self.0.get_mut(user_key).unwrap();
+        player.room = room_key;
+    }
+}
+
 pub struct Games(pub HashMap<RoomKey, ServerGameInfo>);
+
 impl Default for Games {
     fn default() -> Self {
         Games(HashMap::new())

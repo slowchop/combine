@@ -2,6 +2,7 @@ mod events;
 mod game_info;
 mod init;
 mod match_randoms;
+mod server_player;
 mod state;
 mod tick;
 

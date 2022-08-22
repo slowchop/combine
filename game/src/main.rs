@@ -19,9 +19,16 @@ use states::playing::level::{LevelLoadState, Textures, YamlLevel};
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
-struct Args {
+pub struct Args {
     #[clap(subcommand)]
     command: Option<Command>,
+
+    #[clap(short)]
+    skip_to_random_player: bool,
+
+    /// Debugging hack to run two clients. False 0, True 1.
+    #[clap(short)]
+    window_position_shift: Option<u8>,
 }
 
 #[derive(Debug, clap::Subcommand)]
@@ -32,7 +39,7 @@ enum Command {
 fn main() -> miette::Result<()> {
     let args = Args::parse();
     match args.command {
-        None => app::play(),
+        None => app::play(&args),
         Some(Command::UpdateTextureSizes) => update_texture_sizes()?,
     }
     Ok(())

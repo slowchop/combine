@@ -1,4 +1,4 @@
-use crate::state::{PlayerQueue, Players, State};
+use crate::state::{Global, PlayerQueue, Players};
 use bevy_ecs::system::Commands;
 use bevy_log::info;
 use naia_bevy_server::{Server, ServerAddrs};
@@ -30,7 +30,7 @@ pub fn init(mut commands: Commands, mut server: Server<Protocol, Channels>) {
     // dbg!(&main_room_key);
 
     // Resources
-    commands.insert_resource(State { main_room_key });
+    commands.insert_resource(Global { main_room_key });
     commands.insert_resource(PlayerQueue::default());
     commands.insert_resource(Players::default());
 }

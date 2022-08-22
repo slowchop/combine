@@ -1,4 +1,6 @@
-use crate::state::{PlayerQueue, Players, ServerPlayer, State};
+use crate::server_player::ServerPlayer;
+use crate::state::{Global, PlayerQueue, Players};
+use bevy_ecs::prelude::Res;
 use bevy_ecs::{event::EventReader, system::ResMut};
 use bevy_log::{info, warn};
 use bevy_math::Vec2;
@@ -9,7 +11,9 @@ use naia_bevy_server::{
     Server,
 };
 use shared::game::player_name::PlayerName;
+use shared::protocol::entity_assignment::EntityAssignment;
 use shared::protocol::game_ready::GameReady;
+use shared::protocol::position::Position;
 use shared::protocol::Protocol;
 use shared::Channels;
 
@@ -28,7 +32,7 @@ pub fn authorization_event(
 
 pub fn connection_event<'world, 'state>(
     mut event_reader: EventReader<ConnectionEvent>,
-    mut state: ResMut<State>,
+    mut state: ResMut<Global>,
     mut server: Server<'world, 'state, Protocol, Channels>,
 ) {
     for event in event_reader.iter() {
@@ -75,8 +79,9 @@ pub fn disconnection_event(
 pub fn receive_message_event(
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
     mut player_queue: ResMut<PlayerQueue>,
-    mut player_info: ResMut<Players>,
+    mut players: ResMut<Players>,
     mut server: Server<Protocol, Channels>,
+    mut global: Res<Global>,
 ) {
     for key in server.user_keys() {
         let user = server.user(&key);
@@ -92,9 +97,12 @@ pub fn receive_message_event(
                 Protocol::JoinRandomGame(random_game) => {
                     let name = (*random_game.name).clone();
                     let player_name = PlayerName::new(name.as_str());
-                    let player = ServerPlayer { name: player_name };
-                    println!("player requesting random game! {:?}", &player);
-                    player_info.0.insert(user_key.clone(), player);
+                    let player = ServerPlayer {
+                        name: player_name,
+                        room: global.main_room_key,
+                    };
+                    println!("player requesting random game! {:?}", &player.name);
+                    players.0.insert(user_key.clone(), player);
                     player_queue.add(user_key.clone());
                 }
                 Protocol::JoinFriendGame(_) => {
@@ -106,7 +114,34 @@ pub fn receive_message_event(
                 Protocol::RequestTowerPlacement(place_tower) => {
                     println!("REQQQQQQQQ");
                     // TODO: Check if possible
-                    let position: Vec2 = place_tower.position();
+                    let position = Position::new(place_tower.position());
+
+                    let server_player = &players.0[&user_key];
+                    dbg!(server_player.room.to_u64());
+
+                    let entity = server
+                        // Spawn new Square Entity
+                        .spawn()
+                        // Add Entity to main Room
+                        .enter_room(&server_player.room)
+                        // Insert Position component
+                        .insert(position)
+                        // Insert Color component
+                        // .insert(color)
+                        // return Entity id
+                        .id();
+
+                    println!("sending event");
+
+                    let mut assignment_message = EntityAssignment::new(true);
+                    assignment_message.entity.set(&server, &entity);
+                    server.send_message(user_key, Channels::ServerCommand, &assignment_message);
+                }
+                Protocol::EntityAssignment(_) => {
+                    // Server message.
+                }
+                Protocol::Position(_) => {
+                    println!("S got a position event from client")
                 }
             }
             info!(key = ?user_key.to_u64())

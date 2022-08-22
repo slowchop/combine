@@ -7,9 +7,9 @@ use crate::states::{
     connecting, loading_level, main_menu, playing, splash, waiting_for_random, ContinueState,
 };
 use crate::{
-    move_camera, net, App, AssetServer, AssetServerSettings, BillboardMaterial, Camera3dBundle,
-    ClearColor, Color, Commands, DefaultPlugins, LevelLoadState, MaterialPlugin, Msaa, Res,
-    Textures, Transform, Vec3, WindowDescriptor, YamlLevel,
+    move_camera, net, App, Args, AssetServer, AssetServerSettings, BillboardMaterial,
+    Camera3dBundle, ClearColor, Color, Commands, DefaultPlugins, LevelLoadState, MaterialPlugin,
+    Msaa, Res, Textures, Transform, Vec3, WindowDescriptor, YamlLevel,
 };
 use bevy::prelude::*;
 use bevy::window::PresentMode;
@@ -46,8 +46,19 @@ pub enum GameState {
     Playing,
 }
 
-pub fn play() {
+pub fn play(args: &Args) {
     let mut app = App::new();
+
+    let position = match args.window_position_shift {
+        Some(0) => WindowPosition::At(Vec2::new(800.0, 200.0)),
+        Some(1) => WindowPosition::At(Vec2::new(1900.0, 200.0)),
+        _ => WindowPosition::Automatic,
+    };
+
+    let mut settings = Settings::default();
+    if args.skip_to_random_player {
+        settings.start_multiplayer_immediately = true;
+    }
 
     app.insert_resource(WindowDescriptor {
         resizable: false,
@@ -55,13 +66,14 @@ pub fn play() {
         height: 768f32,
         title: "Combined Towers".to_string(),
         present_mode: PresentMode::AutoNoVsync,
+        position,
         ..Default::default()
     })
     .insert_resource(AssetServerSettings {
         watch_for_changes: true,
         ..Default::default()
     })
-    .insert_resource(Settings::default())
+    .insert_resource(settings)
     .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
     .insert_resource(Msaa { samples: 4 })
     .insert_resource(ContinueState(None))

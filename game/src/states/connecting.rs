@@ -1,6 +1,7 @@
 use crate::app::GameState;
 use crate::states::ContinueState;
 use bevy::prelude::*;
+use bevy_egui::{egui, EguiContext};
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Client;
 use shared::protocol::Protocol;
@@ -20,7 +21,10 @@ pub fn update(
     time: Res<Time>,
     mut client: Client<Protocol, Channels>,
     next_state: Res<ContinueState>,
+    mut egui_context: ResMut<EguiContext>,
 ) {
+    egui::Window::new("Connecting to server...").show(egui_context.ctx_mut(), |ui| {});
+
     let next_state = match next_state.0 {
         Some(state) => state,
         None => panic!("No next state in connecting update."),
