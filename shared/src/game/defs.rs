@@ -64,12 +64,12 @@ impl Defs {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Tower {
-    name: String,
-    combo: Vec<String>,
-    texture: String,
-    damage: f32,
-    range: f32,
-    cost: u32,
+    pub name: String,
+    pub combo: Vec<String>,
+    pub texture: String,
+    pub damage: f32,
+    pub range: f32,
+    pub cost: u32,
 }
 
 #[derive(Component)]
@@ -77,15 +77,15 @@ pub struct TowerRef(pub String);
 
 #[derive(Component, Debug, Clone, Serialize, Deserialize)]
 pub struct Creep {
-    name: String,
-    combo: Vec<String>,
-    texture: String,
-    speed: f32,
-    cost: u32,
+    pub name: String,
+    pub combo: Vec<String>,
+    pub texture: String,
+    pub speed: f32,
+    pub cost: u32,
 }
 
 #[derive(Component)]
-pub struct CreepRef(String);
+pub struct CreepRef(pub String);
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TextureDefinition {

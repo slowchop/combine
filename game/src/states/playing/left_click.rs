@@ -4,7 +4,6 @@ use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
 use naia_bevy_client::Client;
 use shared::game::shared_game::{CanBuild, SharedGame};
-use shared::game::towers::Tower;
 use shared::game::ClientGameInfo;
 use shared::protocol::request_tower_placement::RequestTowerPlacement;
 use shared::protocol::Protocol;
@@ -56,7 +55,7 @@ pub fn left_click(
     //     return;
     // }
 
-    let place_tower = RequestTowerPlacement::new(position, Tower::MachineGun, 1230);
+    let place_tower = RequestTowerPlacement::new(position, "machine", 1230);
     client.send_message(Channels::PlayerCommand, &place_tower);
 
     println!("sent place tower request");

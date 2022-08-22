@@ -1,7 +1,7 @@
 use crate::state::{GameId, GameLookup, GameUserLookup, PlayerLookup};
 use crate::SpawnServerEntityEvent;
 use bevy_ecs::prelude::*;
-use bevy_log::{error, warn};
+use bevy_log::{error, info, warn};
 use naia_bevy_server::{Server, UserKey};
 use shared::game::defs::{Defs, EntityType};
 use shared::game::owner::Owner;
@@ -43,6 +43,7 @@ pub fn create_games(
 
         // Create GameId.
         let game_id = game_user_lookup.create_game_reference(create_game_event.user_keys.clone());
+        info!(?game_id, ?game, "Creating game");
         game_lookup.0.insert(game_id, game);
 
         // Send GameReady to each player.

@@ -9,6 +9,7 @@ use shared::protocol::spawn_entity::SpawnEntity;
 use shared::protocol::Protocol;
 use shared::Channels;
 
+#[derive(Debug)]
 pub struct NewEntityEvent {
     pub game_id: GameId,
     pub entity: Entity,
@@ -21,7 +22,7 @@ pub fn add_new_entities_to_game(
     mut game_lookup: ResMut<GameLookup>,
 ) {
     for new_entity_event in new_entities_events.iter() {
-        println!("{:?}", new_entity_event.entity);
+        println!("new entity event {:?}", new_entity_event.entity);
         let game_id = new_entity_event.game_id;
         let game = match game_lookup.0.get_mut(&game_id) {
             Some(g) => g,
@@ -44,13 +45,10 @@ pub fn send_new_entities_to_players(
     mut server: Server<Protocol, Channels>,
 ) {
     for new_entity_event in new_entities_events.iter() {
-        let users = match game_user_lookup.get_game_players(&new_entity_event.game_id) {
+        let users = match game_user_lookup.get_game_users(&new_entity_event.game_id) {
             Some(u) => u,
             None => {
-                warn!(
-                    "Could not get users for game_id {:?}",
-                    new_entity_event.game_id
-                );
+                warn!("Could not get users for game_id {:?}", new_entity_event);
                 continue;
             }
         };
@@ -58,7 +56,7 @@ pub fn send_new_entities_to_players(
         if users.len() == 0 {
             warn!(
                 "Could not get game_user_lookup for game_id {:?}",
-                new_entity_event.game_id
+                new_entity_event
             );
             continue;
         }

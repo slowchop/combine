@@ -25,28 +25,52 @@ pub fn spawn_entities(
     defs: Res<Defs>,
 ) {
     for spawn in new_entities.iter() {
-        let level_entity: &EntityDef = &spawn.entity_def;
+        let entity_def = &spawn.entity_def;
+        let mut texture = entity_def.texture.clone();
 
-        match level_entity.entity_type {
+        match entity_def.entity_type {
             EntityType::Path | EntityType::Spawn => {
-                warn!(?level_entity.entity_type, "TODO");
+                warn!(?entity_def.entity_type, "TODO");
                 continue;
             }
             _ => {}
         }
 
-        let mesh = match level_entity.entity_type {
+        let mesh = match entity_def.entity_type {
             EntityType::Ground => Mesh::from(shape::Plane { size: 10.0 }),
             _ => Mesh::from(BottomQuad {
                 size: Vec2::new(1., 1.),
             }),
         };
-        let alpha_mode = match level_entity.entity_type {
+        let alpha_mode = match entity_def.entity_type {
             EntityType::Ground => AlphaMode::Opaque,
             _ => AlphaMode::Blend,
         };
 
-        let material = level_entity.texture.as_ref().map(|texture_name| {
+        if entity_def.entity_type == EntityType::Tower {
+            if texture.is_some() {
+                warn!(
+                    "Texture was already specified for spawning tower: {:?}",
+                    entity_def
+                );
+            }
+            let tower_name = if let Some(t) = &entity_def.tower {
+                t
+            } else {
+                warn!("Tower not found: {:?}", entity_def);
+                continue;
+            };
+            let tower = if let Some(t) = defs.towers.get(tower_name) {
+                t
+            } else {
+                warn!("Tower not found: {:?}", entity_def);
+                continue;
+            };
+
+            texture = Some(tower.texture.clone());
+        };
+
+        let material = texture.as_ref().map(|texture_name| {
             billboard_materials.add(BillboardMaterial {
                 alpha_mode,
                 color_texture: Some(asset_server.load(texture_name.as_str())),
@@ -55,8 +79,8 @@ pub fn spawn_entities(
         });
 
         let transform: Option<Transform> =
-            defs.level_entity_transform(level_entity)
-                .map(|mut transform| match level_entity.entity_type {
+            defs.level_entity_transform(entity_def)
+                .map(|mut transform| match entity_def.entity_type {
                     EntityType::Ground => transform,
                     _ => {
                         transform.rotation = Quat::from_rotation_x(TAU * -0.125);
@@ -72,51 +96,13 @@ pub fn spawn_entities(
                 ..Default::default()
             }),
             _ => {
-                warn!("no transform and/or material for entity {:?}", level_entity);
+                warn!("no transform and/or material for entity {:?}", entity_def);
                 continue;
             }
         };
 
-        if let EntityType::Ground = level_entity.entity_type {
+        if let EntityType::Ground = entity_def.entity_type {
             entity.insert(RayCastMesh::<MyRaycastSet>::default());
         }
-
-        // match level_entity.entity_type {
-        //     EntityType::Ground => {}
-        //     _ => {
-        //         let texture_def = defs.textures.get(&level_entity.texture).unwrap();
-        //         let mut transform = level_entity_transform(level_entity, texture_def).unwrap();
-        //         transform.rotation = Quat::from_rotation_x(TAU * -0.125);
-        //     }
-        // };
-        //
-        // let mesh = match level_entity.entity_type {
-        //     EntityType::Ground => Mesh::from(shape::Plane { size: 10.0 }),
-        //     _ => Mesh::from(BottomQuad {
-        //         size: Vec2::new(1., 1.),
-        //     }),
-        // };
-        //
-        // let alpha_mode = match level_entity.entity_type {
-        //     EntityType::Ground => AlphaMode::Opaque,
-        //     _ => AlphaMode::Blend,
-        // };
-        //
-        // let material = billboard_materials.add(BillboardMaterial {
-        //     alpha_mode,
-        //     color_texture: Some(asset_server.load(&level_entity.texture)),
-        //     color: Color::ORANGE_RED,
-        // });
-        //
-        // let mut c = commands.spawn_bundle(MaterialMeshBundle {
-        //     mesh: meshes.add(mesh),
-        //     material,
-        //     transform,
-        //     ..Default::default()
-        // });
-        //
-        // if let EntityType::Ground = level_entity.entity_type {
-        //     c.insert(RayCastMesh::<MyRaycastSet>::default());
-        // }
     }
 }

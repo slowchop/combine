@@ -6,6 +6,7 @@ use bevy_utils::{HashMap, HashSet};
 use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
+use std::fmt::{Debug, Formatter};
 
 #[derive(Component, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub struct ServerEntityId(pub u32);
@@ -24,6 +25,18 @@ pub struct SharedGame {
     map: String,
     entities: HashMap<ServerEntityId, Entity>,
     players: Vec<SharedPlayer>,
+}
+
+impl Debug for SharedGame {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "SharedGame {{ map: {:?}, entities: {:?}, players: {:?} }}",
+            self.map,
+            self.entities.len(),
+            self.players
+        )
+    }
 }
 
 impl SharedGame {

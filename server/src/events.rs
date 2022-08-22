@@ -101,33 +101,25 @@ pub fn receive_message_event(
                 }
                 Protocol::RequestTowerPlacement(place_tower) => {
                     // TODO: Check if possible
-                    todo!("Check if building is possible");
+                    warn!("Check if building is possible");
                     let position = Some(place_tower.position().into());
-                    // let shared_player = u
-                    let game_id = match game_user_lookup.get_player_game(user_key) {
-                        None => {
-                            warn!("User not found getting game.");
-                            continue;
-                        }
-                        Some(a) => a,
-                    };
-                    let game = match game_lookup.0.get(&game_id) {
-                        None => {
-                            warn!("Game not found in lookup");
-                            continue;
-                        }
-                        Some(a) => a,
-                    };
                     let player = match player_lookup.0.get(&user_key) {
+                        Some(a) => a,
                         None => {
                             warn!("Player not found in lookup");
                             continue;
                         }
-                        Some(a) => a,
+                    };
+                    let game_id = match game_user_lookup.get_user_game(&user_key) {
+                        Some(a) => a.clone(),
+                        None => {
+                            warn!("Player not found in game_user lookup");
+                            continue;
+                        }
                     };
 
                     spawn_entity_events.send(SpawnServerEntityEvent {
-                        game_id: Default::default(),
+                        game_id,
                         entity_def: EntityDef {
                             entity_type: EntityType::Tower,
                             position,

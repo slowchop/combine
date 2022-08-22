@@ -65,11 +65,11 @@ impl GameUserLookup {
         game_id
     }
 
-    pub fn get_player_game(&self, user_key: &UserKey) -> Option<&GameId> {
+    pub fn get_user_game(&self, user_key: &UserKey) -> Option<&GameId> {
         self.user_to_game.get(user_key)
     }
 
-    pub fn get_game_players(&self, game_id: &GameId) -> Option<&Vec<UserKey>> {
+    pub fn get_game_users(&self, game_id: &GameId) -> Option<&Vec<UserKey>> {
         self.game_to_user.get(game_id)
     }
 }
