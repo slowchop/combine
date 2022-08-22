@@ -4,7 +4,7 @@ use crate::states::playing::GameInfo;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
 use naia_bevy_client::Client;
-use shared::game::managed_game::{CanBuild, EntityType, LevelEntity, ManagedGame};
+use shared::game::managed_game::{CanBuild, ManagedGame};
 use shared::game::towers::Tower;
 use shared::protocol::request_tower_placement::RequestTowerPlacement;
 use shared::protocol::Protocol;

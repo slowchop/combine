@@ -8,8 +8,8 @@ use crate::states::{
 };
 use crate::{
     move_camera, net, App, Args, AssetServer, AssetServerSettings, BillboardMaterial,
-    Camera3dBundle, ClearColor, Color, Commands, DefaultPlugins, LevelLoadState, MaterialPlugin,
-    Msaa, Res, Transform, Vec3, WindowDescriptor, YamlLevel,
+    Camera3dBundle, ClearColor, Color, Commands, DefaultPlugins, MaterialPlugin, Msaa, Res,
+    Transform, Vec3, WindowDescriptor,
 };
 use bevy::prelude::*;
 use bevy::window::PresentMode;
@@ -91,8 +91,6 @@ pub fn play(args: &Args) {
         ClientConfig::default(),
         shared_config(),
     ))
-    .add_plugin(YamlAssetPlugin::<Textures>::new(&["textures"]))
-    .add_plugin(YamlAssetPlugin::<YamlLevel>::new(&["level"]))
     .add_plugin(WorldInspectorPlugin::new());
 
     // Ours!
@@ -146,13 +144,6 @@ pub fn play(args: &Args) {
 
     // Loading level
     app.add_enter_system(GameState::LoadingLevel, loading_level::init);
-    app.add_system_set(
-        ConditionSet::new()
-            .run_in_state(GameState::LoadingLevel)
-            .with_system(loading_level::spawn_level)
-            // .with_system(spawn_entities::spawn_entities)
-            .into(),
-    );
 
     // Playing
     app.add_enter_system(GameState::Playing, init);

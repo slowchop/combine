@@ -24,7 +24,6 @@ pub fn update_texture_sizes() -> miette::Result<()> {
             .entry(non_asset_path.to_str().unwrap().to_string())
             .and_modify(|texture| {
                 texture.size = Vec2::new(i.width() as f32, i.height() as f32);
-                found = true;
             })
             .or_insert(TextureDefinition { size });
     }

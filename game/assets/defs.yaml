@@ -56,43 +56,43 @@ textures:
       - 1199
 
 levels:
-  name: Hide the pain
+  hide:
+    name: Hide the pain
+    entities:
+      - type: base
+        position: [ 10, 0 ]
+        owner: 0
 
-  entities:
-    - type: base
-      position: [ 10, 0 ]
-      owner: 0
-      
-    - type: spawn
-      position: [ 0, 10 ]
-      owner: 1
+      - type: spawn
+        position: [ 0, 10 ]
+        owner: 1
 
-    - type: waypoint
-      steps:
-        - [ 0, -10 ]
-        - [ 0, 10 ]
-      owner: 0
+      - type: waypoint
+        steps:
+          - [ 0, -10 ]
+          - [ 0, 10 ]
+        owner: 0
 
-    - texture: "harold.png"
-      position: [-1, 0]
-    - texture: "harold.png"
-      position: [0, 0]
-    - texture: "harold.png"
-      position: [1, 0]
+      - texture: "harold.png"
+        position: [-1, 0]
+      - texture: "harold.png"
+        position: [0, 0]
+      - texture: "harold.png"
+        position: [1, 0]
 
-    - texture: "harold.png"
-      type: ground
-      position: [-1, 0]
-    - texture: "harold.png"
-      type: ground
-      position: [19, 0]
-    - texture: "harold.png"
-      type: ground
-      position: [-21, 0]
-    - texture: "harold.png"
-      type: ground
-      position: [-1, 20]
-    - texture: "harold.png"
-      type: ground
-      position: [-1, -20]
+      - texture: "harold.png"
+        type: ground
+        position: [-1, 0]
+      - texture: "harold.png"
+        type: ground
+        position: [19, 0]
+      - texture: "harold.png"
+        type: ground
+        position: [-21, 0]
+      - texture: "harold.png"
+        type: ground
+        position: [-1, 20]
+      - texture: "harold.png"
+        type: ground
+        position: [-1, -20]
 

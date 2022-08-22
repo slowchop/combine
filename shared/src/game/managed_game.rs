@@ -65,32 +65,3 @@ pub enum CanBuild {
     Yes,
     No(String),
 }
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct LevelEntity {
-    pub texture: String,
-    pub position: Vec2,
-    #[serde(default, rename = "type")]
-    pub entity_type: EntityType,
-    pub owner: Option<Owner>,
-    pub radius: Option<f32>,
-}
-
-pub struct RuntimeEntity {
-    pub id: ManagedEntityId,
-    pub radius: f32,
-    pub definition: LevelEntity,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum EntityType {
-    Sprite,
-    Ground,
-}
-
-impl Default for EntityType {
-    fn default() -> Self {
-        EntityType::Sprite
-    }
-}
