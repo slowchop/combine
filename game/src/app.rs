@@ -2,7 +2,7 @@ use crate::net::SeenHack;
 use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::left_click::left_click;
-use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntity};
+use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::states::{
     connecting, loading_level, main_menu, playing, splash, waiting_for_random, ContinueState,
 };
@@ -94,7 +94,7 @@ pub fn play(args: &Args) {
     .add_plugin(WorldInspectorPlugin::new());
 
     // Ours!
-    app.add_event::<SpawnEntity>()
+    app.add_event::<SpawnEntityEvent>()
         .insert_resource(SeenHack::default())
         .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)

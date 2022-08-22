@@ -1,5 +1,5 @@
 use crate::app::MyRaycastSet;
-use crate::states::playing::spawn_entities::SpawnEntity;
+use crate::states::playing::spawn_entities::SpawnEntityEvent;
 use crate::states::playing::GameInfo;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
@@ -23,7 +23,7 @@ pub fn left_click(
     mut client: Client<Protocol, Channels>,
     buttons: Res<Input<MouseButton>>,
     query: Query<&Intersection<MyRaycastSet>>,
-    mut spawn_entities: EventWriter<SpawnEntity>,
+    mut spawn_entities: EventWriter<SpawnEntityEvent>,
     // game: Query<&mut ManagedGame>,
     game_info: Query<&GameInfo>,
 ) {

@@ -64,11 +64,11 @@ pub fn receive_message_event(
     mut server: Server<Protocol, Channels>,
 ) {
     for event in event_reader.iter() {
-        println!("got message event");
+        info!("Got message event!");
         if let MessageEvent(user_key, Channels::PlayerCommand, cmd) = event {
             match cmd {
                 Protocol::Auth(_) => {
-                    warn!("Auth on already connected?")
+                    warn!("Client sent auth on already connected.")
                 }
                 Protocol::JoinRandomGame(join_random_game) => {
                     let name = (*join_random_game.name).clone();
@@ -85,11 +85,10 @@ pub fn receive_message_event(
                     player_queue.add(user_key.clone());
                 }
                 Protocol::JoinFriendGame(_) => {
-                    todo!();
+                    warn!("TODO JoinFriendGame");
                 }
                 Protocol::GameReady(_) => {
-                    // Server message. Ignored.
-                    panic!();
+                    warn!("Got a game ready event from client");
                 }
                 Protocol::RequestTowerPlacement(place_tower) => {
                     println!("REQQQQQQQQ");
@@ -101,9 +100,9 @@ pub fn receive_message_event(
                     // server.send_message(user_key, Channels::ServerCommand, &assignment_message);
                 }
                 Protocol::Position(_) => {
-                    panic!();
-                    println!("S got a position event from client")
+                    warn!("Got a position event from client");
                 }
+                Protocol::SpawnEntity(_) => {}
             }
             info!(key = ?user_key.to_u64())
             //     if let Some(entity) = &key_command.entity.get(&server) {

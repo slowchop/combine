@@ -12,17 +12,28 @@ pub struct ServerEntityId(pub u32);
 
 #[derive(Component)]
 pub struct SharedGame {
-    pub map: String,
-    pub entities: HashSet<Entity>,
-    pub players: Vec<SharedPlayer>,
+    map: String,
+    entities: HashMap<ServerEntityId, Entity>,
+    players: Vec<SharedPlayer>,
 }
 
 impl SharedGame {
     pub fn new(map: String, players: Vec<SharedPlayer>) -> Self {
         Self {
             map,
-            entities: HashSet::with_capacity(1024),
+            entities: HashMap::with_capacity(1024),
             players,
+        }
+    }
+
+    pub fn add_entity(&mut self, entity: Entity) -> ServerEntityId {
+        loop {
+            let id = ServerEntityId(thread_rng().gen());
+            if self.entities.contains_key(&id) {
+                continue;
+            }
+            self.entities.insert(id.clone(), entity);
+            return id;
         }
     }
 

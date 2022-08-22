@@ -1,11 +1,10 @@
 use crate::app::GameState;
+use crate::states::playing::spawn_entities::SpawnEntityEvent;
 use crate::states::playing::GameInfo;
 use bevy::prelude::*;
 use bevy::utils::HashSet;
 use iyes_loopless::prelude::NextState;
-use naia_bevy_client::events::{
-    InsertComponentEvent, MessageEvent, SpawnEntityEvent, UpdateComponentEvent,
-};
+use naia_bevy_client::events::{InsertComponentEvent, MessageEvent, UpdateComponentEvent};
 use naia_bevy_client::{Client, CommandsExt};
 use shared::protocol::{Protocol, ProtocolKind};
 use shared::Channels;
@@ -43,12 +42,24 @@ pub fn receive_message_event(
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
     client: Client<Protocol, Channels>,
     mut seen_hack: ResMut<SeenHack>,
+    mut spawn_entity_event: EventWriter<SpawnEntityEvent>,
 ) {
     // dbg!(client.is_connected());
     for event in event_reader.iter() {
         println!("event");
         if let MessageEvent(Channels::ServerCommand, msg) = event {
             match msg {
+                Protocol::SpawnEntity(spawn_entity) => {
+                    let spawn_entity = match spawn_entity.to_entity_def() {
+                        Ok(s) => s,
+                        Err(e) => {
+                            error!("Error decoding spawn entity: {:?}", e);
+                            continue;
+                        }
+                    };
+                    dbg!(&spawn_entity);
+                    spawn_entity_event.send(SpawnEntityEvent(spawn_entity));
+                }
                 Protocol::Auth(_) => {}
                 Protocol::JoinRandomGame(_) => {}
                 Protocol::JoinFriendGame(_) => {}
@@ -68,22 +79,6 @@ pub fn receive_message_event(
                 Protocol::RequestTowerPlacement(_) => {
                     todo!("place tower")
                 }
-                // Protocol::EntityAssignment(message) => {
-                //     //
-                //     println!("got ent assiiiiiiiign");
-                //     let entity = message.entity.get(&client).unwrap();
-                //     CommandsExt::<Protocol>::duplicate_entity(&mut commands, entity).insert_bundle(
-                //         SpriteBundle {
-                //             sprite: Sprite {
-                //                 custom_size: Some(Vec2::new(100., 1000.)),
-                //                 color: Color::WHITE,
-                //                 ..Default::default()
-                //             },
-                //             transform: Transform::from_xyz(0.0, 0.0, 0.0),
-                //             ..Default::default()
-                //         },
-                //     );
-                // }
                 Protocol::Position(_) => {
                     println!("C got a position event from the server?")
                 }

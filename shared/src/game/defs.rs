@@ -62,7 +62,7 @@ pub struct Tower {
 }
 
 #[derive(Component)]
-pub struct TowerRef(String);
+pub struct TowerRef(pub String);
 
 #[derive(Component, Debug, Clone, Serialize, Deserialize)]
 pub struct Creep {

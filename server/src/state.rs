@@ -34,7 +34,7 @@ impl PlayerQueue {
 pub struct PlayerLookup(pub HashMap<UserKey, SharedPlayer>);
 
 #[derive(Component, Default, Debug, Clone, Copy, Hash, PartialOrd, PartialEq, Eq)]
-pub struct GameId(u32);
+pub struct GameId(pub u32);
 
 #[derive(Default)]
 pub struct GameUserLookup {

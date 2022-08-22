@@ -1,5 +1,5 @@
 use crate::app::GameState;
-use crate::states::playing::spawn_entities::SpawnEntity;
+use crate::states::playing::spawn_entities::SpawnEntityEvent;
 use crate::states::playing::GameInfo;
 use bevy::prelude::*;
 use iyes_loopless::prelude::*;
@@ -10,7 +10,7 @@ pub fn init(
     mut commands: Commands,
     game_info: Query<&GameInfo>,
     asset_server: Res<AssetServer>,
-    mut new_entities: EventWriter<SpawnEntity>,
+    mut new_entities: EventWriter<SpawnEntityEvent>,
     defs: Res<Defs>,
 ) {
     let game_info = game_info.single();
@@ -30,7 +30,7 @@ pub fn init(
     // commands.spawn().insert(managed_game);
     warn!("TODO managed game in spawn_level");
 
-    new_entities.send_batch(level.entities.iter().map(|e| SpawnEntity(e.clone())));
+    new_entities.send_batch(level.entities.iter().map(|e| SpawnEntityEvent(e.clone())));
 
     commands.insert_resource(NextState(GameState::Playing));
     println!("Loading level done!");

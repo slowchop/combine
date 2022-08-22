@@ -10,19 +10,27 @@ use shared::game::defs::{Defs, EntityDef, EntityType};
 use std::f32::consts::TAU;
 
 #[derive(Debug, Clone)]
-pub struct SpawnEntity(pub EntityDef);
+pub struct SpawnEntityEvent(pub EntityDef);
 
 pub fn spawn_entities(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut billboard_materials: ResMut<Assets<BillboardMaterial>>,
-    mut new_entities: EventReader<SpawnEntity>,
+    mut new_entities: EventReader<SpawnEntityEvent>,
     defs: Res<Defs>,
 ) {
     for spawn in new_entities.iter() {
         dbg!(&spawn);
         let level_entity: &EntityDef = &spawn.0;
+
+        match level_entity.entity_type {
+            EntityType::Path => {
+                warn!("TODO: Path");
+                return;
+            }
+            _ => {}
+        }
 
         let mesh = match level_entity.entity_type {
             EntityType::Ground => Mesh::from(shape::Plane { size: 10.0 }),
@@ -61,7 +69,7 @@ pub fn spawn_entities(
                 ..Default::default()
             }),
             _ => {
-                warn!("no transform or material for entity {:?}", level_entity);
+                warn!("no transform and/or material for entity {:?}", level_entity);
                 continue;
             }
         };

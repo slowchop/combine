@@ -2,12 +2,14 @@ mod create_games;
 mod events;
 mod init;
 mod match_randoms;
+mod new_entities;
 mod spawn_entities;
 mod state;
 mod tick;
 
 use crate::create_games::create_games;
 use crate::create_games::CreateGameEvent;
+use crate::new_entities::{add_new_entities_to_game, send_new_entities_to_players, NewEntityEvent};
 use crate::spawn_entities::{spawn_entities, SpawnServerEntityEvent};
 use crate::state::{GameLookup, GameUserLookup, PlayerLookup, PlayerQueue};
 use bevy_app::{App, ScheduleRunnerPlugin};
@@ -53,6 +55,7 @@ fn main() {
         .insert_resource(GameUserLookup::default())
         .add_event::<SpawnServerEntityEvent>()
         .add_event::<CreateGameEvent>()
+        .add_event::<NewEntityEvent>()
         .add_startup_system(init)
         .add_system_to_stage(Stage::ReceiveEvents, events::authorization_event)
         .add_system_to_stage(Stage::ReceiveEvents, events::connection_event)
@@ -62,5 +65,7 @@ fn main() {
         .add_system(match_randoms)
         .add_system(create_games)
         .add_system(spawn_entities)
+        .add_system(add_new_entities_to_game)
+        .add_system(send_new_entities_to_players)
         .run();
 }
