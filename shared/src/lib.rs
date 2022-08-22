@@ -1,3 +1,5 @@
+extern crate core;
+
 pub mod game;
 pub mod protocol;
 

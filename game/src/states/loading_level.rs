@@ -18,19 +18,10 @@ pub fn init(
 
     let level = &defs.levels[&game_info.level];
 
-    // let textures: &Textures = textures_assets.get(&textures).unwrap();
-    //
-    // let game_info = game_info.single();
-    //
-    // let managed_game = ManagedGame::from_players_level_textures(
-    //     game_info.players.clone(),
-    //     level.entities.as_slice(),
-    //     textures.0.as_slice(),
-    // );
-    // commands.spawn().insert(managed_game);
-    warn!("TODO managed game in spawn_level");
-
-    new_entities.send_batch(level.entities.iter().map(|e| SpawnEntityEvent(e.clone())));
+    new_entities.send_batch(level.entities.iter().map(|e| SpawnEntityEvent {
+        server_entity_id: None,
+        entity_def: e.clone(),
+    }));
 
     commands.insert_resource(NextState(GameState::Playing));
     println!("Loading level done!");

@@ -100,10 +100,9 @@ pub fn play(args: &Args) {
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)
         .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
         .add_system_to_stage(NaiaStage::ReceiveEvents, net::receive_message_event)
-        .add_system_to_stage(NaiaStage::ReceiveEvents, net::spawn_entity_event)
-        .add_system_to_stage(NaiaStage::ReceiveEvents, net::insert_component_event)
-        .add_system_to_stage(NaiaStage::ReceiveEvents, net::update_component_event)
-        .add_system_to_stage(NaiaStage::ReceiveEvents, net::receive_message_event)
+        // .add_system_to_stage(NaiaStage::ReceiveEvents, net::spawn_entity_event)
+        // .add_system_to_stage(NaiaStage::ReceiveEvents, net::insert_component_event)
+        // .add_system_to_stage(NaiaStage::ReceiveEvents, net::update_component_event)
         .add_system_to_stage(NaiaStage::Tick, tick);
 
     // Splash

@@ -1,4 +1,5 @@
 use crate::game::owner::Owner;
+use crate::game::shared_game::ServerEntityId;
 use bevy_ecs::prelude::Component;
 use bevy_math::{Vec2, Vec3};
 use bevy_transform::prelude::Transform;
@@ -105,6 +106,8 @@ pub struct EntityDef {
     pub tower: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creep: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_entity_id: Option<ServerEntityId>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

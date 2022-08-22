@@ -7,10 +7,14 @@ use crate::{
 use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
 use shared::game::defs::{Defs, EntityDef, EntityType};
+use shared::game::shared_game::ServerEntityId;
 use std::f32::consts::TAU;
 
 #[derive(Debug, Clone)]
-pub struct SpawnEntityEvent(pub EntityDef);
+pub struct SpawnEntityEvent {
+    pub server_entity_id: Option<ServerEntityId>,
+    pub entity_def: EntityDef,
+}
 
 pub fn spawn_entities(
     mut commands: Commands,
@@ -22,7 +26,7 @@ pub fn spawn_entities(
 ) {
     for spawn in new_entities.iter() {
         dbg!(&spawn);
-        let level_entity: &EntityDef = &spawn.0;
+        let level_entity: &EntityDef = &spawn.entity_def;
 
         match level_entity.entity_type {
             EntityType::Path => {
