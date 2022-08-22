@@ -91,10 +91,10 @@ pub struct LevelDef {
 pub struct EntityDef {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub texture: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<Vec2>,
     #[serde(default, rename = "type")]
     pub entity_type: EntityType,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<Vec2>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<Owner>,
     #[serde(skip_serializing_if = "Option::is_none")]

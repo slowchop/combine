@@ -13,7 +13,7 @@ use shared::protocol::game_ready::GameReady;
 pub struct GameInfo {
     pub level: String,
     pub players: [Player; 2],
-    pub you_are: Owner,
+    pub i_am: Owner,
 }
 
 impl From<&GameReady> for GameInfo {
@@ -30,7 +30,7 @@ impl From<&GameReady> for GameInfo {
         GameInfo {
             players,
             level: (*g.level).clone(),
-            you_are: Owner::new(*g.you_are),
+            i_am: Owner::new(*g.i_am),
         }
     }
 }

@@ -3,9 +3,11 @@ mod game_info;
 mod init;
 mod match_randoms;
 mod server_player;
+mod spawn_entities;
 mod state;
 mod tick;
 
+use crate::spawn_entities::{spawn_entities, SpawnServerEntity};
 use bevy_app::{App, ScheduleRunnerPlugin};
 use bevy_core::CorePlugin;
 use bevy_ecs::prelude::*;
@@ -15,6 +17,7 @@ use init::init;
 use match_randoms::match_randoms;
 use naia_bevy_server::shared::ConnectionConfig;
 use naia_bevy_server::{Plugin as ServerPlugin, ServerConfig, Stage};
+use shared::game::defs::Defs;
 use shared::protocol::Protocol;
 use shared::{shared_config, Channels};
 use std::time::Duration;
@@ -41,16 +44,15 @@ fn main() {
             server_config,
             shared_config(),
         ))
-        // Startup System
+        .insert_resource(Defs::load())
+        .add_event::<SpawnServerEntity>()
         .add_startup_system(init)
-        // Receive Server Events
         .add_system_to_stage(Stage::ReceiveEvents, events::authorization_event)
         .add_system_to_stage(Stage::ReceiveEvents, events::connection_event)
         .add_system_to_stage(Stage::ReceiveEvents, events::disconnection_event)
         .add_system_to_stage(Stage::ReceiveEvents, events::receive_message_event)
-        // Gameplay Loop on Tick
         .add_system_to_stage(Stage::Tick, tick)
-        // Run App
         .add_system(match_randoms)
+        .add_system(spawn_entities)
         .run();
 }

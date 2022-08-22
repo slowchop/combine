@@ -137,6 +137,22 @@ pub fn receive_message_event(
                     let mut assignment_message = EntityAssignment::new(true);
                     assignment_message.entity.set(&server, &entity);
                     server.send_message(user_key, Channels::ServerCommand, &assignment_message);
+
+                    /*
+
+                    Create:
+                    * C Request build tower
+                    * S Create server entity
+                    * S Broadcast new entity with EntityDef
+                    * C Create tower
+
+                    Combine:
+                    * C Request combine towers
+                    * S Delete old server towers
+                    * S Broadcast combine towers
+                    * C Delete old server towers
+
+                     */
                 }
                 Protocol::EntityAssignment(_) => {
                     panic!();
