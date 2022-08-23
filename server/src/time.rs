@@ -8,8 +8,11 @@ use shared::protocol::Protocol;
 use shared::{Channels, RELEASE_CLOCK_TIME, RESPAWN_CLOCK_TIME, TICKS_PER_DAY, TICKS_PER_SECOND};
 use std::time::Duration;
 
+#[derive(Debug)]
 pub struct ReleaseCreepsEvent(pub GameId);
-pub struct RespawnCreepsEvent(pub GameId);
+
+#[derive(Debug)]
+pub struct SpawnCreepsEvent(pub GameId);
 
 pub fn add_ticks_to_games(mut game_lookup: ResMut<GameLookup>) {
     for game in game_lookup.0.values_mut() {
@@ -20,7 +23,7 @@ pub fn add_ticks_to_games(mut game_lookup: ResMut<GameLookup>) {
 pub fn emit_time_events(
     game_lookup: Res<GameLookup>,
     mut release_creeps_events: EventWriter<ReleaseCreepsEvent>,
-    mut respawn_creeps_events: EventWriter<RespawnCreepsEvent>,
+    mut respawn_creeps_events: EventWriter<SpawnCreepsEvent>,
 ) {
     for (game_id, game) in game_lookup.0.iter() {
         let clock = game.ticks_since_start_of_day();
@@ -28,7 +31,7 @@ pub fn emit_time_events(
             release_creeps_events.send(ReleaseCreepsEvent(*game_id));
         }
         if clock == RESPAWN_CLOCK_TIME {
-            respawn_creeps_events.send(RespawnCreepsEvent(*game_id));
+            respawn_creeps_events.send(SpawnCreepsEvent(*game_id));
         }
     }
 }

@@ -26,9 +26,10 @@ impl Serde for ServerEntityId {
 #[derive(Component)]
 pub struct SharedGame {
     pub map: String,
-    ticks: Ticks,
-    entities: HashMap<ServerEntityId, Entity>,
+    pub entities: HashMap<ServerEntityId, Entity>,
     pub players: Vec<SharedPlayer>,
+
+    ticks: Ticks,
 }
 
 impl Debug for SharedGame {

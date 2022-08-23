@@ -1,5 +1,5 @@
 use crate::state::{GameId, GameLookup, GameUserLookup, PlayerLookup};
-use crate::SpawnServerEntityEvent;
+use crate::SpawnEntityEvent;
 use bevy_ecs::prelude::*;
 use bevy_log::{error, info, warn};
 use naia_bevy_server::{Server, UserKey};
@@ -21,7 +21,7 @@ pub fn create_games(
     mut game_user_lookup: ResMut<GameUserLookup>,
     mut game_lookup: ResMut<GameLookup>,
     mut player_lookup: ResMut<PlayerLookup>,
-    mut spawn_entities: EventWriter<SpawnServerEntityEvent>,
+    mut spawn_entities: EventWriter<SpawnEntityEvent>,
     mut create_game_events: EventReader<CreateGameEvent>,
     defs: Res<Defs>,
 ) {
@@ -72,7 +72,7 @@ pub fn create_games(
                 }
                 _ => {
                     println!("Sending {:?} to spawn_entities", entity_def);
-                    spawn_entities.send(SpawnServerEntityEvent {
+                    spawn_entities.send(SpawnEntityEvent {
                         game_id,
                         entity_def: entity_def.clone(),
                     });

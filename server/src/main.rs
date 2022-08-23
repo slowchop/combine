@@ -1,4 +1,5 @@
 mod create_games;
+mod creeps;
 mod events;
 mod init;
 mod match_randoms;
@@ -10,10 +11,11 @@ mod time;
 
 use crate::create_games::create_games;
 use crate::create_games::CreateGameEvent;
+use crate::creeps::spawn_creeps;
 use crate::new_entities::{add_new_entities_to_game, send_new_entities_to_players, NewEntityEvent};
-use crate::spawn_entities::{spawn_entities, SpawnServerEntityEvent};
+use crate::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::state::{GameLookup, GameUserLookup, PlayerLookup, PlayerQueue};
-use crate::time::{add_ticks_to_games, emit_time_events, ReleaseCreepsEvent, RespawnCreepsEvent};
+use crate::time::{add_ticks_to_games, emit_time_events, ReleaseCreepsEvent, SpawnCreepsEvent};
 use bevy_app::{App, ScheduleRunnerPlugin};
 use bevy_core::CorePlugin;
 use bevy_ecs::prelude::*;
@@ -55,11 +57,11 @@ fn main() {
         .insert_resource(PlayerLookup::default())
         .insert_resource(GameLookup::default())
         .insert_resource(GameUserLookup::default())
-        .add_event::<SpawnServerEntityEvent>()
+        .add_event::<SpawnEntityEvent>()
         .add_event::<CreateGameEvent>()
         .add_event::<NewEntityEvent>()
         .add_event::<ReleaseCreepsEvent>()
-        .add_event::<RespawnCreepsEvent>()
+        .add_event::<SpawnCreepsEvent>()
         .add_startup_system(init)
         .add_system_to_stage(Stage::ReceiveEvents, events::authorization_event)
         .add_system_to_stage(Stage::ReceiveEvents, events::connection_event)
@@ -73,5 +75,6 @@ fn main() {
         .add_system(spawn_entities)
         .add_system(add_new_entities_to_game)
         .add_system(send_new_entities_to_players)
+        .add_system(spawn_creeps)
         .run();
 }

@@ -9,14 +9,14 @@ use shared::game::SpawnPoint;
 use shared::protocol::position::Position;
 
 #[derive(Debug, Clone)]
-pub struct SpawnServerEntityEvent {
+pub struct SpawnEntityEvent {
     pub game_id: GameId,
     pub entity_def: EntityDef,
 }
 
 pub fn spawn_entities(
     mut commands: Commands,
-    mut spawn_entities: EventReader<SpawnServerEntityEvent>,
+    mut spawn_entities: EventReader<SpawnEntityEvent>,
     mut new_entity_events: EventWriter<NewEntityEvent>,
     defs: Res<Defs>,
 ) {

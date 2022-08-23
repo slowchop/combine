@@ -1,6 +1,6 @@
 use crate::state::PlayerQueue;
 use crate::state::{GameId, PlayerLookup};
-use crate::{GameLookup, GameUserLookup, SpawnServerEntityEvent};
+use crate::{GameLookup, GameUserLookup, SpawnEntityEvent};
 use bevy_ecs::prelude::{EventWriter, Res};
 use bevy_ecs::{event::EventReader, system::ResMut};
 use bevy_log::{info, warn};
@@ -69,7 +69,7 @@ pub fn receive_message_event(
     game_user_lookup: Res<GameUserLookup>,
     game_lookup: Res<GameLookup>,
     mut server: Server<Protocol, Channels>,
-    mut spawn_entity_events: EventWriter<SpawnServerEntityEvent>,
+    mut spawn_entity_events: EventWriter<SpawnEntityEvent>,
 ) {
     for event in event_reader.iter() {
         info!("Got message event!");
@@ -118,7 +118,7 @@ pub fn receive_message_event(
                         }
                     };
 
-                    spawn_entity_events.send(SpawnServerEntityEvent {
+                    spawn_entity_events.send(SpawnEntityEvent {
                         game_id,
                         entity_def: EntityDef {
                             entity_type: EntityType::Tower,
