@@ -6,12 +6,14 @@ mod new_entities;
 mod spawn_entities;
 mod state;
 mod tick;
+mod time;
 
 use crate::create_games::create_games;
 use crate::create_games::CreateGameEvent;
 use crate::new_entities::{add_new_entities_to_game, send_new_entities_to_players, NewEntityEvent};
 use crate::spawn_entities::{spawn_entities, SpawnServerEntityEvent};
 use crate::state::{GameLookup, GameUserLookup, PlayerLookup, PlayerQueue};
+use crate::time::{add_ticks_to_games, emit_time_events};
 use bevy_app::{App, ScheduleRunnerPlugin};
 use bevy_core::CorePlugin;
 use bevy_ecs::prelude::*;
@@ -62,6 +64,8 @@ fn main() {
         .add_system_to_stage(Stage::ReceiveEvents, events::disconnection_event)
         .add_system_to_stage(Stage::ReceiveEvents, events::receive_message_event)
         .add_system_to_stage(Stage::Tick, tick)
+        .add_system_to_stage(Stage::Tick, add_ticks_to_games)
+        .add_system_to_stage(Stage::Tick, emit_time_events)
         .add_system(match_randoms)
         .add_system(create_games)
         .add_system(spawn_entities)

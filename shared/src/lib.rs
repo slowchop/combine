@@ -23,18 +23,19 @@ pub const UDP_URL: &str = "http://10.0.4.14";
 pub const WEB_URL: &str = "http://10.0.4.14";
 
 // 1000 / 20fps = 50ms
-pub const MS_PER_FRAME: u64 = 50;
+pub const MS_PER_TICK: u64 = 50;
+pub const TICKS_PER_SECOND: u64 = 1000 / 50;
 
 pub fn shared_config() -> SharedConfig<Channels> {
-    let tick_interval = Some(Duration::from_millis(MS_PER_FRAME as u64));
+    let tick_interval = Some(Duration::from_millis(MS_PER_TICK as u64));
 
-    let link_condition = None;
+    // let link_condition = None;
     // let link_condition = Some(LinkConditionerConfig::average_condition());
-    //  let link_condition = Some(LinkConditionerConfig {
-    //      incoming_latency: 500,
-    //      incoming_jitter: 1,
-    //      incoming_loss: 0.0,
-    //  });
+    let link_condition = Some(LinkConditionerConfig {
+        incoming_latency: 500,
+        incoming_jitter: 100,
+        incoming_loss: 0.01,
+    });
     SharedConfig::new(
         SocketConfig::new(link_condition, None),
         CHANNEL_CONFIG,
@@ -76,6 +77,6 @@ impl Ticks {
 
 impl From<Duration> for Ticks {
     fn from(duration: Duration) -> Self {
-        Ticks(duration.as_millis() as u64 / MS_PER_FRAME)
+        Ticks(duration.as_millis() as u64 / MS_PER_TICK)
     }
 }

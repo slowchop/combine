@@ -7,6 +7,7 @@ use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 use std::fmt::{Debug, Formatter};
+use std::time::Duration;
 
 #[derive(Component, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub struct ServerEntityId(pub u32);
@@ -23,6 +24,7 @@ impl Serde for ServerEntityId {
 #[derive(Component)]
 pub struct SharedGame {
     map: String,
+    ticks: u64,
     entities: HashMap<ServerEntityId, Entity>,
     players: Vec<SharedPlayer>,
 }
@@ -34,7 +36,7 @@ impl Debug for SharedGame {
             "SharedGame {{ map: {:?}, entities: {:?}, players: {:?} }}",
             self.map,
             self.entities.len(),
-            self.players
+            self.players,
         )
     }
 }
@@ -45,6 +47,7 @@ impl SharedGame {
             map,
             entities: HashMap::with_capacity(1024),
             players,
+            ticks: 0,
         }
     }
 
@@ -57,6 +60,14 @@ impl SharedGame {
             self.entities.insert(id.clone(), entity);
             return id;
         }
+    }
+
+    pub fn tick(&mut self) {
+        self.ticks += 1;
+    }
+
+    pub fn ticks(&self) -> u64 {
+        self.ticks
     }
 
     pub fn can_build_tower(&self, owner: &Owner, position: &Vec2, tower: &str) -> CanBuild {
