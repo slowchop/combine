@@ -5,14 +5,14 @@ use naia_shared::{Property, Replicate};
 
 #[derive(Component, Replicate)]
 #[protocol_path = "crate::protocol::Protocol"]
-pub struct Position {
+pub struct NetPosition {
     pub x: Property<f32>,
     pub y: Property<f32>,
 }
 
-impl Position {
+impl NetPosition {
     pub fn new(v: Vec2) -> Self {
-        Position::new_complete(v.x, v.y)
+        NetPosition::new_complete(v.x, v.y)
     }
 
     pub fn vec2(&self) -> Vec2 {

@@ -7,7 +7,7 @@ use crate::{
 use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
 use shared::game::components::Damage;
-use shared::game::defs::{Defs, EntityDef, EntityType, TowerRef};
+use shared::game::defs::{CreepRef, Defs, EntityDef, EntityType, TowerRef};
 use shared::game::shared_game::ServerEntityId;
 use std::f32::consts::TAU;
 
@@ -71,6 +71,29 @@ pub fn spawn_entities(
             texture = Some(tower.texture.clone());
         };
 
+        if entity_def.entity_type == EntityType::Creep {
+            if texture.is_some() {
+                warn!(
+                    "Texture was already specified for spawning ecreep: {:?}",
+                    entity_def
+                );
+            }
+            let creep_name = if let Some(t) = &entity_def.creep {
+                t
+            } else {
+                warn!("Creep not found: {:?}", entity_def);
+                continue;
+            };
+            let creep = if let Some(t) = defs.creeps.get(creep_name) {
+                t
+            } else {
+                warn!("Creep not found: {:?}", entity_def);
+                continue;
+            };
+
+            texture = Some(creep.texture.clone());
+        };
+
         let material = texture.as_ref().map(|texture_name| {
             billboard_materials.add(BillboardMaterial {
                 alpha_mode,
@@ -109,9 +132,15 @@ pub fn spawn_entities(
                 entity.insert(RayCastMesh::<MyRaycastSet>::default());
             }
             EntityType::Tower => {
-                let tower_name = entity_def.tower.as_ref().unwrap().to_string(); // Already checked
-                let tower = defs.towers.get(&tower_name).unwrap(); // Already checked
+                // Already checked
+                let tower_name = entity_def.tower.as_ref().unwrap().to_string();
+                // let tower = defs.towers.get(&tower_name).unwrap(); // Already checked
                 entity.insert(TowerRef(tower_name));
+            }
+            EntityType::Creep => {
+                // Already checked
+                let creep_name = entity_def.creep.as_ref().unwrap().to_string();
+                entity.insert(CreepRef(creep_name));
             }
             _ => {}
         }

@@ -32,14 +32,14 @@ pub struct Args {
 
 #[derive(Debug, clap::Subcommand)]
 enum Command {
-    UpdateTextureSizes,
+    Textures,
 }
 
 fn main() -> miette::Result<()> {
     let args = Args::parse();
     match args.command {
         None => app::play(&args),
-        Some(Command::UpdateTextureSizes) => update_texture_sizes()?,
+        Some(Command::Textures) => update_texture_sizes()?,
     }
     Ok(())
 }

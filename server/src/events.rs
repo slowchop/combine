@@ -12,7 +12,6 @@ use naia_bevy_server::{
 use shared::game::defs::{EntityDef, EntityType};
 use shared::game::owner::Owner;
 use shared::game::player::{PlayerName, SharedPlayer};
-use shared::protocol::position::Position;
 use shared::protocol::Protocol;
 use shared::Channels;
 
@@ -131,7 +130,7 @@ pub fn receive_message_event(
 
                     // server.send_message(user_key, Channels::ServerCommand, &assignment_message);
                 }
-                Protocol::Position(_) => {
+                Protocol::NetPosition(_) => {
                     warn!("Got a position event from client");
                 }
                 Protocol::SpawnEntity(_) => {}

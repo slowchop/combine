@@ -3,8 +3,8 @@ use bevy_ecs::prelude::*;
 use bevy_log::warn;
 use shared::game::defs::{EntityDef, EntityType};
 use shared::game::owner::Owner;
+use shared::game::position::Position;
 use shared::game::SpawnPoint;
-use shared::protocol::position::Position;
 
 pub fn spawn_creeps(
     mut spawn_entity_events: EventWriter<SpawnEntityEvent>,
@@ -27,22 +27,19 @@ pub fn spawn_creeps(
 
         // Find the spawn points for this game.
         for entity in game.entities.values() {
+            // TODO: Maybe slow
             let (owner, position) = match spawn_points.get(*entity) {
                 Ok(s) => s,
-                Err(e) => {
-                    warn!(
-                        "Spawn point not found for map entity: {:?} for event: {:?}, err: {:?}",
-                        entity, spawn_creep_event, e
-                    );
-                    continue;
-                }
+                Err(_) => continue,
             };
+
+            println!("Found spawn point! {:?} {:?}", position, owner);
 
             let spawn_entity_event = SpawnEntityEvent {
                 game_id,
                 entity_def: EntityDef {
                     entity_type: EntityType::Creep,
-                    position: Some(position.vec2().into()),
+                    position: Some(position.0.into()),
                     owner: Some(*owner),
                     creep: Some("robot".to_string()),
                     ..Default::default()

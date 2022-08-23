@@ -3,10 +3,10 @@ use crate::state::GameId;
 use crate::GameLookup;
 use bevy_ecs::prelude::*;
 use bevy_log::{info, warn};
-use shared::game::defs::{Defs, EntityDef, EntityType, TowerRef};
+use shared::game::defs::{CreepRef, Defs, EntityDef, EntityType, TowerRef};
 use shared::game::owner::Owner;
+use shared::game::position::Position;
 use shared::game::SpawnPoint;
-use shared::protocol::position::Position;
 
 #[derive(Debug, Clone)]
 pub struct SpawnEntityEvent {
@@ -49,7 +49,7 @@ pub fn spawn_entities(
 
                 let id = commands
                     .spawn()
-                    .insert(Position::new(position.into()))
+                    .insert(Position(position.into()))
                     .insert(SpawnPoint)
                     .insert(owner)
                     .insert(game_id)
@@ -74,6 +74,7 @@ pub fn spawn_entities(
                         continue;
                     }
                 };
+                // TODO: tower will be used for attributes.
 
                 let position = match &entity_def.position {
                     Some(p) => p,
@@ -99,7 +100,7 @@ pub fn spawn_entities(
 
                 let id = commands
                     .spawn()
-                    .insert(Position::new(position.into()))
+                    .insert(Position(position.into()))
                     .insert(TowerRef(tower.clone()))
                     .insert(owner)
                     .insert(game_id)
@@ -107,7 +108,39 @@ pub fn spawn_entities(
 
                 created_entity = Some(id);
             }
-            EntityType::Creep => {}
+            EntityType::Creep => {
+                let position = match &entity_def.position {
+                    Some(p) => p,
+                    None => {
+                        warn!("Spawn entity has no position: {:?}", entity_def);
+                        continue;
+                    }
+                };
+                let owner = match entity_def.owner {
+                    Some(o) => o,
+                    None => {
+                        warn!("Spawn entity has no owner: {:?}", entity_def);
+                        continue;
+                    }
+                };
+                let creep = match &entity_def.creep {
+                    Some(t) => t,
+                    None => {
+                        warn!("Spawn entity has no creep!: {:?}", entity_def);
+                        continue;
+                    }
+                };
+
+                let id = commands
+                    .spawn()
+                    .insert(Position(position.into()))
+                    .insert(CreepRef(creep.clone()))
+                    .insert(owner)
+                    .insert(game_id)
+                    .id();
+
+                created_entity = Some(id);
+            }
             _ => {
                 warn!("no spawn for entity {:?}", entity_def);
                 continue;

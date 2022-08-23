@@ -4,6 +4,7 @@ pub mod owner;
 pub mod player;
 pub mod shared_game;
 pub mod systems;
+pub mod position;
 
 use crate::game::owner::Owner;
 use crate::game::player::SharedPlayer;

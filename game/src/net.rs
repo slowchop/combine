@@ -78,7 +78,7 @@ pub fn receive_message_event(
                 Protocol::RequestTowerPlacement(_) => {
                     todo!("place tower")
                 }
-                Protocol::Position(_) => {
+                Protocol::NetPosition(_) => {
                     println!("C got a position event from the server?")
                 }
             }
