@@ -6,7 +6,8 @@ use crate::{
 };
 use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
-use shared::game::defs::{Defs, EntityDef, EntityType};
+use shared::game::components::Damage;
+use shared::game::defs::{Defs, EntityDef, EntityType, TowerRef};
 use shared::game::shared_game::ServerEntityId;
 use std::f32::consts::TAU;
 
@@ -25,7 +26,6 @@ pub fn spawn_entities(
     defs: Res<Defs>,
 ) {
     for spawn in new_entities.iter() {
-        println!("---------------------------------------------");
         let entity_def = &spawn.entity_def;
         let mut texture = entity_def.texture.clone();
 
@@ -71,7 +71,6 @@ pub fn spawn_entities(
             texture = Some(tower.texture.clone());
         };
 
-        info!(?texture);
         let material = texture.as_ref().map(|texture_name| {
             billboard_materials.add(BillboardMaterial {
                 alpha_mode,
@@ -79,9 +78,7 @@ pub fn spawn_entities(
                 color: Color::WHITE,
             })
         });
-        info!(?material);
 
-        info!(?entity_def, "??");
         let transform: Option<Transform> = defs
             .level_entity_transform(&texture, &entity_def.position.as_ref().map(|p| p.into()))
             .map(|mut transform| match entity_def.entity_type {
@@ -91,7 +88,6 @@ pub fn spawn_entities(
                     transform
                 }
             });
-        info!(?transform);
 
         let mut entity = match (transform, material) {
             (Some(transform), Some(material)) => commands.spawn_bundle(MaterialMeshBundle {
@@ -106,8 +102,18 @@ pub fn spawn_entities(
             }
         };
 
-        if let EntityType::Ground = entity_def.entity_type {
-            entity.insert(RayCastMesh::<MyRaycastSet>::default());
+        if let EntityType::Ground = entity_def.entity_type {}
+
+        match entity_def.entity_type {
+            EntityType::Ground => {
+                entity.insert(RayCastMesh::<MyRaycastSet>::default());
+            }
+            EntityType::Tower => {
+                let tower_name = entity_def.tower.as_ref().unwrap().to_string(); // Already checked
+                let tower = defs.towers.get(&tower_name).unwrap(); // Already checked
+                entity.insert(TowerRef(tower_name));
+            }
+            _ => {}
         }
     }
 }

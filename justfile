@@ -13,8 +13,11 @@ server:
 
 web:
     cd game && cargo build --release --target wasm32-unknown-unknown
-    cd game && wasm-bindgen --out-dir web --target web target/wasm32-unknown-unknown/release/combine.wasm
+    cd game && wasm-bindgen --out-dir ../web --target web ../target/wasm32-unknown-unknown/release/towercombo.wasm
     rsync -vr game/assets web
 
+clean_web:
+    rm -fr web/*wasm* web/*.js web/*.ts assets
+
 host:
-    cd web && python3 -m http.server
+    cd web && sfz -r --cors --coi -b 0.0.0.0 -p 8000

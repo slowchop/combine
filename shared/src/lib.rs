@@ -15,7 +15,12 @@ use rand::{thread_rng, Rng};
 use std::time::Duration;
 
 pub const UDP_PORT: u16 = 24191;
+
+pub const WEB_CONNECT_PORT: u16 = 24191; // Runs a web server for POST?
 pub const WEB_PORT: u16 = 24192;
+
+pub const UDP_URL: &str = "http://10.0.4.14";
+pub const WEB_URL: &str = "http://10.0.4.14";
 
 // 1000 / 20fps = 50ms
 pub const MS_PER_FRAME: u64 = 50;

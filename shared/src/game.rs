@@ -1,3 +1,4 @@
+pub mod components;
 pub mod defs;
 pub mod owner;
 pub mod player;
