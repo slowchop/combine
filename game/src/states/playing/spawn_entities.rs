@@ -7,7 +7,7 @@ use crate::{
 use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
 use bevy_prototype_lyon::prelude::{
-    DrawMode, GeometryBuilder, LineCap, LineJoin, StrokeMode, StrokeOptions,
+    DrawMode, FillMode, GeometryBuilder, LineCap, LineJoin, StrokeMode, StrokeOptions,
 };
 use bevy_prototype_lyon::shapes;
 use bevy_prototype_lyon::shapes::Polygon;
@@ -41,6 +41,21 @@ pub fn spawn_entities(
 
         if let EntityType::Path = entity_def.entity_type {
             // Debugging only.
+
+            let shape = shapes::RegularPolygon {
+                sides: 6,
+                feature: shapes::RegularPolygonFeature::Radius(200.0),
+                ..shapes::RegularPolygon::default()
+            };
+
+            commands.spawn_bundle(GeometryBuilder::build_as(
+                &shape,
+                DrawMode::Outlined {
+                    fill_mode: FillMode::color(Color::CYAN),
+                    outline_mode: StrokeMode::new(Color::BLACK, 10.0),
+                },
+                Transform::default().with_rotation(Quat::from_rotation_z(TAU * 0.75)),
+            ));
 
             // TODO: These lines aren't being drawn
 

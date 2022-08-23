@@ -5,9 +5,11 @@ use bevy::utils::HashSet;
 use iyes_loopless::prelude::NextState;
 use naia_bevy_client::events::{InsertComponentEvent, MessageEvent, UpdateComponentEvent};
 use naia_bevy_client::{Client, CommandsExt};
-use shared::game::shared_game::SharedGame;
+use shared::game::shared_game::{ServerEntityId, SharedGame};
 use shared::game::ClientGameInfo;
+use shared::protocol::release_the_creeps::ReleaseCreep;
 use shared::protocol::{Protocol, ProtocolKind};
+use shared::ticks::Ticks;
 use shared::Channels;
 
 pub fn connect_event(client: Client<Protocol, Channels>) {
@@ -18,32 +20,19 @@ pub fn disconnect_event(client: Client<Protocol, Channels>) {
     println!("Client disconnected from: {}", client.server_address());
 }
 
-/// The server always sends two of the same packet to the client.
-///
-/// I'm sure that the higher level server code isn't sending anything so it seems like naia is
-/// doing it. I don't know why, since it should be "ordered reliable".
-///
-/// This is to track duplicate packets.
-#[derive(Default)]
-pub struct SeenHack(HashSet<u64>);
-
-impl SeenHack {
-    fn seen(&mut self, id: u64) -> bool {
-        if self.0.contains(&id) {
-            true
-        } else {
-            self.0.insert(id);
-            false
-        }
-    }
+#[derive(Debug)]
+pub struct ReleaseCreepEvent {
+    pub starting_position: Vec2,
+    pub server_entity_id: ServerEntityId,
+    pub starting_tick: Ticks,
 }
 
 pub fn receive_message_event(
     mut commands: Commands,
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
     client: Client<Protocol, Channels>,
-    mut seen_hack: ResMut<SeenHack>,
     mut spawn_entity_event: EventWriter<SpawnEntityEvent>,
+    mut release_the_creeps_events: EventWriter<ReleaseCreepEvent>,
 ) {
     // dbg!(client.is_connected());
     for event in event_reader.iter() {
@@ -80,6 +69,14 @@ pub fn receive_message_event(
                 }
                 Protocol::NetPosition(_) => {
                     println!("C got a position event from the server?")
+                }
+                Protocol::ReleaseCreep(release_creep) => {
+                    info!("Release the creeps!");
+                    release_the_creeps_events.send(ReleaseCreepEvent {
+                        starting_position: (*release_creep.starting_position).clone().into(),
+                        server_entity_id: (*release_creep.server_entity_id).clone(),
+                        starting_tick: (*release_creep.starting_tick),
+                    });
                 }
             }
         }

@@ -1,10 +1,11 @@
 pub mod components;
 pub mod defs;
 pub mod owner;
+pub mod path;
 pub mod player;
+pub mod position;
 pub mod shared_game;
 pub mod systems;
-pub mod position;
 
 use crate::game::owner::Owner;
 use crate::game::player::SharedPlayer;

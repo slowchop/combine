@@ -4,7 +4,7 @@ use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use serde::{Deserialize, Serialize};
 
 /// 0 or 1.
-#[derive(Component, Default, Serialize, Deserialize, Copy, Clone, Debug, Eq, PartialEq)]
+#[derive(Component, Default, Serialize, Deserialize, Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub struct Owner(u8);
 
 impl Owner {

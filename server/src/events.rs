@@ -133,14 +133,14 @@ pub fn receive_message_event(
                 Protocol::NetPosition(_) => {
                     warn!("Got a position event from client");
                 }
-                Protocol::SpawnEntity(_) => {}
+                Protocol::SpawnEntity(_) => {
+                    warn!("Got a spawn entity event from client");
+                }
+                Protocol::ReleaseCreep(_) => {
+                    warn!("Got a release the creeps event from client");
+                }
             }
             info!(key = ?user_key.to_u64())
-            //     if let Some(entity) = &key_command.entity.get(&server) {
-            //         // global
-            //         //     .player_last_command
-            //         //     .insert(*entity, key_command.clone());
-            //     }
         }
     }
 }

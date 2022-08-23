@@ -1,6 +1,7 @@
-use crate::net::SeenHack;
+use crate::net::ReleaseCreepEvent;
 use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
+use crate::states::playing::creeps::release_creeps;
 use crate::states::playing::left_click::left_click;
 use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::states::playing::time::add_ticks_to_game;
@@ -99,7 +100,7 @@ pub fn play(args: &Args) {
 
     // Ours!
     app.add_event::<SpawnEntityEvent>()
-        .insert_resource(SeenHack::default())
+        .add_event::<ReleaseCreepEvent>()
         .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)
         .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
@@ -154,6 +155,7 @@ pub fn play(args: &Args) {
             .with_system(left_click)
             .with_system(move_camera)
             .with_system(spawn_entities)
+            .with_system(release_creeps)
             .with_system(ui)
             .into(),
     );

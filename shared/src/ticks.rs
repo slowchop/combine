@@ -1,4 +1,5 @@
 use crate::{MS_PER_TICK, TICKS_PER_SECOND};
+use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use std::ops::{Add, AddAssign, Div, Sub, SubAssign};
 use std::time::Duration;
 
@@ -79,5 +80,34 @@ impl Div for Ticks {
     type Output = Self;
     fn div(self, other: Self) -> Self {
         Ticks(self.0 / other.0)
+    }
+}
+
+impl Serde for Ticks {
+    fn ser(&self, writer: &mut dyn BitWrite) {
+        self.0.ser(writer);
+    }
+
+    fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
+        Ok(Ticks(i64::de(reader)?))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use naia_shared::serde::BitWriter;
+
+    #[test]
+    fn test_ticks_serde() {
+        let mut writer = BitWriter::new();
+        let ticks_1 = Ticks(1234567890);
+        ticks_1.ser(&mut writer);
+        let (buffer_length, buffer) = writer.flush();
+
+        let mut reader = BitReader::new(&buffer[..buffer_length]);
+        let ticks_2 = Ticks::de(&mut reader).unwrap();
+
+        assert_eq!(ticks_1, ticks_2);
     }
 }

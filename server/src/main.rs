@@ -4,6 +4,7 @@ mod events;
 mod init;
 mod match_randoms;
 mod new_entities;
+mod release_creeps;
 mod spawn_entities;
 mod state;
 mod tick;

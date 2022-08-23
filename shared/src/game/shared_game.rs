@@ -27,6 +27,7 @@ impl Serde for ServerEntityId {
 pub struct SharedGame {
     pub map: String,
     pub entities: HashMap<ServerEntityId, Entity>,
+    pub spawn_points: HashMap<Owner, Vec2>,
     pub players: Vec<SharedPlayer>,
 
     ticks: Ticks,
@@ -49,6 +50,7 @@ impl SharedGame {
         Self {
             map,
             entities: HashMap::with_capacity(1024),
+            spawn_points: Default::default(),
             players,
             ticks: 0u64.into(),
         }

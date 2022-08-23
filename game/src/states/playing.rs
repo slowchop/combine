@@ -1,5 +1,6 @@
 pub mod bottom_quad;
 pub mod camera;
+pub mod creeps;
 pub mod left_click;
 pub mod spawn_entities;
 pub mod time;

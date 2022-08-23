@@ -18,6 +18,7 @@ pub fn spawn_entities(
     mut commands: Commands,
     mut spawn_entities: EventReader<SpawnEntityEvent>,
     mut new_entity_events: EventWriter<NewEntityEvent>,
+    mut game_lookup: ResMut<GameLookup>,
     defs: Res<Defs>,
 ) {
     for spawn in spawn_entities.iter() {
@@ -32,13 +33,6 @@ pub fn spawn_entities(
             EntityType::Base => {}
 
             EntityType::Spawn => {
-                let position = match &entity_def.position {
-                    Some(p) => p,
-                    None => {
-                        warn!("Spawn entity has no position!");
-                        continue;
-                    }
-                };
                 let owner = match entity_def.owner {
                     Some(o) => o,
                     None => {
@@ -47,16 +41,41 @@ pub fn spawn_entities(
                     }
                 };
 
-                let id = commands
-                    .spawn()
-                    .insert(Position(position.into()))
-                    .insert(SpawnPoint)
-                    .insert(owner)
-                    .insert(game_id)
-                    .id();
-                created_entity = Some(id);
+                let mut game = match game_lookup.0.get_mut(&game_id) {
+                    Some(g) => g,
+                    None => {
+                        warn!(
+                            "Could not get game for game_id {:?} for {:?}",
+                            game_id, spawn
+                        );
+                        continue;
+                    }
+                };
+                let position = match &entity_def.position {
+                    Some(p) => p,
+                    None => {
+                        warn!("Spawn entity has no position!");
+                        continue;
+                    }
+                };
 
-                info!("Spawned SpawnPoint at {:?}", position);
+                game.spawn_points.insert(owner, position.into());
+
+                // We don't need to create spawn points on the server because we're just going
+                // to track their locations in SharedGame.
+                //
+                // Also don't need to send them to the client because they have them on their map.
+
+                // let id = commands
+                //     .spawn()
+                //     .insert(Position(position.into()))
+                //     .insert(SpawnPoint)
+                //     .insert(owner)
+                //     .insert(game_id)
+                //     .id();
+                // created_entity = Some(id);
+                //
+                // info!("Spawned SpawnPoint at {:?}", position);
             }
             EntityType::Path => {}
             EntityType::Tower => {
