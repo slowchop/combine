@@ -1,7 +1,6 @@
 use crate::game::owner::Owner;
 use crate::game::player::{PlayerName, SharedPlayer};
 use crate::game::ClientGameInfo;
-use crate::seen_hack;
 use bevy_ecs::prelude::Component;
 use naia_shared::{Property, Replicate};
 

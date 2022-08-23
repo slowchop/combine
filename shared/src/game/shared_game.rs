@@ -1,5 +1,7 @@
 use crate::game::owner::Owner;
 use crate::game::player::SharedPlayer;
+use crate::ticks::Ticks;
+use crate::{RELEASE_CLOCK_TIME, TICKS_PER_DAY, TICKS_PER_SECOND};
 use bevy_ecs::prelude::*;
 use bevy_math::Vec2;
 use bevy_utils::{HashMap, HashSet};
@@ -23,10 +25,10 @@ impl Serde for ServerEntityId {
 
 #[derive(Component)]
 pub struct SharedGame {
-    map: String,
-    ticks: u64,
+    pub map: String,
+    ticks: Ticks,
     entities: HashMap<ServerEntityId, Entity>,
-    players: Vec<SharedPlayer>,
+    pub players: Vec<SharedPlayer>,
 }
 
 impl Debug for SharedGame {
@@ -47,7 +49,7 @@ impl SharedGame {
             map,
             entities: HashMap::with_capacity(1024),
             players,
-            ticks: 0,
+            ticks: 0u64.into(),
         }
     }
 
@@ -63,11 +65,38 @@ impl SharedGame {
     }
 
     pub fn tick(&mut self) {
-        self.ticks += 1;
+        self.ticks += Ticks(1);
     }
 
-    pub fn ticks(&self) -> u64 {
+    pub fn ticks(&self) -> Ticks {
         self.ticks
+    }
+
+    pub fn duration(&self) -> Option<Duration> {
+        self.ticks().to_duration()
+    }
+
+    pub fn ticks_since_start_of_day(&self) -> Ticks {
+        let v = self.ticks().0 % TICKS_PER_DAY.0;
+        debug_assert!(v >= 0);
+        Ticks(v)
+    }
+
+    pub fn start_of_day(&self) -> Ticks {
+        Ticks(self.ticks().0 - self.ticks_since_start_of_day().0)
+    }
+
+    pub fn day(&self) -> i64 {
+        (self.ticks / TICKS_PER_DAY).0
+    }
+
+    pub fn next_release_ticks(&self) -> Ticks {
+        let next = Ticks(self.day() * TICKS_PER_DAY.0 + RELEASE_CLOCK_TIME.0);
+        if self.ticks <= next {
+            next
+        } else {
+            next + TICKS_PER_DAY
+        }
     }
 
     pub fn can_build_tower(&self, owner: &Owner, position: &Vec2, tower: &str) -> CanBuild {
@@ -83,4 +112,39 @@ impl SharedGame {
 pub enum CanBuild {
     Yes,
     No(String),
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_ticks() {
+        let next_release_time: Ticks = RELEASE_CLOCK_TIME;
+        let mut g = SharedGame::new("".to_string(), vec![]);
+
+        g.ticks = 0.into();
+        assert_eq!(g.next_release_ticks(), next_release_time);
+        g.ticks = next_release_time - 1.into();
+        assert_eq!(g.next_release_ticks(), next_release_time);
+        g.ticks = next_release_time;
+        assert_eq!(g.next_release_ticks(), next_release_time);
+
+        g.ticks = next_release_time + 1.into();
+        assert_eq!(g.next_release_ticks(), next_release_time + TICKS_PER_DAY);
+        g.ticks = TICKS_PER_DAY - Ticks(1);
+        assert_eq!(g.next_release_ticks(), next_release_time + TICKS_PER_DAY);
+        g.ticks = TICKS_PER_DAY;
+        assert_eq!(g.next_release_ticks(), next_release_time + TICKS_PER_DAY);
+        g.ticks = TICKS_PER_DAY + Ticks(1);
+        assert_eq!(g.next_release_ticks(), next_release_time + TICKS_PER_DAY);
+        g.ticks = TICKS_PER_DAY + next_release_time;
+        assert_eq!(g.next_release_ticks(), next_release_time + TICKS_PER_DAY);
+
+        g.ticks = TICKS_PER_DAY + next_release_time + 1.into();
+        assert_eq!(
+            g.next_release_ticks(),
+            next_release_time + TICKS_PER_DAY + TICKS_PER_DAY
+        );
+    }
 }

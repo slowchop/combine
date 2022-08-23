@@ -62,14 +62,16 @@ pub fn receive_message_event(
                 Protocol::JoinRandomGame(_) => {}
                 Protocol::JoinFriendGame(_) => {}
                 Protocol::GameReady(game_ready) => {
-                    let game_info = &*game_ready.game_info;
-                    println!("-------- Client got a game ready! {:?}", game_info);
+                    let client_game_info = &*game_ready.game_info;
+                    println!("-------- Client got a game ready! {:?}", client_game_info);
 
-                    commands.spawn().insert(game_info.clone());
+                    commands.spawn().insert(client_game_info.clone());
 
-                    let shared_game =
-                        SharedGame::new(game_info.map.clone(), game_info.players.clone());
-                    warn!("shared game!");
+                    let shared_game = SharedGame::new(
+                        client_game_info.map.clone(),
+                        client_game_info.players.clone(),
+                    );
+                    commands.spawn().insert(shared_game);
 
                     commands.insert_resource(NextState(GameState::LoadingLevel));
                 }

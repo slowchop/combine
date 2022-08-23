@@ -39,7 +39,5 @@ pub fn update(
     if client.is_connected() {
         println!("Connected to: {}", client.server_address());
         commands.insert_resource(NextState(next_state));
-    } else {
-        println!("Waiting for connection...");
     }
 }

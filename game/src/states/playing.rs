@@ -2,6 +2,8 @@ pub mod bottom_quad;
 pub mod camera;
 pub mod left_click;
 pub mod spawn_entities;
+pub mod time;
+pub mod ui;
 
 use bevy::prelude::*;
 use shared::game::owner::Owner;

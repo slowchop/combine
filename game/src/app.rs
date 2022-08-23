@@ -3,6 +3,8 @@ use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::left_click::left_click;
 use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
+use crate::states::playing::time::add_ticks_to_game;
+use crate::states::playing::ui::ui;
 use crate::states::{
     connecting, loading_level, main_menu, playing, splash, waiting_for_random, ContinueState,
 };
@@ -103,7 +105,8 @@ pub fn play(args: &Args) {
         // .add_system_to_stage(NaiaStage::ReceiveEvents, net::spawn_entity_event)
         // .add_system_to_stage(NaiaStage::ReceiveEvents, net::insert_component_event)
         // .add_system_to_stage(NaiaStage::ReceiveEvents, net::update_component_event)
-        .add_system_to_stage(NaiaStage::Tick, tick);
+        .add_system_to_stage(NaiaStage::Tick, tick)
+        .add_system_to_stage(NaiaStage::Tick, add_ticks_to_game);
 
     // Splash
     app.add_enter_system(GameState::Splash, splash::init);
@@ -152,6 +155,7 @@ pub fn play(args: &Args) {
             .with_system(left_click)
             .with_system(move_camera)
             .with_system(spawn_entities)
+            .with_system(ui)
             .into(),
     );
 
