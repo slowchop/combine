@@ -23,6 +23,7 @@ bevy_egui = "0.15.1"
 bevy-inspector-egui = "0.12.1"
 iyes_loopless = "0.7.1"
 bevy_mod_raycast = "0.6.2"
+bevy_prototype_lyon = "0.6.0"
 
 serde = "1.0.143"
 miette = "5.3.0"

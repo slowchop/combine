@@ -20,6 +20,7 @@ use bevy_mod_raycast::{
     DefaultPluginState, DefaultRaycastingPlugin, RayCastMesh, RayCastMethod, RayCastSource,
     RaycastSystem,
 };
+use bevy_prototype_lyon::prelude::ShapePlugin;
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Plugin as ClientPlugin;
 use naia_bevy_client::{Client, ClientConfig, Stage as NaiaStage};
@@ -93,7 +94,8 @@ pub fn play(args: &Args) {
         ClientConfig::default(),
         shared_config(),
     ))
-    .add_plugin(WorldInspectorPlugin::new());
+    .add_plugin(WorldInspectorPlugin::new())
+    .add_plugin(ShapePlugin);
 
     // Ours!
     app.add_event::<SpawnEntityEvent>()
@@ -102,9 +104,6 @@ pub fn play(args: &Args) {
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)
         .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
         .add_system_to_stage(NaiaStage::ReceiveEvents, net::receive_message_event)
-        // .add_system_to_stage(NaiaStage::ReceiveEvents, net::spawn_entity_event)
-        // .add_system_to_stage(NaiaStage::ReceiveEvents, net::insert_component_event)
-        // .add_system_to_stage(NaiaStage::ReceiveEvents, net::update_component_event)
         .add_system_to_stage(NaiaStage::Tick, tick)
         .add_system_to_stage(NaiaStage::Tick, add_ticks_to_game);
 

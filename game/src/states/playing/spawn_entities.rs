@@ -6,8 +6,13 @@ use crate::{
 };
 use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
+use bevy_prototype_lyon::prelude::{
+    DrawMode, GeometryBuilder, LineCap, LineJoin, StrokeMode, StrokeOptions,
+};
+use bevy_prototype_lyon::shapes;
+use bevy_prototype_lyon::shapes::Polygon;
 use shared::game::components::Damage;
-use shared::game::defs::{CreepRef, Defs, EntityDef, EntityType, TowerRef};
+use shared::game::defs::{CreepRef, Defs, EntityDef, EntityType, TowerRef, PIXELS_PER_METER};
 use shared::game::shared_game::ServerEntityId;
 use std::f32::consts::TAU;
 
@@ -29,12 +34,34 @@ pub fn spawn_entities(
         let entity_def = &spawn.entity_def;
         let mut texture = entity_def.texture.clone();
 
-        match entity_def.entity_type {
-            EntityType::Path | EntityType::Spawn => {
-                warn!(?entity_def.entity_type, "TODO");
-                continue;
-            }
-            _ => {}
+        if entity_def.entity_type == EntityType::Spawn {
+            // Ignore spawn.
+            continue;
+        }
+
+        if let EntityType::Path = entity_def.entity_type {
+            // Debugging only.
+
+            // TODO: These lines aren't being drawn
+
+            let path = entity_def.path.as_ref().unwrap();
+            let path = path
+                .iter()
+                .map(|p| p.into())
+                .map(|p: Vec2| p * PIXELS_PER_METER)
+                .collect::<Vec<Vec2>>();
+            let shape = Polygon {
+                points: path,
+                closed: false,
+            };
+
+            commands.spawn_bundle(GeometryBuilder::build_as(
+                &shape,
+                DrawMode::Stroke(StrokeMode::new(Color::BLACK, 10.0)),
+                Default::default(),
+            ));
+
+            continue;
         }
 
         let mesh = match entity_def.entity_type {
