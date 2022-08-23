@@ -77,7 +77,35 @@ pub fn spawn_entities(
                 //
                 // info!("Spawned SpawnPoint at {:?}", position);
             }
-            EntityType::Path => {}
+            EntityType::Path => {
+                let owner = match entity_def.owner {
+                    Some(o) => o,
+                    None => {
+                        warn!("path Spawn entity has no owner!");
+                        continue;
+                    }
+                };
+
+                let mut game = match game_lookup.0.get_mut(&game_id) {
+                    Some(g) => g,
+                    None => {
+                        warn!(
+                            "path Could not get game for game_id {:?} for {:?}",
+                            game_id, spawn
+                        );
+                        continue;
+                    }
+                };
+                let path = match &entity_def.path {
+                    Some(p) => p,
+                    None => {
+                        warn!("path Spawn entity has no path!");
+                        continue;
+                    }
+                };
+
+                game.paths.insert(owner, position.into());
+            }
             EntityType::Tower => {
                 let tower_name = match &entity_def.tower {
                     Some(t) => t,

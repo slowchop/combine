@@ -7,7 +7,7 @@ use shared::game::owner::Owner;
 use shared::game::path::Path;
 use shared::game::position::Position;
 use shared::game::shared_game::ServerEntityId;
-use shared::protocol::release_the_creeps::ReleaseCreep;
+use shared::protocol::release_creep::ReleaseCreep;
 use shared::protocol::Protocol;
 use shared::Channels;
 
@@ -20,6 +20,7 @@ pub fn tell_clients_to_release_the_creeps(
     creep_query: Query<(&ServerEntityId, &Position), (With<CreepRef>, Without<Path>)>,
 ) {
     for release_creeps_event in release_creeps_events.iter() {
+        println!("Trying to sending release creeps event!");
         let users = match game_user_lookup.get_game_users(&release_creeps_event.game_id) {
             Some(u) => u,
             None => {

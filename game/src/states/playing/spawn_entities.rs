@@ -11,9 +11,10 @@ use bevy_prototype_lyon::prelude::{
 };
 use bevy_prototype_lyon::shapes;
 use bevy_prototype_lyon::shapes::Polygon;
+use server::path::Path;
 use shared::game::components::Damage;
 use shared::game::defs::{CreepRef, Defs, EntityDef, EntityType, TowerRef, PIXELS_PER_METER};
-use shared::game::shared_game::ServerEntityId;
+use shared::game::shared_game::{ServerEntityId, SharedGame};
 use std::f32::consts::TAU;
 
 #[derive(Debug, Clone)]
@@ -29,6 +30,7 @@ pub fn spawn_entities(
     mut billboard_materials: ResMut<Assets<BillboardMaterial>>,
     mut new_entities: EventReader<SpawnEntityEvent>,
     defs: Res<Defs>,
+    mut game: Query<&mut SharedGame>,
 ) {
     for spawn in new_entities.iter() {
         let entity_def = &spawn.entity_def;
@@ -40,7 +42,31 @@ pub fn spawn_entities(
         }
 
         if let EntityType::Path = entity_def.entity_type {
-            // Debugging only.
+            let path = if let Some(p) = &entity_def.path {
+                p
+            } else {
+                warn!("Path entity has no path!");
+                continue;
+            };
+            let owner = if let Some(o) = entity_def.owner {
+                o
+            } else {
+                warn!("Path entity has no owner!");
+                continue;
+            };
+
+            let mut game = match game.get_single_mut() {
+                Ok(g) => g,
+                Err(e) => {
+                    warn!("Could not get game for {:?}: {:?}", spawn, e);
+                    continue;
+                }
+            };
+
+            let path = path.iter().map(|p| p.into()).collect();
+            game.paths.insert(owner, Path(path));
+
+            // Debugging down here.
 
             let shape = shapes::RegularPolygon {
                 sides: 6,
@@ -174,12 +200,16 @@ pub fn spawn_entities(
                 entity.insert(RayCastMesh::<MyRaycastSet>::default());
             }
             EntityType::Tower => {
+                todo!("owner");
+
                 // Already checked
                 let tower_name = entity_def.tower.as_ref().unwrap().to_string();
                 // let tower = defs.towers.get(&tower_name).unwrap(); // Already checked
                 entity.insert(TowerRef(tower_name));
             }
             EntityType::Creep => {
+                todo!("owner");
+
                 // Already checked
                 let creep_name = entity_def.creep.as_ref().unwrap().to_string();
                 entity.insert(CreepRef(creep_name));

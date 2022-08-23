@@ -3,11 +3,12 @@ use bevy_ecs::prelude::*;
 use bevy_math::Vec2;
 
 #[derive(Component, Debug)]
-pub struct Path(Vec<Vec2>);
+pub struct Path(pub Vec<Vec2>);
 
 #[derive(Component, Debug)]
 pub struct PathProgress {
-    current_path: usize,
-    started_at: f32,
-    distance_to_next: f32,
+    previous_position: Vec2,
+    previous_ticks: Ticks,
+    target_position: Vec2,
+    current_path_target: usize,
 }

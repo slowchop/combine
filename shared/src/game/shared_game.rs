@@ -8,6 +8,7 @@ use bevy_utils::{HashMap, HashSet};
 use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
+use server::path::Path;
 use std::fmt::{Debug, Formatter};
 use std::time::Duration;
 
@@ -26,9 +27,10 @@ impl Serde for ServerEntityId {
 #[derive(Component)]
 pub struct SharedGame {
     pub map: String,
-    pub entities: HashMap<ServerEntityId, Entity>,
-    pub spawn_points: HashMap<Owner, Vec2>,
     pub players: Vec<SharedPlayer>,
+    pub spawn_points: HashMap<Owner, Vec2>,
+    pub paths: HashMap<Owner, Path>,
+    pub entities: HashMap<ServerEntityId, Entity>,
 
     ticks: Ticks,
 }
@@ -53,6 +55,7 @@ impl SharedGame {
             spawn_points: Default::default(),
             players,
             ticks: 0u64.into(),
+            paths: Default::default(),
         }
     }
 

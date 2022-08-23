@@ -14,6 +14,7 @@ use crate::create_games::create_games;
 use crate::create_games::CreateGameEvent;
 use crate::creeps::spawn_creeps;
 use crate::new_entities::{add_new_entities_to_game, send_new_entities_to_players, NewEntityEvent};
+use crate::release_creeps::tell_clients_to_release_the_creeps;
 use crate::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::state::{GameLookup, GameUserLookup, PlayerLookup, PlayerQueue};
 use crate::time::{add_ticks_to_games, emit_time_events, ReleaseCreepsEvent, SpawnCreepsEvent};
@@ -76,6 +77,7 @@ fn main() {
         .add_system(spawn_entities)
         .add_system(add_new_entities_to_game)
         .add_system(send_new_entities_to_players)
+        .add_system(tell_clients_to_release_the_creeps)
         .add_system(spawn_creeps)
         .run();
 }

@@ -7,7 +7,7 @@ use naia_bevy_client::events::{InsertComponentEvent, MessageEvent, UpdateCompone
 use naia_bevy_client::{Client, CommandsExt};
 use shared::game::shared_game::{ServerEntityId, SharedGame};
 use shared::game::ClientGameInfo;
-use shared::protocol::release_the_creeps::ReleaseCreep;
+use shared::protocol::release_creep::ReleaseCreep;
 use shared::protocol::{Protocol, ProtocolKind};
 use shared::ticks::Ticks;
 use shared::Channels;
@@ -71,7 +71,7 @@ pub fn receive_message_event(
                     println!("C got a position event from the server?")
                 }
                 Protocol::ReleaseCreep(release_creep) => {
-                    info!("Release the creeps!");
+                    info!("got a release the creeps network message.");
                     release_the_creeps_events.send(ReleaseCreepEvent {
                         starting_position: (*release_creep.starting_position).clone().into(),
                         server_entity_id: (*release_creep.server_entity_id).clone(),
