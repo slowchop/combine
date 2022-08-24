@@ -5,6 +5,7 @@ use bevy::utils::HashSet;
 use iyes_loopless::prelude::NextState;
 use naia_bevy_client::events::{InsertComponentEvent, MessageEvent, UpdateComponentEvent};
 use naia_bevy_client::{Client, CommandsExt};
+use shared::game::destroyment_method::DestroymentMethod;
 use shared::game::shared_game::{ServerEntityId, SharedGame};
 use shared::game::ClientGameInfo;
 use shared::protocol::release_creep::ReleaseCreeps;
@@ -35,12 +36,21 @@ pub struct UpdatePositionEvent {
     pub velocity: Vec3,
 }
 
+#[derive(Debug)]
+pub struct DestroyEntityEvent {
+    pub server_entity_id: ServerEntityId,
+    pub position: Vec3,
+    pub velocity: Vec3,
+    pub how: DestroymentMethod,
+}
+
 pub fn receive_message_event(
     mut commands: Commands,
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
     mut spawn_entity_event: EventWriter<SpawnEntityEvent>,
     mut release_the_creeps_events: EventWriter<ReleaseCreepEvent>,
     mut update_position_events: EventWriter<UpdatePositionEvent>,
+    mut destroy_entity_events: EventWriter<DestroyEntityEvent>,
 ) {
     // dbg!(client.is_connected());
     for event in event_reader.iter() {
@@ -82,17 +92,21 @@ pub fn receive_message_event(
                 }
                 Protocol::ReleaseCreeps(_) => {
                     info!("got a release the creeps network message.");
-                    release_the_creeps_events.send(ReleaseCreepEvent {
-                        // starting_position: (*release_creep.starting_position).clone().into(),
-                        // server_entity_id: (*release_creep.server_entity_id).clone(),
-                    });
+                    release_the_creeps_events.send(ReleaseCreepEvent {});
                 }
                 Protocol::UpdatePosition(update_position) => {
-                    info!("got an update position!");
                     update_position_events.send(UpdatePositionEvent {
                         position: (*update_position.position).clone().into(),
-                        server_entity_id: (*update_position.server_entity_id).clone(),
+                        server_entity_id: (*update_position.server_entity_id),
                         velocity: (*update_position.velocity).clone().into(),
+                    });
+                }
+                Protocol::DestroyEntity(destroy_entity) => {
+                    destroy_entity_events.send(DestroyEntityEvent {
+                        position: (*destroy_entity.position).clone().into(),
+                        server_entity_id: (*destroy_entity.server_entity_id),
+                        velocity: (*destroy_entity.velocity).clone().into(),
+                        how: (*destroy_entity.how),
                     });
                 }
             }

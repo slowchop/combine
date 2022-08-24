@@ -1,5 +1,6 @@
 pub mod components;
 pub mod defs;
+pub mod destroyment_method;
 pub mod owner;
 pub mod path;
 pub mod player;

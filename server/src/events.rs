@@ -139,6 +139,9 @@ pub fn receive_message_event(
                 Protocol::UpdatePosition(_) => {
                     warn!("Got an update position from client");
                 }
+                Protocol::DestroyEntity(_) => {
+                    warn!("Got a destroy entity from client");
+                }
             }
             info!(key = ?user_key.to_u64())
         }

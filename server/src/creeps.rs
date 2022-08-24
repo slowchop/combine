@@ -9,11 +9,13 @@ use bevy_transform::prelude::*;
 use naia_bevy_server::Server;
 use shared::game::components::Speed;
 use shared::game::defs::{EntityDef, EntityType};
+use shared::game::destroyment_method::DestroymentMethod;
 use shared::game::owner::Owner;
 use shared::game::path::{Path, PathLeaveAt, PathProgress};
 use shared::game::position::Position;
 use shared::game::shared_game::ServerEntityId;
 use shared::game::SpawnPoint;
+use shared::protocol::destroy_entity::DestroyEntity;
 use shared::protocol::update_position::UpdatePosition;
 use shared::protocol::Protocol;
 use shared::Channels;
@@ -124,7 +126,6 @@ pub fn move_along_path_and_optionally_tell_client(
             // If we're still on the same path, move and break out.
             if movement_this_frame < distance_left {
                 transform.translation += direction * movement_this_frame;
-
                 velocity = direction * speed.0;
                 break;
             }
@@ -133,9 +134,27 @@ pub fn move_along_path_and_optionally_tell_client(
             movement_this_frame -= distance_left;
             path_progress.current_path_target += 1;
             if path_progress.current_path_target >= path.0.len() {
-                // TODO: send event
                 info!("We've hit the target!!!");
-                todo!();
+                let message = DestroyEntity::new(
+                    *server_entity_id,
+                    transform.translation,
+                    velocity,
+                    DestroymentMethod::Explosion,
+                );
+                send_message_to_game(
+                    &mut server,
+                    &game_id,
+                    &*game_user_lookup,
+                    Channels::ServerCommand,
+                    &message,
+                );
+                warn!("TODO: Send this to another system.");
+                warn!("TODO: Remove entity from server (entity and shared game)");
+                warn!("TODO: Give player some gold");
+                warn!("TODO: Lose a life");
+
+                commands.entity(entity).despawn();
+
                 break;
             }
 
