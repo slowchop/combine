@@ -4,9 +4,9 @@ play:
 build_client_release:
     cd client && cargo build --release
 
-play_multi:
-    cd client && cargo run --features bevy/dynamic -- -w 0 -s &
-    cd client && cargo run --features bevy/dynamic -- -w 1 -s
+play_multi_dev:
+    cd client && cargo run --features bevy/dynamic -- -w 0 -s -d &
+    cd client && cargo run --features bevy/dynamic -- -w 1 -s -d
 
 watch_server:
     cargo watch -s "cargo run --package server --features use-udp"

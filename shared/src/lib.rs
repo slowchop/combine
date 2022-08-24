@@ -22,8 +22,8 @@ pub const UDP_PORT: u16 = 24191;
 pub const WEB_CONNECT_PORT: u16 = 24191; // Runs a web server for POST?
 pub const WEB_PORT: u16 = 24192;
 
-pub const UDP_URL: &str = "http://10.0.4.14";
-pub const WEB_URL: &str = "http://10.0.4.14";
+pub const PROD_URL: &str = "http://45.248.51.162";
+pub const DEV_URL: &str = "http://10.0.4.14";
 
 // 1000 / 20fps = 50ms
 pub const MS_PER_TICK: u64 = 50;
@@ -62,6 +62,32 @@ pub fn shared_config() -> SharedConfig<Channels> {
         tick_interval,
         None,
     )
+}
+
+#[derive(Debug, Clone)]
+pub enum Env {
+    Prod,
+    Dev,
+}
+
+#[derive(Debug, Clone)]
+pub struct Network {
+    pub url: String,
+    pub env: Env,
+}
+
+pub fn network_resource(debug: bool) -> Network {
+    if debug {
+        Network {
+            url: DEV_URL.to_string(),
+            env: Env::Dev,
+        }
+    } else {
+        Network {
+            env: Env::Prod,
+            url: PROD_URL.to_string(),
+        }
+    }
 }
 
 #[derive(Copy)]

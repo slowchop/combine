@@ -5,18 +5,29 @@ use bevy_egui::{egui, EguiContext};
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Client;
 use shared::protocol::Protocol;
-use shared::{Auth, Channels, UDP_PORT, UDP_URL, WEB_CONNECT_PORT, WEB_PORT, WEB_URL};
+use shared::{Auth, Channels, Network};
 
-pub fn init(mut commands: Commands, time: Res<Time>, mut client: Client<Protocol, Channels>) {
+#[cfg(target_arch = "wasm32")]
+use shared::WEB_CONNECT_PORT;
+
+#[cfg(not(target_arch = "wasm32"))]
+use shared::UDP_PORT;
+
+pub fn init(
+    mut commands: Commands,
+    time: Res<Time>,
+    mut client: Client<Protocol, Channels>,
+    network: Res<Network>,
+) {
     println!("Connecting...");
 
     client.auth(Auth {});
 
     #[cfg(target_arch = "wasm32")]
-    client.connect(&format!("{}:{}", WEB_URL, WEB_CONNECT_PORT));
+    client.connect(&format!("{}:{}", network.url, WEB_CONNECT_PORT));
 
     #[cfg(not(target_arch = "wasm32"))]
-    client.connect(&format!("{}:{}", UDP_URL, UDP_PORT));
+    client.connect(&format!("{}:{}", network.url, UDP_PORT));
 
     // let command = Auth::new();
     // client.send_message(Channels::PlayerCommand, &command);

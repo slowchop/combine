@@ -28,6 +28,10 @@ pub struct Args {
     /// Debugging hack to run two clients. False 0, True 1.
     #[clap(short)]
     window_position_shift: Option<u8>,
+
+    /// Sets the server to gak's IP address.
+    #[clap(short)]
+    debug: bool,
 }
 
 #[derive(Debug, clap::Subcommand)]

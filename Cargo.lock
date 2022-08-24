@@ -3715,6 +3715,7 @@ dependencies = [
  "bevy_time",
  "bevy_transform",
  "bevy_utils",
+ "clap",
  "naia-bevy-server",
  "rand",
  "serde",
