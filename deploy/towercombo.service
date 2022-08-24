@@ -1,0 +1,13 @@
+[Unit]
+Description=TowerCombo!
+After=network.target
+Wants=network-online.target
+
+[Service]
+Restart=always
+Type=simple
+ExecStart=/home/gak/towercombo/target/release/server
+WorkingDirectory=/home/gak/towercombo
+
+[Install]
+WantedBy=multi-user.target
