@@ -137,6 +137,7 @@ pub fn send_message_to_game<R, P>(
     }
 
     for user_key in users {
+        dbg!("sending message to player!!!");
         server.send_message(user_key, channel, message);
     }
 }

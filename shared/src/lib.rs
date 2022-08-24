@@ -44,7 +44,7 @@ pub const RELEASE_CLOCK_TIME: Ticks = Ticks(4 * TICKS_PER_SECOND as i64);
 
 pub fn shared_config() -> SharedConfig<Channels> {
     let tick_interval = Some(Duration::from_millis(MS_PER_TICK as u64));
-    let link_condition = if true {
+    let link_condition = if false {
         Some(LinkConditionerConfig::average_condition())
     } else {
         None
@@ -83,9 +83,10 @@ pub const CHANNEL_CONFIG: &[Channel<Channels>] = &[
         direction: ChannelDirection::ServerToClient,
         mode: ChannelMode::OrderedReliable(ReliableSettings::default()),
     },
-    Channel {
-        index: Channels::ServerUpdate,
-        direction: ChannelDirection::ServerToClient,
-        mode: ChannelMode::UnorderedReliable(ReliableSettings::default()),
-    },
+    // This was dropping packets 100% of the time, maybe the rng was unlucky...
+    // Channel {
+    //     index: Channels::ServerUpdate,
+    //     direction: ChannelDirection::ServerToClient,
+    //     mode: ChannelMode::UnorderedReliable(ReliableSettings::default()),
+    // },
 ];

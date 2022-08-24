@@ -107,8 +107,6 @@ pub fn receive_message_event(
                     });
                 }
                 Protocol::UpdatePlayer(update_player) => {
-                    panic!("wtf?");
-                    info!("Got update plyaer event");
                     update_player_events.send(UpdatePlayerEvent {
                         owner: (*update_player.owner),
                         gold: (*update_player.gold),

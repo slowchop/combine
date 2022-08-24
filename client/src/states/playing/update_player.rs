@@ -14,7 +14,6 @@ pub fn update_player(
     mut game: Query<&mut SharedGame>,
 ) {
     for update_player_event in update_player_events.iter() {
-        dbg!(&update_player_event);
         let mut game = if let Ok(g) = game.get_single_mut() {
             g
         } else {
@@ -31,5 +30,6 @@ pub fn update_player(
 
         player.gold = update_player_event.gold;
         player.lives = update_player_event.lives;
+        dbg!(player);
     }
 }

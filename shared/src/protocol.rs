@@ -27,8 +27,8 @@ pub mod update_position;
 pub enum Protocol {
     UpdatePosition(UpdatePosition),
     DestroyEntity(DestroyEntity),
-    SpawnEntity(SpawnEntity),
     UpdatePlayer(UpdatePlayer),
+    SpawnEntity(SpawnEntity),
     ReleaseCreeps(ReleaseCreeps),
     Auth(Auth),
     JoinRandomGame(JoinRandomGame),

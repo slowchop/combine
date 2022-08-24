@@ -38,12 +38,15 @@ pub fn lose_a_life(
             continue;
         };
 
+        player.lives -= 1;
+
+        dbg!("sending message to players");
         let message = UpdatePlayer::new(lose_a_life_event.who, player.gold, player.lives);
         send_message_to_game(
             &mut server,
             &lose_a_life_event.game_id,
             &*game_user_lookup,
-            Channels::ServerUpdate,
+            Channels::ServerCommand,
             &message,
         );
     }
