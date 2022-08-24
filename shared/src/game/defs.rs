@@ -23,7 +23,7 @@ pub struct Defs {
 
 impl Defs {
     pub fn load() -> Self {
-        let data = include_str!("../../../game/assets/defs.yaml");
+        let data = include_str!("../../../client/assets/defs.yaml");
         serde_yaml::from_str(data).unwrap()
     }
 
