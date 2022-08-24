@@ -38,9 +38,17 @@ pub fn lose_a_life(
             continue;
         };
 
+        if player.lives == 0 {
+            todo!();
+            // game_over_events.send(GameOverEvent {
+            //     game_id: lose_a_life_event.game_id,
+            //     winner: lose_a_life_event.who.other(),
+            // });
+            continue;
+        }
+
         player.lives -= 1;
 
-        dbg!("sending message to players");
         let message = UpdatePlayer::new(lose_a_life_event.who, player.gold, player.lives);
         send_message_to_game(
             &mut server,

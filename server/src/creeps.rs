@@ -55,24 +55,23 @@ pub fn spawn_creeps(
             println!("Spawn point! {:?} {:?}", position, owner);
 
             // 20 creeps for each player, make a little grid.
-            // for x in 0..2 {
-            //     for y in 0..2 {
-            let x = 0;
-            let y = 0;
-            let pos = *position + Vec2::new(x as f32 * 1.0, y as f32 * 1.0);
-            let spawn_entity_event = SpawnEntityEvent {
-                game_id,
-                entity_def: EntityDef {
-                    entity_type: EntityType::Creep,
-                    position: Some(pos.into()),
-                    owner: Some(*owner),
-                    creep: Some("robot".to_string()),
-                    ..Default::default()
-                },
-            };
-            spawn_entity_events.send(spawn_entity_event);
-            // }
-            // }
+            for x in 0..3 {
+                for y in 0..3 {
+                    let pos = *position + Vec2::new(x as f32 * 3.0, y as f32 * 3.0);
+                    let spawn_entity_event = SpawnEntityEvent {
+                        game_id,
+                        entity_def: EntityDef {
+                            entity_type: EntityType::Creep,
+                            position: Some(pos.into()),
+                            owner: Some(*owner),
+                            creep: Some("robot".to_string()),
+                            ..Default::default()
+                        },
+                    };
+
+                    spawn_entity_events.send(spawn_entity_event);
+                }
+            }
         }
     }
 }

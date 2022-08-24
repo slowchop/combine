@@ -6,6 +6,7 @@ use bevy_time::Time;
 use bevy_transform::prelude::*;
 use naia_bevy_server::shared::{ChannelIndex, Protocolize, ReplicateSafe};
 use naia_bevy_server::{Server, UserKey};
+use rand::{thread_rng, Rng};
 use shared::game::defs::CreepRef;
 use shared::game::owner::Owner;
 use shared::game::path::{Path, PathLeaveAt, PathProgress};
@@ -91,7 +92,8 @@ pub fn tell_clients_to_release_the_creeps(
                     current_path_target: 0,
                 })
                 .insert(PathLeaveAt(
-                    time.time_since_startup() + Duration::from_secs(2),
+                    time.time_since_startup()
+                        + Duration::from_secs_f32(2.0 + thread_rng().gen_range(0.0f32..5.0f32)),
                 ));
         }
 
@@ -137,7 +139,6 @@ pub fn send_message_to_game<R, P>(
     }
 
     for user_key in users {
-        dbg!("sending message to player!!!");
         server.send_message(user_key, channel, message);
     }
 }
