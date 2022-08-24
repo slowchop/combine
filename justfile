@@ -39,22 +39,21 @@ watch_server:
 server:
     cargo run --package server --features use-udp
 
+server_rsync:
+    rsync -vr --exclude target * $HOST:~/towercombo
+    rsync -vr --exclude target ../naia/ $HOST:~/naia
+
+# Run after server_deploy
+# Manually run:
+#   sudo snap install --edge --classic just
 server_deploy_bootstrap:
-    # sudo snap install --edge --classic just
     sudo apt update
     sudo apt install -y build-essential clang libssl-dev pkg-config
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-server_deploy:
-    rsync -vr --exclude target * $HOST:~/towercombo
-    rsync -vr --exclude target ../naia/ $HOST:~/naia
-    # Can't sudo with password over ssh it seems.
-    # Run this on the server:
-    # just server_deploy_local
-
-server_deploy_local:
-    $HOME/.cargo/bin/cargo build --release --package server --features use-udp --features shared/prod
     sudo cp deploy/towercombo.service /etc/systemd/system/
     sudo systemctl enable towercombo.service
     sudo systemctl restart towercombo.service
+
+server_deploy: server_rsync
+    $HOME/.cargo/bin/cargo build --release --package server --features use-udp --features shared/prod
     journalctl -f
