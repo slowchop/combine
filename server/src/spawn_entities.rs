@@ -178,10 +178,17 @@ pub fn spawn_entities(
                         continue;
                     }
                 };
-                let creep = match &entity_def.creep {
+                let creep_name = match &entity_def.creep {
                     Some(t) => t,
                     None => {
                         warn!("Spawn entity has no creep!: {:?}", entity_def);
+                        continue;
+                    }
+                };
+                let creep = match defs.creep(creep_name.as_str()) {
+                    Some(t) => t,
+                    None => {
+                        warn!("Creep not found: {:?} {:?}", creep_name, entity_def);
                         continue;
                     }
                 };
@@ -189,7 +196,7 @@ pub fn spawn_entities(
                 let id = commands
                     .spawn()
                     .insert(Transform::from_translation(position.0))
-                    .insert(CreepRef(creep.clone()))
+                    .insert(CreepRef(creep_name.clone()))
                     .insert(owner)
                     .insert(game_id)
                     .insert(Speed(creep.speed))

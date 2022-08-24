@@ -83,8 +83,8 @@ pub fn tell_clients_to_release_the_creeps(
                 .entity(*entity)
                 .insert(path.clone())
                 .insert(PathProgress {
-                    previous_position: transform.translation,
-                    previous_position_time: time.seconds_since_startup(),
+                    // previous_position: transform.translation,
+                    // previous_position_time: time.seconds_since_startup(),
                     target_position: path.0[0],
                     current_path_target: 0,
                 });
