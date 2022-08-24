@@ -103,7 +103,6 @@ pub fn move_along_path_and_optionally_tell_client(
 
         if let Some(path_leave_at) = path_leave_at {
             if time.time_since_startup() < path_leave_at.0 {
-                println!("Creep shouldn't move yet!");
                 continue;
             }
 
@@ -111,17 +110,22 @@ pub fn move_along_path_and_optionally_tell_client(
             need_to_broadcast = true;
         }
 
+        // Reduce this for each new path we take. Usually should be 0 or 1 times!
         let mut movement_this_frame = speed.0 * time.delta_seconds();
+
+        // Final velocity after any paths turned.
+        let mut velocity = Vec3::ZERO;
 
         loop {
             let difference = (path_progress.target_position - transform.translation);
-
             let direction = difference.normalize();
             let distance_left = difference.length();
 
             // If we're still on the same path, move and break out.
             if movement_this_frame < distance_left {
                 transform.translation += direction * movement_this_frame;
+
+                velocity = direction * speed.0;
                 break;
             }
 
@@ -142,9 +146,8 @@ pub fn move_along_path_and_optionally_tell_client(
         }
 
         if need_to_broadcast {
-            // TODO: VELOCITY!!!!!!
             let message =
-                UpdatePosition::new(server_entity_id.clone(), transform.translation, Vec3::ZERO);
+                UpdatePosition::new(server_entity_id.clone(), transform.translation, velocity);
             send_message_to_game(
                 &mut server,
                 &game_id,
