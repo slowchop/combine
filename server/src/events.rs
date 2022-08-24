@@ -130,14 +130,14 @@ pub fn receive_message_event(
 
                     // server.send_message(user_key, Channels::ServerCommand, &assignment_message);
                 }
-                Protocol::NetPosition(_) => {
-                    warn!("Got a position event from client");
-                }
                 Protocol::SpawnEntity(_) => {
                     warn!("Got a spawn entity event from client");
                 }
-                Protocol::ReleaseCreep(_) => {
+                Protocol::ReleaseCreeps(_) => {
                     warn!("Got a release the creeps event from client");
+                }
+                Protocol::UpdatePosition(_) => {
+                    warn!("Got an update position from client");
                 }
             }
             info!(key = ?user_key.to_u64())

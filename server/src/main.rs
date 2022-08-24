@@ -12,7 +12,7 @@ mod time;
 
 use crate::create_games::create_games;
 use crate::create_games::CreateGameEvent;
-use crate::creeps::spawn_creeps;
+use crate::creeps::{move_along_path_and_optionally_tell_client, spawn_creeps};
 use crate::new_entities::{add_new_entities_to_game, send_new_entities_to_players, NewEntityEvent};
 use crate::release_creeps::tell_clients_to_release_the_creeps;
 use crate::spawn_entities::{spawn_entities, SpawnEntityEvent};
@@ -79,5 +79,6 @@ fn main() {
         .add_system(send_new_entities_to_players)
         .add_system(tell_clients_to_release_the_creeps)
         .add_system(spawn_creeps)
+        .add_system(move_along_path_and_optionally_tell_client)
         .run();
 }

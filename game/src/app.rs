@@ -1,4 +1,4 @@
-use crate::net::ReleaseCreepEvent;
+use crate::net::{ReleaseCreepEvent, UpdatePositionEvent};
 use crate::settings::Settings;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::creeps::release_creeps;
@@ -6,6 +6,9 @@ use crate::states::playing::left_click::left_click;
 use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::states::playing::time::add_ticks_to_game;
 use crate::states::playing::ui::ui;
+use crate::states::playing::update_positions::{
+    update_positions_from_server, update_transform_from_velocity, update_transforms_from_positions,
+};
 use crate::states::{
     connecting, loading_level, main_menu, playing, splash, waiting_for_random, ContinueState,
 };
@@ -101,6 +104,7 @@ pub fn play(args: &Args) {
     // Ours!
     app.add_event::<SpawnEntityEvent>()
         .add_event::<ReleaseCreepEvent>()
+        .add_event::<UpdatePositionEvent>()
         .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)
         .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
@@ -157,6 +161,9 @@ pub fn play(args: &Args) {
             .with_system(spawn_entities)
             .with_system(release_creeps)
             .with_system(ui)
+            .with_system(update_positions_from_server)
+            .with_system(update_transforms_from_positions)
+            .with_system(update_transform_from_velocity)
             .into(),
     );
 

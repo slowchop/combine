@@ -11,8 +11,6 @@ use bevy_prototype_lyon::prelude::{
 };
 use bevy_prototype_lyon::shapes;
 use bevy_prototype_lyon::shapes::Polygon;
-use server::path::Path;
-use shared::game::components::Damage;
 use shared::game::defs::{CreepRef, Defs, EntityDef, EntityType, TowerRef, PIXELS_PER_METER};
 use shared::game::shared_game::{ServerEntityId, SharedGame};
 use std::f32::consts::TAU;
@@ -62,9 +60,6 @@ pub fn spawn_entities(
                     continue;
                 }
             };
-
-            let path = path.iter().map(|p| p.into()).collect();
-            game.paths.insert(owner, Path(path));
 
             // Debugging down here.
 
@@ -193,28 +188,55 @@ pub fn spawn_entities(
             }
         };
 
-        if let EntityType::Ground = entity_def.entity_type {}
-
         match entity_def.entity_type {
             EntityType::Ground => {
-                entity.insert(RayCastMesh::<MyRaycastSet>::default());
+                entity
+                    .insert(Name::new("Ground"))
+                    .insert(RayCastMesh::<MyRaycastSet>::default());
             }
             EntityType::Tower => {
-                todo!("owner");
+                let owner = if let Some(o) = entity_def.owner {
+                    o
+                } else {
+                    warn!("Tower entity has no owner!");
+                    continue;
+                };
 
                 // Already checked
                 let tower_name = entity_def.tower.as_ref().unwrap().to_string();
                 // let tower = defs.towers.get(&tower_name).unwrap(); // Already checked
-                entity.insert(TowerRef(tower_name));
+                entity
+                    .insert(Name::new(format!("Tower {}", tower_name)))
+                    .insert(TowerRef(tower_name))
+                    .insert(owner);
             }
             EntityType::Creep => {
-                todo!("owner");
+                let owner = if let Some(o) = entity_def.owner {
+                    o
+                } else {
+                    warn!("Tower entity has no owner!");
+                    continue;
+                };
 
                 // Already checked
                 let creep_name = entity_def.creep.as_ref().unwrap().to_string();
-                entity.insert(CreepRef(creep_name));
+                entity
+                    .insert(Name::new(format!("Creep {}", creep_name)))
+                    .insert(CreepRef(creep_name))
+                    .insert(owner);
             }
-            _ => {}
+            EntityType::Sprite => {
+                entity.insert(Name::new("Sprite"));
+            }
+            EntityType::Spawn => {
+                entity.insert(Name::new("Spawn"));
+            }
+            EntityType::Base => {
+                entity.insert(Name::new("Base"));
+            }
+            EntityType::Path => {
+                entity.insert(Name::new("Path"));
+            }
         }
     }
 }

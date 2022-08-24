@@ -2,10 +2,14 @@ use crate::new_entities::NewEntityEvent;
 use crate::state::GameId;
 use crate::GameLookup;
 use bevy_ecs::prelude::*;
-use bevy_log::{info, warn};
+use bevy_log::{error, info, warn};
+use bevy_math::{Vec2, Vec3};
+use bevy_transform::prelude::Transform;
+use shared::game::components::Speed;
 use shared::game::defs::{CreepRef, Defs, EntityDef, EntityType, TowerRef};
 use shared::game::owner::Owner;
-use shared::game::position::Position;
+use shared::game::path::Path;
+use shared::game::position::{vec2_to_vec3, Position};
 use shared::game::SpawnPoint;
 
 #[derive(Debug, Clone)]
@@ -81,7 +85,7 @@ pub fn spawn_entities(
                 let owner = match entity_def.owner {
                     Some(o) => o,
                     None => {
-                        warn!("path Spawn entity has no owner!");
+                        error!("path Spawn entity has no owner!");
                         continue;
                     }
                 };
@@ -89,7 +93,7 @@ pub fn spawn_entities(
                 let mut game = match game_lookup.0.get_mut(&game_id) {
                     Some(g) => g,
                     None => {
-                        warn!(
+                        error!(
                             "path Could not get game for game_id {:?} for {:?}",
                             game_id, spawn
                         );
@@ -99,12 +103,14 @@ pub fn spawn_entities(
                 let path = match &entity_def.path {
                     Some(p) => p,
                     None => {
-                        warn!("path Spawn entity has no path!");
+                        error!("path Spawn entity has no path!");
                         continue;
                     }
                 };
 
-                game.paths.insert(owner, position.into());
+                info!("Inserting path for owner {:?}", owner);
+                let path: Vec<Vec3> = path.iter().map(|p| vec2_to_vec3(&p.into())).collect();
+                game.paths.insert(owner, Path(path));
             }
             EntityType::Tower => {
                 let tower_name = match &entity_def.tower {
@@ -130,6 +136,7 @@ pub fn spawn_entities(
                         continue;
                     }
                 };
+                let position: Position = position.0.into();
                 let owner = match entity_def.owner {
                     Some(o) => o,
                     None => {
@@ -147,7 +154,7 @@ pub fn spawn_entities(
 
                 let id = commands
                     .spawn()
-                    .insert(Position(position.into()))
+                    .insert(position)
                     .insert(TowerRef(tower.clone()))
                     .insert(owner)
                     .insert(game_id)
@@ -163,6 +170,7 @@ pub fn spawn_entities(
                         continue;
                     }
                 };
+                let position: Position = position.0.into();
                 let owner = match entity_def.owner {
                     Some(o) => o,
                     None => {
@@ -180,10 +188,11 @@ pub fn spawn_entities(
 
                 let id = commands
                     .spawn()
-                    .insert(Position(position.into()))
+                    .insert(Transform::from_translation(position.0))
                     .insert(CreepRef(creep.clone()))
                     .insert(owner)
                     .insert(game_id)
+                    .insert(Speed(creep.speed))
                     .id();
 
                 created_entity = Some(id);

@@ -1,11 +1,18 @@
+use crate::state::GameId;
 use crate::{GameLookup, SpawnCreepsEvent, SpawnEntityEvent};
 use bevy_ecs::prelude::*;
 use bevy_log::warn;
 use bevy_math::Vec2;
+use bevy_transform::prelude::*;
+use naia_bevy_server::Server;
+use shared::game::components::Speed;
 use shared::game::defs::{EntityDef, EntityType};
 use shared::game::owner::Owner;
+use shared::game::path::{Path, PathProgress};
 use shared::game::position::Position;
 use shared::game::SpawnPoint;
+use shared::protocol::Protocol;
+use shared::Channels;
 
 pub fn spawn_creeps(
     mut spawn_entity_events: EventWriter<SpawnEntityEvent>,
@@ -55,5 +62,19 @@ pub fn spawn_creeps(
                 }
             }
         }
+    }
+}
+
+pub fn move_along_path_and_optionally_tell_client(
+    query: Query<(&mut Transform, &PathProgress, &Path, &GameId, &Speed)>,
+    mut server: Server<Protocol, Channels>,
+) {
+    for (mut transform, path_progress, path, game_id) in query.iter() {
+        let path_progress: &PathProgress = &path_progress;
+        let distance = path_progress
+            .previous_position
+            .distance(path_progress.target_position);
+        dbg!(distance);
+        todo!();
     }
 }

@@ -198,6 +198,42 @@ impl From<NetVec2> for Vec2 {
     }
 }
 
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+pub struct NetVec3(pub Vec3);
+
+impl Serde for NetVec3 {
+    fn ser(&self, writer: &mut dyn BitWrite) {
+        self.0.x.ser(writer);
+        self.0.y.ser(writer);
+        self.0.z.ser(writer);
+    }
+
+    fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
+        let x: f32 = Serde::de(reader)?;
+        let y: f32 = Serde::de(reader)?;
+        let z: f32 = Serde::de(reader)?;
+        Ok(NetVec3(Vec3::new(x, y, z)))
+    }
+}
+
+impl From<Vec3> for NetVec3 {
+    fn from(v: Vec3) -> Self {
+        NetVec3(v)
+    }
+}
+
+impl From<&NetVec3> for Vec3 {
+    fn from(nv: &NetVec3) -> Self {
+        nv.0
+    }
+}
+
+impl From<NetVec3> for Vec3 {
+    fn from(nv: NetVec3) -> Self {
+        nv.0
+    }
+}
+
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, Eq, PartialEq, FromRepr)]
 #[serde(rename_all = "snake_case")]
 #[repr(u8)]

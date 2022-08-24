@@ -1,23 +1,26 @@
 use crate::{GameLookup, GameUserLookup, ReleaseCreepsEvent};
 use bevy_ecs::prelude::*;
 use bevy_log::warn;
+use bevy_time::Time;
+use bevy_transform::prelude::*;
 use naia_bevy_server::Server;
 use shared::game::defs::CreepRef;
 use shared::game::owner::Owner;
-use shared::game::path::Path;
-use shared::game::position::Position;
+use shared::game::path::{Path, PathProgress};
+use shared::game::position::{vec2_to_vec3, Position};
 use shared::game::shared_game::ServerEntityId;
-use shared::protocol::release_creep::ReleaseCreep;
+use shared::protocol::release_creep::ReleaseCreeps;
 use shared::protocol::Protocol;
 use shared::Channels;
 
 pub fn tell_clients_to_release_the_creeps(
+    time: Res<Time>,
     mut commands: Commands,
     mut release_creeps_events: EventReader<ReleaseCreepsEvent>,
     mut server: Server<Protocol, Channels>,
     game_user_lookup: Res<GameUserLookup>,
     game_lookup: Res<GameLookup>,
-    creep_query: Query<(&ServerEntityId, &Position), (With<CreepRef>, Without<Path>)>,
+    creep_query: Query<(&ServerEntityId, &Transform, &Owner), (With<CreepRef>, Without<Path>)>,
 ) {
     for release_creeps_event in release_creeps_events.iter() {
         println!("Trying to sending release creeps event!");
@@ -54,16 +57,44 @@ pub fn tell_clients_to_release_the_creeps(
         // Work out which ones are creeps.
         // Send a ReleaseCreep message to each client for each entity.
         for (server_entity_id, entity) in &game.entities {
-            let (server_entity_id_2, position) = match creep_query.get(*entity) {
+            let (server_entity_id_2, transform, owner) = match creep_query.get(*entity) {
                 Ok(e) => e,
-                Err(_) => continue,
+                Err(_) => {
+                    warn!(
+                        "Could not get creep for entity while trying to release: {:?}",
+                        entity
+                    );
+                    continue;
+                }
             };
             debug_assert_eq!(server_entity_id, server_entity_id_2);
 
-            let message = ReleaseCreep::new(server_entity_id.clone(), position.0, game.ticks());
-            for user_key in users {
-                server.send_message(user_key, Channels::ServerCommand, &message);
-            }
+            dbg!(&game.paths.len());
+
+            let path = if let Some(p) = game.paths.get(owner) {
+                p
+            } else {
+                warn!("Could not get path for owner {:?}", owner);
+                continue;
+            };
+
+            println!("Inserting path components to creep {:?}", &path);
+            commands
+                .entity(*entity)
+                .insert(path.clone())
+                .insert(PathProgress {
+                    previous_position: transform.translation,
+                    previous_position_time: time.seconds_since_startup(),
+                    target_position: path.0[0],
+                    current_path_target: 0,
+                });
+        }
+
+        // We're only sending one "release" message to each client. The server will send position
+        // updates to the client for the creeps.
+        for user_key in users {
+            let message = ReleaseCreeps::new();
+            server.send_message(user_key, Channels::ServerCommand, &message);
         }
     }
 }

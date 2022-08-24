@@ -1,4 +1,5 @@
 use crate::game::owner::Owner;
+use crate::game::path::Path;
 use crate::game::player::SharedPlayer;
 use crate::ticks::Ticks;
 use crate::{RELEASE_CLOCK_TIME, TICKS_PER_DAY, TICKS_PER_SECOND};
@@ -8,7 +9,6 @@ use bevy_utils::{HashMap, HashSet};
 use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
-use server::path::Path;
 use std::fmt::{Debug, Formatter};
 use std::time::Duration;
 

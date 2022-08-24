@@ -66,7 +66,6 @@ pub fn create_games(
                 EntityType::Sprite => {}
                 EntityType::Ground => {}
                 EntityType::Base => {}
-                EntityType::Path => {}
                 EntityType::Creep => {
                     warn!("No creeps should be in a level!");
                 }
