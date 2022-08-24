@@ -58,7 +58,6 @@ pub fn update_transform_from_velocity(
     mut query: Query<(&mut Position, &Velocity)>,
 ) {
     for (mut position, velocity) in query.iter_mut() {
-        println!("Update position");
         position.0 += velocity.0 * time.delta_seconds();
     }
 }

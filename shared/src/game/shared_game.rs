@@ -11,8 +11,11 @@ use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 use std::fmt::{Debug, Formatter};
 use std::time::Duration;
+use tracing::warn;
 
-#[derive(Component, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Component, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize,
+)]
 pub struct ServerEntityId(pub u32);
 
 impl Serde for ServerEntityId {
@@ -59,7 +62,7 @@ impl SharedGame {
         }
     }
 
-    pub fn add_entity(&mut self, entity: Entity) -> ServerEntityId {
+    pub fn server_add_entity(&mut self, entity: Entity) -> ServerEntityId {
         loop {
             let id = ServerEntityId(thread_rng().gen());
             if self.entities.contains_key(&id) {
@@ -68,6 +71,13 @@ impl SharedGame {
             self.entities.insert(id.clone(), entity);
             return id;
         }
+    }
+
+    pub fn client_add_entity(&mut self, server_entity_id: ServerEntityId, entity: Entity) {
+        if self.entities.contains_key(&server_entity_id) {
+            warn!("Tried to insert the same server entity twice");
+        }
+        self.entities.insert(server_entity_id, entity);
     }
 
     pub fn tick(&mut self) {

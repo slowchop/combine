@@ -47,10 +47,7 @@ impl Defs {
             .as_ref()
             .and_then(|texture| self.textures.get(texture.as_str()))?;
 
-        info!("{:?}", texture_def);
-
         let position = position.as_ref()?;
-        info!("{:?}", position);
         let x = position.x;
         let y = position.y;
         Some(Transform::from_xyz(x, 0., y).with_scale(Vec3::new(

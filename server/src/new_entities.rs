@@ -19,10 +19,14 @@ pub struct NewEntityEvent {
 
 pub fn add_new_entities_to_game(
     mut commands: Commands,
-    mut new_entities_events: EventReader<NewEntityEvent>,
     mut game_lookup: ResMut<GameLookup>,
+    mut new_entities_events: EventReader<NewEntityEvent>,
+    game_user_lookup: Res<GameUserLookup>,
+    mut server: Server<Protocol, Channels>,
 ) {
     for new_entity_event in new_entities_events.iter() {
+        let mut entity_def = new_entity_event.entity_def.clone();
+
         println!("new entity event {:?}", new_entity_event.entity);
         let game_id = new_entity_event.game_id;
         let game = match game_lookup.0.get_mut(&game_id) {
@@ -33,19 +37,12 @@ pub fn add_new_entities_to_game(
             }
         };
 
-        let server_entity_id = game.add_entity(new_entity_event.entity);
+        let server_entity_id = game.server_add_entity(new_entity_event.entity);
+        entity_def.server_entity_id = Some(server_entity_id);
         commands
             .entity(new_entity_event.entity)
             .insert(server_entity_id);
-    }
-}
 
-pub fn send_new_entities_to_players(
-    mut new_entities_events: EventReader<NewEntityEvent>,
-    game_user_lookup: Res<GameUserLookup>,
-    mut server: Server<Protocol, Channels>,
-) {
-    for new_entity_event in new_entities_events.iter() {
         let users = match game_user_lookup.get_game_users(&new_entity_event.game_id) {
             Some(u) => u,
             None => {
@@ -62,9 +59,13 @@ pub fn send_new_entities_to_players(
             continue;
         }
 
-        let message = SpawnEntity::new(&new_entity_event.entity_def);
-        for user in users {
-            server.send_message(user, Channels::ServerCommand, &message);
-        }
+        let message = SpawnEntity::new(&entity_def);
+        send_message_to_game(
+            &mut server,
+            &game_id,
+            &game_user_lookup,
+            Channels::ServerCommand,
+            &message,
+        );
     }
 }

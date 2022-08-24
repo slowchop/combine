@@ -11,6 +11,7 @@ use shared::protocol::release_creep::ReleaseCreeps;
 use shared::protocol::{Protocol, ProtocolKind};
 use shared::ticks::Ticks;
 use shared::Channels;
+use std::thread::spawn;
 
 pub fn connect_event(client: Client<Protocol, Channels>) {
     println!("Client connected to: {}", client.server_address());
@@ -48,8 +49,14 @@ pub fn receive_message_event(
             match msg {
                 Protocol::SpawnEntity(spawn_entity) => {
                     let spawn_entity = &*spawn_entity.entity_def;
+                    if spawn_entity.server_entity_id.is_none() {
+                        warn!(
+                            "Got a spawn entity message without a server entity id {:?}",
+                            spawn_entity
+                        );
+                    }
                     spawn_entity_event.send(SpawnEntityEvent {
-                        server_entity_id: None,
+                        server_entity_id: spawn_entity.server_entity_id,
                         entity_def: spawn_entity.clone(),
                     });
                 }

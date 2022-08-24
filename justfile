@@ -1,6 +1,9 @@
 play:
     cd client && cargo run --features bevy/dynamic
 
+build_client_release:
+    cd client && cargo build --release
+
 play_multi:
     cd client && cargo run --features bevy/dynamic -- -w 0 -s &
     cd client && cargo run --features bevy/dynamic -- -w 1 -s

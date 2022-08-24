@@ -30,72 +30,86 @@ pub fn spawn_entities(
     defs: Res<Defs>,
     mut game: Query<&mut SharedGame>,
 ) {
+    let mut game = if let Ok(g) = game.get_single_mut() {
+        g
+    } else {
+        warn!("Could not get game in spawn_entities!");
+        return;
+    };
+
     for spawn in new_entities.iter() {
         let entity_def = &spawn.entity_def;
         let mut texture = entity_def.texture.clone();
 
         if entity_def.entity_type == EntityType::Spawn {
-            // Ignore spawn.
+            warn!("TODO: Ignoring base for now.");
+            continue;
+        }
+        if entity_def.entity_type == EntityType::Base {
+            warn!("TODO: Ignoring base for now.");
             continue;
         }
 
         if let EntityType::Path = entity_def.entity_type {
-            let path = if let Some(p) = &entity_def.path {
-                p
-            } else {
-                warn!("Path entity has no path!");
-                continue;
-            };
-            let owner = if let Some(o) = entity_def.owner {
-                o
-            } else {
-                warn!("Path entity has no owner!");
-                continue;
-            };
+            // Client doesn't care about path.
+            // Server just spams client with spawn + position updates.
 
-            let mut game = match game.get_single_mut() {
-                Ok(g) => g,
-                Err(e) => {
-                    warn!("Could not get game for {:?}: {:?}", spawn, e);
-                    continue;
-                }
-            };
-
+            // let path = if let Some(p) = &entity_def.path {
+            //     p
+            // } else {
+            //     warn!("Path entity has no path!");
+            //     continue;
+            // };
+            // let owner = if let Some(o) = entity_def.owner {
+            //     o
+            // } else {
+            //     warn!("Path entity has no owner!");
+            //     continue;
+            // };
+            //
+            // let mut game = match game.get_single_mut() {
+            //     Ok(g) => g,
+            //     Err(e) => {
+            //         warn!("Could not get game for {:?}: {:?}", spawn, e);
+            //         continue;
+            //     }
+            // };
+            //
             // Debugging down here.
-
-            let shape = shapes::RegularPolygon {
-                sides: 6,
-                feature: shapes::RegularPolygonFeature::Radius(200.0),
-                ..shapes::RegularPolygon::default()
-            };
-
-            commands.spawn_bundle(GeometryBuilder::build_as(
-                &shape,
-                DrawMode::Outlined {
-                    fill_mode: FillMode::color(Color::CYAN),
-                    outline_mode: StrokeMode::new(Color::BLACK, 10.0),
-                },
-                Transform::default().with_rotation(Quat::from_rotation_z(TAU * 0.75)),
-            ));
-
-            // TODO: These lines aren't being drawn
-
-            let path = entity_def.path.as_ref().unwrap();
-            let path = path
-                .iter()
-                .map(|p| p.into())
-                .map(|p: Vec2| p * PIXELS_PER_METER)
-                .collect::<Vec<Vec2>>();
-            let shape = Polygon {
-                points: path,
-                closed: false,
-            };
-
-            commands.spawn_bundle(GeometryBuilder::build_as(
-                &shape,
-                DrawMode::Stroke(StrokeMode::new(Color::BLACK, 10.0)),
-                Default::default(),
-            ));
+            //
+            // let shape = shapes::RegularPolygon {
+            //     sides: 6,
+            //     feature: shapes::RegularPolygonFeature::Radius(200.0),
+            //     ..shapes::RegularPolygon::default()
+            // };
+            //
+            // commands.spawn_bundle(GeometryBuilder::build_as(
+            //     &shape,
+            //     DrawMode::Outlined {
+            //         fill_mode: FillMode::color(Color::CYAN),
+            //         outline_mode: StrokeMode::new(Color::BLACK, 10.0),
+            //     },
+            //     Transform::default().with_rotation(Quat::from_rotation_z(TAU * 0.75)),
+            // ));
+            //
+            // // TODO: These lines aren't being drawn
+            //
+            // let path = entity_def.path.as_ref().unwrap();
+            // let path = path
+            //     .iter()
+            //     .map(|p| p.into())
+            //     .map(|p: Vec2| p * PIXELS_PER_METER)
+            //     .collect::<Vec<Vec2>>();
+            // let shape = Polygon {
+            //     points: path,
+            //     closed: false,
+            // };
+            //
+            // commands.spawn_bundle(GeometryBuilder::build_as(
+            //     &shape,
+            //     DrawMode::Stroke(StrokeMode::new(Color::BLACK, 10.0)),
+            //     Default::default(),
+            // ));
 
             continue;
         }
@@ -236,6 +250,16 @@ pub fn spawn_entities(
             }
             EntityType::Path => {
                 entity.insert(Name::new("Path"));
+            }
+        }
+
+        if let Some(server_entity_id) = &spawn.server_entity_id {
+            println!("Inserting server entity id: {:?}", server_entity_id);
+            entity.insert(*server_entity_id);
+            game.client_add_entity(*server_entity_id, entity.id());
+        } else {
+            if spawn.entity_def.entity_type == EntityType::Creep {
+                warn!("Spawning: No server entity id for {:?}", spawn);
             }
         }
     }
