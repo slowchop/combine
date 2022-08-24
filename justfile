@@ -24,3 +24,17 @@ clean_web:
 
 host:
     cd web && sfz -r --cors --coi -b 0.0.0.0 -p 8000
+
+deploy_bootstrap:
+    sudo apt update
+    sudo apt install -y build-essential clang libssl-dev
+    sudo snap install --edge --classic just
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+deploy:
+    rsync -vr --exclude target * towercombo:~/towercombo
+    rsync -vr --exclude target ../naia/ towercombo:~/naia
+    ssh towercombo "cd towercombo && just local_deploy"
+
+local_deploy:
+    /home/gak/.cargo/bin/cargo build --release --package server --features use-webrtc
