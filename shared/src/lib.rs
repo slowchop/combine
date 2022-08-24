@@ -22,8 +22,8 @@ pub const UDP_PORT: u16 = 24191;
 pub const WEB_CONNECT_PORT: u16 = 24191; // Runs a web server for POST?
 pub const WEB_PORT: u16 = 24192;
 
-// pub const PROD_URL: &str = "http://45.248.51.162";
-pub const PROD_URL: &str = "http://10.0.4.14";
+pub const PROD_URL: &str = "http://45.248.51.162";
+// pub const PROD_URL: &str = "http://10.0.4.14";
 
 pub const DEV_URL: &str = "http://10.0.4.14";
 

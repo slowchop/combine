@@ -1,2 +1,5 @@
 /target
 /web
+
+# Local Netlify folder
+.netlify

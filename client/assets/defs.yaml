@@ -44,42 +44,47 @@ levels:
         - -5.0
       - - 18.0
         - -2.0
-    - texture: harold.png
+    - texture: tree.png
       type: sprite
       position:
       - -25.0
       - -2.0
-    - texture: harold.png
+    - texture: tree.png
       type: sprite
       position:
       - 0.0
       - 0.0
-    - texture: harold.png
+    - texture: props.png
+      type: sprite
+      position:
+      - 1.0
+      - 1.0
+    - texture: tree.png
       type: sprite
       position:
       - 25.0
       - -2.0
-    - texture: harold.png
+    - texture: grass.png
       type: ground
       position:
-      - -1.0
       - 0.0
-    - texture: harold.png
+      - 0.0
+    - texture: grass.png
       type: ground
       position:
       - 19.0
       - 0.0
-    - texture: harold.png
+    - texture: grass.png
       type: ground
       position:
       - -21.0
       - 0.0
-    - texture: harold.png
+    - texture: grass.png
       type: ground
       position:
       - -1.0
       - 20.0
-    - texture: harold.png
+    - texture: grass.png
       type: ground
       position:
       - -1.0
@@ -94,11 +99,11 @@ towers:
     damage: 3.0
     range: 3.0
     cost: 100
-  laser:
-    name: Laser
+  cold:
+    name: Cold
     combo:
     - machine
-    - flame
+    - machine
     texture: tower.png
     damage: 1.0
     range: 1.0
@@ -110,23 +115,21 @@ towers:
     damage: 1.0
     range: 1.0
     cost: 100
-  cold:
-    name: Cold
+  laser:
+    name: Laser
     combo:
     - machine
-    - machine
+    - flame
     texture: tower.png
     damage: 1.0
     range: 1.0
     cost: 100
 creeps:
-  strong:
-    name: Strong
-    combo:
-    - robot
-    - robot
+  robot:
+    name: Robot
+    combo: []
     texture: gnome.png
-    speed: 1.0
+    speed: 10.0
     cost: 100
   fast:
     name: Fast
@@ -136,19 +139,29 @@ creeps:
     texture: gnome.png
     speed: 2.0
     cost: 100
+  strong:
+    name: Strong
+    combo:
+    - robot
+    - robot
+    texture: gnome.png
+    speed: 1.0
+    cost: 100
   monster:
     name: Monster
     combo: []
     texture: gnome.png
     speed: 1.0
     cost: 100
-  robot:
-    name: Robot
-    combo: []
-    texture: gnome.png
-    speed: 10.0
-    cost: 100
 textures:
+  grass.png:
+    size:
+    - 256.0
+    - 256.0
+  gnome.png:
+    size:
+    - 263.0
+    - 582.0
   hover.png:
     size:
     - 256.0
@@ -157,11 +170,15 @@ textures:
     size:
     - 280.0
     - 311.0
-  gnome.png:
+  tree.png:
     size:
-    - 263.0
-    - 582.0
+    - 984.0
+    - 1120.0
   harold.png:
     size:
     - 846.0
     - 1199.0
+  props.png:
+    size:
+    - 4096.0
+    - 4096.0

@@ -20,6 +20,7 @@ use crate::{
     Transform, Vec3, WindowDescriptor,
 };
 use bevy::prelude::*;
+use bevy::render::texture::ImageSettings;
 use bevy::window::PresentMode;
 use bevy_inspector_egui::{WorldInspectorParams, WorldInspectorPlugin};
 use bevy_mod_raycast::{
@@ -86,6 +87,11 @@ pub fn play(args: &Args) {
     .insert_resource(settings)
     .insert_resource(Defs::load())
     .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
+    .insert_resource(ImageSettings::default_nearest())
+    .insert_resource(AmbientLight {
+        color: Color::WHITE,
+        brightness: 1.0,
+    })
     .insert_resource(Msaa { samples: 4 })
     .insert_resource(ContinueState(None))
     .add_loopless_state(GameState::Splash)
