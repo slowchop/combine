@@ -16,11 +16,12 @@ use shared::Channels;
 use std::thread::spawn;
 
 pub fn connect_event(client: Client<Protocol, Channels>) {
-    println!("Client connected to: {}", client.server_address());
+    println!("Client connected {}", client.server_address());
 }
 
-pub fn disconnect_event(client: Client<Protocol, Channels>) {
-    println!("Client disconnected from: {}", client.server_address());
+pub fn disconnect_event(client: Client<Protocol, Channels>, mut commands: Commands) {
+    println!("Client disconnected");
+    commands.insert_resource(NextState(GameState::Disconnected));
 }
 
 #[derive(Debug)]

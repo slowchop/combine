@@ -48,7 +48,7 @@ fn main() {
 
     let server_config = ServerConfig {
         connection: ConnectionConfig {
-            disconnection_timeout_duration: Duration::from_secs(10),
+            disconnection_timeout_duration: Duration::from_secs(5),
             ..Default::default()
         },
         require_auth: true,

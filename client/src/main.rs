@@ -40,6 +40,14 @@ enum Command {
 }
 
 fn main() -> miette::Result<()> {
+    let _guard = sentry::init((
+        "https://682d2e74603f4cc185e4b408f89f0e73@o1376616.ingest.sentry.io/6685785",
+        sentry::ClientOptions {
+            release: sentry::release_name!(),
+            ..Default::default()
+        },
+    ));
+
     let args = Args::parse();
     match args.command {
         None => app::play(&args),

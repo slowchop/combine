@@ -1,4 +1,5 @@
 pub mod connecting;
+pub mod disconnected;
 pub mod loading_level;
 pub mod main_menu;
 pub mod playing;

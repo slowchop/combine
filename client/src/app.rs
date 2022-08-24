@@ -1,5 +1,6 @@
 use crate::net::{DestroyEntityEvent, ReleaseCreepEvent, UpdatePositionEvent};
 use crate::settings::Settings;
+use crate::states::disconnected;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::creeps::release_creeps;
 use crate::states::playing::destroy_entities::destroy_entities;
@@ -54,6 +55,9 @@ pub enum GameState {
     // In game!
     LoadingLevel,
     Playing,
+
+    //
+    Disconnected,
 }
 
 pub fn play(args: &Args) {
@@ -176,6 +180,15 @@ pub fn play(args: &Args) {
             .with_system(update_transform_from_velocity)
             .with_system(destroy_entities)
             .with_system(update_player)
+            .into(),
+    );
+
+    // Disconnected screen
+    app.add_enter_system(GameState::Disconnected, disconnected::init);
+    app.add_system_set(
+        ConditionSet::new()
+            .run_in_state(GameState::Disconnected)
+            .with_system(disconnected::disconnected)
             .into(),
     );
 

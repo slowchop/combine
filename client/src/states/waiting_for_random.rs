@@ -2,6 +2,7 @@ use crate::app::GameState;
 use crate::states::ContinueState;
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContext};
+use bevy_inspector_egui::egui::Align2;
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Client;
 use shared::game::player::PlayerName;
@@ -16,5 +17,7 @@ pub fn init(mut commands: Commands, time: Res<Time>, mut client: Client<Protocol
 }
 
 pub fn update(mut egui_context: ResMut<EguiContext>) {
-    egui::Window::new("Waiting for random").show(egui_context.ctx_mut(), |ui| {});
+    egui::Window::new("Waiting for random")
+        .anchor(Align2::CENTER_CENTER, [0.0, 0.0])
+        .show(egui_context.ctx_mut(), |ui| {});
 }

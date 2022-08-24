@@ -2,6 +2,7 @@ use crate::app::GameState;
 use crate::states::ContinueState;
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContext};
+use bevy_inspector_egui::egui::Align2;
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Client;
 use shared::protocol::Protocol;
@@ -37,7 +38,9 @@ pub fn update(
     next_state: Res<ContinueState>,
     mut egui_context: ResMut<EguiContext>,
 ) {
-    egui::Window::new("Connecting to server...").show(egui_context.ctx_mut(), |ui| {});
+    egui::Window::new("Connecting to server...")
+        .anchor(Align2::CENTER_CENTER, [0.0, 0.0])
+        .show(egui_context.ctx_mut(), |ui| {});
 
     let next_state = match next_state.0 {
         Some(state) => state,
