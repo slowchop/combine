@@ -1,5 +1,7 @@
 /target
 /web
+/TowerCombo
+TowerCombo-Windows.zip
 
 # Local Netlify folder
 .netlify

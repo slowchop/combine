@@ -6,7 +6,7 @@ use iyes_loopless::prelude::*;
 use naia_bevy_client::Client;
 use shared::game::player::PlayerName;
 use shared::protocol::Protocol;
-use shared::{Auth, Channels, JoinRandomGame, UDP_PORT};
+use shared::{Auth, Channels, JoinRandomGame};
 
 pub fn init(mut commands: Commands, time: Res<Time>, mut client: Client<Protocol, Channels>) {
     println!("Waiting for random...");

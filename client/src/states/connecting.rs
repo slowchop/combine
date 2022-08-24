@@ -5,29 +5,26 @@ use bevy_egui::{egui, EguiContext};
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Client;
 use shared::protocol::Protocol;
-use shared::{Auth, Channels, Network};
+use shared::{Auth, Channels, SESSION_LISTEN_PORT, URL};
 
-#[cfg(target_arch = "wasm32")]
-use shared::WEB_CONNECT_PORT;
+// #[cfg(target_arch = "wasm32")]
+// use shared::WEB_CONNECT_PORT;
+//
+// #[cfg(not(target_arch = "wasm32"))]
+// use shared::UDP_PORT;
 
-#[cfg(not(target_arch = "wasm32"))]
-use shared::UDP_PORT;
-
-pub fn init(
-    mut commands: Commands,
-    time: Res<Time>,
-    mut client: Client<Protocol, Channels>,
-    network: Res<Network>,
-) {
+pub fn init(mut commands: Commands, time: Res<Time>, mut client: Client<Protocol, Channels>) {
     println!("Connecting...");
 
     client.auth(Auth {});
 
-    #[cfg(target_arch = "wasm32")]
-    client.connect(&format!("{}:{}", network.url, WEB_CONNECT_PORT));
+    // #[cfg(target_arch = "wasm32")]
+    // client.connect(&format!("{}:{}", network.url, WEB_CONNECT_PORT));
+    //
+    // #[cfg(not(target_arch = "wasm32"))]
+    // client.connect(&format!("{}:{}", network.url, UDP_PORT));
 
-    #[cfg(not(target_arch = "wasm32"))]
-    client.connect(&format!("{}:{}", network.url, UDP_PORT));
+    client.connect(&format!("{}:{}", URL, SESSION_LISTEN_PORT));
 
     // let command = Auth::new();
     // client.send_message(Channels::PlayerCommand, &command);

@@ -12,7 +12,7 @@ pub fn tick(
     mut server: Server<Protocol, Channels>,
 ) {
     let s = time.seconds_since_startup();
-    if s - *last_time > 1.0 {
+    if s - *last_time > 60.0 {
         info!(?s, ticks = ?server.server_tick(), "tick");
         *last_time = s;
     }

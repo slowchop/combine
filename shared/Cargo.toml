@@ -3,6 +3,10 @@ name = "shared"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+prod = []
+dev = []
+
 [dependencies]
 bevy_ecs = { version = "0.8", default-features = false }
 bevy_math = { version = "0.8", default-features = false }

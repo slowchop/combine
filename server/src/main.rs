@@ -34,17 +34,13 @@ use naia_bevy_server::shared::ConnectionConfig;
 use naia_bevy_server::{Plugin as ServerPlugin, ServerConfig, Stage};
 use shared::game::defs::Defs;
 use shared::protocol::Protocol;
-use shared::{network_resource, shared_config, Channels, Env, Network, DEV_URL, PROD_URL};
+use shared::{shared_config, Channels};
 use std::time::Duration;
 use tick::tick;
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
-pub struct Args {
-    /// Sets the server to gak's IP address.
-    #[clap(short)]
-    debug: bool,
-}
+pub struct Args {}
 
 fn main() {
     info!("Server starting...");
@@ -68,7 +64,6 @@ fn main() {
             server_config,
             shared_config(),
         ))
-        .insert_resource(network_resource(args.debug))
         .insert_resource(Defs::load())
         .insert_resource(PlayerQueue::default())
         .insert_resource(PlayerLookup::default())

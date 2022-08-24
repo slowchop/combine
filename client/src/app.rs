@@ -33,7 +33,7 @@ use naia_bevy_client::Plugin as ClientPlugin;
 use naia_bevy_client::{Client, ClientConfig, Stage as NaiaStage};
 use shared::game::defs::Defs;
 use shared::protocol::Protocol;
-use shared::{network_resource, shared_config, Auth, Channels, UDP_PORT};
+use shared::{shared_config, Auth, Channels};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum GameState {
@@ -83,7 +83,6 @@ pub fn play(args: &Args) {
         watch_for_changes: true,
         ..Default::default()
     })
-    .insert_resource(network_resource(args.debug))
     .insert_resource(settings)
     .insert_resource(Defs::load())
     .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
