@@ -1,19 +1,23 @@
+use crate::release_creeps::send_message_to_game;
 use crate::state::GameId;
-use crate::{info, GameLookup, SpawnCreepsEvent, SpawnEntityEvent};
+use crate::{info, GameLookup, GameUserLookup, SpawnCreepsEvent, SpawnEntityEvent};
 use bevy_ecs::prelude::*;
 use bevy_log::warn;
-use bevy_math::Vec2;
+use bevy_math::{Vec2, Vec3};
 use bevy_time::Time;
 use bevy_transform::prelude::*;
 use naia_bevy_server::Server;
 use shared::game::components::Speed;
 use shared::game::defs::{EntityDef, EntityType};
 use shared::game::owner::Owner;
-use shared::game::path::{Path, PathProgress};
+use shared::game::path::{Path, PathLeaveAt, PathProgress};
 use shared::game::position::Position;
+use shared::game::shared_game::ServerEntityId;
 use shared::game::SpawnPoint;
+use shared::protocol::update_position::UpdatePosition;
 use shared::protocol::Protocol;
 use shared::Channels;
+use std::time::Duration;
 
 pub fn spawn_creeps(
     mut spawn_entity_events: EventWriter<SpawnEntityEvent>,
@@ -69,29 +73,54 @@ pub fn spawn_creeps(
 }
 
 pub fn move_along_path_and_optionally_tell_client(
+    mut commands: Commands,
     time: Res<Time>,
-    mut query: Query<(&mut Transform, &mut PathProgress, &Path, &GameId, &Speed)>,
+    game_user_lookup: Res<GameUserLookup>,
+    mut query: Query<(
+        Entity,
+        &mut Transform,
+        &mut PathProgress,
+        &ServerEntityId,
+        &Path,
+        &GameId,
+        &Speed,
+        Option<&PathLeaveAt>,
+    )>,
     mut server: Server<Protocol, Channels>,
 ) {
-    for (mut transform, mut path_progress, path, game_id, speed) in query.iter_mut() {
-        println!("Moving along path!");
+    for (
+        entity,
+        mut transform,
+        mut path_progress,
+        server_entity_id,
+        path,
+        game_id,
+        speed,
+        path_leave_at,
+    ) in query.iter_mut()
+    {
+        let mut need_to_broadcast = false;
+
+        if let Some(path_leave_at) = path_leave_at {
+            if time.time_since_startup() < path_leave_at.0 {
+                println!("Creep shouldn't move yet!");
+                continue;
+            }
+
+            commands.entity(entity).remove::<PathLeaveAt>();
+            need_to_broadcast = true;
+        }
+
         let mut movement_this_frame = speed.0 * time.delta_seconds();
-        dbg!(movement_this_frame, time.delta_seconds(), speed);
 
         loop {
             let difference = (path_progress.target_position - transform.translation);
-            dbg!(difference);
 
             let direction = difference.normalize();
             let distance_left = difference.length();
-            dbg!(distance_left);
 
             // If we're still on the same path, move and break out.
             if movement_this_frame < distance_left {
-                println!(
-                    "Need to move to the next path: movement this frame: {:?} distance left: {:?}",
-                    movement_this_frame, distance_left
-                );
                 transform.translation += direction * movement_this_frame;
                 break;
             }
@@ -106,9 +135,23 @@ pub fn move_along_path_and_optionally_tell_client(
                 break;
             }
 
-            println!("Move on same path");
+            println!("Move on same path {:?}", transform.translation);
             path_progress.target_position = path.0[path_progress.current_path_target].clone();
+            need_to_broadcast = true;
             // TODO: Tell client new position/velocity.
+        }
+
+        if need_to_broadcast {
+            // TODO: VELOCITY!!!!!!
+            let message =
+                UpdatePosition::new(server_entity_id.clone(), transform.translation, Vec3::ZERO);
+            send_message_to_game(
+                &mut server,
+                &game_id,
+                &*game_user_lookup,
+                Channels::ServerCommand,
+                &message,
+            );
         }
     }
 

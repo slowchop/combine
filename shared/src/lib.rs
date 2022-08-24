@@ -38,7 +38,7 @@ pub const TICKS_PER_SECOND: u64 = 1000 / 50;
 // pub const RESPAWN_CLOCK_TIME: Ticks = Ticks(20 * TICKS_PER_SECOND as i64);
 // pub const RELEASE_CLOCK_TIME: Ticks = Ticks(15 * TICKS_PER_SECOND as i64);
 
-pub const TICKS_PER_DAY: Ticks = Ticks(10 * TICKS_PER_SECOND as i64);
+pub const TICKS_PER_DAY: Ticks = Ticks(100 * TICKS_PER_SECOND as i64);
 pub const RESPAWN_CLOCK_TIME: Ticks = Ticks(2 * TICKS_PER_SECOND as i64);
 pub const RELEASE_CLOCK_TIME: Ticks = Ticks(4 * TICKS_PER_SECOND as i64);
 
@@ -60,6 +60,7 @@ pub fn shared_config() -> SharedConfig<Channels> {
     )
 }
 
+#[derive(Copy)]
 #[derive_channels]
 pub enum Channels {
     PlayerCommand,

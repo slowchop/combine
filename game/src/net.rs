@@ -48,7 +48,6 @@ pub fn receive_message_event(
             match msg {
                 Protocol::SpawnEntity(spawn_entity) => {
                     let spawn_entity = &*spawn_entity.entity_def;
-                    dbg!(&spawn_entity);
                     spawn_entity_event.send(SpawnEntityEvent {
                         server_entity_id: None,
                         entity_def: spawn_entity.clone(),
@@ -82,7 +81,7 @@ pub fn receive_message_event(
                     });
                 }
                 Protocol::UpdatePosition(update_position) => {
-                    info!("got a release the creeps network message.");
+                    info!("got an update position!");
                     update_position_events.send(UpdatePositionEvent {
                         position: (*update_position.position).clone().into(),
                         server_entity_id: (*update_position.server_entity_id).clone(),

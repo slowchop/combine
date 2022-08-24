@@ -19,7 +19,7 @@ use crate::{
 };
 use bevy::prelude::*;
 use bevy::window::PresentMode;
-use bevy_inspector_egui::WorldInspectorPlugin;
+use bevy_inspector_egui::{WorldInspectorParams, WorldInspectorPlugin};
 use bevy_mod_raycast::{
     DefaultPluginState, DefaultRaycastingPlugin, RayCastMesh, RayCastMethod, RayCastSource,
     RaycastSystem,

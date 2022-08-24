@@ -4,46 +4,46 @@ levels:
     entities:
     - type: base
       position:
-      - -200.0
       - -20.0
+      - -2.0
       owner: 0
     - type: spawn
       position:
-      - -200.0
-      - 20.0
+      - -20.0
+      - 2.0
       owner: 0
     - type: path
       owner: 0
       path:
-      - - -180.0
-        - 20.0
-      - - 100.0
-        - 50.0
-      - - -100.0
-        - -50.0
-      - - -180.0
-        - -20.0
+      - - -18.0
+        - 2.0
+      - - 10.0
+        - 5.0
+      - - -10.0
+        - -5.0
+      - - -18.0
+        - -2.0
     - type: base
       position:
-      - 200.0
-      - -20.0
+      - 20.0
+      - -2.0
       owner: 1
     - type: spawn
       position:
-      - 200.0
       - 20.0
+      - 2.0
       owner: 1
     - type: path
       owner: 1
       path:
-      - - 180.0
-        - 20.0
-      - - -100.0
-        - 50.0
-      - - 100.0
-        - -50.0
-      - - 180.0
-        - -20.0
+      - - 18.0
+        - 2.0
+      - - -10.0
+        - 5.0
+      - - 10.0
+        - -5.0
+      - - 18.0
+        - -2.0
     - texture: harold.png
       type: sprite
       position:

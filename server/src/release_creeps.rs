@@ -1,17 +1,21 @@
+use crate::state::GameId;
 use crate::{GameLookup, GameUserLookup, ReleaseCreepsEvent};
 use bevy_ecs::prelude::*;
 use bevy_log::warn;
 use bevy_time::Time;
 use bevy_transform::prelude::*;
-use naia_bevy_server::Server;
+use naia_bevy_server::shared::{ChannelIndex, Protocolize, ReplicateSafe};
+use naia_bevy_server::{Server, UserKey};
 use shared::game::defs::CreepRef;
 use shared::game::owner::Owner;
-use shared::game::path::{Path, PathProgress};
+use shared::game::path::{Path, PathLeaveAt, PathProgress};
 use shared::game::position::{vec2_to_vec3, Position};
-use shared::game::shared_game::ServerEntityId;
+use shared::game::shared_game::{ServerEntityId, SharedGame};
 use shared::protocol::release_creep::ReleaseCreeps;
 use shared::protocol::Protocol;
 use shared::Channels;
+use std::ops::Add;
+use std::time::Duration;
 
 pub fn tell_clients_to_release_the_creeps(
     time: Res<Time>,
@@ -83,18 +87,56 @@ pub fn tell_clients_to_release_the_creeps(
                 .entity(*entity)
                 .insert(path.clone())
                 .insert(PathProgress {
-                    // previous_position: transform.translation,
-                    // previous_position_time: time.seconds_since_startup(),
                     target_position: path.0[0],
                     current_path_target: 0,
-                });
+                })
+                .insert(PathLeaveAt(
+                    time.time_since_startup() + Duration::from_secs(2),
+                ));
         }
 
         // We're only sending one "release" message to each client. The server will send position
         // updates to the client for the creeps.
-        for user_key in users {
-            let message = ReleaseCreeps::new();
-            server.send_message(user_key, Channels::ServerCommand, &message);
+        let message = ReleaseCreeps::new();
+        send_message_to_game(
+            &mut server,
+            &release_creeps_event.game_id,
+            &*game_user_lookup,
+            Channels::ServerCommand,
+            &message,
+        );
+    }
+}
+
+pub fn send_message_to_game<R, P>(
+    server: &mut Server<Protocol, Channels>,
+    game_id: &GameId,
+    game_user_lookup: &GameUserLookup,
+    channel: Channels,
+    message: &R,
+) where
+    R: ReplicateSafe<P> + ReplicateSafe<Protocol>,
+    P: Protocolize,
+{
+    let users = match game_user_lookup.get_game_users(game_id) {
+        Some(u) => u,
+        None => {
+            warn!(
+                "Could not get users for game_id {:?} for sending a message",
+                game_id
+            );
+            return;
         }
+    };
+    if users.len() == 0 {
+        warn!(
+            "Could not get enough users for game_id {:?} for sending message",
+            game_id,
+        );
+        return;
+    }
+
+    for user_key in users {
+        server.send_message(user_key, channel, message);
     }
 }
