@@ -7,6 +7,7 @@ use crate::states::playing::left_click::left_click;
 use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::states::playing::time::add_ticks_to_game;
 use crate::states::playing::ui::ui;
+use crate::states::playing::update_player::{update_player, UpdatePlayerEvent};
 use crate::states::playing::update_positions::{
     update_positions_from_server, update_transform_from_velocity, update_transforms_from_positions,
 };
@@ -107,6 +108,7 @@ pub fn play(args: &Args) {
         .add_event::<ReleaseCreepEvent>()
         .add_event::<UpdatePositionEvent>()
         .add_event::<DestroyEntityEvent>()
+        .add_event::<UpdatePlayerEvent>()
         .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)
         .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
@@ -167,6 +169,7 @@ pub fn play(args: &Args) {
             .with_system(update_transforms_from_positions)
             .with_system(update_transform_from_velocity)
             .with_system(destroy_entities)
+            .with_system(update_player)
             .into(),
     );
 

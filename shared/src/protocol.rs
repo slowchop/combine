@@ -3,6 +3,7 @@ use crate::protocol::game_ready::GameReady;
 use crate::protocol::release_creep::ReleaseCreeps;
 use crate::protocol::request_tower_placement::RequestTowerPlacement;
 use crate::protocol::spawn_entity::SpawnEntity;
+use crate::protocol::update_player::UpdatePlayer;
 use crate::protocol::update_position::UpdatePosition;
 use crate::{Auth, JoinFriendGame};
 pub use join_random_game::JoinRandomGame;
@@ -19,6 +20,7 @@ pub mod join_random_game;
 pub mod release_creep;
 pub mod request_tower_placement;
 pub mod spawn_entity;
+pub mod update_player;
 pub mod update_position;
 
 #[derive(Protocolize)]
@@ -26,6 +28,7 @@ pub enum Protocol {
     UpdatePosition(UpdatePosition),
     DestroyEntity(DestroyEntity),
     SpawnEntity(SpawnEntity),
+    UpdatePlayer(UpdatePlayer),
     ReleaseCreeps(ReleaseCreeps),
     Auth(Auth),
     JoinRandomGame(JoinRandomGame),

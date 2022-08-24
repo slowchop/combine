@@ -142,6 +142,9 @@ pub fn receive_message_event(
                 Protocol::DestroyEntity(_) => {
                     warn!("Got a destroy entity from client");
                 }
+                Protocol::UpdatePlayer(_) => {
+                    warn!("Got an update player from client");
+                }
             }
             info!(key = ?user_key.to_u64())
         }

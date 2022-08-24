@@ -6,6 +6,7 @@ pub mod left_click;
 pub mod spawn_entities;
 pub mod time;
 pub mod ui;
+pub mod update_player;
 pub mod update_positions;
 
 use bevy::prelude::*;

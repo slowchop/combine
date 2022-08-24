@@ -1,5 +1,6 @@
 use crate::app::GameState;
 use crate::states::playing::spawn_entities::SpawnEntityEvent;
+use crate::states::playing::update_player::UpdatePlayerEvent;
 use bevy::prelude::*;
 use bevy::utils::HashSet;
 use iyes_loopless::prelude::NextState;
@@ -39,8 +40,6 @@ pub struct UpdatePositionEvent {
 #[derive(Debug)]
 pub struct DestroyEntityEvent {
     pub server_entity_id: ServerEntityId,
-    pub position: Vec3,
-    pub velocity: Vec3,
     pub how: DestroymentMethod,
 }
 
@@ -51,10 +50,10 @@ pub fn receive_message_event(
     mut release_the_creeps_events: EventWriter<ReleaseCreepEvent>,
     mut update_position_events: EventWriter<UpdatePositionEvent>,
     mut destroy_entity_events: EventWriter<DestroyEntityEvent>,
+    mut update_player_events: EventWriter<UpdatePlayerEvent>,
 ) {
     // dbg!(client.is_connected());
     for event in event_reader.iter() {
-        println!("event");
         if let MessageEvent(Channels::ServerCommand, msg) = event {
             match msg {
                 Protocol::SpawnEntity(spawn_entity) => {
@@ -103,10 +102,17 @@ pub fn receive_message_event(
                 }
                 Protocol::DestroyEntity(destroy_entity) => {
                     destroy_entity_events.send(DestroyEntityEvent {
-                        position: (*destroy_entity.position).clone().into(),
                         server_entity_id: (*destroy_entity.server_entity_id),
-                        velocity: (*destroy_entity.velocity).clone().into(),
                         how: (*destroy_entity.how),
+                    });
+                }
+                Protocol::UpdatePlayer(update_player) => {
+                    panic!("wtf?");
+                    info!("Got update plyaer event");
+                    update_player_events.send(UpdatePlayerEvent {
+                        owner: (*update_player.owner),
+                        gold: (*update_player.gold),
+                        lives: (*update_player.lives),
                     });
                 }
             }

@@ -15,6 +15,10 @@ impl Owner {
         Self(owner)
     }
 
+    pub fn other_player(&self) -> Owner {
+        Owner(1 - self.0)
+    }
+
     // Bit of a hack!
     pub fn waiting() -> Self {
         Self(42)

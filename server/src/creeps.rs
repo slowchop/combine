@@ -1,6 +1,9 @@
 use crate::release_creeps::send_message_to_game;
 use crate::state::GameId;
-use crate::{info, GameLookup, GameUserLookup, SpawnCreepsEvent, SpawnEntityEvent};
+use crate::stats::LoseALifeEvent;
+use crate::{
+    info, DestroyEntityEvent, GameLookup, GameUserLookup, SpawnCreepsEvent, SpawnEntityEvent,
+};
 use bevy_ecs::prelude::*;
 use bevy_log::warn;
 use bevy_math::{Vec2, Vec3};
@@ -74,7 +77,7 @@ pub fn spawn_creeps(
     }
 }
 
-pub fn move_along_path_and_optionally_tell_client(
+pub fn move_along_path(
     mut commands: Commands,
     time: Res<Time>,
     game_user_lookup: Res<GameUserLookup>,
@@ -82,6 +85,7 @@ pub fn move_along_path_and_optionally_tell_client(
         Entity,
         &mut Transform,
         &mut PathProgress,
+        &Owner,
         &ServerEntityId,
         &Path,
         &GameId,
@@ -89,11 +93,14 @@ pub fn move_along_path_and_optionally_tell_client(
         Option<&PathLeaveAt>,
     )>,
     mut server: Server<Protocol, Channels>,
+    mut destroy_entity_events: EventWriter<DestroyEntityEvent>,
+    mut lose_a_life_events: EventWriter<LoseALifeEvent>,
 ) {
     for (
         entity,
         mut transform,
         mut path_progress,
+        owner,
         server_entity_id,
         path,
         game_id,
@@ -135,25 +142,17 @@ pub fn move_along_path_and_optionally_tell_client(
             path_progress.current_path_target += 1;
             if path_progress.current_path_target >= path.0.len() {
                 info!("We've hit the target!!!");
-                let message = DestroyEntity::new(
-                    *server_entity_id,
-                    transform.translation,
-                    velocity,
-                    DestroymentMethod::Explosion,
-                );
-                send_message_to_game(
-                    &mut server,
-                    &game_id,
-                    &*game_user_lookup,
-                    Channels::ServerCommand,
-                    &message,
-                );
-                warn!("TODO: Send this to another system.");
-                warn!("TODO: Remove entity from server (entity and shared game)");
-                warn!("TODO: Give player some gold");
-                warn!("TODO: Lose a life");
 
-                commands.entity(entity).despawn();
+                lose_a_life_events.send(LoseALifeEvent {
+                    game_id: *game_id,
+                    who: owner.other_player(),
+                });
+
+                destroy_entity_events.send(DestroyEntityEvent {
+                    game_id: *game_id,
+                    server_entity_id: *server_entity_id,
+                    destroyment_method: DestroymentMethod::Quiet,
+                });
 
                 break;
             }

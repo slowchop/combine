@@ -44,14 +44,18 @@ pub const RELEASE_CLOCK_TIME: Ticks = Ticks(4 * TICKS_PER_SECOND as i64);
 
 pub fn shared_config() -> SharedConfig<Channels> {
     let tick_interval = Some(Duration::from_millis(MS_PER_TICK as u64));
+    let link_condition = if true {
+        Some(LinkConditionerConfig::average_condition())
+    } else {
+        None
+    };
 
-    let link_condition = None;
-    // let link_condition = Some(LinkConditionerConfig::average_condition());
     // let link_condition = Some(LinkConditionerConfig {
     //     incoming_latency: 500,
     //     incoming_jitter: 100,
     //     incoming_loss: 0.01,
     // });
+
     SharedConfig::new(
         SocketConfig::new(link_condition, None),
         CHANNEL_CONFIG,

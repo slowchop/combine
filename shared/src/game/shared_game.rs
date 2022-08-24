@@ -73,6 +73,10 @@ impl SharedGame {
         }
     }
 
+    pub fn get_player_mut(&mut self, owner: Owner) -> Option<&mut SharedPlayer> {
+        self.players.iter_mut().find(|p| p.owner == owner)
+    }
+
     pub fn client_add_entity(&mut self, server_entity_id: ServerEntityId, entity: Entity) {
         if self.entities.contains_key(&server_entity_id) {
             warn!("Tried to insert the same server entity twice");

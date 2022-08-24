@@ -28,18 +28,6 @@ pub fn update_positions_from_server(
                 continue;
             };
 
-        // let (mut position, mut velocity) = if let Ok(p) = query.get_mut(*entity) {
-        //     p
-        // } else {
-        //     warn!(
-        //         "Could not get position/vel for server position update {:?}",
-        //         update_position_event
-        //     );
-        //     continue;
-        // };
-
-        println!("Update position from server: {:?}", update_position_event);
-
         commands
             .entity(*entity)
             .insert(Position(update_position_event.position))

@@ -9,23 +9,11 @@ use naia_shared::{Property, Replicate};
 #[protocol_path = "crate::protocol::Protocol"]
 pub struct DestroyEntity {
     pub server_entity_id: Property<ServerEntityId>,
-    pub position: Property<NetVec3>,
-    pub velocity: Property<NetVec3>,
     pub how: Property<DestroymentMethod>,
 }
 
 impl DestroyEntity {
-    pub fn new(
-        server_entity_id: ServerEntityId,
-        position: Vec3,
-        velocity: Vec3,
-        how: DestroymentMethod,
-    ) -> Self {
-        DestroyEntity::new_complete(
-            server_entity_id,
-            position.into(),
-            velocity.into(),
-            how.into(),
-        )
+    pub fn new(server_entity_id: ServerEntityId, how: DestroymentMethod) -> Self {
+        DestroyEntity::new_complete(server_entity_id, how.into())
     }
 }
