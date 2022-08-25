@@ -1,3 +1,4 @@
+use crate::game::defs::TowerRef;
 use crate::game::owner::Owner;
 use crate::game::path::Path;
 use crate::game::player::SharedPlayer;
@@ -119,20 +120,6 @@ impl SharedGame {
             next + TICKS_PER_DAY
         }
     }
-
-    pub fn can_build_tower(&self, owner: &Owner, position: &Vec2, tower: &str) -> CanBuild {
-        CanBuild::Yes
-        // for (id, entity) in &self.entities {
-        //     entity.definition.
-        //
-        // }
-        // true
-    }
-}
-
-pub enum CanBuild {
-    Yes,
-    No(String),
 }
 
 #[cfg(test)]

@@ -1,3 +1,4 @@
+use crate::game::components::Tooltip;
 use crate::game::owner::Owner;
 use crate::game::shared_game::ServerEntityId;
 use bevy_ecs::prelude::Component;
@@ -126,6 +127,9 @@ pub struct EntityDef {
     pub creep: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_entity_id: Option<ServerEntityId>,
+
+    #[serde(skip)]
+    pub tooltip: Option<Tooltip>,
 }
 
 impl Serde for EntityDef {
@@ -139,6 +143,7 @@ impl Serde for EntityDef {
         self.tower.ser(writer);
         self.creep.ser(writer);
         self.server_entity_id.ser(writer);
+        // Intentionally skipping tooltip
     }
 
     fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
@@ -151,6 +156,8 @@ impl Serde for EntityDef {
         let tower: Option<String> = Serde::de(reader)?;
         let creep: Option<String> = Serde::de(reader)?;
         let server_entity_id: Option<ServerEntityId> = Serde::de(reader)?;
+        // Intentionally skipping tooltip
+
         Ok(EntityDef {
             texture,
             entity_type,
@@ -161,6 +168,7 @@ impl Serde for EntityDef {
             tower,
             creep,
             server_entity_id,
+            tooltip: None,
         })
     }
 }

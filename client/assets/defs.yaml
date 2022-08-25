@@ -2,11 +2,11 @@ levels:
   test:
     name: Hide the pain
     entities:
-    - type: guide # don't remove this :)
+    - texture: hover.png
+      type: guide
       position:
-        - 0.0
-        - 0.0
-      texture: hover.png
+      - 0.0
+      - 0.0
     - type: base
       position:
       - -20.0
@@ -65,16 +65,6 @@ levels:
       - 0.0
       - 0.0
 towers:
-  machine:
-    name: Machine Gun
-    combo: []
-    texture: TESTDIS.png
-    damage: 50.0
-    range: 5.0
-    cost: 100
-    reload: 1.0
-    instant_fire: true
-    size: 5.0
   cold:
     name: Cold
     combo:
@@ -83,22 +73,20 @@ towers:
     texture: TESTDIS.png
     damage: 50.0
     range: 1.0
+    size: 5.0
     cost: 100
     reload: 1.0
     instant_fire: true
-    size: 5.0
-  laser:
-    name: Laser
-    combo:
-    - machine
-    - flame
-    texture: tower.png
+  machine:
+    name: Machine Gun
+    combo: []
+    texture: TESTDIS.png
     damage: 50.0
     range: 5.0
+    size: 5.0
     cost: 100
     reload: 1.0
     instant_fire: true
-    size: 5.0
   flame:
     name: Flame
     combo:
@@ -107,20 +95,32 @@ towers:
     texture: tower.png
     damage: 50.0
     range: 3.0
+    size: 5.0
     cost: 100
     reload: 1.0
     instant_fire: true
-    size: 5.0
-creeps:
-  fast:
-    name: Fast
+  laser:
+    name: Laser
     combo:
-    - monster
-    - monster
-    texture: gnome.png
-    speed: 2.0
+    - machine
+    - flame
+    texture: tower.png
+    damage: 50.0
+    range: 5.0
+    size: 5.0
     cost: 100
-    health: 100.0
+    reload: 1.0
+    instant_fire: true
+creeps:
+  strong:
+    name: Strong
+    combo:
+    - robot
+    - robot
+    texture: gnome.png
+    speed: 1.0
+    cost: 100
+    health: 250.0
   robot:
     name: Robot
     combo: []
@@ -135,25 +135,29 @@ creeps:
     speed: 1.0
     cost: 100
     health: 100.0
-  strong:
-    name: Strong
+  fast:
+    name: Fast
     combo:
-    - robot
-    - robot
+    - monster
+    - monster
     texture: gnome.png
-    speed: 1.0
+    speed: 2.0
     cost: 100
-    health: 250.0
+    health: 100.0
 textures:
-  gnome.png:
+  tree.png:
     size:
-    - 263.0
-    - 582.0
-  grass.png:
+    - 984.0
+    - 1120.0
+  Outline.png:
     size:
-    - 256.0
-    - 256.0
+    - 360.0
+    - 531.0
   ground.png:
+    size:
+    - 256.0
+    - 256.0
+  hover.png:
     size:
     - 256.0
     - 256.0
@@ -161,39 +165,43 @@ textures:
     size:
     - 4096.0
     - 4096.0
-  TESTDIS.png:
+  tooltip.png:
     size:
-    - 572.0
-    - 600.0
-  tree.png:
-    size:
-    - 984.0
-    - 1120.0
-  Yellow.png:
-    size:
-    - 578.0
-    - 600.0
+    - 256.0
+    - 256.0
   Blue.png:
     size:
     - 572.0
     - 600.0
-  hover.png:
-    size:
-    - 256.0
-    - 256.0
-  AAAAA.png:
-    size:
-    - 352.0
-    - 523.0
   tower.png:
     size:
     - 280.0
     - 311.0
-  Outline.png:
+  gnome.png:
     size:
-    - 360.0
-    - 531.0
+    - 263.0
+    - 582.0
+  AAAAA.png:
+    size:
+    - 352.0
+    - 523.0
+  Yellow.png:
+    size:
+    - 578.0
+    - 600.0
+  grass.png:
+    size:
+    - 256.0
+    - 256.0
   harold.png:
     size:
     - 846.0
     - 1199.0
+  click-tooltip.png:
+    size:
+    - 256.0
+    - 256.0
+  TESTDIS.png:
+    size:
+    - 572.0
+    - 600.0

@@ -5,7 +5,7 @@ use crate::states::playing::camera::GameCamera;
 use crate::states::playing::creeps::release_creeps;
 use crate::states::playing::destroy_entities::destroy_entities;
 use crate::states::playing::game_over::{game_over, game_over_message};
-use crate::states::playing::left_click::left_click;
+use crate::states::playing::left_click::mouse_action;
 use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::states::playing::time::add_ticks_to_game;
 use crate::states::playing::ui::ui;
@@ -133,6 +133,8 @@ pub fn play(args: &Args) {
         .add_system_to_stage(NaiaStage::Tick, tick)
         .add_system_to_stage(NaiaStage::Tick, add_ticks_to_game);
 
+    app.add_startup_system(init);
+
     // Splash
     app.add_enter_system(GameState::Splash, splash::init);
     app.add_system_set(
@@ -173,12 +175,11 @@ pub fn play(args: &Args) {
     app.add_enter_system(GameState::LoadingLevel, loading_level::init);
 
     // Playing
-    app.add_enter_system(GameState::Playing, init);
     app.add_exit_system(GameState::Playing, disconnected::init);
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::Playing)
-            .with_system(left_click)
+            .with_system(mouse_action)
             .with_system(move_camera)
             .with_system(spawn_entities)
             .with_system(release_creeps)
