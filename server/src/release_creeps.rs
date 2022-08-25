@@ -57,6 +57,9 @@ pub fn tell_clients_to_release_the_creeps(
                 continue;
             }
         };
+        if game.winner.is_some() {
+            continue;
+        }
 
         // Iterate over entities in the game.
         // Work out which ones are creeps.

@@ -1,9 +1,10 @@
-use crate::net::{DestroyEntityEvent, ReleaseCreepEvent, UpdatePositionEvent};
+use crate::net::{DestroyEntityEvent, GameOverEvent, ReleaseCreepEvent, UpdatePositionEvent};
 use crate::settings::Settings;
 use crate::states::disconnected;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::creeps::release_creeps;
 use crate::states::playing::destroy_entities::destroy_entities;
+use crate::states::playing::game_over::{game_over, game_over_message};
 use crate::states::playing::left_click::left_click;
 use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::states::playing::time::add_ticks_to_game;
@@ -119,6 +120,7 @@ pub fn play(args: &Args) {
         .add_event::<UpdatePositionEvent>()
         .add_event::<DestroyEntityEvent>()
         .add_event::<UpdatePlayerEvent>()
+        .add_event::<GameOverEvent>()
         .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)
         .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
@@ -167,6 +169,7 @@ pub fn play(args: &Args) {
 
     // Playing
     app.add_enter_system(GameState::Playing, init);
+    app.add_exit_system(GameState::Playing, disconnected::init);
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::Playing)
@@ -180,6 +183,8 @@ pub fn play(args: &Args) {
             .with_system(update_transform_from_velocity)
             .with_system(destroy_entities)
             .with_system(update_player)
+            .with_system(game_over)
+            .with_system(game_over_message)
             .into(),
     );
 

@@ -7,6 +7,7 @@ use iyes_loopless::prelude::NextState;
 use naia_bevy_client::events::{InsertComponentEvent, MessageEvent, UpdateComponentEvent};
 use naia_bevy_client::{Client, CommandsExt};
 use shared::game::destroyment_method::DestroymentMethod;
+use shared::game::owner::Owner;
 use shared::game::shared_game::{ServerEntityId, SharedGame};
 use shared::game::ClientGameInfo;
 use shared::protocol::release_creep::ReleaseCreeps;
@@ -19,8 +20,23 @@ pub fn connect_event(client: Client<Protocol, Channels>) {
     println!("Client connected {}", client.server_address());
 }
 
-pub fn disconnect_event(client: Client<Protocol, Channels>, mut commands: Commands) {
-    println!("Client disconnected");
+pub fn disconnect_event(
+    client: Client<Protocol, Channels>,
+    mut commands: Commands,
+    game: Query<&SharedGame>,
+) {
+    let game = if let Ok(game) = game.get_single() {
+        game
+    } else {
+        println!("Client disconnected, but we have no game.");
+        return;
+    };
+    if game.winner.is_some() {
+        println!("Client disconnected, but the game is over.");
+        return;
+    }
+
+    println!("Client disconnected and we're in a game! Show the disconnect screen.");
     commands.insert_resource(NextState(GameState::Disconnected));
 }
 
@@ -44,6 +60,11 @@ pub struct DestroyEntityEvent {
     pub how: DestroymentMethod,
 }
 
+#[derive(Debug)]
+pub struct GameOverEvent {
+    pub winner: Owner,
+}
+
 pub fn receive_message_event(
     mut commands: Commands,
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
@@ -52,6 +73,7 @@ pub fn receive_message_event(
     mut update_position_events: EventWriter<UpdatePositionEvent>,
     mut destroy_entity_events: EventWriter<DestroyEntityEvent>,
     mut update_player_events: EventWriter<UpdatePlayerEvent>,
+    mut game_over_events: EventWriter<GameOverEvent>,
 ) {
     // dbg!(client.is_connected());
     for event in event_reader.iter() {
@@ -88,7 +110,7 @@ pub fn receive_message_event(
                     commands.insert_resource(NextState(GameState::LoadingLevel));
                 }
                 Protocol::RequestTowerPlacement(_) => {
-                    todo!("place tower")
+                    warn!("Got a request tower placement message, but we are not a server");
                 }
                 Protocol::ReleaseCreeps(_) => {
                     info!("got a release the creeps network message.");
@@ -114,7 +136,12 @@ pub fn receive_message_event(
                         lives: (*update_player.lives),
                     });
                 }
-                Protocol::GameOver(_) => {}
+                Protocol::GameOver(game_over) => {
+                    info!("Got a game over message");
+                    game_over_events.send(GameOverEvent {
+                        winner: *game_over.winner,
+                    });
+                }
             }
         }
     }

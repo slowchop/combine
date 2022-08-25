@@ -41,6 +41,9 @@ pub fn spawn_creeps(
                 continue;
             }
         };
+        if game.winner.is_some() {
+            continue;
+        }
 
         let spawn_points = &game.spawn_points;
         if spawn_points.len() != 2 {

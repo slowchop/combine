@@ -72,8 +72,7 @@ fn fragment(in: FragmentInput) -> @location(0) vec4<f32> {
     var sampled = textureSample(base_color_texture, base_color_sampler, in.uv);
 
     // If the colour is #ff007f we change it to the team colour.
-//    if (sampled.r == 1.0 && sampled.g == 0.0 && sampled.b == 0.5 && sampled.a == 1.0) {
-//    if (sampled.r == 1.0 && sampled.b > 0.48 && sampled.b < 0.52 && sampled.g == 0.0) {
+    // TODO: Can't match the colour properly...
     if (sampled.r == 1.0 && sampled.g == 0.0 && sampled.b > 0.2 && sampled.b < 0.5) {
         if (owner == 0) {
             sampled = vec4<f32>(1.0, 1.0, 0.0, sampled.a);

@@ -29,14 +29,15 @@ pub fn lose_a_life(
     mut game_over_events: EventWriter<GameOverEvent>,
 ) {
     for lose_a_life_event in lose_a_life_events.iter() {
-        dbg!(lose_a_life_event);
-
         let game = if let Some(game) = game_lookup.0.get_mut(&lose_a_life_event.game_id) {
             game
         } else {
             warn!("No game when losing a life: {:?}", lose_a_life_event);
             continue;
         };
+        if game.winner.is_some() {
+            continue;
+        }
 
         let player = if let Some(player) = game.get_player_mut(lose_a_life_event.who) {
             player
@@ -46,11 +47,10 @@ pub fn lose_a_life(
         };
 
         if player.lives == 0 {
-            todo!();
-            // game_over_events.send(GameOverEvent {
-            //     game_id: lose_a_life_event.game_id,
-            //     winner: lose_a_life_event.who.other(),
-            // });
+            game_over_events.send(GameOverEvent {
+                game_id: lose_a_life_event.game_id,
+                winner: lose_a_life_event.who.other_player(),
+            });
             continue;
         }
 
