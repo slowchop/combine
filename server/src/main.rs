@@ -1,5 +1,6 @@
 mod create_games;
 mod creeps;
+mod damage;
 mod destroy;
 mod events;
 mod game_over;
@@ -17,6 +18,7 @@ mod towers;
 use crate::create_games::create_games;
 use crate::create_games::CreateGameEvent;
 use crate::creeps::{move_along_path, spawn_creeps};
+use crate::damage::damage_creeps;
 use crate::destroy::{destroy_entities, DestroyEntityEvent};
 use crate::game_over::game_over;
 use crate::new_entities::{add_new_entities_to_game, NewEntityEvent};
@@ -25,7 +27,7 @@ use crate::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::state::{GameLookup, GameUserLookup, PlayerLookup, PlayerQueue};
 use crate::stats::{lose_a_life, GameOverEvent, LoseALifeEvent};
 use crate::time::{add_ticks_to_games, emit_time_events, ReleaseCreepsEvent, SpawnCreepsEvent};
-use crate::towers::shoot_towers;
+use crate::towers::{shoot_towers, DamageCreepEvent};
 use bevy_app::{App, ScheduleRunnerPlugin};
 use bevy_core::CorePlugin;
 use bevy_ecs::prelude::*;
@@ -89,6 +91,7 @@ fn main() {
         .add_event::<DestroyEntityEvent>()
         .add_event::<LoseALifeEvent>()
         .add_event::<GameOverEvent>()
+        .add_event::<DamageCreepEvent>()
         .add_startup_system(init)
         .add_system_to_stage(Stage::ReceiveEvents, events::authorization_event)
         .add_system_to_stage(Stage::ReceiveEvents, events::connection_event)
@@ -108,5 +111,6 @@ fn main() {
         .add_system(lose_a_life)
         .add_system(game_over)
         .add_system(shoot_towers)
+        .add_system(damage_creeps)
         .run();
 }

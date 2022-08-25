@@ -6,25 +6,29 @@ use bevy_time::Time;
 use bevy_transform::prelude::Transform;
 use shared::game::defs::{CreepRef, Defs, TowerRef};
 use shared::game::owner::Owner;
+use shared::game::shared_game::ServerEntityId;
 use std::time::Duration;
 
 #[derive(Component, Debug)]
-pub struct LastShot(Duration);
+pub struct LastShot(pub Duration);
+
+#[derive(Debug)]
+pub struct DamageCreepEvent {
+    pub game_id: GameId,
+    pub server_entity_id: ServerEntityId,
+    pub amount: f32,
+}
 
 pub fn shoot_towers(
+    mut commands: Commands,
     time: Res<Time>,
-    game_lookup: Res<GameLookup>,
-    mut towers: Query<(
-        &TowerRef,
-        &Transform,
-        Option<&mut LastShot>,
-        &GameId,
-        &Owner,
-    )>,
-    mut creeps: Query<(&CreepRef, &Transform, &Owner)>,
     defs: Res<Defs>,
+    game_lookup: Res<GameLookup>,
+    mut towers: Query<(&TowerRef, &Transform, &mut LastShot, &GameId, &Owner)>,
+    mut creeps: Query<(&CreepRef, &Transform, &Owner)>,
+    mut damage_creep_events: EventWriter<DamageCreepEvent>,
 ) {
-    for (tower_ref, tower_transform, maybe_last_shot, game_id, tower_owner) in towers.iter_mut() {
+    for (tower_ref, tower_transform, mut last_shot, game_id, tower_owner) in towers.iter_mut() {
         let tower = if let Some(tower) = defs.tower(&tower_ref.0) {
             tower
         } else {
@@ -32,18 +36,11 @@ pub fn shoot_towers(
             continue;
         };
 
-        let should_shoot = if let Some(last_shot) = maybe_last_shot {
-            let next_reload = last_shot.0 + Duration::from_secs_f32(tower.reload);
-            time.time_since_startup() >= next_reload
-        } else {
-            true
-        };
-
+        let next_reload = last_shot.0 + Duration::from_secs_f32(tower.reload);
+        let should_shoot = time.time_since_startup() >= next_reload;
         if !should_shoot {
             continue;
         }
-
-        println!("should shoot");
 
         let game = if let Some(game) = game_lookup.0.get(game_id) {
             game
@@ -57,33 +54,32 @@ pub fn shoot_towers(
 
         // Check if there are any towers in range. Maybe randomly run this to save CPU cycles.
         for (server_entity_id, entity) in &game.entities {
-            println!("searching for creeps in game.entities");
-
             let (creep_ref, creep_transform, creep_owner) = if let Ok(c) = creeps.get(*entity) {
                 c
             } else {
                 continue;
             };
 
-            println!("found maybe creep to shoot");
-
             if tower_owner == creep_owner {
                 continue;
             }
-
-            println!("found enemy creep to shoot");
 
             let distance = creep_transform
                 .translation
                 .distance(tower_transform.translation);
 
-            println!("Distance: {}", distance);
-
             if distance > tower.range {
                 continue;
             }
 
-            panic!("found a creep to hit!")
+            println!("Shooting!");
+            last_shot.0 = time.time_since_startup().clone();
+
+            damage_creep_events.send(DamageCreepEvent {
+                game_id: *game_id,
+                server_entity_id: *server_entity_id,
+                amount: tower.damage,
+            });
         }
     }
 }

@@ -70,7 +70,6 @@ pub fn create_games(
                     warn!("No creeps should be in a level!");
                 }
                 _ => {
-                    println!("Sending {:?} to spawn_entities", entity_def);
                     spawn_entities.send(SpawnEntityEvent {
                         game_id,
                         entity_def: entity_def.clone(),

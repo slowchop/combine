@@ -1,5 +1,7 @@
+use crate::damage::Damaged;
 use crate::new_entities::NewEntityEvent;
 use crate::state::GameId;
+use crate::towers::LastShot;
 use crate::GameLookup;
 use bevy_ecs::prelude::*;
 use bevy_log::{error, info, warn};
@@ -11,6 +13,7 @@ use shared::game::owner::Owner;
 use shared::game::path::Path;
 use shared::game::position::{vec2_to_vec3, Position};
 use shared::game::SpawnPoint;
+use std::time::Duration;
 
 #[derive(Debug, Clone)]
 pub struct SpawnEntityEvent {
@@ -115,14 +118,13 @@ pub fn spawn_entities(
                         continue;
                     }
                 };
-                let tower = match defs.tower(tower_name.as_str()) {
+                let _tower = match defs.tower(tower_name.as_str()) {
                     Some(t) => t,
                     None => {
                         warn!("Tower not found: {:?} {:?}", tower_name, entity_def);
                         continue;
                     }
                 };
-                // TODO: tower will be used for attributes.
 
                 let position = match &entity_def.position {
                     Some(p) => p,
@@ -149,10 +151,11 @@ pub fn spawn_entities(
 
                 let id = commands
                     .spawn()
-                    .insert(position)
+                    .insert(Transform::from_translation(position.0))
                     .insert(TowerRef(tower.clone()))
                     .insert(owner)
                     .insert(game_id)
+                    .insert(LastShot(Duration::ZERO))
                     .id();
 
                 created_entity = Some(id);
@@ -187,6 +190,7 @@ pub fn spawn_entities(
                         continue;
                     }
                 };
+                info!(?creep, "Spawning creep...");
 
                 let id = commands
                     .spawn()
@@ -195,6 +199,7 @@ pub fn spawn_entities(
                     .insert(owner)
                     .insert(game_id)
                     .insert(Speed(creep.speed))
+                    .insert(Damaged(0.))
                     .id();
 
                 created_entity = Some(id);

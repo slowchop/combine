@@ -58,7 +58,7 @@ pub fn move_camera(
         }
 
         game_camera.zoom += zoom * game_camera.zoom * time.delta_seconds();
-        if game_camera.zoom < 10.0 {
+        if game_camera.zoom < 1.0 {
             game_camera.zoom += game_camera.zoom * 3.0 * time.delta_seconds();
         }
         if game_camera.zoom > 100.0 {

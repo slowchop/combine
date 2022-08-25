@@ -115,7 +115,7 @@ pub fn spawn_entities(
         }
 
         let mesh = match entity_def.entity_type {
-            EntityType::Ground => Mesh::from(shape::Plane { size: 10.0 }),
+            EntityType::Ground => Mesh::from(shape::Plane { size: 10000.0 }),
             _ => Mesh::from(BottomQuad {
                 size: Vec2::new(1., 1.),
             }),

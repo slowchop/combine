@@ -88,9 +88,10 @@ pub struct Creep {
     pub texture: String,
     pub speed: f32,
     pub cost: u32,
+    pub health: f32,
 }
 
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct CreepRef(pub String);
 
 #[derive(Debug, Serialize, Deserialize)]

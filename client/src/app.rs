@@ -22,6 +22,7 @@ use crate::{
     Transform, Vec3, WindowDescriptor,
 };
 use bevy::prelude::*;
+use bevy::render::render_resource::SamplerDescriptor;
 use bevy::render::texture::ImageSettings;
 use bevy::window::PresentMode;
 use bevy_egui::EguiPlugin;
@@ -76,6 +77,8 @@ pub fn play(args: &Args) {
         settings.start_multiplayer_immediately = true;
     }
 
+    let image_settings = ImageSettings::default_nearest();
+
     app.insert_resource(WindowDescriptor {
         resizable: false,
         width: 1024f32,
@@ -92,7 +95,7 @@ pub fn play(args: &Args) {
     .insert_resource(settings)
     .insert_resource(Defs::load())
     .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
-    // .insert_resource(ImageSettings::default_nearest())
+    .insert_resource(image_settings)
     .insert_resource(AmbientLight {
         color: Color::WHITE,
         brightness: 1.0,

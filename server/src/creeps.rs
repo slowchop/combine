@@ -58,8 +58,8 @@ pub fn spawn_creeps(
             println!("Spawn point! {:?} {:?}", position, owner);
 
             // 20 creeps for each player, make a little grid.
-            for x in 0..3 {
-                for y in 0..3 {
+            for x in 0..1 {
+                for y in 0..1 {
                     let pos = *position + Vec2::new(x as f32 * 3.0, y as f32 * 3.0);
                     let spawn_entity_event = SpawnEntityEvent {
                         game_id,

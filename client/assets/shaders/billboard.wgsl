@@ -73,7 +73,7 @@ fn fragment(in: FragmentInput) -> @location(0) vec4<f32> {
 
     // If the colour is #ff007f we change it to the team colour.
     // TODO: Can't match the colour properly...
-    if (sampled.r == 1.0 && sampled.g == 0.0 && sampled.b > 0.2 && sampled.b < 0.5) {
+    if (sampled.r == 1.0 && sampled.g == 0.0 && sampled.b == 0.0) {
         if (owner == 0) {
             sampled = vec4<f32>(1.0, 1.0, 0.0, sampled.a);
         } else if (owner == 1) {

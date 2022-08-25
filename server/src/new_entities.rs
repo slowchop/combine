@@ -2,7 +2,7 @@ use crate::release_creeps::send_message_to_game;
 use crate::state::GameId;
 use crate::{GameLookup, GameUserLookup};
 use bevy_ecs::prelude::*;
-use bevy_log::warn;
+use bevy_log::{info, warn};
 use naia_bevy_server::Server;
 use shared::game::defs::EntityDef;
 use shared::game::shared_game::ServerEntityId;
@@ -41,6 +41,8 @@ pub fn add_new_entities_to_game(
         commands
             .entity(new_entity_event.entity)
             .insert(server_entity_id);
+
+        info!(?server_entity_id, "New entity created on server...");
 
         let users = match game_user_lookup.get_game_users(&new_entity_event.game_id) {
             Some(u) => u,
