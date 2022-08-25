@@ -49,16 +49,6 @@ levels:
       position:
       - -25.0
       - -2.0
-    - texture: Yellow.png
-      type: sprite
-      position:
-      - 0.0
-      - 0.0
-    - texture: Blue.png
-      type: sprite
-      position:
-        - 3.0
-        - 0.0
     - texture: tree.png
       type: sprite
       position:
@@ -73,6 +63,28 @@ towers:
   machine:
     name: Machine Gun
     combo: []
+    texture: TESTDIS.png
+    damage: 50.0
+    range: 5.0
+    cost: 100
+    reload: 1.0
+    instant_fire: true
+  cold:
+    name: Cold
+    combo:
+    - machine
+    - machine
+    texture: TESTDIS.png
+    damage: 50.0
+    range: 1.0
+    cost: 100
+    reload: 1.0
+    instant_fire: true
+  laser:
+    name: Laser
+    combo:
+    - machine
+    - flame
     texture: tower.png
     damage: 50.0
     range: 5.0
@@ -90,34 +102,28 @@ towers:
     cost: 100
     reload: 1.0
     instant_fire: true
-  cold:
-    name: Cold
-    combo:
-    - machine
-    - machine
-    texture: tower.png
-    damage: 50.0
-    range: 1.0
-    cost: 100
-    reload: 1.0
-    instant_fire: true
-  laser:
-    name: Laser
-    combo:
-    - machine
-    - flame
-    texture: tower.png
-    damage: 50.0
-    range: 5.0
-    cost: 100
-    reload: 1.0
-    instant_fire: true
 creeps:
+  fast:
+    name: Fast
+    combo:
+    - monster
+    - monster
+    texture: gnome.png
+    speed: 2.0
+    cost: 100
+    health: 100.0
   robot:
     name: Robot
     combo: []
     texture: gnome.png
     speed: 10.0
+    cost: 100
+    health: 100.0
+  monster:
+    name: Monster
+    combo: []
+    texture: gnome.png
+    speed: 1.0
     cost: 100
     health: 100.0
   strong:
@@ -129,36 +135,24 @@ creeps:
     speed: 1.0
     cost: 100
     health: 250.0
-  fast:
-    name: Fast
-    combo:
-    - monster
-    - monster
-    texture: gnome.png
-    speed: 2.0
-    cost: 100
-    health: 100.0
-  monster:
-    name: Monster
-    combo: []
-    texture: gnome.png
-    speed: 1.0
-    cost: 100
-    health: 100.0
 textures:
-  Outline.png:
-    size:
-    - 360.0
-    - 531.0
   gnome.png:
     size:
     - 263.0
     - 582.0
-  tower.png:
+  grass.png:
     size:
-    - 280.0
-    - 311.0
-  Blue.png:
+    - 256.0
+    - 256.0
+  ground.png:
+    size:
+    - 256.0
+    - 256.0
+  props.png:
+    size:
+    - 4096.0
+    - 4096.0
+  TESTDIS.png:
     size:
     - 572.0
     - 600.0
@@ -166,31 +160,31 @@ textures:
     size:
     - 984.0
     - 1120.0
-  AAAAA.png:
-    size:
-    - 352.0
-    - 523.0
-  grass.png:
-    size:
-    - 256.0
-    - 256.0
-  harold.png:
-    size:
-    - 846.0
-    - 1199.0
-  ground.png:
-    size:
-    - 256.0
-    - 256.0
   Yellow.png:
     size:
     - 578.0
     - 600.0
-  props.png:
+  Blue.png:
     size:
-    - 4096.0
-    - 4096.0
+    - 572.0
+    - 600.0
   hover.png:
     size:
     - 256.0
     - 256.0
+  AAAAA.png:
+    size:
+    - 352.0
+    - 523.0
+  tower.png:
+    size:
+    - 280.0
+    - 311.0
+  Outline.png:
+    size:
+    - 360.0
+    - 531.0
+  harold.png:
+    size:
+    - 846.0
+    - 1199.0
