@@ -2,6 +2,11 @@ levels:
   test:
     name: Hide the pain
     entities:
+    - type: guide
+      position:
+        - 0.0
+        - 0.0
+      texture: hover.png
     - type: base
       position:
       - -20.0

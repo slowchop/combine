@@ -245,6 +245,7 @@ pub enum EntityType {
     Path,
     Tower,
     Creep,
+    Guide,
 }
 
 impl Default for EntityType {

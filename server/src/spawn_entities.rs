@@ -50,6 +50,7 @@ pub fn spawn_entities(
         let mut created_entity = None;
         match entity_def.entity_type {
             // Ignore these.
+            EntityType::Guide => {}
             EntityType::Sprite => {}
             EntityType::Ground => {}
             EntityType::Base => {}

@@ -1,5 +1,6 @@
 use crate::app::{GameState, MyRaycastSet};
 use crate::states::playing::bottom_quad::BottomQuad;
+use crate::states::playing::left_click::Guide;
 use crate::{
     shape, AlphaMode, AssetServer, Assets, BillboardMaterial, Color, Commands, EventReader, Handle,
     MaterialMeshBundle, Mesh, Quat, Res, ResMut, StandardMaterial, Vec2,
@@ -116,6 +117,7 @@ pub fn spawn_entities(
 
         let mesh = match entity_def.entity_type {
             EntityType::Ground => Mesh::from(shape::Plane { size: 10000.0 }),
+            EntityType::Guide => Mesh::from(shape::Plane { size: 10.0 }),
             _ => Mesh::from(BottomQuad {
                 size: Vec2::new(1., 1.),
             }),
@@ -190,6 +192,11 @@ pub fn spawn_entities(
             .level_entity_transform(&texture, &entity_def.position.as_ref().map(|p| p.into()))
             .map(|mut transform| match entity_def.entity_type {
                 EntityType::Ground => transform,
+                EntityType::Guide => {
+                    let pos = transform.translation + Vec3::new(0.5, 0.5, 0.5);
+                    transform.translation = pos;
+                    transform
+                }
                 _ => {
                     transform.rotation = Quat::from_rotation_x(TAU * -0.125);
                     transform
@@ -214,6 +221,9 @@ pub fn spawn_entities(
                 entity
                     .insert(Name::new("Ground"))
                     .insert(RayCastMesh::<MyRaycastSet>::default());
+            }
+            EntityType::Guide => {
+                entity.insert(Name::new("Guide")).insert(Guide);
             }
             EntityType::Tower => {
                 let owner = if let Some(o) = entity_def.owner {
