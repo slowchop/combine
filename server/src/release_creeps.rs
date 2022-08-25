@@ -28,7 +28,6 @@ pub fn tell_clients_to_release_the_creeps(
     creep_query: Query<(&ServerEntityId, &Transform, &Owner), (With<CreepRef>, Without<Path>)>,
 ) {
     for release_creeps_event in release_creeps_events.iter() {
-        println!("Trying to sending release creeps event!");
         let users = match game_user_lookup.get_game_users(&release_creeps_event.game_id) {
             Some(u) => u,
             None => {
@@ -77,8 +76,6 @@ pub fn tell_clients_to_release_the_creeps(
             };
             debug_assert_eq!(server_entity_id, server_entity_id_2);
 
-            dbg!(&game.paths.len());
-
             let path = if let Some(p) = game.paths.get(owner) {
                 p
             } else {
@@ -86,7 +83,6 @@ pub fn tell_clients_to_release_the_creeps(
                 continue;
             };
 
-            println!("Inserting path components to creep {:?}", &path);
             commands
                 .entity(*entity)
                 .insert(path.clone())

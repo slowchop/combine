@@ -49,15 +49,15 @@ levels:
       position:
       - -25.0
       - -2.0
-    - texture: tree.png
+    - texture: Outline.png
       type: sprite
       position:
       - 0.0
       - 0.0
-    - texture: props.png
+    - texture: AAAAA.png
       type: sprite
       position:
-      - 1.0
+      - 2.0
       - 1.0
     - texture: tree.png
       type: sprite
@@ -99,6 +99,8 @@ towers:
     damage: 3.0
     range: 3.0
     cost: 100
+    reload: 1.0
+    instant_fire: true
   cold:
     name: Cold
     combo:
@@ -108,13 +110,8 @@ towers:
     damage: 1.0
     range: 1.0
     cost: 100
-  machine:
-    name: Machine Gun
-    combo: []
-    texture: tower.png
-    damage: 1.0
-    range: 1.0
-    cost: 100
+    reload: 1.0
+    instant_fire: true
   laser:
     name: Laser
     combo:
@@ -124,12 +121,37 @@ towers:
     damage: 1.0
     range: 1.0
     cost: 100
+    reload: 1.0
+    instant_fire: true
+  machine:
+    name: Machine Gun
+    combo: []
+    texture: tower.png
+    damage: 1.0
+    range: 1.0
+    cost: 100
+    reload: 1.0
+    instant_fire: true
 creeps:
+  strong:
+    name: Strong
+    combo:
+    - robot
+    - robot
+    texture: gnome.png
+    speed: 1.0
+    cost: 100
   robot:
     name: Robot
     combo: []
     texture: gnome.png
     speed: 10.0
+    cost: 100
+  monster:
+    name: Monster
+    combo: []
+    texture: gnome.png
+    speed: 1.0
     cost: 100
   fast:
     name: Fast
@@ -139,37 +161,15 @@ creeps:
     texture: gnome.png
     speed: 2.0
     cost: 100
-  strong:
-    name: Strong
-    combo:
-    - robot
-    - robot
-    texture: gnome.png
-    speed: 1.0
-    cost: 100
-  monster:
-    name: Monster
-    combo: []
-    texture: gnome.png
-    speed: 1.0
-    cost: 100
 textures:
-  grass.png:
+  props.png:
     size:
-    - 256.0
-    - 256.0
-  gnome.png:
+    - 4096.0
+    - 4096.0
+  AAAAA.png:
     size:
-    - 263.0
-    - 582.0
-  hover.png:
-    size:
-    - 256.0
-    - 256.0
-  tower.png:
-    size:
-    - 280.0
-    - 311.0
+    - 352.0
+    - 523.0
   tree.png:
     size:
     - 984.0
@@ -178,7 +178,23 @@ textures:
     size:
     - 846.0
     - 1199.0
-  props.png:
+  Outline.png:
     size:
-    - 4096.0
-    - 4096.0
+    - 360.0
+    - 531.0
+  grass.png:
+    size:
+    - 256.0
+    - 256.0
+  gnome.png:
+    size:
+    - 263.0
+    - 582.0
+  tower.png:
+    size:
+    - 280.0
+    - 311.0
+  hover.png:
+    size:
+    - 256.0
+    - 256.0

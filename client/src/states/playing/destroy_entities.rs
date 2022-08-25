@@ -25,7 +25,6 @@ pub fn destroy_entities(
             return;
         };
 
-        info!("Destroying entity {:?}", entity);
         commands.entity(*entity).despawn();
     }
 }

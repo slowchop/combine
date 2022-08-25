@@ -27,7 +27,6 @@ pub fn add_new_entities_to_game(
     for new_entity_event in new_entities_events.iter() {
         let mut entity_def = new_entity_event.entity_def.clone();
 
-        println!("new entity event {:?}", new_entity_event.entity);
         let game_id = new_entity_event.game_id;
         let game = match game_lookup.0.get_mut(&game_id) {
             Some(g) => g,

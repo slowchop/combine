@@ -139,12 +139,9 @@ pub fn move_along_path(
                 break;
             }
 
-            println!("Creep had hit a waypoint");
             movement_this_frame -= distance_left;
             path_progress.current_path_target += 1;
             if path_progress.current_path_target >= path.0.len() {
-                info!("We've hit the target!!!");
-
                 lose_a_life_events.send(LoseALifeEvent {
                     game_id: *game_id,
                     who: owner.other_player(),
@@ -159,10 +156,8 @@ pub fn move_along_path(
                 break;
             }
 
-            println!("Move on same path {:?}", transform.translation);
             path_progress.target_position = path.0[path_progress.current_path_target].clone();
             need_to_broadcast = true;
-            // TODO: Tell client new position/velocity.
         }
 
         if need_to_broadcast {
@@ -177,8 +172,4 @@ pub fn move_along_path(
             );
         }
     }
-
-    // let distance = path_progress
-    //     .previous_position
-    //     .distance(path_progress.target_position);
 }

@@ -41,8 +41,6 @@ pub fn destroy_entities(
             return;
         };
 
-        info!("Destroying entity {:?}", entity);
-
         let message = DestroyEntity::new(
             destroy_entity_event.server_entity_id,
             destroy_entity_event.destroyment_method,

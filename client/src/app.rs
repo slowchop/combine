@@ -92,7 +92,7 @@ pub fn play(args: &Args) {
     .insert_resource(settings)
     .insert_resource(Defs::load())
     .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
-    .insert_resource(ImageSettings::default_nearest())
+    // .insert_resource(ImageSettings::default_nearest())
     .insert_resource(AmbientLight {
         color: Color::WHITE,
         brightness: 1.0,

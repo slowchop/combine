@@ -12,6 +12,7 @@ mod state;
 mod stats;
 mod tick;
 mod time;
+mod towers;
 
 use crate::create_games::create_games;
 use crate::create_games::CreateGameEvent;
@@ -24,6 +25,7 @@ use crate::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::state::{GameLookup, GameUserLookup, PlayerLookup, PlayerQueue};
 use crate::stats::{lose_a_life, GameOverEvent, LoseALifeEvent};
 use crate::time::{add_ticks_to_games, emit_time_events, ReleaseCreepsEvent, SpawnCreepsEvent};
+use crate::towers::shoot_towers;
 use bevy_app::{App, ScheduleRunnerPlugin};
 use bevy_core::CorePlugin;
 use bevy_ecs::prelude::*;
@@ -46,6 +48,14 @@ pub struct Args {}
 
 fn main() {
     info!("Server starting...");
+    let _guard = sentry::init((
+        "https://db16146d2a8743db88796811d9cb150c@o1376616.ingest.sentry.io/6686130",
+        sentry::ClientOptions {
+            release: sentry::release_name!(),
+            ..Default::default()
+        },
+    ));
+
     let args = Args::parse();
 
     let server_config = ServerConfig {
@@ -97,5 +107,6 @@ fn main() {
         .add_system(destroy_entities)
         .add_system(lose_a_life)
         .add_system(game_over)
+        .add_system(shoot_towers)
         .run();
 }

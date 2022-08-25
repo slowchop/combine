@@ -18,7 +18,7 @@ shared = { path = "../shared" }
 naia-bevy-client = { path = "../../naia/adapters/bevy/client" }
 #naia-bevy-client = { git = "https://github.com/naia-lib/naia", rev = "397f2c4586f0e43e50e97363e9381a79eaec618b" }
 
-bevy = "0.8.0"
+bevy = "0.8.1"
 bevy_egui = "0.15.1"
 bevy-inspector-egui = "0.12.1"
 iyes_loopless = "0.7.1"

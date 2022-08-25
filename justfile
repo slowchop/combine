@@ -12,12 +12,25 @@ build_client_release:
 
 build_client_windows:
     cd client && cargo build --release --target x86_64-pc-windows-gnu --features shared/prod
-    rm -rf TowerCombo
-    mkdir TowerCombo
+    rm -rf tmp
+    mkdir -p tmp/TowerCombo
+    cp deploy/WIN-README.txt tmp/
     cp target/x86_64-pc-windows-gnu/release/towercombo.exe TowerCombo/TowerCombo.exe
     cp -r client/assets TowerCombo
     zip -r TowerCombo-Windows.zip TowerCombo
 
+build_client_mac:
+    cd client && cargo build --release --target x86_64-apple-darwin --features shared/prod
+
+# https://wapl.es/rust/2019/02/17/rust-cross-compile-linux-to-macos.html
+build_client_mac_old:
+    PATH="$HOME/src/osxcross/target/bin:$PATH" \
+    CC=o64-clang \
+    CXX=o64-clang++ \
+    LIBZ_SYS_STATIC=1 && \
+    echo $PATH && \
+    cd client && \
+    cargo build --release --target x86_64-apple-darwin --features shared/prod
 
 web_clean:
     rm -fr web/*wasm* web/*.js web/*.ts assets
@@ -58,3 +71,6 @@ server_deploy_local:
     $HOME/.cargo/bin/cargo build --release --package server --features use-udp --features shared/prod
     sudo systemctl restart towercombo.service
     journalctl -f
+
+textures:
+    cd client && cargo run --package towercombo --features shared/dev -- textures

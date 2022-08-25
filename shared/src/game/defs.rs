@@ -74,9 +74,11 @@ pub struct Tower {
     pub damage: f32,
     pub range: f32,
     pub cost: u32,
+    pub reload: f32,
+    pub instant_fire: bool,
 }
 
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct TowerRef(pub String);
 
 #[derive(Component, Debug, Clone, Serialize, Deserialize)]
