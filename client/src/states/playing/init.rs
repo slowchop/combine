@@ -1,9 +1,12 @@
+use crate::states::playing::left_click::Selected;
 use bevy::prelude::*;
 
 #[derive(Component)]
 pub struct HoverText;
 
 pub fn init(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.insert_resource(Selected::Nothing);
+
     commands
         .spawn_bundle(
             TextBundle::from_section(

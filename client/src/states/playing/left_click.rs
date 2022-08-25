@@ -33,8 +33,11 @@ pub enum HoveringOn {
 /// If this component does not exist, nothing is selected.
 #[derive(Component, Debug)]
 pub enum Selected {
+    Nothing,
+
     /// One tower is clicked on and waiting for a second tower.
     OneTowerForCombo(ServerEntityId),
+
     /// A second tower is selected for a combo.
     ///
     /// This should show a confirmation thing.
@@ -60,15 +63,14 @@ enum SetGuideVisibility {
 
 #[derive(Debug)]
 enum OnClick {
+    Nothing,
+    SetSelected(Selected),
     BuildBaseTower,
-    // SetSelected(Selected),
-    StartFirstCombo(ServerEntityId),
     BuildCombinedTower {
         tower_1: ServerEntityId,
         tower_2: ServerEntityId,
         tower_ref: TowerRef,
     },
-    No,
 }
 
 #[derive(Debug)]
@@ -83,7 +85,7 @@ impl SetGuide {
         Self {
             visibility: SetGuideVisibility::Off,
             position: SetGuidePosition::Normal,
-            on_click: OnClick::No,
+            on_click: OnClick::Nothing,
         }
     }
 }
@@ -100,7 +102,7 @@ pub fn mouse_action(
         (&mut Transform, &Handle<BillboardMaterial>),
         (With<Guide>, Without<TowerRef>),
     >,
-    mut selected: Query<&mut Selected>,
+    mut selected: ResMut<Selected>,
     camera_query: Query<(&GlobalTransform, &Camera)>,
     mut hover_text_query: Query<(&mut Style, &mut Text), (With<HoverText>)>,
 ) {
@@ -145,8 +147,8 @@ pub fn mouse_action(
 
     let mut set_guide = SetGuide::new();
     let mut set_text = None;
-    match selected.get_single_mut().as_deref_mut() {
-        Err(_) => {
+    match *selected {
+        Selected::Nothing => {
             // Nothing selected
             if let HoveringOn::Tower(next_tower_id, next_tower_pos) = hovering_on {
                 // We're hovering on the first tower, suggest to combo.
@@ -154,7 +156,7 @@ pub fn mouse_action(
                 set_guide = SetGuide {
                     visibility: SetGuideVisibility::Good,
                     position: SetGuidePosition::Lock(next_tower_pos),
-                    on_click: OnClick::No,
+                    on_click: OnClick::SetSelected(Selected::OneTowerForCombo(next_tower_id)),
                 };
             } else {
                 // Hovering on nothing.
@@ -167,10 +169,10 @@ pub fn mouse_action(
             }
         }
 
-        Ok(Selected::OneTowerForCombo(tower_1_id)) => {
+        Selected::OneTowerForCombo(tower_1_id) => {
             // Already have one tower selected.
             if let HoveringOn::Tower(next_tower_id, next_tower_pos) = hovering_on {
-                if tower_1_id == &next_tower_id {
+                if tower_1_id == next_tower_id {
                     // guide_position = SetGuidePosition::Off;
                 } else {
                     // TODO: Work out if the combo is OK
@@ -217,17 +219,17 @@ pub fn mouse_action(
         return;
     }
 
-    todo!();
     match set_guide.on_click {
-        OnClick::No => {}
+        OnClick::Nothing => {}
         OnClick::BuildBaseTower => {
-            // commands.spawn().insert()
-
             let place_tower = RequestTowerPlacement::new(position, "machine", 1230);
             client.send_message(Channels::PlayerCommand, &place_tower);
         }
-        OnClick::BuildCombinedTower { .. } => {
+        OnClick::SetSelected(s) => {
             todo!();
+        }
+        OnClick::BuildCombinedTower { .. } => {
+            todo!()
         }
     }
 
