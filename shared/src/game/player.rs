@@ -12,10 +12,10 @@ pub struct SharedPlayer {
 }
 
 impl SharedPlayer {
-    pub fn new(name: PlayerName, owner: Owner) -> Self {
+    pub fn new_waiting(name: PlayerName) -> Self {
         SharedPlayer {
             name,
-            owner,
+            owner: Owner::waiting(),
             gold: 1000,
             lives: 20,
         }

@@ -141,6 +141,8 @@ pub fn spawn_entities(
                         continue;
                     }
                 };
+                debug_assert!(owner != Owner::waiting());
+
                 let tower = match &entity_def.tower {
                     Some(t) => t,
                     None => {

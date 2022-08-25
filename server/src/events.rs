@@ -82,12 +82,7 @@ pub fn receive_message_event(
                     let player_name = PlayerName::new(name.as_str());
                     println!("player requesting random game! {:?}", &player_name);
 
-                    let player = SharedPlayer {
-                        name: player_name,
-                        gold: 0,
-                        lives: 0,
-                        owner: Owner::waiting(),
-                    };
+                    let player = SharedPlayer::new_waiting(player_name);
                     player_lookup.0.insert(user_key.clone(), player);
 
                     player_queue.add(user_key.clone());

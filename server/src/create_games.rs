@@ -26,29 +26,34 @@ pub fn create_games(
     defs: Res<Defs>,
 ) {
     for create_game_event in create_game_events.iter() {
-        let player_names: Vec<PlayerName> = create_game_event
+        let shared_players: Vec<SharedPlayer> = create_game_event
             .user_keys
             .iter()
-            .map(|&u| player_lookup.0.get(&u).unwrap().name.clone())
+            .enumerate()
+            .map(|(idx, u)| {
+                let player = player_lookup.0.get_mut(&u).unwrap();
+                player.owner = Owner::new(idx as u8);
+                player.clone()
+            })
             .collect::<Vec<_>>();
 
-        // Create SharedPlayers.
-        let shared_players: Vec<SharedPlayer> = player_names
-            .iter()
-            .enumerate()
-            .map(|(idx, n)| SharedPlayer::new(n.clone(), Owner::new(idx as u8)))
-            .collect::<Vec<_>>();
         let map_name = "test";
-        let game = SharedGame::new(map_name.to_string(), shared_players.clone());
+        let game = SharedGame::new(
+            map_name.to_string(),
+            shared_players.clone(),
+            // shared_players.iter().map(|p| p.clone()).collect(),
+        );
 
         // Create GameId.
         let game_id = game_user_lookup.create_game_reference(create_game_event.user_keys.clone());
         info!(?game_id, ?game, "Creating game");
         game_lookup.0.insert(game_id, game);
 
+        dbg!(&shared_players);
+
         // Send GameReady to each player.
         for (idx, player) in create_game_event.user_keys.iter().enumerate() {
-            println!("Sending GameReady to {}", player_names[idx]);
+            println!("Sending GameReady to {:?}", shared_players[idx]);
             let client_game_info = ClientGameInfo {
                 i_am: Owner::new(idx as u8),
                 map: map_name.to_string(),
