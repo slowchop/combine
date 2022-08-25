@@ -73,6 +73,7 @@ pub struct Tower {
     pub texture: String,
     pub damage: f32,
     pub range: f32,
+    pub size: f32,
     pub cost: u32,
     pub reload: f32,
     pub instant_fire: bool,

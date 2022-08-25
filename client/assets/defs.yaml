@@ -2,7 +2,7 @@ levels:
   test:
     name: Hide the pain
     entities:
-    - type: guide
+    - type: guide # don't remove this :)
       position:
         - 0.0
         - 0.0
@@ -74,6 +74,7 @@ towers:
     cost: 100
     reload: 1.0
     instant_fire: true
+    size: 5.0
   cold:
     name: Cold
     combo:
@@ -85,6 +86,7 @@ towers:
     cost: 100
     reload: 1.0
     instant_fire: true
+    size: 5.0
   laser:
     name: Laser
     combo:
@@ -96,6 +98,7 @@ towers:
     cost: 100
     reload: 1.0
     instant_fire: true
+    size: 5.0
   flame:
     name: Flame
     combo:
@@ -107,6 +110,7 @@ towers:
     cost: 100
     reload: 1.0
     instant_fire: true
+    size: 5.0
 creeps:
   fast:
     name: Fast
