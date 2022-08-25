@@ -39,7 +39,7 @@ watch_server:
 server:
     cargo run --package server --features use-udp
 
-server_rsync:
+server_sync:
     rsync -vr --exclude target * $HOST:~/towercombo
     rsync -vr --exclude target ../naia/ $HOST:~/naia
 
@@ -54,6 +54,7 @@ server_deploy_bootstrap:
     sudo systemctl enable towercombo.service
     sudo systemctl restart towercombo.service
 
-server_deploy: server_rsync
+server_deploy_local:
     $HOME/.cargo/bin/cargo build --release --package server --features use-udp --features shared/prod
+    sudo systemctl restart towercombo.service
     journalctl -f
