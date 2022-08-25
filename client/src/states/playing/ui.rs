@@ -40,5 +40,8 @@ pub fn ui(
             "Time of day: {:?}",
             game.ticks_since_start_of_day()
         ));
+
+        ui.label(format!("Connected: {:?}", client.is_connected()));
+        ui.label(format!("RTT: {:?}", client.rtt()));
     });
 }

@@ -24,6 +24,7 @@ use crate::{
 use bevy::prelude::*;
 use bevy::render::texture::ImageSettings;
 use bevy::window::PresentMode;
+use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::{WorldInspectorParams, WorldInspectorPlugin};
 use bevy_mod_raycast::{
     DefaultPluginState, DefaultRaycastingPlugin, RayCastMesh, RayCastMethod, RayCastSource,
@@ -111,7 +112,8 @@ pub fn play(args: &Args) {
         ClientConfig::default(),
         shared_config(),
     ))
-    .add_plugin(WorldInspectorPlugin::new())
+    .add_plugin(EguiPlugin)
+    // .add_plugin(WorldInspectorPlugin::new())
     .add_plugin(ShapePlugin);
 
     // Ours!
