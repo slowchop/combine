@@ -30,6 +30,5 @@ pub fn update_player(
 
         player.gold = update_player_event.gold;
         player.lives = update_player_event.lives;
-        dbg!(player);
     }
 }

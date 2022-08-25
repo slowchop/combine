@@ -1,11 +1,11 @@
 play:
     cd client && cargo run --features bevy/dynamic --features shared/$ENV
 
-play_multi_dev:
+play_multi:
     #!/usr/bin/env bash
     cd client
-    cargo run --features bevy/dynamic --features shared/$ENV -- -w 0 -s -d &
-    cargo run --features bevy/dynamic --features shared/$ENV -- -w 1 -s -d
+    cargo run --features bevy/dynamic --features shared/$ENV -- -w 0 -s &
+    cargo run --features bevy/dynamic --features shared/$ENV -- -w 1 -s
 
 build_client_release:
     cd client && cargo build --release

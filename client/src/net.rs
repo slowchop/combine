@@ -114,6 +114,7 @@ pub fn receive_message_event(
                         lives: (*update_player.lives),
                     });
                 }
+                Protocol::GameOver(_) => {}
             }
         }
     }

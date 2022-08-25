@@ -29,8 +29,10 @@ struct FragmentInput {
 @group(1) @binding(0)
 var<uniform> material: CustomMaterial;
 @group(1) @binding(1)
-var base_color_texture: texture_2d<f32>;
+var<uniform> owner: i32;
 @group(1) @binding(2)
+var base_color_texture: texture_2d<f32>;
+@group(1) @binding(3)
 var base_color_sampler: sampler;
 
 // Lots of this code is reused from `pbr()` in pbr_functions.wgsl.
@@ -67,7 +69,19 @@ fn fragment(in: FragmentInput) -> @location(0) vec4<f32> {
 
     var light_colour = vec4<f32>(light_accum, 1.0) + vec4(lights.ambient_color.rgb, 1.0);
 
-    return light_colour * textureSample(base_color_texture, base_color_sampler, in.uv);
-//    return light_colour * material.color * textureSample(base_color_texture, base_color_sampler, in.uv);
+    var sampled = textureSample(base_color_texture, base_color_sampler, in.uv);
+
+    // If the colour is #ff007f we change it to the team colour.
+//    if (sampled.r == 1.0 && sampled.g == 0.0 && sampled.b == 0.5 && sampled.a == 1.0) {
+//    if (sampled.r == 1.0 && sampled.b > 0.48 && sampled.b < 0.52 && sampled.g == 0.0) {
+    if (sampled.r == 1.0 && sampled.g == 0.0 && sampled.b > 0.2 && sampled.b < 0.5) {
+        if (owner == 0) {
+            sampled = vec4<f32>(1.0, 1.0, 0.0, sampled.a);
+        } else if (owner == 1) {
+            sampled = vec4<f32>(0.0, 0.0, 1.0, sampled.a);
+        }
+    }
+
+    return light_colour * sampled;
 }
 

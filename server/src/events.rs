@@ -145,6 +145,9 @@ pub fn receive_message_event(
                 Protocol::UpdatePlayer(_) => {
                     warn!("Got an update player from client");
                 }
+                Protocol::GameOver(_) => {
+                    warn!("Got a game over from client");
+                }
             }
             info!(key = ?user_key.to_u64())
         }

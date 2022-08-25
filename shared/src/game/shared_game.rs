@@ -34,7 +34,7 @@ pub struct SharedGame {
     pub spawn_points: HashMap<Owner, Vec2>,
     pub paths: HashMap<Owner, Path>,
     pub entities: HashMap<ServerEntityId, Entity>,
-
+    pub winner: Option<Owner>,
     ticks: Ticks,
 }
 
@@ -59,6 +59,7 @@ impl SharedGame {
             players,
             ticks: 0u64.into(),
             paths: Default::default(),
+            winner: None,
         }
     }
 

@@ -29,6 +29,21 @@ pub fn spawn_entities(
         let entity_def = &spawn.entity_def;
         let game_id = spawn.game_id;
 
+        let mut game = match game_lookup.0.get_mut(&game_id) {
+            Some(g) => g,
+            None => {
+                warn!(
+                    "Could not get game for game_id {:?} for {:?}",
+                    game_id, spawn
+                );
+                continue;
+            }
+        };
+        if game.winner.is_some() {
+            warn!("Spawn disabled because game is over.");
+            continue;
+        }
+
         let mut created_entity = None;
         match entity_def.entity_type {
             // Ignore these.
@@ -45,16 +60,6 @@ pub fn spawn_entities(
                     }
                 };
 
-                let mut game = match game_lookup.0.get_mut(&game_id) {
-                    Some(g) => g,
-                    None => {
-                        warn!(
-                            "Could not get game for game_id {:?} for {:?}",
-                            game_id, spawn
-                        );
-                        continue;
-                    }
-                };
                 let position = match &entity_def.position {
                     Some(p) => p,
                     None => {
@@ -90,16 +95,6 @@ pub fn spawn_entities(
                     }
                 };
 
-                let mut game = match game_lookup.0.get_mut(&game_id) {
-                    Some(g) => g,
-                    None => {
-                        error!(
-                            "path Could not get game for game_id {:?} for {:?}",
-                            game_id, spawn
-                        );
-                        continue;
-                    }
-                };
                 let path = match &entity_def.path {
                     Some(p) => p,
                     None => {

@@ -172,10 +172,17 @@ pub fn spawn_entities(
         };
 
         let material = texture.as_ref().map(|texture_name| {
+            let shader_owner = if let Some(o) = entity_def.owner {
+                o.0 as i32
+            } else {
+                -1
+            };
+
             billboard_materials.add(BillboardMaterial {
                 alpha_mode,
                 color_texture: Some(asset_server.load(texture_name.as_str())),
                 color: Color::WHITE,
+                owner: shader_owner,
             })
         });
 

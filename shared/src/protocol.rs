@@ -1,4 +1,5 @@
 use crate::protocol::destroy_entity::DestroyEntity;
+use crate::protocol::game_over::GameOver;
 use crate::protocol::game_ready::GameReady;
 use crate::protocol::release_creep::ReleaseCreeps;
 use crate::protocol::request_tower_placement::RequestTowerPlacement;
@@ -14,6 +15,7 @@ use naia_shared::{
 
 pub mod auth;
 pub mod destroy_entity;
+pub mod game_over;
 pub mod game_ready;
 pub mod join_friend_game;
 pub mod join_random_game;
@@ -35,4 +37,5 @@ pub enum Protocol {
     JoinFriendGame(JoinFriendGame),
     GameReady(GameReady),
     RequestTowerPlacement(RequestTowerPlacement),
+    GameOver(GameOver),
 }

@@ -15,11 +15,18 @@ pub struct LoseALifeEvent {
     pub who: Owner,
 }
 
+#[derive(Debug)]
+pub struct GameOverEvent {
+    pub game_id: GameId,
+    pub winner: Owner,
+}
+
 pub fn lose_a_life(
     mut lose_a_life_events: EventReader<LoseALifeEvent>,
     mut game_lookup: ResMut<GameLookup>,
     mut server: Server<Protocol, Channels>,
     game_user_lookup: Res<GameUserLookup>,
+    mut game_over_events: EventWriter<GameOverEvent>,
 ) {
     for lose_a_life_event in lose_a_life_events.iter() {
         dbg!(lose_a_life_event);

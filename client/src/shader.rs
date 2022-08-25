@@ -12,8 +12,14 @@ use bevy::render::render_resource::{
 pub struct BillboardMaterial {
     #[uniform(0)]
     pub color: Color,
-    #[texture(1)]
-    #[sampler(2)]
+
+    // -1 no owner
+    // 0 or 1 otherwise
+    #[uniform(1)]
+    pub owner: i32,
+
+    #[texture(2)]
+    #[sampler(3)]
     pub color_texture: Option<Handle<Image>>,
     pub alpha_mode: AlphaMode,
 }
