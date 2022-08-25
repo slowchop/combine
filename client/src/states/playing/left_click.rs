@@ -1,4 +1,5 @@
 use crate::app::MyRaycastSet;
+use crate::states::playing::init::HoverText;
 use crate::states::playing::spawn_entities::SpawnEntityEvent;
 use crate::BillboardMaterial;
 use bevy::prelude::*;
@@ -6,7 +7,7 @@ use bevy_mod_raycast::Intersection;
 use naia_bevy_client::Client;
 use shared::game::defs::{Defs, Tower, TowerRef};
 use shared::game::position::vec2_to_vec3;
-use shared::game::shared_game::{CanBuild, ServerEntityId, SharedGame};
+use shared::game::shared_game::{ServerEntityId, SharedGame};
 use shared::game::ClientGameInfo;
 use shared::protocol::request_tower_placement::RequestTowerPlacement;
 use shared::protocol::Protocol;
@@ -45,13 +46,20 @@ pub enum Selected {
 }
 
 #[derive(Clone, Copy, PartialEq, Debug)]
-enum SetGuide {
-    Off,
+enum SetGuidePosition {
     Normal,
     Lock(Vec3),
 }
 
-pub enum CanBuild {
+#[derive(Clone, Copy, PartialEq, Debug)]
+enum SetGuideVisibility {
+    Off,
+    Good,
+    Bad,
+}
+
+#[derive(Debug)]
+enum CanBuild {
     BaseTower,
     CombinedTower {
         tower_1: ServerEntityId,
@@ -59,6 +67,23 @@ pub enum CanBuild {
         tower_ref: TowerRef,
     },
     No,
+}
+
+#[derive(Debug)]
+struct SetGuide {
+    visibility: SetGuideVisibility,
+    position: SetGuidePosition,
+    can_build: CanBuild,
+}
+
+impl SetGuide {
+    fn new() -> Self {
+        Self {
+            visibility: SetGuideVisibility::Off,
+            position: SetGuidePosition::Normal,
+            can_build: CanBuild::No,
+        }
+    }
 }
 
 pub fn mouse_action(
@@ -74,6 +99,8 @@ pub fn mouse_action(
         (With<Guide>, Without<TowerRef>),
     >,
     mut selected: Query<&mut Selected>,
+    camera_query: Query<(&GlobalTransform, &Camera)>,
+    mut hover_text_query: Query<(&mut Style, &mut Text), (With<HoverText>)>,
 ) {
     let (mut guide_transform, material_handle) = if let Ok(g) = guide.get_single_mut() {
         g
@@ -114,29 +141,38 @@ pub fn mouse_action(
         }
     }
 
-    let mut set_guide = SetGuide::Off;
+    let mut set_guide = SetGuide::new();
     let mut set_text = None;
-    let mut can_build = CanBuild::Yes;
     match selected.get_single_mut().as_deref_mut() {
         Err(_) => {
-            println!("nothing selected");
+            // Nothing selected
             if let HoveringOn::Tower(next_tower_id, next_tower_pos) = hovering_on {
-                set_guide = SetGuide::Lock(next_tower_pos);
-                can_build = CanBuild::No;
+                // We're hovering on the first tower, suggest to combo.
+                set_text = Some("Combine this tower\nwith another.");
+                set_guide = SetGuide {
+                    visibility: SetGuideVisibility::Good,
+                    position: SetGuidePosition::Lock(next_tower_pos),
+                    can_build: CanBuild::No,
+                };
             } else {
-                set_guide = SetGuide::Normal;
-                can_build = CanBuild::BaseTower;
+                // Hovering on nothing.
                 set_text = Some("Place a tower here");
+                set_guide = SetGuide {
+                    visibility: SetGuideVisibility::Good,
+                    position: SetGuidePosition::Normal,
+                    can_build: CanBuild::BaseTower,
+                };
             }
         }
+
         Ok(Selected::OneTowerForCombo(tower_1_id)) => {
-            println!("one tower for combo");
+            // Already have one tower selected.
             if let HoveringOn::Tower(next_tower_id, next_tower_pos) = hovering_on {
                 if tower_1_id == &next_tower_id {
-                    set_guide = SetGuide::Off;
+                    // guide_position = SetGuidePosition::Off;
                 } else {
                     // TODO: Work out if the combo is OK
-                    set_guide = SetGuide::Lock(next_tower_pos);
+                    // guide_position = SetGuidePosition::Lock(next_tower_pos);
                 }
             }
         }
@@ -144,20 +180,36 @@ pub fn mouse_action(
     }
 
     let mut material = materials.get_mut(&material_handle).unwrap();
-    if let CanBuild::Yes = can_build {
-        material.color = Color::rgba(0.0, 1.0, 0.0, 0.1);
-    } else {
-        material.color = Color::rgba(1.0, 0.0, 0.0, 0.1);
+    match set_guide.visibility {
+        SetGuideVisibility::Off => {
+            material.color = Color::rgba(0.0, 0.0, 0.0, 0.0);
+        }
+        SetGuideVisibility::Good => {
+            material.color = Color::rgba(0.0, 1.0, 0.0, 0.2);
+        }
+        SetGuideVisibility::Bad => {
+            material.color = Color::rgba(1.0, 0.0, 0.0, 0.2);
+        }
     }
 
-    if set_guide == SetGuide::Off {
-        material.color = Color::rgba(0.0, 0.0, 0.0, 0.0);
-    } else if let SetGuide::Lock(pos) = set_guide {
-        guide_transform.translation = pos;
-    } else if let SetGuide::Normal = set_guide {
-        guide_transform.translation = vec2_to_vec3(&position);
+    match set_guide.position {
+        SetGuidePosition::Normal => {
+            guide_transform.translation = vec2_to_vec3(&position);
+        }
+        SetGuidePosition::Lock(pos) => {
+            guide_transform.translation = pos;
+        }
     }
     guide_transform.translation += Vec3::new(0.0, 0.5, 0.0);
+
+    let (camera_transform, camera) = camera_query.single();
+    let viewport_pos = camera
+        .world_to_viewport(camera_transform, guide_transform.translation)
+        .unwrap();
+    let (mut hover_text_style, mut text) = hover_text_query.single_mut();
+    hover_text_style.position.left = Val::Px(viewport_pos.x);
+    hover_text_style.position.bottom = Val::Px(viewport_pos.y);
+    text.sections[0].value = set_text.unwrap_or("").to_string();
 
     if !(buttons.just_released(MouseButton::Left)) {
         return;

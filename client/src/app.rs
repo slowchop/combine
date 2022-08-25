@@ -175,6 +175,7 @@ pub fn play(args: &Args) {
     app.add_enter_system(GameState::LoadingLevel, loading_level::init);
 
     // Playing
+    app.add_enter_system(GameState::Playing, playing::init::init);
     app.add_exit_system(GameState::Playing, disconnected::init);
     app.add_system_set(
         ConditionSet::new()
