@@ -59,9 +59,11 @@ enum SetGuideVisibility {
 }
 
 #[derive(Debug)]
-enum CanBuild {
-    BaseTower,
-    CombinedTower {
+enum OnClick {
+    BuildBaseTower,
+    // SetSelected(Selected),
+    StartFirstCombo(ServerEntityId),
+    BuildCombinedTower {
         tower_1: ServerEntityId,
         tower_2: ServerEntityId,
         tower_ref: TowerRef,
@@ -73,7 +75,7 @@ enum CanBuild {
 struct SetGuide {
     visibility: SetGuideVisibility,
     position: SetGuidePosition,
-    can_build: CanBuild,
+    on_click: OnClick,
 }
 
 impl SetGuide {
@@ -81,7 +83,7 @@ impl SetGuide {
         Self {
             visibility: SetGuideVisibility::Off,
             position: SetGuidePosition::Normal,
-            can_build: CanBuild::No,
+            on_click: OnClick::No,
         }
     }
 }
@@ -152,7 +154,7 @@ pub fn mouse_action(
                 set_guide = SetGuide {
                     visibility: SetGuideVisibility::Good,
                     position: SetGuidePosition::Lock(next_tower_pos),
-                    can_build: CanBuild::No,
+                    on_click: OnClick::No,
                 };
             } else {
                 // Hovering on nothing.
@@ -160,7 +162,7 @@ pub fn mouse_action(
                 set_guide = SetGuide {
                     visibility: SetGuideVisibility::Good,
                     position: SetGuidePosition::Normal,
-                    can_build: CanBuild::BaseTower,
+                    on_click: OnClick::BuildBaseTower,
                 };
             }
         }
@@ -215,8 +217,22 @@ pub fn mouse_action(
         return;
     }
 
-    let place_tower = RequestTowerPlacement::new(position, "machine", 1230);
-    client.send_message(Channels::PlayerCommand, &place_tower);
+    todo!();
+    match set_guide.on_click {
+        OnClick::No => {}
+        OnClick::BuildBaseTower => {
+            // commands.spawn().insert()
+
+            let place_tower = RequestTowerPlacement::new(position, "machine", 1230);
+            client.send_message(Channels::PlayerCommand, &place_tower);
+        }
+        OnClick::BuildCombinedTower { .. } => {
+            todo!();
+        }
+    }
+
+    // let place_tower = RequestTowerPlacement::new(position, "machine", 1230);
+    // client.send_message(Channels::PlayerCommand, &place_tower);
 
     println!("sent place tower request");
 }
