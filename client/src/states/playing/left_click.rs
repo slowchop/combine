@@ -1,6 +1,6 @@
 use crate::app::MyRaycastSet;
-use crate::states::playing::floaty_text::FloatyText;
-use crate::states::playing::init::HoverText;
+use crate::states::playing::floaty_text::{floaty_text_bundle, FloatyText};
+use crate::states::playing::init::MouseHoverText;
 use crate::states::playing::spawn_entities::SpawnEntityEvent;
 use crate::BillboardMaterial;
 use bevy::prelude::*;
@@ -10,7 +10,8 @@ use shared::game::defs::{Defs, Tower, TowerRef};
 use shared::game::position::vec2_to_vec3;
 use shared::game::shared_game::{ServerEntityId, SharedGame};
 use shared::game::ClientGameInfo;
-use shared::protocol::request_tower_placement::RequestTowerPlacement;
+use shared::protocol::combo_tower_request::ComboTowerRequest;
+use shared::protocol::request_tower_placement::NewTowerRequest;
 use shared::protocol::Protocol;
 use shared::Channels;
 
@@ -37,7 +38,10 @@ pub enum Selected {
     Nothing,
 
     /// One tower is clicked on and waiting for a second tower.
-    OneTowerForCombo(ServerEntityId),
+    OneTowerForCombo {
+        first_id: ServerEntityId,
+        position: Vec3,
+    },
 
     /// A second tower is selected for a combo.
     ///
@@ -78,7 +82,6 @@ enum OnClick {
 struct SetGuide {
     visibility: SetGuideVisibility,
     position: SetGuidePosition,
-    on_click: OnClick,
 }
 
 impl SetGuide {
@@ -86,12 +89,16 @@ impl SetGuide {
         Self {
             visibility: SetGuideVisibility::Off,
             position: SetGuidePosition::Normal,
-            on_click: OnClick::Nothing,
         }
     }
 }
 
+#[derive(Component)]
+pub struct CombineFloatyText;
+
 pub fn mouse_action(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
     defs: Res<Defs>,
     mut client: Client<Protocol, Channels>,
     buttons: Res<Input<MouseButton>>,
@@ -103,7 +110,11 @@ pub fn mouse_action(
         (With<Guide>, Without<TowerRef>),
     >,
     mut selected: ResMut<Selected>,
-    mut hover_text_query: Query<&mut FloatyText, With<HoverText>>,
+    mut hover_text_query: Query<
+        &mut FloatyText,
+        (With<MouseHoverText>, Without<CombineFloatyText>),
+    >,
+    mut combine_floaty_text_query: Query<Entity, (With<FloatyText>, With<CombineFloatyText>)>,
 ) {
     let (mut guide_transform, material_handle) = if let Ok(g) = guide.get_single_mut() {
         g
@@ -146,40 +157,99 @@ pub fn mouse_action(
 
     let mut set_guide = SetGuide::new();
     let mut set_text = None;
-    match *selected {
+    match &*selected {
         Selected::Nothing => {
             // Nothing selected
-            if let HoveringOn::Tower(next_tower_id, next_tower_pos) = hovering_on {
-                // We're hovering on the first tower, suggest to combo.
+            if let HoveringOn::Tower(hovering_tower_id, hovering_tower_position) = hovering_on {
                 set_text = Some("Combine this tower\nwith another.");
                 set_guide = SetGuide {
                     visibility: SetGuideVisibility::Good,
-                    position: SetGuidePosition::Lock(next_tower_pos),
-                    on_click: OnClick::SetSelected(Selected::OneTowerForCombo(next_tower_id)),
+                    position: SetGuidePosition::Lock(hovering_tower_position),
                 };
+
+                if buttons.just_released(MouseButton::Left) {
+                    *selected = Selected::OneTowerForCombo {
+                        first_id: hovering_tower_id,
+                        position: hovering_tower_position,
+                    };
+                    commands
+                        .spawn_bundle(floaty_text_bundle(&asset_server))
+                        .insert(FloatyText {
+                            text: "#1".to_string(),
+                            world_position: hovering_tower_position,
+                        })
+                        .insert(CombineFloatyText);
+                }
             } else {
                 // Hovering on nothing.
                 set_text = Some("Place a tower here");
                 set_guide = SetGuide {
                     visibility: SetGuideVisibility::Good,
                     position: SetGuidePosition::Normal,
-                    on_click: OnClick::BuildBaseTower,
                 };
-            }
-        }
 
-        Selected::OneTowerForCombo(tower_1_id) => {
-            // Already have one tower selected.
-            if let HoveringOn::Tower(next_tower_id, next_tower_pos) = hovering_on {
-                if tower_1_id == next_tower_id {
-                    // guide_position = SetGuidePosition::Off;
-                } else {
-                    // TODO: Work out if the combo is OK
-                    // guide_position = SetGuidePosition::Lock(next_tower_pos);
+                if buttons.just_released(MouseButton::Left) {
+                    let place_tower = NewTowerRequest::new(position, "machine", 1230);
+                    client.send_message(Channels::PlayerCommand, &place_tower);
                 }
             }
         }
-        _ => todo!(),
+
+        Selected::OneTowerForCombo {
+            first_id: first_tower_id,
+            position: first_tower_position,
+        } => {
+            // Already have one tower selected.
+            let mut find_another = false;
+            if let HoveringOn::Tower(hovering_tower_id, hovering_tower_pos) = hovering_on {
+                // Hovering on the second tower.
+                // TODO: Work out if the combo is OK
+
+                if first_tower_id == &hovering_tower_id {
+                    find_another = true;
+                } else {
+                    set_text = "Click to combine\ninto a ~RFlame Tower~N.\n$200".into();
+                    set_guide = SetGuide {
+                        visibility: SetGuideVisibility::Good,
+                        position: SetGuidePosition::Lock(hovering_tower_pos),
+                    };
+
+                    if buttons.just_released(MouseButton::Left) {
+                        let combo_tower =
+                            ComboTowerRequest::new(vec![*first_tower_id, hovering_tower_id]);
+                        client.send_message(Channels::PlayerCommand, &combo_tower);
+
+                        *selected = Selected::Nothing;
+                        combine_floaty_text_query.for_each(|e| {
+                            commands.entity(e).despawn();
+                        });
+                    }
+                }
+            } else {
+                find_another = true;
+            }
+
+            if find_another {
+                // Linking to nothing.
+                set_text = "Find another tower to combine.\nClick here to abort!".into();
+                set_guide = SetGuide {
+                    visibility: SetGuideVisibility::Bad,
+                    position: SetGuidePosition::Normal,
+                };
+
+                if buttons.just_released(MouseButton::Left) {
+                    *selected = Selected::Nothing;
+                    combine_floaty_text_query.for_each(|e| {
+                        commands.entity(e).despawn();
+                    });
+                }
+            }
+        }
+        Selected::TwoTowersForCombo {
+            first,
+            second,
+            to_build,
+        } => todo!(),
     }
 
     let mut material = materials.get_mut(&material_handle).unwrap();
@@ -208,27 +278,4 @@ pub fn mouse_action(
     let mut floaty = hover_text_query.single_mut();
     floaty.world_position = guide_transform.translation;
     floaty.text = set_text.unwrap_or("").to_string();
-
-    if !(buttons.just_released(MouseButton::Left)) {
-        return;
-    }
-
-    match set_guide.on_click {
-        OnClick::Nothing => {}
-        OnClick::BuildBaseTower => {
-            let place_tower = RequestTowerPlacement::new(position, "machine", 1230);
-            client.send_message(Channels::PlayerCommand, &place_tower);
-        }
-        OnClick::SetSelected(s) => {
-            *selected = s;
-        }
-        OnClick::BuildCombinedTower { .. } => {
-            todo!()
-        }
-    }
-
-    // let place_tower = RequestTowerPlacement::new(position, "machine", 1230);
-    // client.send_message(Channels::PlayerCommand, &place_tower);
-
-    println!("sent place tower request");
 }

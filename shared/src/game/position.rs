@@ -14,5 +14,9 @@ pub fn vec2_to_vec3(v: &Vec2) -> Vec3 {
     Vec3::new(v.x, 0.0, v.y)
 }
 
+pub fn vec3_to_vec2(v: &Vec3) -> Vec2 {
+    Vec2::new(v.x, v.z)
+}
+
 #[derive(Component, Debug)]
 pub struct Velocity(pub Vec3);

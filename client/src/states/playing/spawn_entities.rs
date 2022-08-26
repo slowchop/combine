@@ -13,6 +13,8 @@ use bevy_prototype_lyon::prelude::{
 use bevy_prototype_lyon::shapes;
 use bevy_prototype_lyon::shapes::Polygon;
 use shared::game::defs::{CreepRef, Defs, EntityDef, EntityType, TowerRef, PIXELS_PER_METER};
+use shared::game::path::Path;
+use shared::game::position::vec2_to_vec3;
 use shared::game::shared_game::{ServerEntityId, SharedGame};
 use std::f32::consts::TAU;
 
@@ -55,27 +57,22 @@ pub fn spawn_entities(
             // Client doesn't care about path.
             // Server just spams client with spawn + position updates.
 
-            // let path = if let Some(p) = &entity_def.path {
-            //     p
-            // } else {
-            //     warn!("Path entity has no path!");
-            //     continue;
-            // };
-            // let owner = if let Some(o) = entity_def.owner {
-            //     o
-            // } else {
-            //     warn!("Path entity has no owner!");
-            //     continue;
-            // };
-            //
-            // let mut game = match game.get_single_mut() {
-            //     Ok(g) => g,
-            //     Err(e) => {
-            //         warn!("Could not get game for {:?}: {:?}", spawn, e);
-            //         continue;
-            //     }
-            // };
-            //
+            let path = if let Some(p) = &entity_def.path {
+                p
+            } else {
+                warn!("Path entity has no path!");
+                continue;
+            };
+            let owner = if let Some(o) = entity_def.owner {
+                o
+            } else {
+                warn!("Path entity has no owner!");
+                continue;
+            };
+
+            let path: Vec<Vec3> = path.iter().map(|p| vec2_to_vec3(&p.into())).collect();
+            game.paths.insert(owner, Path(path));
+
             // Debugging down here.
             //
             // let shape = shapes::RegularPolygon {

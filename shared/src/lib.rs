@@ -5,6 +5,7 @@ pub mod protocol;
 pub mod ticks;
 
 use crate::ticks::Ticks;
+use bevy_render::color::Color;
 use naia_shared::{
     derive_channels, Channel, ChannelDirection, ChannelMode, LinkConditionerConfig,
     OrderedReliableReceiver, Protocolize, ReliableSettings, SharedConfig, SocketConfig,

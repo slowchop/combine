@@ -28,6 +28,7 @@ bevy-inspector-egui = "0.12.1"
 iyes_loopless = "0.7.1"
 bevy_mod_raycast = "0.6.2"
 bevy_prototype_lyon = "0.6.0"
+bevy_prototype_debug_lines = { version = "0.8", features = ["3d"] }
 
 serde = "1.0.143"
 miette = "5.3.0"

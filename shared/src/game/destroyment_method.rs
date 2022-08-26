@@ -6,6 +6,7 @@ use strum::FromRepr;
 pub enum DestroymentMethod {
     Quiet,
     Explosion,
+    Combo,
 }
 
 impl Serde for DestroymentMethod {

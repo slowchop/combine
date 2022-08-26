@@ -3,6 +3,7 @@ use crate::settings::Settings;
 use crate::states::disconnected;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::creeps::release_creeps;
+use crate::states::playing::debug_lines::debug_lines_path;
 use crate::states::playing::destroy_entities::destroy_entities;
 use crate::states::playing::floaty_text::update_floaty_text_and_world_to_screen_pos;
 use crate::states::playing::game_over::{game_over, game_over_message};
@@ -32,6 +33,7 @@ use bevy_mod_raycast::{
     DefaultPluginState, DefaultRaycastingPlugin, RayCastMesh, RayCastMethod, RayCastSource,
     RaycastSystem,
 };
+use bevy_prototype_debug_lines::DebugLinesPlugin;
 use bevy_prototype_lyon::prelude::ShapePlugin;
 use iyes_loopless::prelude::*;
 use naia_bevy_client::Plugin as ClientPlugin;
@@ -116,6 +118,7 @@ pub fn play(args: &Args) {
         ClientConfig::default(),
         shared_config(),
     ))
+    .add_plugin(DebugLinesPlugin::default())
     .add_plugin(EguiPlugin)
     // .add_plugin(WorldInspectorPlugin::new())
     .add_plugin(ShapePlugin);
@@ -194,6 +197,7 @@ pub fn play(args: &Args) {
             .with_system(game_over)
             .with_system(game_over_message)
             .with_system(update_floaty_text_and_world_to_screen_pos)
+            .with_system(debug_lines_path)
             .into(),
     );
 

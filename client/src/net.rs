@@ -109,7 +109,7 @@ pub fn receive_message_event(
 
                     commands.insert_resource(NextState(GameState::LoadingLevel));
                 }
-                Protocol::RequestTowerPlacement(_) => {
+                Protocol::NewTowerRequest(_) => {
                     warn!("Got a request tower placement message, but we are not a server");
                 }
                 Protocol::ReleaseCreeps(_) => {
@@ -141,6 +141,9 @@ pub fn receive_message_event(
                     game_over_events.send(GameOverEvent {
                         winner: *game_over.winner,
                     });
+                }
+                Protocol::ComboTowerRequest(_) => {
+                    warn!("Got a combo tower request message");
                 }
             }
         }
