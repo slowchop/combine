@@ -46,7 +46,7 @@ pub fn damage_creeps(
             continue;
         };
 
-        let creep = if let Some(creep) = defs.creep(&creep_ref.0) {
+        let creep = if let Some(creep) = defs.creep(&creep_ref) {
             creep
         } else {
             warn!("Creep not found in defs: {:?}", creep_ref);

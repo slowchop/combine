@@ -112,17 +112,17 @@ pub fn spawn_entities(
                 game.paths.insert(owner, Path(path));
             }
             EntityType::Tower => {
-                let tower_name = match &entity_def.tower {
+                let tower_ref = match &entity_def.tower {
                     Some(t) => t,
                     None => {
                         warn!("Tower entity has no tower name: {:?}", entity_def);
                         continue;
                     }
                 };
-                let _tower = match defs.tower(tower_name.as_str()) {
+                let _tower = match defs.tower(tower_ref) {
                     Some(t) => t,
                     None => {
-                        warn!("Tower not found: {:?} {:?}", tower_name, entity_def);
+                        warn!("Tower not found: {:?} {:?}", tower_ref, entity_def);
                         continue;
                     }
                 };
@@ -155,7 +155,7 @@ pub fn spawn_entities(
                 let id = commands
                     .spawn()
                     .insert(Transform::from_translation(position.0))
-                    .insert(TowerRef(tower.clone()))
+                    .insert(tower.clone())
                     .insert(owner)
                     .insert(game_id)
                     .insert(LastShot(Duration::ZERO))
@@ -179,17 +179,17 @@ pub fn spawn_entities(
                         continue;
                     }
                 };
-                let creep_name = match &entity_def.creep {
+                let creep_ref = match &entity_def.creep {
                     Some(t) => t,
                     None => {
                         warn!("Spawn entity has no creep!: {:?}", entity_def);
                         continue;
                     }
                 };
-                let creep = match defs.creep(creep_name.as_str()) {
+                let creep = match defs.creep(creep_ref) {
                     Some(t) => t,
                     None => {
-                        warn!("Creep not found: {:?} {:?}", creep_name, entity_def);
+                        warn!("Creep not found: {:?} {:?}", creep_ref, entity_def);
                         continue;
                     }
                 };
@@ -198,7 +198,7 @@ pub fn spawn_entities(
                 let id = commands
                     .spawn()
                     .insert(Transform::from_translation(position.0))
-                    .insert(CreepRef(creep_name.clone()))
+                    .insert(creep_ref.clone())
                     .insert(owner)
                     .insert(game_id)
                     .insert(Speed(creep.speed))

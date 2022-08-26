@@ -17,8 +17,8 @@ pub const PIXELS_PER_METER: f32 = 250.;
 #[derive(Serialize, Deserialize)]
 pub struct Defs {
     pub levels: HashMap<String, LevelDef>,
-    pub towers: HashMap<String, Tower>,
-    pub creeps: HashMap<String, Creep>,
+    pub towers: HashMap<TowerRef, Tower>,
+    pub creeps: HashMap<CreepRef, Creep>,
     pub textures: HashMap<String, TextureDefinition>,
 }
 
@@ -58,19 +58,30 @@ impl Defs {
         )))
     }
 
-    pub fn tower(&self, name: &str) -> Option<Tower> {
-        self.towers.get(name).cloned()
+    pub fn tower(&self, tower_ref: &TowerRef) -> Option<Tower> {
+        self.towers.get(tower_ref).cloned()
     }
 
-    pub fn creep(&self, name: &str) -> Option<Creep> {
-        self.creeps.get(name).cloned()
+    pub fn creep_for_combo(&self, combo: &[&CreepRef]) -> Option<Creep> {
+        for creep in self.creeps.values() {
+            let creep_combo = creep.combo.iter().map(|c| c).collect::<Vec<&CreepRef>>();
+            if combo == creep_combo {
+                return Some(creep.clone());
+            }
+        }
+        None
+    }
+
+    pub fn creep(&self, creep_ref: &CreepRef) -> Option<Creep> {
+        self.creeps.get(creep_ref).cloned()
     }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Tower {
-    pub name: String,
-    pub combo: Vec<String>,
+    pub name: TowerRef,
+    pub title: String,
+    pub combo: Vec<TowerRef>,
     pub texture: String,
     pub damage: f32,
     pub range: f32,
@@ -80,13 +91,24 @@ pub struct Tower {
     pub instant_fire: bool,
 }
 
-#[derive(Component, Debug)]
+#[derive(Component, Debug, Serialize, Deserialize, Clone, PartialEq, Eq, Hash)]
 pub struct TowerRef(pub String);
+
+impl Serde for TowerRef {
+    fn ser(&self, writer: &mut dyn BitWrite) {
+        self.0.ser(writer);
+    }
+
+    fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
+        Ok(TowerRef(Serde::de(reader)?))
+    }
+}
 
 #[derive(Component, Debug, Clone, Serialize, Deserialize)]
 pub struct Creep {
-    pub name: String,
-    pub combo: Vec<String>,
+    pub name: CreepRef,
+    pub title: String,
+    pub combo: Vec<CreepRef>,
     pub texture: String,
     pub speed: f32,
     pub cost: u32,
@@ -94,8 +116,18 @@ pub struct Creep {
     pub size: f32,
 }
 
-#[derive(Component, Debug)]
+#[derive(Component, Debug, Serialize, Deserialize, Clone, Eq, PartialEq, Hash)]
 pub struct CreepRef(pub String);
+
+impl Serde for CreepRef {
+    fn ser(&self, writer: &mut dyn BitWrite) {
+        self.0.ser(writer);
+    }
+
+    fn de(reader: &mut BitReader) -> Result<Self, SerdeErr> {
+        Ok(CreepRef(Serde::de(reader)?))
+    }
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TextureDefinition {
@@ -123,9 +155,9 @@ pub struct EntityDef {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<Vec<NetVec2>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tower: Option<String>,
+    pub tower: Option<TowerRef>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creep: Option<String>,
+    pub creep: Option<CreepRef>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_entity_id: Option<ServerEntityId>,
 
@@ -154,8 +186,8 @@ impl Serde for EntityDef {
         let owner: Option<Owner> = Serde::de(reader)?;
         let radius: Option<f32> = Serde::de(reader)?;
         let path: Option<Vec<NetVec2>> = Serde::de(reader)?;
-        let tower: Option<String> = Serde::de(reader)?;
-        let creep: Option<String> = Serde::de(reader)?;
+        let tower: Option<TowerRef> = Serde::de(reader)?;
+        let creep: Option<CreepRef> = Serde::de(reader)?;
         let server_entity_id: Option<ServerEntityId> = Serde::de(reader)?;
         // Intentionally skipping tooltip
 

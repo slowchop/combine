@@ -25,7 +25,7 @@ pub struct Guide;
 pub enum HoveringOn {
     Nothing,
     Creep(ServerEntityId, Vec3, Creep),
-    Tower(ServerEntityId, Vec3),
+    Tower(ServerEntityId, Vec3, Tower),
 }
 
 /// If this component does not exist, nothing is selected.
@@ -36,12 +36,14 @@ pub enum Selected {
     OneCreepForCombo {
         first_id: ServerEntityId,
         position: Vec3,
+        creep: Creep,
     },
 
     /// One tower is clicked on and waiting for a second tower.
     OneTowerForCombo {
         first_id: ServerEntityId,
         position: Vec3,
+        tower: Tower,
     },
 }
 
@@ -131,7 +133,7 @@ pub fn mouse_action(
     };
     let mouse_position_vec3 = vec2_to_vec3(&mouse_position_vec2);
 
-    let tower = if let Some(tower) = defs.tower("machine") {
+    let tower = if let Some(tower) = defs.tower(&TowerRef("machine".to_string())) {
         tower
     } else {
         return;
@@ -142,11 +144,12 @@ pub fn mouse_action(
         if client_game_info.i_am != *tower_owner {
             continue;
         }
-        let other_tower = defs.tower(&other_tower_ref.0).unwrap();
-        let min_distance = other_tower.size / 2.0 + tower.size / 2.0;
+        let other_tower = defs.tower(&other_tower_ref).unwrap();
+        let min_distance = &other_tower.size / 2.0 + &tower.size / 2.0;
         let distance = (transform.translation - mouse_position_vec3).length();
         if distance < min_distance {
-            hovering_on = HoveringOn::Tower(*server_entity_id, transform.translation);
+            hovering_on =
+                HoveringOn::Tower(*server_entity_id, transform.translation, tower.clone());
         }
     }
 
@@ -155,7 +158,7 @@ pub fn mouse_action(
         if client_game_info.i_am != *creep_owner {
             continue;
         }
-        let creep = defs.creep(&other_creep_ref.0).unwrap();
+        let creep = defs.creep(&other_creep_ref).unwrap();
         let max_distance = creep.size / 2.0;
         let distance = (transform.translation - mouse_position_vec3).length();
         if distance > max_distance {
@@ -198,7 +201,7 @@ pub fn mouse_action(
                     }
                 }
                 HoveringOn::Creep(hovering_creep_id, hovering_creep_position, creep) => {
-                    set_text = format!("Combine this {}\nwith another creep.", creep.name);
+                    set_text = format!("Combine this {}\nwith another creep.", creep.title);
                     set_guide = SetGuide {
                         visibility: SetGuideVisibility::Good,
                         position: SetGuidePosition::Lock(hovering_creep_position),
@@ -208,11 +211,12 @@ pub fn mouse_action(
                         *selected = Selected::OneCreepForCombo {
                             first_id: hovering_creep_id,
                             position: hovering_creep_position,
+                            creep,
                         };
                     }
                 }
-                HoveringOn::Tower(hovering_tower_id, hovering_tower_position) => {
-                    set_text = "Combine this tower\nwith another.".into();
+                HoveringOn::Tower(hovering_tower_id, hovering_tower_position, tower) => {
+                    set_text = format!("Combine this {}\nwith another tower.", tower.title);
                     set_guide = SetGuide {
                         visibility: SetGuideVisibility::Good,
                         position: SetGuidePosition::Lock(hovering_tower_position),
@@ -222,6 +226,7 @@ pub fn mouse_action(
                         *selected = Selected::OneTowerForCombo {
                             first_id: hovering_tower_id,
                             position: hovering_tower_position,
+                            tower,
                         };
                         // TODO: Doesn't work
                         // commands
@@ -239,11 +244,12 @@ pub fn mouse_action(
         Selected::OneTowerForCombo {
             first_id: first_tower_id,
             position: first_tower_position,
+            tower: first_tower,
         } => {
             // Already have one tower selected.
             let mut find_another = false;
             match hovering_on {
-                HoveringOn::Tower(hovering_tower_id, hovering_tower_pos) => {
+                HoveringOn::Tower(hovering_tower_id, hovering_tower_pos, tower) => {
                     // Hovering on the second tower.
                     // TODO: Work out if the combo is OK
 
@@ -295,39 +301,56 @@ pub fn mouse_action(
         Selected::OneCreepForCombo {
             first_id: first_creep_id,
             position: first_creep_position,
+            creep: first_creep,
         } => {
             let mut find_another = false;
             match hovering_on {
-                HoveringOn::Creep(hovering_creep_id, hovering_creep_pos, creep) => {
+                HoveringOn::Creep(hovering_creep_id, hovering_creep_pos, hovering_creep) => {
                     // Hovering on the second creep.
                     if first_creep_id == &hovering_creep_id {
                         find_another = true;
                     } else {
-                        set_text = format!(
-                            "Click to combine\ninto a ~R{}~N.\n${}",
-                            creep.name, creep.cost
-                        );
-                        set_guide = SetGuide {
-                            visibility: SetGuideVisibility::Good,
-                            position: SetGuidePosition::Lock(hovering_creep_pos),
-                        };
+                        match defs.creep_for_combo(&vec![&hovering_creep.name, &first_creep.name]) {
+                            Some(new_creep) => {
+                                set_text = format!(
+                                    "Click to combine\ninto a {}.\n${}",
+                                    new_creep.title, new_creep.cost
+                                );
+                                set_guide = SetGuide {
+                                    visibility: SetGuideVisibility::Good,
+                                    position: SetGuidePosition::Lock(hovering_creep_pos),
+                                };
 
-                        if buttons.just_released(MouseButton::Left) {
-                            let combo_creep =
-                                ComboCreepRequest::new(vec![*first_creep_id, hovering_creep_id]);
-                            client.send_message(Channels::PlayerCommand, &combo_creep);
+                                if buttons.just_released(MouseButton::Left) {
+                                    let combo_creep = ComboCreepRequest::new(vec![
+                                        *first_creep_id,
+                                        hovering_creep_id,
+                                    ]);
+                                    client.send_message(Channels::PlayerCommand, &combo_creep);
 
-                            *selected = Selected::Nothing;
-                            combine_floaty_text_query.for_each(|e| {
-                                commands.entity(e).despawn();
-                            });
+                                    *selected = Selected::Nothing;
+                                    combine_floaty_text_query.for_each(|e| {
+                                        commands.entity(e).despawn();
+                                    });
+                                }
+                            }
+                            None => {
+                                set_text = format!(
+                                    "Can't combine {} with a {}.",
+                                    first_creep.title, hovering_creep.title
+                                );
+                                set_guide = SetGuide {
+                                    visibility: SetGuideVisibility::Bad,
+                                    position: SetGuidePosition::Lock(hovering_creep_pos),
+                                };
+                            }
                         }
                     }
                 }
                 HoveringOn::Nothing => {
                     find_another = true;
                 }
-                HoveringOn::Tower(_, _) => find_another = true,
+                HoveringOn::Tower(..) => find_another = true,
             }
 
             if find_another {

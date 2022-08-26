@@ -29,7 +29,7 @@ pub fn shoot_towers(
     mut damage_creep_events: EventWriter<DamageCreepEvent>,
 ) {
     for (tower_ref, tower_transform, mut last_shot, game_id, tower_owner) in towers.iter_mut() {
-        let tower = if let Some(tower) = defs.tower(&tower_ref.0) {
+        let tower = if let Some(tower) = defs.tower(&tower_ref) {
             tower
         } else {
             warn!("Tower not found in defs: {:?}", tower_ref);

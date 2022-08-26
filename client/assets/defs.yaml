@@ -66,7 +66,9 @@ levels:
       - 0.0
 towers:
   cold:
-    name: Cold
+    name: cold
+    title: Cold
+    emoji: ❄️
     combo:
     - machine
     - machine
@@ -78,7 +80,9 @@ towers:
     reload: 1.0
     instant_fire: true
   machine:
-    name: Machine Gun
+    name: machine
+    title: Machine Gun
+    emoji: 🔫
     combo: []
     texture: TESTDIS.png
     damage: 50.0
@@ -88,7 +92,9 @@ towers:
     reload: 1.0
     instant_fire: true
   flame:
-    name: Flame
+    name: flame
+    title: Flame
+    emoji: 🔥
     combo:
     - machine
     - cold
@@ -100,7 +106,9 @@ towers:
     reload: 1.0
     instant_fire: true
   laser:
-    name: Laser
+    name: laser
+    title: Laser
+    emoji: 🎯
     combo:
     - machine
     - flame
@@ -113,7 +121,9 @@ towers:
     instant_fire: true
 creeps:
   strong:
-    name: Strong
+    name: strong
+    title: Strong
+    emoji: 🐻
     combo:
     - robot
     - robot
@@ -123,7 +133,9 @@ creeps:
     health: 250.0
     size: 5.0
   robot:
-    name: Robot
+    name: robot
+    title: Robot
+    emoji: 🤖
     combo: []
     texture: gnome.png
     speed: 1.0
@@ -131,7 +143,9 @@ creeps:
     health: 100.0
     size: 5.0
   monster:
-    name: Monster
+    name: monster
+    title: Monster
+    emoji: 🐲
     combo: []
     texture: gnome.png
     speed: 1.0
@@ -139,7 +153,9 @@ creeps:
     health: 100.0
     size: 5.0
   fast:
-    name: Fast
+    name: fast
+    title: Fast
+    emoji: 🏃
     combo:
     - monster
     - monster

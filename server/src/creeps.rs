@@ -11,7 +11,7 @@ use bevy_time::Time;
 use bevy_transform::prelude::*;
 use naia_bevy_server::Server;
 use shared::game::components::Speed;
-use shared::game::defs::{EntityDef, EntityType};
+use shared::game::defs::{Creep, CreepRef, EntityDef, EntityType};
 use shared::game::destroyment_method::DestroymentMethod;
 use shared::game::owner::Owner;
 use shared::game::path::{Path, PathLeaveAt, PathProgress};
@@ -67,7 +67,7 @@ pub fn spawn_creeps(
                             entity_type: EntityType::Creep,
                             position: Some(pos.into()),
                             owner: Some(*owner),
-                            creep: Some("robot".to_string()),
+                            creep: Some(CreepRef("robot".to_string())),
                             ..Default::default()
                         },
                     };

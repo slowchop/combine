@@ -157,13 +157,13 @@ pub fn spawn_entities(
             let creep_name = if let Some(t) = &entity_def.creep {
                 t
             } else {
-                warn!("Creep not found: {:?}", entity_def);
+                warn!("Creep not found while spawning: {:?}", entity_def);
                 continue;
             };
             let creep = if let Some(t) = defs.creeps.get(creep_name) {
                 t
             } else {
-                warn!("Creep not found: {:?}", entity_def);
+                warn!("Creep not found while spawning 2: {:?}", entity_def);
                 continue;
             };
 
@@ -231,11 +231,11 @@ pub fn spawn_entities(
                 };
 
                 // Already checked
-                let tower_name = entity_def.tower.as_ref().unwrap().to_string();
+                let tower_ref = entity_def.tower.as_ref().unwrap();
                 // let tower = defs.towers.get(&tower_name).unwrap(); // Already checked
                 entity
-                    .insert(Name::new(format!("Tower {}", tower_name)))
-                    .insert(TowerRef(tower_name))
+                    .insert(Name::new(format!("Tower {:?}", tower_ref)))
+                    .insert(tower_ref.to_owned())
                     .insert(owner);
             }
             EntityType::Creep => {
@@ -247,10 +247,10 @@ pub fn spawn_entities(
                 };
 
                 // Already checked
-                let creep_name = entity_def.creep.as_ref().unwrap().to_string();
+                let creep_ref = entity_def.creep.as_ref().unwrap();
                 entity
-                    .insert(Name::new(format!("Creep {}", creep_name)))
-                    .insert(CreepRef(creep_name))
+                    .insert(Name::new(format!("Creep {:?}", creep_ref)))
+                    .insert(creep_ref.to_owned())
                     .insert(owner);
             }
             EntityType::Sprite => {

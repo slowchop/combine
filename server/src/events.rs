@@ -10,7 +10,7 @@ use naia_bevy_server::{
     events::{AuthorizationEvent, ConnectionEvent, DisconnectionEvent, MessageEvent},
     Server,
 };
-use shared::game::defs::{CreepRef, EntityDef, EntityType, TowerRef};
+use shared::game::defs::{CreepRef, Defs, EntityDef, EntityType, TowerRef};
 use shared::game::destroyment_method::DestroymentMethod;
 use shared::game::owner::Owner;
 use shared::game::player::{PlayerName, SharedPlayer};
@@ -78,6 +78,7 @@ pub fn receive_message_event(
     mut destroy_entity_event: EventWriter<DestroyEntityEvent>,
     mut tower_query: Query<(&Transform, &TowerRef, &Owner)>,
     mut creep_query: Query<(&Transform, &CreepRef, &Owner)>,
+    defs: Res<Defs>,
 ) {
     for event in event_reader.iter() {
         if let MessageEvent(user_key, Channels::PlayerCommand, cmd) = event {
@@ -126,7 +127,7 @@ pub fn receive_message_event(
                             entity_type: EntityType::Tower,
                             position,
                             owner: Some(player.owner.clone()),
-                            tower: Some("machine".to_string()),
+                            tower: Some(TowerRef("machine".to_string())),
                             ..Default::default()
                         },
                     })
@@ -185,7 +186,7 @@ pub fn receive_message_event(
                             entity_type: EntityType::Tower,
                             position: Some(position.into()),
                             owner: Some(player.owner.clone()),
-                            tower: Some("machine".to_string()),
+                            tower: Some(TowerRef("machine".to_string())),
                             ..Default::default()
                         },
                     });
@@ -223,9 +224,37 @@ pub fn receive_message_event(
                     };
 
                     let server_ids = &*combo_creep_request.creeps;
-                    warn!("TODO: Check if comboing is possible");
-                    warn!("TODO: Check which creep this upgrades to!");
-                    warn!("TODO: Check owner");
+
+                    // Check for owner and return creep_refs.
+                    let creeps = match server_ids
+                        .iter()
+                        .map(|server_id| {
+                            let entity = game.entities.get(server_id)?;
+                            let (_, creep_ref, creep_owner) = creep_query.get(*entity).ok()?;
+                            if creep_owner != &player.owner {
+                                return None;
+                            }
+                            Some(creep_ref)
+                        })
+                        .collect::<Option<Vec<&CreepRef>>>()
+                    {
+                        Some(creeps) => creeps,
+                        None => {
+                            warn!(
+                                "One of the creeps couldnt be found in list: {:?}",
+                                server_ids
+                            );
+                            continue;
+                        }
+                    };
+
+                    let creep = match defs.creep_for_combo(&creeps) {
+                        None => {
+                            warn!("No match for combo {:?}", &creeps);
+                            continue;
+                        }
+                        Some(c) => c,
+                    };
 
                     let last_creep_id = server_ids.last().unwrap();
                     let last_creep_entity = match game.entities.get(last_creep_id) {
@@ -235,7 +264,7 @@ pub fn receive_message_event(
                         }
                         Some(s) => s,
                     };
-                    let (transform, creep_ref, owner) = match creep_query.get(*last_creep_entity) {
+                    let (transform, _, _) = match creep_query.get(*last_creep_entity) {
                         Err(e) => {
                             warn!("Last creep not found in query for combo creep.");
                             continue;
@@ -244,13 +273,15 @@ pub fn receive_message_event(
                     };
                     let position = vec3_to_vec2(&transform.translation);
 
+                    warn!("TODO: Check money and deduct.");
+
                     spawn_entity_events.send(SpawnEntityEvent {
                         game_id,
                         entity_def: EntityDef {
                             entity_type: EntityType::Creep,
                             position: Some(position.into()),
                             owner: Some(player.owner.clone()),
-                            creep: Some("robot".to_string()),
+                            creep: Some(creep.name),
                             ..Default::default()
                         },
                     });
