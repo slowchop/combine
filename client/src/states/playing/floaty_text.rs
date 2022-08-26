@@ -7,9 +7,11 @@ pub struct FloatyText {
     pub world_position: Vec3,
 }
 
+pub const FONT: &str = "fonts/oliver/Oliver-Regular.ttf";
+
 pub fn floaty_text_style(asset_server: &Res<AssetServer>) -> TextStyle {
     TextStyle {
-        font: asset_server.load("fonts/oliver/Oliver-Regular.ttf"),
+        font: asset_server.load(FONT),
         font_size: 40.0,
         color: Color::BLACK,
     }

@@ -1,5 +1,6 @@
 pub mod bottom_quad;
 pub mod camera;
+pub mod console;
 pub mod creeps;
 pub mod debug_lines;
 pub mod destroy_entities;

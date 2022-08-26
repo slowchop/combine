@@ -1,7 +1,8 @@
 use crate::net::{DestroyEntityEvent, GameOverEvent, ReleaseCreepEvent, UpdatePositionEvent};
 use crate::settings::Settings;
-use crate::states::disconnected;
 use crate::states::playing::camera::GameCamera;
+use crate::states::playing::console;
+use crate::states::playing::console::ConsoleItem;
 use crate::states::playing::creeps::release_creeps;
 use crate::states::playing::debug_lines::debug_lines_path;
 use crate::states::playing::destroy_entities::destroy_entities;
@@ -18,6 +19,7 @@ use crate::states::playing::update_positions::{
 use crate::states::{
     connecting, loading_level, main_menu, playing, splash, waiting_for_random, ContinueState,
 };
+use crate::states::{disconnected, editor};
 use crate::{
     move_camera, net, App, Args, AssetServer, AssetServerSettings, BillboardMaterial,
     Camera3dBundle, ClearColor, Color, Commands, DefaultPlugins, MaterialPlugin, Msaa, Res,
@@ -27,7 +29,8 @@ use bevy::prelude::*;
 use bevy::render::render_resource::SamplerDescriptor;
 use bevy::render::texture::ImageSettings;
 use bevy::window::PresentMode;
-use bevy_egui::EguiPlugin;
+use bevy_egui::egui::{FontFamily, FontId};
+use bevy_egui::{egui, EguiContext, EguiPlugin};
 use bevy_inspector_egui::{WorldInspectorParams, WorldInspectorPlugin};
 use bevy_mod_raycast::{
     DefaultPluginState, DefaultRaycastingPlugin, RayCastMesh, RayCastMethod, RayCastSource,
@@ -64,6 +67,9 @@ pub enum GameState {
 
     //
     Disconnected,
+
+    // Editor
+    Editor,
 }
 
 pub fn play(args: &Args) {
@@ -130,6 +136,7 @@ pub fn play(args: &Args) {
         .add_event::<DestroyEntityEvent>()
         .add_event::<UpdatePlayerEvent>()
         .add_event::<GameOverEvent>()
+        .add_event::<ConsoleItem>()
         .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)
         .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
@@ -138,6 +145,7 @@ pub fn play(args: &Args) {
         .add_system_to_stage(NaiaStage::Tick, add_ticks_to_game);
 
     app.add_startup_system(init);
+    app.add_startup_system(init_egui);
 
     // Splash
     app.add_enter_system(GameState::Splash, splash::init);
@@ -207,6 +215,16 @@ pub fn play(args: &Args) {
         ConditionSet::new()
             .run_in_state(GameState::Disconnected)
             .with_system(disconnected::disconnected)
+            .into(),
+    );
+
+    // Editor
+    app.add_system_set(
+        ConditionSet::new()
+            .run_in_state(GameState::Editor)
+            .with_system(editor::menu::menu)
+            .with_system(console::handle_console_events)
+            .with_system(console::update_console)
             .into(),
     );
 
@@ -287,4 +305,18 @@ fn init(
         .insert(RayCastSource::<MyRaycastSet>::new());
 
     commands.insert_resource(DefaultPluginState::<MyRaycastSet>::default().with_debug_cursor());
+}
+
+fn init_egui(mut egui_context: ResMut<EguiContext>) {
+    let ctx = egui_context.ctx_mut();
+    let mut style = (*ctx.style()).clone();
+    style.text_styles.insert(
+        egui::TextStyle::Button,
+        FontId::new(30.0, FontFamily::Proportional),
+    );
+    style.text_styles.insert(
+        egui::TextStyle::Heading,
+        FontId::new(40.0, FontFamily::Proportional),
+    );
+    ctx.set_style(style);
 }

@@ -35,14 +35,16 @@ pub fn update(
 
     egui::Window::new("Combo Towers").show(egui_context.ctx_mut(), |ui| {
         if ui.button("Multiplayer").clicked() || settings.start_multiplayer_immediately {
-            println!("Multiplayer");
             commands.insert_resource(ContinueState(Some(GameState::WaitingForRandom)));
             commands.insert_resource(NextState(GameState::Connecting));
         };
-        if ui.button("Friend").clicked() {
-            println!("Friend");
-            commands.insert_resource(ContinueState(Some(GameState::VsFriend)));
-            commands.insert_resource(NextState(GameState::Connecting));
+        // if ui.button("Friend").clicked() {
+        //     println!("Friend");
+        //     commands.insert_resource(ContinueState(Some(GameState::VsFriend)));
+        //     commands.insert_resource(NextState(GameState::Connecting));
+        // };
+        if ui.button("Editor").clicked() {
+            commands.insert_resource(NextState(GameState::Editor));
         };
     });
 }
