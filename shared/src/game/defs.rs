@@ -163,7 +163,7 @@ pub struct LevelDef {
     pub entities: Vec<EntityDef>,
 }
 
-#[derive(Clone, Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Default, Debug, Serialize, Deserialize, PartialEq, Eq, Component)]
 pub struct EntityDef {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub texture: Option<String>,

@@ -65,10 +65,20 @@ levels:
       - 0.0
       - 0.0
 towers:
+  machine:
+    name: machine
+    title: Machine Gun
+    combo: []
+    texture: TESTDIS.png
+    damage: 50.0
+    range: 5.0
+    size: 5.0
+    cost: 100
+    reload: 1.0
+    instant_fire: true
   cold:
     name: cold
     title: Ice Cream Cart
-    emoji: ❄️
     combo:
     - machine
     - machine
@@ -79,36 +89,9 @@ towers:
     cost: 100
     reload: 1.0
     instant_fire: true
-  machine:
-    name: machine
-    title: Machine Gun
-    emoji: 🔫
-    combo: []
-    texture: TESTDIS.png
-    damage: 50.0
-    range: 5.0
-    size: 5.0
-    cost: 100
-    reload: 1.0
-    instant_fire: true
-  flame:
-    name: flame
-    title: BBQ
-    emoji: 🔥
-    combo:
-    - machine
-    - cold
-    texture: tower.png
-    damage: 50.0
-    range: 3.0
-    size: 5.0
-    cost: 100
-    reload: 1.0
-    instant_fire: true
   laser:
     name: laser
     title: Laser
-    emoji: 🎯
     combo:
     - machine
     - flame
@@ -119,11 +102,23 @@ towers:
     cost: 100
     reload: 1.0
     instant_fire: true
+  flame:
+    name: flame
+    title: BBQ
+    combo:
+    - machine
+    - cold
+    texture: tower.png
+    damage: 50.0
+    range: 3.0
+    size: 5.0
+    cost: 100
+    reload: 1.0
+    instant_fire: true
 creeps:
   strong:
     name: strong
     title: Strong
-    emoji: 🐻
     combo:
     - robot
     - robot
@@ -132,20 +127,9 @@ creeps:
     cost: 100
     health: 250.0
     size: 5.0
-  robot:
-    name: robot
-    title: Robot
-    emoji: 🤖
-    combo: []
-    texture: gnome.png
-    speed: 1.0
-    cost: 100
-    health: 100.0
-    size: 5.0
   monster:
     name: monster
     title: Monster
-    emoji: 🐲
     combo: []
     texture: gnome.png
     speed: 1.0
@@ -155,7 +139,6 @@ creeps:
   fast:
     name: fast
     title: Fast
-    emoji: 🏃
     combo:
     - monster
     - monster
@@ -164,52 +147,17 @@ creeps:
     cost: 100
     health: 100.0
     size: 5.0
+  robot:
+    name: robot
+    title: Robot
+    combo: []
+    texture: gnome.png
+    speed: 1.0
+    cost: 100
+    health: 100.0
+    size: 5.0
 textures:
-  tree.png:
-    size:
-    - 984.0
-    - 1120.0
-  Outline.png:
-    size:
-    - 360.0
-    - 531.0
-  ground.png:
-    size:
-    - 256.0
-    - 256.0
-  hover.png:
-    size:
-    - 256.0
-    - 256.0
-  props.png:
-    size:
-    - 4096.0
-    - 4096.0
-  tooltip.png:
-    size:
-    - 256.0
-    - 256.0
-  Blue.png:
-    size:
-    - 572.0
-    - 600.0
-  tower.png:
-    size:
-    - 280.0
-    - 311.0
-  gnome.png:
-    size:
-    - 263.0
-    - 582.0
-  AAAAA.png:
-    size:
-    - 352.0
-    - 523.0
-  Yellow.png:
-    size:
-    - 578.0
-    - 600.0
-  grass.png:
+  editor/home.png:
     size:
     - 256.0
     - 256.0
@@ -217,7 +165,67 @@ textures:
     size:
     - 846.0
     - 1199.0
+  editor/path-start.png:
+    size:
+    - 256.0
+    - 256.0
+  editor/path-waypoint.png:
+    size:
+    - 256.0
+    - 256.0
+  props.png:
+    size:
+    - 4096.0
+    - 4096.0
+  gnome.png:
+    size:
+    - 263.0
+    - 582.0
+  tooltip.png:
+    size:
+    - 256.0
+    - 256.0
+  Outline.png:
+    size:
+    - 360.0
+    - 531.0
+  AAAAA.png:
+    size:
+    - 352.0
+    - 523.0
+  ground.png:
+    size:
+    - 256.0
+    - 256.0
+  tree.png:
+    size:
+    - 984.0
+    - 1120.0
+  hover.png:
+    size:
+    - 256.0
+    - 256.0
+  tower.png:
+    size:
+    - 280.0
+    - 311.0
+  Blue.png:
+    size:
+    - 572.0
+    - 600.0
+  Yellow.png:
+    size:
+    - 578.0
+    - 600.0
   click-tooltip.png:
+    size:
+    - 256.0
+    - 256.0
+  editor/path-end.png:
+    size:
+    - 256.0
+    - 256.0
+  grass.png:
     size:
     - 256.0
     - 256.0

@@ -13,17 +13,17 @@ pub struct Editor {
 
 pub struct NewEvent;
 
-pub struct LoadEvent(String);
+pub struct LoadEvent(pub String);
 
-pub struct SaveEvent(String);
+pub struct SaveEvent(pub String);
 
-pub struct AddSpriteEvent(String);
+pub struct AddSpriteEvent(pub String);
 
-pub struct AddPathEvent(Owner);
+pub struct AddPathEvent(pub Owner);
 
-pub struct DeleteEvent(Entity);
+pub struct DeleteEvent(pub Entity);
 
-pub struct MoveEvent(Entity, Vec3);
+pub struct MoveEvent(pub Entity, pub Vec3);
 
 pub fn menu(
     defs: Res<Defs>,

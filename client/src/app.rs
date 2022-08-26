@@ -1,5 +1,7 @@
 use crate::net::{DestroyEntityEvent, GameOverEvent, ReleaseCreepEvent, UpdatePositionEvent};
 use crate::settings::Settings;
+use crate::states::editor::load_map::load_map;
+use crate::states::editor::new::new_events;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::console;
 use crate::states::playing::console::ConsoleItem;
@@ -235,6 +237,9 @@ pub fn play(args: &Args) {
             .with_system(editor::menu::menu)
             .with_system(console::handle_console_events)
             .with_system(console::update_console)
+            .with_system(load_map)
+            .with_system(new_events)
+            .with_system(move_camera)
             .into(),
     );
 
