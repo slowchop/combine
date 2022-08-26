@@ -11,9 +11,8 @@ pub fn release_creeps(
     mut commands: Commands,
     mut release_the_creeps_events: EventReader<ReleaseCreepEvent>,
     game: Query<&SharedGame>,
-    creeps: Query<&Owner, With<CreepRef>>,
 ) {
-    // I've changed my mind. No client side creep release, just as a notification.
+    // No client side creep release, just as a notification.
     // The creep positions will be sent from the server.
 
     let game = match game.get_single() {
@@ -25,8 +24,6 @@ pub fn release_creeps(
     };
 
     for release_the_creep_event in release_the_creeps_events.iter() {
-        println!("Release the creeps! {:?}", release_the_creep_event);
-
         let entity =
             if let Some(entity) = game.entities.get(&release_the_creep_event.server_entity_id) {
                 entity
@@ -38,7 +35,6 @@ pub fn release_creeps(
                 continue;
             };
 
-        println!("Attach released");
         commands.entity(*entity).insert(Released);
     }
 }

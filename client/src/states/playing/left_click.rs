@@ -7,7 +7,7 @@ use crate::BillboardMaterial;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
 use naia_bevy_client::Client;
-use shared::game::defs::{CreepRef, Defs, Tower, TowerRef};
+use shared::game::defs::{Creep, CreepRef, Defs, Tower, TowerRef};
 use shared::game::owner::Owner;
 use shared::game::position::vec2_to_vec3;
 use shared::game::shared_game::{ServerEntityId, SharedGame};
@@ -23,7 +23,7 @@ pub struct Guide;
 #[derive(Debug)]
 pub enum HoveringOn {
     Nothing,
-    Creep(ServerEntityId, Vec3),
+    Creep(ServerEntityId, Vec3, Creep),
     Tower(ServerEntityId, Vec3),
 }
 
@@ -32,19 +32,15 @@ pub enum HoveringOn {
 pub enum Selected {
     Nothing,
 
-    /// One tower is clicked on and waiting for a second tower.
-    OneTowerForCombo {
+    OneCreepForCombo {
         first_id: ServerEntityId,
         position: Vec3,
     },
 
-    /// A second tower is selected for a combo.
-    ///
-    /// This should show a confirmation thing.
-    TwoTowersForCombo {
-        first: ServerEntityId,
-        second: ServerEntityId,
-        to_build: TowerRef,
+    /// One tower is clicked on and waiting for a second tower.
+    OneTowerForCombo {
+        first_id: ServerEntityId,
+        position: Vec3,
     },
 }
 
@@ -82,7 +78,6 @@ pub struct CombineFloatyText;
 pub fn mouse_action(
     mut commands: Commands,
     client_game_info: Query<&ClientGameInfo>,
-    asset_server: Res<AssetServer>,
     defs: Res<Defs>,
     mut client: Client<Protocol, Channels>,
     buttons: Res<Input<MouseButton>>,
@@ -168,12 +163,13 @@ pub fn mouse_action(
         match closest_creep {
             None => {
                 closest_creep = Some(distance);
-                hovering_on = HoveringOn::Creep(*server_entity_id, transform.translation);
+                hovering_on = HoveringOn::Creep(*server_entity_id, transform.translation, creep);
             }
             Some(previous_closest) => {
                 if distance < previous_closest {
                     closest_creep = Some(distance);
-                    hovering_on = HoveringOn::Creep(*server_entity_id, transform.translation);
+                    hovering_on =
+                        HoveringOn::Creep(*server_entity_id, transform.translation, creep);
                 }
             }
         }
@@ -182,13 +178,13 @@ pub fn mouse_action(
     // println!("hovering on: {:?}", hovering_on);
 
     let mut set_guide = SetGuide::new();
-    let mut set_text = None;
+    let mut set_text: String = "".to_string();
     match &*selected {
         Selected::Nothing => {
             // Nothing selected
             match hovering_on {
                 HoveringOn::Nothing => {
-                    set_text = Some("Place a tower here");
+                    set_text = "Place a tower here".into();
                     set_guide = SetGuide {
                         visibility: SetGuideVisibility::Good,
                         position: SetGuidePosition::Normal,
@@ -200,11 +196,22 @@ pub fn mouse_action(
                         client.send_message(Channels::PlayerCommand, &place_tower);
                     }
                 }
-                HoveringOn::Creep(hovering_creep_id, hovering_creep_position) => {
-                    todo!()
+                HoveringOn::Creep(hovering_creep_id, hovering_creep_position, creep) => {
+                    set_text = format!("Combine this {}\nwith another creep.", creep.name);
+                    set_guide = SetGuide {
+                        visibility: SetGuideVisibility::Good,
+                        position: SetGuidePosition::Lock(hovering_creep_position),
+                    };
+
+                    if buttons.just_released(MouseButton::Left) {
+                        *selected = Selected::OneCreepForCombo {
+                            first_id: hovering_creep_id,
+                            position: hovering_creep_position,
+                        };
+                    }
                 }
                 HoveringOn::Tower(hovering_tower_id, hovering_tower_position) => {
-                    set_text = Some("Combine this tower\nwith another.");
+                    set_text = "Combine this tower\nwith another.".into();
                     set_guide = SetGuide {
                         visibility: SetGuideVisibility::Good,
                         position: SetGuidePosition::Lock(hovering_tower_position),
@@ -234,37 +241,43 @@ pub fn mouse_action(
         } => {
             // Already have one tower selected.
             let mut find_another = false;
-            if let HoveringOn::Tower(hovering_tower_id, hovering_tower_pos) = hovering_on {
-                // Hovering on the second tower.
-                // TODO: Work out if the combo is OK
+            match hovering_on {
+                HoveringOn::Tower(hovering_tower_id, hovering_tower_pos) => {
+                    // Hovering on the second tower.
+                    // TODO: Work out if the combo is OK
 
-                if first_tower_id == &hovering_tower_id {
-                    find_another = true;
-                } else {
-                    set_text = "Click to combine\ninto a ~RFlame Tower~N.\n$200".into();
-                    set_guide = SetGuide {
-                        visibility: SetGuideVisibility::Good,
-                        position: SetGuidePosition::Lock(hovering_tower_pos),
-                    };
+                    if first_tower_id == &hovering_tower_id {
+                        find_another = true;
+                    } else {
+                        set_text = "Click to combine\ninto a ~RFlame Tower~N.\n$200".to_string();
+                        set_guide = SetGuide {
+                            visibility: SetGuideVisibility::Good,
+                            position: SetGuidePosition::Lock(hovering_tower_pos),
+                        };
 
-                    if buttons.just_released(MouseButton::Left) {
-                        let combo_tower =
-                            ComboTowerRequest::new(vec![*first_tower_id, hovering_tower_id]);
-                        client.send_message(Channels::PlayerCommand, &combo_tower);
+                        if buttons.just_released(MouseButton::Left) {
+                            let combo_tower =
+                                ComboTowerRequest::new(vec![*first_tower_id, hovering_tower_id]);
+                            client.send_message(Channels::PlayerCommand, &combo_tower);
 
-                        *selected = Selected::Nothing;
-                        combine_floaty_text_query.for_each(|e| {
-                            commands.entity(e).despawn();
-                        });
+                            *selected = Selected::Nothing;
+                            combine_floaty_text_query.for_each(|e| {
+                                commands.entity(e).despawn();
+                            });
+                        }
                     }
                 }
-            } else {
-                find_another = true;
+                HoveringOn::Nothing => {
+                    find_another = true;
+                }
+                HoveringOn::Creep(..) => {
+                    find_another = true;
+                }
             }
 
             if find_another {
                 // Linking to nothing.
-                set_text = "Find another tower to combine.\nClick here to abort!".into();
+                set_text = "Find another tower to combine.\nClick here to abort!".to_string();
                 set_guide = SetGuide {
                     visibility: SetGuideVisibility::Bad,
                     position: SetGuidePosition::Normal,
@@ -278,11 +291,60 @@ pub fn mouse_action(
                 }
             }
         }
-        Selected::TwoTowersForCombo {
-            first,
-            second,
-            to_build,
-        } => todo!(),
+        Selected::OneCreepForCombo {
+            first_id: first_creep_id,
+            position: first_creep_position,
+        } => {
+            let mut find_another = false;
+            match hovering_on {
+                HoveringOn::Creep(hovering_creep_id, hovering_creep_pos, creep) => {
+                    // Hovering on the second creep.
+                    if first_creep_id == &hovering_creep_id {
+                        find_another = true;
+                    } else {
+                        set_text = format!(
+                            "Click to combine\ninto a ~R{}~N.\n${}",
+                            creep.name, creep.cost
+                        );
+                        set_guide = SetGuide {
+                            visibility: SetGuideVisibility::Good,
+                            position: SetGuidePosition::Lock(hovering_creep_pos),
+                        };
+
+                        if buttons.just_released(MouseButton::Left) {
+                            // let combo_creep =
+                            //     ComboCreepRequest::new(vec![*first_creep_id, hovering_creep_id]);
+                            // client.send_message(Channels::PlayerCommand, &combo_creep);
+                            //
+                            *selected = Selected::Nothing;
+                            combine_floaty_text_query.for_each(|e| {
+                                commands.entity(e).despawn();
+                            });
+                        }
+                    }
+                }
+                HoveringOn::Nothing => {
+                    find_another = true;
+                }
+                HoveringOn::Tower(_, _) => find_another = true,
+            }
+
+            if find_another {
+                // Linking to nothing.
+                set_text = "Find another creep to combine.\nClick here to abort!".to_string();
+                set_guide = SetGuide {
+                    visibility: SetGuideVisibility::Bad,
+                    position: SetGuidePosition::Normal,
+                };
+
+                if buttons.just_released(MouseButton::Left) {
+                    *selected = Selected::Nothing;
+                    combine_floaty_text_query.for_each(|e| {
+                        commands.entity(e).despawn();
+                    });
+                }
+            }
+        }
     }
 
     let mut material = materials.get_mut(&material_handle).unwrap();
@@ -310,5 +372,5 @@ pub fn mouse_action(
 
     let mut floaty = hover_text_query.single_mut();
     floaty.world_position = guide_transform.translation;
-    floaty.text = set_text.unwrap_or("").to_string();
+    floaty.text = set_text;
 }
