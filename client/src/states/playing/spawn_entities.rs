@@ -131,18 +131,19 @@ pub fn spawn_entities(
                     entity_def
                 );
             }
-            let tower_name = if let Some(t) = &entity_def.tower {
+            let tower_ref = if let Some(t) = &entity_def.tower {
                 t
             } else {
                 warn!("Tower not found: {:?}", entity_def);
                 continue;
             };
-            let tower = if let Some(t) = defs.towers.get(tower_name) {
+            let tower = if let Some(t) = defs.towers.get(tower_ref) {
                 t
             } else {
                 warn!("Tower not found: {:?}", entity_def);
                 continue;
             };
+            dbg!(&tower);
 
             texture = Some(tower.texture.clone());
         };

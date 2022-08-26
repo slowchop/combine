@@ -67,12 +67,12 @@ levels:
 towers:
   cold:
     name: cold
-    title: Cold
+    title: Ice Cream Cart
     emoji: ❄️
     combo:
     - machine
     - machine
-    texture: TESTDIS.png
+    texture: harold.png
     damage: 50.0
     range: 1.0
     size: 5.0
@@ -93,7 +93,7 @@ towers:
     instant_fire: true
   flame:
     name: flame
-    title: Flame
+    title: BBQ
     emoji: 🔥
     combo:
     - machine

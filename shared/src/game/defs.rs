@@ -4,7 +4,7 @@ use crate::game::shared_game::ServerEntityId;
 use bevy_ecs::prelude::Component;
 use bevy_math::{Vec2, Vec3};
 use bevy_transform::prelude::Transform;
-use bevy_utils::HashMap;
+use bevy_utils::{HashMap, HashSet};
 use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use serde::{Deserialize, Serialize};
 use std::fs::File;
@@ -62,18 +62,41 @@ impl Defs {
         self.towers.get(tower_ref).cloned()
     }
 
-    pub fn creep_for_combo(&self, combo: &[&CreepRef]) -> Option<Creep> {
-        for creep in self.creeps.values() {
-            let creep_combo = creep.combo.iter().map(|c| c).collect::<Vec<&CreepRef>>();
-            if combo == creep_combo {
-                return Some(creep.clone());
+    pub fn tower_for_combo(&self, combo: &[&TowerRef]) -> Option<Tower> {
+        let mut combo = combo.iter().map(|c| *c).collect::<HashSet<&TowerRef>>();
+
+        for tower in self.towers.values() {
+            let tower_combo = tower
+                .combo
+                .iter()
+                .map(|c| c)
+                .collect::<HashSet<&TowerRef>>();
+            if combo == tower_combo {
+                return Some(tower.clone());
             }
         }
+        info!("not found!");
         None
     }
 
     pub fn creep(&self, creep_ref: &CreepRef) -> Option<Creep> {
         self.creeps.get(creep_ref).cloned()
+    }
+
+    pub fn creep_for_combo(&self, combo: &[&CreepRef]) -> Option<Creep> {
+        let combo = combo.iter().map(|c| *c).collect::<HashSet<&CreepRef>>();
+
+        for creep in self.creeps.values() {
+            let creep_combo = creep
+                .combo
+                .iter()
+                .map(|c| c)
+                .collect::<HashSet<&CreepRef>>();
+            if combo == creep_combo {
+                return Some(creep.clone());
+            }
+        }
+        None
     }
 }
 

@@ -133,7 +133,7 @@ pub fn mouse_action(
     };
     let mouse_position_vec3 = vec2_to_vec3(&mouse_position_vec2);
 
-    let tower = if let Some(tower) = defs.tower(&TowerRef("machine".to_string())) {
+    let base_tower = if let Some(tower) = defs.tower(&TowerRef("machine".to_string())) {
         tower
     } else {
         return;
@@ -145,11 +145,14 @@ pub fn mouse_action(
             continue;
         }
         let other_tower = defs.tower(&other_tower_ref).unwrap();
-        let min_distance = &other_tower.size / 2.0 + &tower.size / 2.0;
+        let min_distance = &other_tower.size / 2.0 + &other_tower.size / 2.0;
         let distance = (transform.translation - mouse_position_vec3).length();
         if distance < min_distance {
-            hovering_on =
-                HoveringOn::Tower(*server_entity_id, transform.translation, tower.clone());
+            hovering_on = HoveringOn::Tower(
+                *server_entity_id,
+                transform.translation,
+                other_tower.clone(),
+            );
         }
     }
 
@@ -228,14 +231,6 @@ pub fn mouse_action(
                             position: hovering_tower_position,
                             tower,
                         };
-                        // TODO: Doesn't work
-                        // commands
-                        //     .spawn_bundle(floaty_text_bundle(&asset_server))
-                        //     .insert(FloatyText {
-                        //         text: "#1".to_string(),
-                        //         world_position: hovering_tower_position,
-                        //     })
-                        //     .insert(CombineFloatyText);
                     }
                 }
             }
@@ -249,28 +244,46 @@ pub fn mouse_action(
             // Already have one tower selected.
             let mut find_another = false;
             match hovering_on {
-                HoveringOn::Tower(hovering_tower_id, hovering_tower_pos, tower) => {
+                HoveringOn::Tower(hovering_tower_id, hovering_tower_pos, hovering_tower) => {
                     // Hovering on the second tower.
-                    // TODO: Work out if the combo is OK
 
                     if first_tower_id == &hovering_tower_id {
                         find_another = true;
                     } else {
-                        set_text = "Click to combine\ninto a ~RFlame Tower~N.\n$200".to_string();
-                        set_guide = SetGuide {
-                            visibility: SetGuideVisibility::Good,
-                            position: SetGuidePosition::Lock(hovering_tower_pos),
-                        };
+                        match defs.tower_for_combo(&vec![&hovering_tower.name, &first_tower.name]) {
+                            Some(new_tower) => {
+                                set_text = format!(
+                                    "Click to combine\ninto a {}.\n${}",
+                                    new_tower.title, new_tower.cost
+                                );
+                                set_guide = SetGuide {
+                                    visibility: SetGuideVisibility::Good,
+                                    position: SetGuidePosition::Lock(hovering_tower_pos),
+                                };
 
-                        if buttons.just_released(MouseButton::Left) {
-                            let combo_tower =
-                                ComboTowerRequest::new(vec![*first_tower_id, hovering_tower_id]);
-                            client.send_message(Channels::PlayerCommand, &combo_tower);
+                                if buttons.just_released(MouseButton::Left) {
+                                    let combo_tower = ComboTowerRequest::new(vec![
+                                        *first_tower_id,
+                                        hovering_tower_id,
+                                    ]);
+                                    client.send_message(Channels::PlayerCommand, &combo_tower);
 
-                            *selected = Selected::Nothing;
-                            combine_floaty_text_query.for_each(|e| {
-                                commands.entity(e).despawn();
-                            });
+                                    *selected = Selected::Nothing;
+                                    combine_floaty_text_query.for_each(|e| {
+                                        commands.entity(e).despawn();
+                                    });
+                                }
+                            }
+                            None => {
+                                set_text = format!(
+                                    "Can't combine {}\n with a {}.",
+                                    first_tower.title, hovering_tower.title
+                                );
+                                set_guide = SetGuide {
+                                    visibility: SetGuideVisibility::Bad,
+                                    position: SetGuidePosition::Lock(hovering_tower_pos),
+                                };
+                            }
                         }
                     }
                 }
@@ -336,7 +349,7 @@ pub fn mouse_action(
                             }
                             None => {
                                 set_text = format!(
-                                    "Can't combine {} with a {}.",
+                                    "Can't combine a {}\n with a {}.",
                                     first_creep.title, hovering_creep.title
                                 );
                                 set_guide = SetGuide {

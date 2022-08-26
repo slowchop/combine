@@ -159,9 +159,37 @@ pub fn receive_message_event(
                     };
 
                     let server_ids = &*combo_tower_request.towers;
-                    warn!("TODO: Check if building is possible");
-                    warn!("TODO: Check which tower this upgrades to!");
-                    warn!("TODO: Check owner");
+
+                    // Check for owner and return tower_refs.
+                    let towers = match server_ids
+                        .iter()
+                        .map(|server_id| {
+                            let entity = game.entities.get(server_id)?;
+                            let (_, tower_ref, tower_owner) = tower_query.get(*entity).ok()?;
+                            if tower_owner != &player.owner {
+                                return None;
+                            }
+                            Some(tower_ref)
+                        })
+                        .collect::<Option<Vec<&TowerRef>>>()
+                    {
+                        Some(towers) => towers,
+                        None => {
+                            warn!(
+                                "One of the towers couldnt be found in list: {:?}",
+                                server_ids
+                            );
+                            continue;
+                        }
+                    };
+
+                    let tower = match defs.tower_for_combo(&towers) {
+                        None => {
+                            warn!("No match for combo {:?}", &towers);
+                            continue;
+                        }
+                        Some(c) => c,
+                    };
 
                     let last_tower_id = server_ids.last().unwrap();
                     let last_tower_entity = match game.entities.get(last_tower_id) {
@@ -171,7 +199,7 @@ pub fn receive_message_event(
                         }
                         Some(s) => s,
                     };
-                    let (transform, tower_ref, owner) = match tower_query.get(*last_tower_entity) {
+                    let (transform, _, _) = match tower_query.get(*last_tower_entity) {
                         Err(e) => {
                             warn!("Last tower not found in query for combo tower.");
                             continue;
@@ -180,13 +208,16 @@ pub fn receive_message_event(
                     };
                     let position = vec3_to_vec2(&transform.translation);
 
+                    warn!("TODO: Drop money");
+                    info!(?tower.name, "Creating tower");
+
                     spawn_entity_events.send(SpawnEntityEvent {
                         game_id,
                         entity_def: EntityDef {
                             entity_type: EntityType::Tower,
                             position: Some(position.into()),
                             owner: Some(player.owner.clone()),
-                            tower: Some(TowerRef("machine".to_string())),
+                            tower: Some(tower.name),
                             ..Default::default()
                         },
                     });

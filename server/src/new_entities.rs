@@ -42,8 +42,6 @@ pub fn add_new_entities_to_game(
             .entity(new_entity_event.entity)
             .insert(server_entity_id);
 
-        info!(?server_entity_id, "New entity created on server...");
-
         let users = match game_user_lookup.get_game_users(&new_entity_event.game_id) {
             Some(u) => u,
             None => {

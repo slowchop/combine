@@ -193,7 +193,6 @@ pub fn spawn_entities(
                         continue;
                     }
                 };
-                info!(?creep, "Spawning creep...");
 
                 let id = commands
                     .spawn()
