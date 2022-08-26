@@ -26,7 +26,7 @@ levels:
         - 5.0
       - - -10.0
         - -5.0
-      - - -18.0
+      - - 18.0
         - -2.0
     - type: base
       position:
@@ -47,7 +47,7 @@ levels:
         - 5.0
       - - 10.0
         - -5.0
-      - - 18.0
+      - - -18.0
         - -2.0
     - texture: tree.png
       type: sprite
@@ -121,13 +121,15 @@ creeps:
     speed: 1.0
     cost: 100
     health: 250.0
+    size: 5.0
   robot:
     name: Robot
     combo: []
     texture: gnome.png
-    speed: 10.0
+    speed: 1.0
     cost: 100
     health: 100.0
+    size: 5.0
   monster:
     name: Monster
     combo: []
@@ -135,6 +137,7 @@ creeps:
     speed: 1.0
     cost: 100
     health: 100.0
+    size: 5.0
   fast:
     name: Fast
     combo:
@@ -144,6 +147,7 @@ creeps:
     speed: 2.0
     cost: 100
     health: 100.0
+    size: 5.0
 textures:
   tree.png:
     size:

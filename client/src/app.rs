@@ -80,7 +80,7 @@ pub fn play(args: &Args) {
         settings.start_multiplayer_immediately = true;
     }
 
-    let image_settings = ImageSettings::default_nearest();
+    let image_settings = ImageSettings::default_linear();
 
     app.insert_resource(WindowDescriptor {
         resizable: false,

@@ -91,6 +91,7 @@ pub struct Creep {
     pub speed: f32,
     pub cost: u32,
     pub health: f32,
+    pub size: f32,
 }
 
 #[derive(Component, Debug)]

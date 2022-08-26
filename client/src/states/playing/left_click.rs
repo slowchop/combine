@@ -1,4 +1,5 @@
 use crate::app::MyRaycastSet;
+use crate::states::playing::creeps::Released;
 use crate::states::playing::floaty_text::{floaty_text_bundle, FloatyText};
 use crate::states::playing::init::MouseHoverText;
 use crate::states::playing::spawn_entities::SpawnEntityEvent;
@@ -6,7 +7,8 @@ use crate::BillboardMaterial;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
 use naia_bevy_client::Client;
-use shared::game::defs::{Defs, Tower, TowerRef};
+use shared::game::defs::{CreepRef, Defs, Tower, TowerRef};
+use shared::game::owner::Owner;
 use shared::game::position::vec2_to_vec3;
 use shared::game::shared_game::{ServerEntityId, SharedGame};
 use shared::game::ClientGameInfo;
@@ -15,20 +17,13 @@ use shared::protocol::request_tower_placement::NewTowerRequest;
 use shared::protocol::Protocol;
 use shared::Channels;
 
-// pub fn place_tower_requests(
-//     mut request_tower_placement: EventReader<RequestTowerPlacement>,
-//     game_info: Query<&GameInfo>,
-// ) {
-//     let game_info = game_info.single();
-//     for request in request_tower_placement.iter() {}
-// }
-
 #[derive(Component)]
 pub struct Guide;
 
 #[derive(Debug)]
 pub enum HoveringOn {
     Nothing,
+    Creep(ServerEntityId, Vec3),
     Tower(ServerEntityId, Vec3),
 }
 
@@ -67,18 +62,6 @@ enum SetGuideVisibility {
 }
 
 #[derive(Debug)]
-enum OnClick {
-    Nothing,
-    SetSelected(Selected),
-    BuildBaseTower,
-    BuildCombinedTower {
-        tower_1: ServerEntityId,
-        tower_2: ServerEntityId,
-        tower_ref: TowerRef,
-    },
-}
-
-#[derive(Debug)]
 struct SetGuide {
     visibility: SetGuideVisibility,
     position: SetGuidePosition,
@@ -98,12 +81,17 @@ pub struct CombineFloatyText;
 
 pub fn mouse_action(
     mut commands: Commands,
+    client_game_info: Query<&ClientGameInfo>,
     asset_server: Res<AssetServer>,
     defs: Res<Defs>,
     mut client: Client<Protocol, Channels>,
     buttons: Res<Input<MouseButton>>,
     query: Query<&Intersection<MyRaycastSet>, (Without<Guide>, Without<TowerRef>)>,
-    towers: Query<(&TowerRef, &Transform, &ServerEntityId), Without<Guide>>,
+    towers: Query<(&TowerRef, &Transform, &ServerEntityId, &Owner), Without<Guide>>,
+    creeps: Query<
+        (&CreepRef, &Transform, &ServerEntityId, &Owner),
+        (Without<Guide>, Without<Released>),
+    >,
     mut materials: ResMut<Assets<BillboardMaterial>>,
     mut guide: Query<
         (&mut Transform, &Handle<BillboardMaterial>),
@@ -116,6 +104,14 @@ pub fn mouse_action(
     >,
     mut combine_floaty_text_query: Query<Entity, (With<FloatyText>, With<CombineFloatyText>)>,
 ) {
+    let client_game_info = match client_game_info.get_single() {
+        Ok(client_game_info) => client_game_info,
+        Err(_) => {
+            warn!("No client_game_info");
+            return;
+        }
+    };
+
     let (mut guide_transform, material_handle) = if let Ok(g) = guide.get_single_mut() {
         g
     } else {
@@ -132,11 +128,12 @@ pub fn mouse_action(
         };
         position = Some(Vec2::new(intersection.x, intersection.z));
     }
-    let position = if let Some(position) = position {
+    let mouse_position_vec2 = if let Some(position) = position {
         position
     } else {
         return;
     };
+    let mouse_position_vec3 = vec2_to_vec3(&mouse_position_vec2);
 
     let tower = if let Some(tower) = defs.tower("machine") {
         tower
@@ -145,52 +142,88 @@ pub fn mouse_action(
     };
 
     let mut hovering_on = HoveringOn::Nothing;
-    for (other_tower_ref, transform, server_entity_id) in towers.iter() {
+    for (other_tower_ref, transform, server_entity_id, tower_owner) in towers.iter() {
+        if client_game_info.i_am != *tower_owner {
+            continue;
+        }
         let other_tower = defs.tower(&other_tower_ref.0).unwrap();
-        let min_distance = (other_tower.size + tower.size).powf(2.0);
-        let distance_squared = (transform.translation - vec2_to_vec3(&position)).length_squared();
-        if distance_squared < min_distance {
+        let min_distance = other_tower.size / 2.0 + tower.size / 2.0;
+        let distance = (transform.translation - mouse_position_vec3).length();
+        if distance < min_distance {
             hovering_on = HoveringOn::Tower(*server_entity_id, transform.translation);
-            break;
         }
     }
+
+    let mut closest_creep = None;
+    for (other_creep_ref, transform, server_entity_id, creep_owner) in creeps.iter() {
+        if client_game_info.i_am != *creep_owner {
+            continue;
+        }
+        let creep = defs.creep(&other_creep_ref.0).unwrap();
+        let max_distance = creep.size / 2.0;
+        let distance = (transform.translation - mouse_position_vec3).length();
+        if distance > max_distance {
+            continue;
+        }
+        match closest_creep {
+            None => {
+                closest_creep = Some(distance);
+                hovering_on = HoveringOn::Creep(*server_entity_id, transform.translation);
+            }
+            Some(previous_closest) => {
+                if distance < previous_closest {
+                    closest_creep = Some(distance);
+                    hovering_on = HoveringOn::Creep(*server_entity_id, transform.translation);
+                }
+            }
+        }
+    }
+
+    // println!("hovering on: {:?}", hovering_on);
 
     let mut set_guide = SetGuide::new();
     let mut set_text = None;
     match &*selected {
         Selected::Nothing => {
             // Nothing selected
-            if let HoveringOn::Tower(hovering_tower_id, hovering_tower_position) = hovering_on {
-                set_text = Some("Combine this tower\nwith another.");
-                set_guide = SetGuide {
-                    visibility: SetGuideVisibility::Good,
-                    position: SetGuidePosition::Lock(hovering_tower_position),
-                };
-
-                if buttons.just_released(MouseButton::Left) {
-                    *selected = Selected::OneTowerForCombo {
-                        first_id: hovering_tower_id,
-                        position: hovering_tower_position,
+            match hovering_on {
+                HoveringOn::Nothing => {
+                    set_text = Some("Place a tower here");
+                    set_guide = SetGuide {
+                        visibility: SetGuideVisibility::Good,
+                        position: SetGuidePosition::Normal,
                     };
-                    commands
-                        .spawn_bundle(floaty_text_bundle(&asset_server))
-                        .insert(FloatyText {
-                            text: "#1".to_string(),
-                            world_position: hovering_tower_position,
-                        })
-                        .insert(CombineFloatyText);
-                }
-            } else {
-                // Hovering on nothing.
-                set_text = Some("Place a tower here");
-                set_guide = SetGuide {
-                    visibility: SetGuideVisibility::Good,
-                    position: SetGuidePosition::Normal,
-                };
 
-                if buttons.just_released(MouseButton::Left) {
-                    let place_tower = NewTowerRequest::new(position, "machine", 1230);
-                    client.send_message(Channels::PlayerCommand, &place_tower);
+                    if buttons.just_released(MouseButton::Left) {
+                        let place_tower =
+                            NewTowerRequest::new(mouse_position_vec2, "machine", 1230);
+                        client.send_message(Channels::PlayerCommand, &place_tower);
+                    }
+                }
+                HoveringOn::Creep(hovering_creep_id, hovering_creep_position) => {
+                    todo!()
+                }
+                HoveringOn::Tower(hovering_tower_id, hovering_tower_position) => {
+                    set_text = Some("Combine this tower\nwith another.");
+                    set_guide = SetGuide {
+                        visibility: SetGuideVisibility::Good,
+                        position: SetGuidePosition::Lock(hovering_tower_position),
+                    };
+
+                    if buttons.just_released(MouseButton::Left) {
+                        *selected = Selected::OneTowerForCombo {
+                            first_id: hovering_tower_id,
+                            position: hovering_tower_position,
+                        };
+                        // TODO: Doesn't work
+                        // commands
+                        //     .spawn_bundle(floaty_text_bundle(&asset_server))
+                        //     .insert(FloatyText {
+                        //         text: "#1".to_string(),
+                        //         world_position: hovering_tower_position,
+                        //     })
+                        //     .insert(CombineFloatyText);
+                    }
                 }
             }
         }
@@ -267,7 +300,7 @@ pub fn mouse_action(
 
     match set_guide.position {
         SetGuidePosition::Normal => {
-            guide_transform.translation = vec2_to_vec3(&position);
+            guide_transform.translation = vec2_to_vec3(&mouse_position_vec2);
         }
         SetGuidePosition::Lock(pos) => {
             guide_transform.translation = pos;

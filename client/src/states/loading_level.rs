@@ -9,7 +9,6 @@ use shared::game::ClientGameInfo;
 pub fn init(
     mut commands: Commands,
     game_info: Query<&ClientGameInfo>,
-    asset_server: Res<AssetServer>,
     mut new_entities: EventWriter<SpawnEntityEvent>,
     defs: Res<Defs>,
 ) {

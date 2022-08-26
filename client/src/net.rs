@@ -42,9 +42,7 @@ pub fn disconnect_event(
 
 #[derive(Debug)]
 pub struct ReleaseCreepEvent {
-    // pub server_entity_id: ServerEntityId,
-    // pub starting_position: Vec3,
-    // pub starting_tick: Ticks,
+    pub server_entity_id: ServerEntityId,
 }
 
 #[derive(Debug)]
@@ -112,9 +110,13 @@ pub fn receive_message_event(
                 Protocol::NewTowerRequest(_) => {
                     warn!("Got a request tower placement message, but we are not a server");
                 }
-                Protocol::ReleaseCreeps(_) => {
+                Protocol::ReleaseCreeps(release_creeps_event) => {
                     info!("got a release the creeps network message.");
-                    release_the_creeps_events.send(ReleaseCreepEvent {});
+                    for server_entity_id in &*release_creeps_event.creeps {
+                        release_the_creeps_events.send(ReleaseCreepEvent {
+                            server_entity_id: *server_entity_id,
+                        });
+                    }
                 }
                 Protocol::UpdatePosition(update_position) => {
                     update_position_events.send(UpdatePositionEvent {

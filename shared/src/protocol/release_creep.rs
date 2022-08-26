@@ -7,10 +7,12 @@ use naia_shared::{Property, Replicate};
 
 #[derive(Component, Replicate)]
 #[protocol_path = "crate::protocol::Protocol"]
-pub struct ReleaseCreeps {}
+pub struct ReleaseCreeps {
+    pub creeps: Property<Vec<ServerEntityId>>,
+}
 
 impl ReleaseCreeps {
-    pub fn new() -> Self {
-        ReleaseCreeps::new_complete()
+    pub fn new(ids: Vec<ServerEntityId>) -> Self {
+        ReleaseCreeps::new_complete(ids)
     }
 }

@@ -13,7 +13,7 @@ use shared::{Auth, Channels, JoinRandomGame};
 
 pub fn init(
     mut commands: Commands,
-    transforms: Query<Entity, With<Transform>>,
+    transforms: Query<Entity, (With<Transform>, Without<Camera>)>,
     game_infos: Query<Entity, With<ClientGameInfo>>,
     games: Query<Entity, With<SharedGame>>,
 ) {

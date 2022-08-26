@@ -63,7 +63,8 @@ pub fn tell_clients_to_release_the_creeps(
         // Iterate over entities in the game.
         // Work out which ones are creeps.
         // Send a ReleaseCreep message to each client for each entity.
-        for (server_entity_id, entity) in &game.entities {
+        let mut collected_server_entity_ids = Vec::with_capacity(40);
+        for (idx, (server_entity_id, entity)) in game.entities.iter().enumerate() {
             let (server_entity_id_2, transform, owner) = match creep_query.get(*entity) {
                 Ok(e) => e,
                 Err(_) => {
@@ -83,6 +84,8 @@ pub fn tell_clients_to_release_the_creeps(
                 continue;
             };
 
+            collected_server_entity_ids.push(*server_entity_id);
+
             commands
                 .entity(*entity)
                 .insert(path.clone())
@@ -91,14 +94,13 @@ pub fn tell_clients_to_release_the_creeps(
                     current_path_target: 0,
                 })
                 .insert(PathLeaveAt(
-                    time.time_since_startup()
-                        + Duration::from_secs_f32(2.0 + thread_rng().gen_range(0.0f32..5.0f32)),
+                    time.time_since_startup() + Duration::from_secs_f32(idx as f32),
                 ));
         }
 
         // We're only sending one "release" message to each client. The server will send position
         // updates to the client for the creeps.
-        let message = ReleaseCreeps::new();
+        let message = ReleaseCreeps::new(collected_server_entity_ids);
         send_message_to_game(
             &mut server,
             &release_creeps_event.game_id,
