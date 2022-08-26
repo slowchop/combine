@@ -137,6 +137,14 @@ pub fn play(args: &Args) {
         .add_event::<UpdatePlayerEvent>()
         .add_event::<GameOverEvent>()
         .add_event::<ConsoleItem>()
+        .insert_resource(editor::menu::Editor::default())
+        .add_event::<editor::menu::NewEvent>()
+        .add_event::<editor::menu::SaveEvent>()
+        .add_event::<editor::menu::LoadEvent>()
+        .add_event::<editor::menu::AddSpriteEvent>()
+        .add_event::<editor::menu::AddPathEvent>()
+        .add_event::<editor::menu::DeleteEvent>()
+        .add_event::<editor::menu::MoveEvent>()
         .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)
         .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
@@ -219,6 +227,8 @@ pub fn play(args: &Args) {
     );
 
     // Editor
+    app.add_enter_system(GameState::Editor, editor::init::init);
+    app.add_exit_system(GameState::Editor, init_egui);
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::Editor)
@@ -317,6 +327,10 @@ fn init_egui(mut egui_context: ResMut<EguiContext>) {
     style.text_styles.insert(
         egui::TextStyle::Heading,
         FontId::new(40.0, FontFamily::Proportional),
+    );
+    style.text_styles.insert(
+        egui::TextStyle::Body,
+        FontId::new(30.0, FontFamily::Proportional),
     );
     ctx.set_style(style);
 }
