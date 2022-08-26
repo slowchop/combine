@@ -147,6 +147,9 @@ pub fn receive_message_event(
                 Protocol::ComboTowerRequest(_) => {
                     warn!("Got a combo tower request message");
                 }
+                Protocol::ComboCreepRequest(_) => {
+                    warn!("Got a combo creep request message");
+                }
             }
         }
     }

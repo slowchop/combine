@@ -1,3 +1,4 @@
+use crate::protocol::combo_creep_request::ComboCreepRequest;
 use crate::protocol::combo_tower_request::ComboTowerRequest;
 use crate::protocol::destroy_entity::DestroyEntity;
 use crate::protocol::game_over::GameOver;
@@ -15,6 +16,7 @@ use naia_shared::{
 };
 
 pub mod auth;
+pub mod combo_creep_request;
 pub mod combo_tower_request;
 pub mod destroy_entity;
 pub mod game_over;
@@ -37,6 +39,7 @@ pub enum Protocol {
 
     NewTowerRequest(NewTowerRequest),
     ComboTowerRequest(ComboTowerRequest),
+    ComboCreepRequest(ComboCreepRequest),
 
     GameReady(GameReady),
     GameOver(GameOver),

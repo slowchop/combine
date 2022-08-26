@@ -12,6 +12,7 @@ use shared::game::owner::Owner;
 use shared::game::position::vec2_to_vec3;
 use shared::game::shared_game::{ServerEntityId, SharedGame};
 use shared::game::ClientGameInfo;
+use shared::protocol::combo_creep_request::ComboCreepRequest;
 use shared::protocol::combo_tower_request::ComboTowerRequest;
 use shared::protocol::request_tower_placement::NewTowerRequest;
 use shared::protocol::Protocol;
@@ -312,10 +313,10 @@ pub fn mouse_action(
                         };
 
                         if buttons.just_released(MouseButton::Left) {
-                            // let combo_creep =
-                            //     ComboCreepRequest::new(vec![*first_creep_id, hovering_creep_id]);
-                            // client.send_message(Channels::PlayerCommand, &combo_creep);
-                            //
+                            let combo_creep =
+                                ComboCreepRequest::new(vec![*first_creep_id, hovering_creep_id]);
+                            client.send_message(Channels::PlayerCommand, &combo_creep);
+
                             *selected = Selected::Nothing;
                             combine_floaty_text_query.for_each(|e| {
                                 commands.entity(e).despawn();

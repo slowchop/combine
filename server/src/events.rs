@@ -10,7 +10,7 @@ use naia_bevy_server::{
     events::{AuthorizationEvent, ConnectionEvent, DisconnectionEvent, MessageEvent},
     Server,
 };
-use shared::game::defs::{EntityDef, EntityType, TowerRef};
+use shared::game::defs::{CreepRef, EntityDef, EntityType, TowerRef};
 use shared::game::destroyment_method::DestroymentMethod;
 use shared::game::owner::Owner;
 use shared::game::player::{PlayerName, SharedPlayer};
@@ -77,6 +77,7 @@ pub fn receive_message_event(
     // For combos, TODO: move to system
     mut destroy_entity_event: EventWriter<DestroyEntityEvent>,
     mut tower_query: Query<(&Transform, &TowerRef, &Owner)>,
+    mut creep_query: Query<(&Transform, &CreepRef, &Owner)>,
 ) {
     for event in event_reader.iter() {
         if let MessageEvent(user_key, Channels::PlayerCommand, cmd) = event {
@@ -185,6 +186,71 @@ pub fn receive_message_event(
                             position: Some(position.into()),
                             owner: Some(player.owner.clone()),
                             tower: Some("machine".to_string()),
+                            ..Default::default()
+                        },
+                    });
+
+                    for server_entity_id in server_ids {
+                        destroy_entity_event.send(DestroyEntityEvent {
+                            game_id,
+                            server_entity_id: server_entity_id.clone(),
+                            destroyment_method: DestroymentMethod::Quiet,
+                        });
+                    }
+                }
+                Protocol::ComboCreepRequest(combo_creep_request) => {
+                    let player = match player_lookup.0.get(&user_key) {
+                        Some(a) => a,
+                        None => {
+                            warn!("Player not found in lookup");
+                            continue;
+                        }
+                    };
+                    let game_id = match game_user_lookup.get_user_game(&user_key) {
+                        Some(a) => a.clone(),
+                        None => {
+                            warn!("Player not found in game_user lookup");
+                            continue;
+                        }
+                    };
+
+                    let game = match game_lookup.0.get(&game_id) {
+                        None => {
+                            warn!("Game not found in lookup for combo creep request");
+                            continue;
+                        }
+                        Some(s) => s,
+                    };
+
+                    let server_ids = &*combo_creep_request.creeps;
+                    warn!("TODO: Check if comboing is possible");
+                    warn!("TODO: Check which creep this upgrades to!");
+                    warn!("TODO: Check owner");
+
+                    let last_creep_id = server_ids.last().unwrap();
+                    let last_creep_entity = match game.entities.get(last_creep_id) {
+                        None => {
+                            warn!("Last creep not found in game entities");
+                            continue;
+                        }
+                        Some(s) => s,
+                    };
+                    let (transform, creep_ref, owner) = match creep_query.get(*last_creep_entity) {
+                        Err(e) => {
+                            warn!("Last creep not found in query for combo creep.");
+                            continue;
+                        }
+                        Ok(s) => s,
+                    };
+                    let position = vec3_to_vec2(&transform.translation);
+
+                    spawn_entity_events.send(SpawnEntityEvent {
+                        game_id,
+                        entity_def: EntityDef {
+                            entity_type: EntityType::Creep,
+                            position: Some(position.into()),
+                            owner: Some(player.owner.clone()),
+                            creep: Some("robot".to_string()),
                             ..Default::default()
                         },
                     });
