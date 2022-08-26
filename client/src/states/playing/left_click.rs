@@ -1,4 +1,5 @@
 use crate::app::MyRaycastSet;
+use crate::states::playing::floaty_text::FloatyText;
 use crate::states::playing::init::HoverText;
 use crate::states::playing::spawn_entities::SpawnEntityEvent;
 use crate::BillboardMaterial;
@@ -94,7 +95,6 @@ pub fn mouse_action(
     defs: Res<Defs>,
     mut client: Client<Protocol, Channels>,
     buttons: Res<Input<MouseButton>>,
-    mut spawn_entities: EventWriter<SpawnEntityEvent>,
     query: Query<&Intersection<MyRaycastSet>, (Without<Guide>, Without<TowerRef>)>,
     towers: Query<(&TowerRef, &Transform, &ServerEntityId), Without<Guide>>,
     mut materials: ResMut<Assets<BillboardMaterial>>,
@@ -103,8 +103,7 @@ pub fn mouse_action(
         (With<Guide>, Without<TowerRef>),
     >,
     mut selected: ResMut<Selected>,
-    camera_query: Query<(&GlobalTransform, &Camera)>,
-    mut hover_text_query: Query<(&mut Style, &mut Text), (With<HoverText>)>,
+    mut hover_text_query: Query<&mut FloatyText, With<HoverText>>,
 ) {
     let (mut guide_transform, material_handle) = if let Ok(g) = guide.get_single_mut() {
         g
@@ -206,14 +205,9 @@ pub fn mouse_action(
     }
     guide_transform.translation += Vec3::new(0.0, 0.5, 0.0);
 
-    let (camera_transform, camera) = camera_query.single();
-    let viewport_pos = camera
-        .world_to_viewport(camera_transform, guide_transform.translation)
-        .unwrap();
-    let (mut hover_text_style, mut text) = hover_text_query.single_mut();
-    hover_text_style.position.left = Val::Px(viewport_pos.x);
-    hover_text_style.position.bottom = Val::Px(viewport_pos.y);
-    text.sections[0].value = set_text.unwrap_or("").to_string();
+    let mut floaty = hover_text_query.single_mut();
+    floaty.world_position = guide_transform.translation;
+    floaty.text = set_text.unwrap_or("").to_string();
 
     if !(buttons.just_released(MouseButton::Left)) {
         return;
@@ -226,7 +220,7 @@ pub fn mouse_action(
             client.send_message(Channels::PlayerCommand, &place_tower);
         }
         OnClick::SetSelected(s) => {
-            todo!();
+            *selected = s;
         }
         OnClick::BuildCombinedTower { .. } => {
             todo!()

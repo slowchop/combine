@@ -4,6 +4,7 @@ use crate::states::disconnected;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::creeps::release_creeps;
 use crate::states::playing::destroy_entities::destroy_entities;
+use crate::states::playing::floaty_text::update_floaty_text_and_world_to_screen_pos;
 use crate::states::playing::game_over::{game_over, game_over_message};
 use crate::states::playing::left_click::mouse_action;
 use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
@@ -192,6 +193,7 @@ pub fn play(args: &Args) {
             .with_system(update_player)
             .with_system(game_over)
             .with_system(game_over_message)
+            .with_system(update_floaty_text_and_world_to_screen_pos)
             .into(),
     );
 
