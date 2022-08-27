@@ -1,12 +1,12 @@
 use crate::states::map_editor::load_map::CreateEditorEntity;
-use crate::states::map_editor::menu::{AddSpriteEvent, ClearEditorLevelEvent};
+use crate::states::map_editor::menu::{AddEditorSpriteEvent, ClearEditorLevelEvent};
 use crate::states::playing::camera::GameCamera;
 use bevy::prelude::*;
 use shared::game::defs::{EntityDef, EntityType};
 use shared::game::position::vec3_to_vec2;
 
 pub fn add_sprite(
-    mut create_event: EventReader<AddSpriteEvent>,
+    mut create_event: EventReader<AddEditorSpriteEvent>,
     mut create_editor_entity: EventWriter<CreateEditorEntity>,
     game_camera: Query<&GameCamera>,
 ) {

@@ -1,6 +1,6 @@
 use crate::app::MyRaycastSet;
 use crate::states::map_editor::input_events::Draggable;
-use crate::states::map_editor::menu::{ClearEditorLevelEvent, EditorInfo, LoadEvent};
+use crate::states::map_editor::menu::{ClearEditorLevelEvent, EditorInfo, LoadEditorLevelEvent};
 use crate::states::playing::bottom_quad::BottomQuad;
 use crate::states::playing::console::ConsoleItem;
 use crate::BillboardMaterial;
@@ -24,7 +24,7 @@ pub struct PathInfo {
 pub fn load_map(
     mut console: EventWriter<ConsoleItem>,
     defs: Res<Defs>,
-    mut load_map_events: EventReader<LoadEvent>,
+    mut load_map_events: EventReader<LoadEditorLevelEvent>,
     mut create_editor_entities: EventWriter<CreateEditorEntity>,
 ) {
     for map in load_map_events.iter() {

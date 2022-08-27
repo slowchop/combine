@@ -74,9 +74,7 @@ pub fn input_events(
             let mut closest_distance = None;
             for (entity, transform, maybe_entity_def, _) in query.iter() {
                 if let Some(entity_def) = maybe_entity_def {
-                    if entity_def.entity_type == EntityType::Spawn
-                        || entity_def.entity_type == EntityType::Base
-                        || entity_def.entity_type == EntityType::Guide
+                    if entity_def.entity_type == EntityType::Guide
                         || entity_def.entity_type == EntityType::Ground
                     {
                         continue;
@@ -145,14 +143,13 @@ pub fn input_events(
 
             if buttons.just_released(MouseButton::Left) {
                 *drag_state = EditorDragState::NotDragging;
-                // Drag time was too short, ignoring.
-                println!("Drag time was too short, ignoring.");
-                if time.time_since_startup() - start_time < Duration::from_secs_f32(0.4) {
-                    mouse_position = vec2_to_vec3(&original_position);
-                    position = original_position;
-                } else {
-                    return;
-                }
+                // if time.time_since_startup() - start_time < Duration::from_secs_f32(0.4) {
+                // println!("Drag time was too short, ignoring.");
+                // mouse_position = vec2_to_vec3(&original_position);
+                // position = original_position;
+                // } else {
+                return;
+                // }
             }
 
             transform.translation = mouse_position;

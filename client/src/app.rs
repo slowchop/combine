@@ -245,12 +245,12 @@ pub fn play(args: &Args) {
         .insert_resource(EditorDragState::default())
         .insert_resource(IsPointerCaptured(false))
         .add_event::<map_editor::menu::ClearEditorLevelEvent>()
-        .add_event::<map_editor::menu::SaveEvent>()
-        .add_event::<map_editor::menu::LoadEvent>()
-        .add_event::<map_editor::menu::AddSpriteEvent>()
-        .add_event::<map_editor::menu::AddPathEvent>()
-        .add_event::<map_editor::menu::DeleteEvent>()
-        .add_event::<map_editor::menu::MoveEvent>();
+        .add_event::<map_editor::menu::SaveEditorLevelEvent>()
+        .add_event::<map_editor::menu::LoadEditorLevelEvent>()
+        .add_event::<map_editor::menu::AddEditorSpriteEvent>()
+        .add_event::<map_editor::menu::AddEditorPathEvent>()
+        .add_event::<map_editor::menu::DeleteEditorEntityEvent>()
+        .add_event::<map_editor::menu::MoveEditorEntityEvent>();
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::Editor)

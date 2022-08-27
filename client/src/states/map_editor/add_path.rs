@@ -1,6 +1,6 @@
 use crate::states::map_editor::input_events::Draggable;
 use crate::states::map_editor::load_map::PathInfo;
-use crate::states::map_editor::menu::{AddPathEvent, EditorInfo};
+use crate::states::map_editor::menu::{AddEditorPathEvent, EditorInfo};
 use crate::states::playing::bottom_quad::BottomQuad;
 use crate::BillboardMaterial;
 use bevy::prelude::*;
@@ -9,7 +9,7 @@ use shared::game::position::vec2_to_vec3;
 
 pub fn add_path(
     mut commands: Commands,
-    mut path_events: EventReader<AddPathEvent>,
+    mut path_events: EventReader<AddEditorPathEvent>,
     asset_server: Res<AssetServer>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut billboard_materials: ResMut<Assets<BillboardMaterial>>,
@@ -30,7 +30,7 @@ pub fn add_path(
         let mut path = entity_def.path.as_mut().unwrap();
         let idx = path.len();
         let waypoint: Vec2 = path.last().unwrap().into();
-        let waypoint: Vec2 = waypoint + Vec2::new(10.0, 10.0);
+        let waypoint: Vec2 = waypoint + Vec2::new(2.0, 2.0);
         path.push(waypoint.clone().into());
 
         let material = billboard_materials.add(BillboardMaterial {

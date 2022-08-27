@@ -1,6 +1,6 @@
 use crate::states::map_editor::input_events::Draggable;
 use crate::states::map_editor::load_map::PathInfo;
-use crate::states::map_editor::menu::{EditorInfo, SaveEvent};
+use crate::states::map_editor::menu::{EditorInfo, SaveEditorLevelEvent};
 use bevy::prelude::*;
 use bevy::utils::HashMap;
 use shared::game::defs::{Defs, EntityDef, EntityType};
@@ -8,7 +8,7 @@ use shared::game::owner::Owner;
 use shared::game::position::vec3_to_vec2;
 
 pub fn save_map(
-    mut save_map_events: EventReader<SaveEvent>,
+    mut save_map_events: EventReader<SaveEditorLevelEvent>,
     mut commands: Commands,
     mut defs: ResMut<Defs>,
     editor_info: Res<EditorInfo>,
