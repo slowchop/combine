@@ -12,15 +12,12 @@ pub fn save_map(
     mut commands: Commands,
     mut defs: ResMut<Defs>,
     editor_info: Res<EditorInfo>,
-    mut query: Query<
-        (
-            Entity,
-            &mut Transform,
-            Option<&mut EntityDef>,
-            Option<&mut PathInfo>,
-        ),
-        With<Draggable>,
-    >,
+    mut query: Query<(
+        Entity,
+        &mut Transform,
+        Option<&mut EntityDef>,
+        Option<&mut PathInfo>,
+    )>,
 ) {
     for event in save_map_events.iter() {
         // Normal entities (not paths) will have an EntityDef component which we will just nuke
@@ -39,7 +36,9 @@ pub fn save_map(
         new_paths.insert(Owner::new(0), Vec::new());
         new_paths.insert(Owner::new(1), Vec::new());
         for (entity, transform, maybe_entity_def, maybe_path_info) in query.iter() {
-            if let Some(entity_def) = maybe_entity_def {
+            if let Some(mut entity_def) = maybe_entity_def {
+                let mut entity_def = entity_def.clone();
+                entity_def.server_entity_id = None;
                 new_entities.push(entity_def.clone());
             } else if let Some(path_info) = maybe_path_info {
                 let owner = path_info.owner;

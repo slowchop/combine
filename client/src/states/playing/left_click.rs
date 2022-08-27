@@ -114,6 +114,7 @@ pub fn mouse_action(
         g
     } else {
         // Haven't set up the guide yet!
+        warn!("No guide");
         return;
     };
 

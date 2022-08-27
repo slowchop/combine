@@ -37,7 +37,7 @@ pub fn create_games(
             })
             .collect::<Vec<_>>();
 
-        let map_name = "test";
+        let map_name = "test3";
         let game = SharedGame::new(
             map_name.to_string(),
             shared_players.clone(),

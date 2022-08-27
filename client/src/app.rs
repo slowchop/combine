@@ -7,6 +7,7 @@ use crate::states::editor::load_map::{create_editor_entities, load_map, CreateEd
 use crate::states::editor::new::new_events;
 use crate::states::editor::no_pointer_capture::{is_pointer_captured_system, IsPointerCaptured};
 use crate::states::editor::path_lines::path_lines;
+use crate::states::editor::save_map::save_map;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::console;
 use crate::states::playing::console::ConsoleItem;
@@ -253,6 +254,7 @@ pub fn play(args: &Args) {
             .with_system(add_sprite)
             .with_system(input_events)
             .with_system(add_path)
+            .with_system(save_map)
             .with_system(is_pointer_captured_system)
             .into(),
     );

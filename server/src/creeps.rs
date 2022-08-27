@@ -55,10 +55,10 @@ pub fn spawn_creeps(
         }
 
         for (owner, position) in spawn_points {
-            // 25 creeps for each player, make a little grid.
+            // 16 creeps for each player, make a little grid.
             let mut i = 0;
-            for x in 0..5 {
-                for y in 0..5 {
+            for x in 0..4 {
+                for y in 0..4 {
                     i += 1;
 
                     let creep_ref = if i % 2 == 0 {
@@ -67,7 +67,7 @@ pub fn spawn_creeps(
                         CreepRef("monster".to_string())
                     };
 
-                    let pos = *position + Vec2::new(x as f32 * 3.0, y as f32 * 3.0);
+                    let pos = *position + Vec2::new((x - 2) as f32 * 3.0, (y - 2) as f32 * 3.0);
                     let spawn_entity_event = SpawnEntityEvent {
                         game_id,
                         entity_def: EntityDef {
