@@ -1,3 +1,4 @@
+pub mod add_sprite;
 pub mod init;
 pub mod load_map;
 pub mod menu;

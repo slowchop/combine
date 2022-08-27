@@ -1,5 +1,5 @@
 use crate::app::MyRaycastSet;
-use crate::states::editor::menu::{LoadEvent, NewEvent};
+use crate::states::editor::menu::{LoadEvent, ClearEditorLevelEvent};
 use crate::states::playing::bottom_quad::BottomQuad;
 use crate::states::playing::console::ConsoleItem;
 use crate::BillboardMaterial;
@@ -10,15 +10,13 @@ use shared::game::defs::{Defs, EntityDef, EntityType, LevelDef};
 use shared::game::position::vec2_to_vec3;
 use std::f32::consts::TAU;
 
+pub struct CreateEditorEntity(pub EntityDef);
+
 pub fn load_map(
-    mut commands: Commands,
     mut console: EventWriter<ConsoleItem>,
-    asset_server: Res<AssetServer>,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut billboard_materials: ResMut<Assets<BillboardMaterial>>,
     defs: Res<Defs>,
     mut load_map_events: EventReader<LoadEvent>,
-    query: Query<&Transform>,
+    mut create_editor_entities: EventWriter<CreateEditorEntity>,
 ) {
     for map in load_map_events.iter() {
         dbg!(&map.0);
@@ -34,6 +32,23 @@ pub fn load_map(
         };
 
         for entity_def in &level_def.entities {
+            create_editor_entities.send(CreateEditorEntity(entity_def.clone()));
+        }
+    }
+}
+
+pub fn create_editor_entities(
+    mut create_editor_entities: EventReader<CreateEditorEntity>,
+    mut commands: Commands,
+    defs: Res<Defs>,
+    asset_server: Res<AssetServer>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut billboard_materials: ResMut<Assets<BillboardMaterial>>,
+) {
+    {
+        for create_editor_entity in create_editor_entities.iter() {
+            let entity_def = &create_editor_entity.0;
+
             let mut texture = &entity_def.texture;
 
             if entity_def.entity_type == EntityType::Guide {

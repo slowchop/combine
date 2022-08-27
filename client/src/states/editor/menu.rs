@@ -11,7 +11,7 @@ pub struct Editor {
     pub selected_sprite: String,
 }
 
-pub struct NewEvent;
+pub struct ClearEditorLevelEvent;
 
 pub struct LoadEvent(pub String);
 
@@ -28,7 +28,7 @@ pub struct MoveEvent(pub Entity, pub Vec3);
 pub fn menu(
     defs: Res<Defs>,
     mut egui_context: ResMut<EguiContext>,
-    mut new_events: EventWriter<NewEvent>,
+    mut new_events: EventWriter<ClearEditorLevelEvent>,
     mut load_events: EventWriter<LoadEvent>,
     mut save_events: EventWriter<SaveEvent>,
     mut add_sprite_events: EventWriter<AddSpriteEvent>,
@@ -40,7 +40,7 @@ pub fn menu(
         .default_width(260.)
         .show(egui_context.ctx_mut(), |ui| {
             if ui.button("New").clicked() {
-                new_events.send(NewEvent);
+                new_events.send(ClearEditorLevelEvent);
             };
 
             ui.separator();
@@ -59,7 +59,10 @@ pub fn menu(
                 .width(260.)
                 .selected_text(&editor_map.selected_sprite)
                 .show_ui(ui, |ui| {
-                    for (name, def) in &defs.textures {
+                    let mut textures = defs.textures.iter().collect::<Vec<_>>();
+                    textures.sort_by(|a, b| a.0.cmp(b.0));
+
+                    for (name, def) in textures {
                         let s = format!("{} ({}x{})", name, def.size.x, def.size.y);
                         ui.selectable_value(&mut editor_map.selected_sprite, name.into(), s);
                     }

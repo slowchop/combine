@@ -1,6 +1,7 @@
 use crate::net::{DestroyEntityEvent, GameOverEvent, ReleaseCreepEvent, UpdatePositionEvent};
 use crate::settings::Settings;
-use crate::states::editor::load_map::load_map;
+use crate::states::editor::add_sprite::add_sprite;
+use crate::states::editor::load_map::{create_editor_entities, load_map, CreateEditorEntity};
 use crate::states::editor::new::new_events;
 use crate::states::editor::path_lines::path_lines;
 use crate::states::playing::camera::GameCamera;
@@ -141,13 +142,6 @@ pub fn play(args: &Args) {
         .add_event::<GameOverEvent>()
         .add_event::<ConsoleItem>()
         .insert_resource(editor::menu::Editor::default())
-        .add_event::<editor::menu::NewEvent>()
-        .add_event::<editor::menu::SaveEvent>()
-        .add_event::<editor::menu::LoadEvent>()
-        .add_event::<editor::menu::AddSpriteEvent>()
-        .add_event::<editor::menu::AddPathEvent>()
-        .add_event::<editor::menu::DeleteEvent>()
-        .add_event::<editor::menu::MoveEvent>()
         .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)
         .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
@@ -232,6 +226,14 @@ pub fn play(args: &Args) {
     // Editor
     app.add_enter_system(GameState::Editor, editor::init::init);
     app.add_exit_system(GameState::Editor, init_egui);
+    app.add_event::<CreateEditorEntity>()
+        .add_event::<editor::menu::ClearEditorLevelEvent>()
+        .add_event::<editor::menu::SaveEvent>()
+        .add_event::<editor::menu::LoadEvent>()
+        .add_event::<editor::menu::AddSpriteEvent>()
+        .add_event::<editor::menu::AddPathEvent>()
+        .add_event::<editor::menu::DeleteEvent>()
+        .add_event::<editor::menu::MoveEvent>();
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::Editor)
@@ -239,9 +241,11 @@ pub fn play(args: &Args) {
             .with_system(console::handle_console_events)
             .with_system(console::update_console)
             .with_system(load_map)
+            .with_system(create_editor_entities)
             .with_system(new_events)
             .with_system(move_camera)
             .with_system(path_lines)
+            .with_system(add_sprite)
             .into(),
     );
 
