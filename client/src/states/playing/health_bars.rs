@@ -20,11 +20,13 @@ pub fn add_health_bars(
         let mesh = meshes.add(shape::Quad::new(Vec2::new(1.0, 0.2)).into());
         let material = materials.add(StandardMaterial::from(Color::rgba(1.0, 0.0, 0.0, 1.0)));
 
+        let mut transform = transform.clone();
+
         commands.entity(entity).insert(HasHealthBar);
         commands
             .spawn_bundle(MaterialMeshBundle {
                 material,
-                transform: *transform,
+                transform,
                 mesh,
                 ..Default::default()
             })
@@ -47,20 +49,17 @@ pub fn health_bars(
         Without<Damaged>,
     >,
 ) {
-    // Health bar query seems to work.
-    // Just can't access the creep entity.
-
     for (health_bar_entity, mut health_bar_transform, health_bar, material) in
         health_bar_query.iter_mut()
     {
         let (damaged, &transform, creep_ref) = if let Ok(c) = creep_query.get(health_bar.0) {
             c
         } else {
-            warn!(
-                "Entity not found in creep_query for health_bars: {:?} Despawning. It's cool.",
-                health_bar.0
-            );
-            commands.entity(health_bar_entity).despawn();
+            // warn!(
+            //     "Entity not found in creep_query for health_bars: {:?} Despawning. It's cool.",
+            //     health_bar.0
+            // );
+            // commands.entity(health_bar_entity).despawn();
             continue;
         };
 
@@ -73,8 +72,9 @@ pub fn health_bars(
 
         let fraction = 1.0 - damaged.0 as f32 / creep.health as f32;
         let material = materials.get_mut(&material).unwrap();
-        material.base_color = Color::rgb(1.0 - fraction, fraction, 1.0);
+        material.base_color = Color::rgba(1.0 - fraction, fraction, 1.0, 1.0);
 
+        health_bar_transform.translation = transform.translation + Vec3::new(0.0, 0.0, 0.0);
         health_bar_transform.scale.x = fraction;
     }
 }
