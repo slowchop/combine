@@ -29,7 +29,10 @@ pub fn save_map(
         // entities.
 
         let map_name = event.0.clone();
-        let level_def = defs.levels.entry(map_name).or_insert_with(Default::default);
+        let level_def = defs
+            .levels
+            .entry(map_name.clone())
+            .or_insert_with(Default::default);
 
         let mut new_entities = Vec::new();
         let mut new_paths = HashMap::new();
@@ -40,7 +43,10 @@ pub fn save_map(
                 new_entities.push(entity_def.clone());
             } else if let Some(path_info) = maybe_path_info {
                 let owner = path_info.owner;
-                new_paths[&owner].push((path_info.index, transform.translation));
+                new_paths
+                    .get_mut(&owner)
+                    .unwrap()
+                    .push((path_info.index, transform.translation));
             } else {
                 warn!("Unknown entity {:?} {:?}", entity, transform);
                 continue;
