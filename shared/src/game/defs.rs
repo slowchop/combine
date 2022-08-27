@@ -9,6 +9,7 @@ use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::Write;
+use std::time::Duration;
 use strum::FromRepr;
 use tracing::info;
 
@@ -129,6 +130,20 @@ impl Defs {
     }
 }
 
+#[derive(Component)]
+pub struct DamageOverTimeState {
+    pub damage: u32,
+    last_trigger: Duration,
+    end_at: Duration,
+}
+
+#[derive(Component, Debug, Clone, Serialize, Deserialize)]
+pub struct DamageOverTime {
+    pub damage: u32,
+    pub interval: f32,
+    pub total_duration: f32,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Tower {
     pub emoji: String,
@@ -136,12 +151,23 @@ pub struct Tower {
     pub title: String,
     pub combo: Vec<TowerRef>,
     pub texture: String,
-    pub damage: f32,
     pub range: f32,
     pub size: f32,
     pub cost: u32,
     pub reload: f32,
-    pub instant_fire: bool,
+
+    pub instant_damage: f32,
+
+    /// How much to slow down creeps.
+    pub cold_slowdown: Option<f32>,
+
+    /// Use instant damage as the interval for damage over time
+    pub fire_damage_seconds: Option<f32>,
+    pub fire_damage_interval: Option<f32>,
+
+    /// If this is set, this is an area effect applying to many creeps,
+    /// otherwise it only attacks one creep.
+    pub area: Option<f32>,
 }
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone, PartialEq, Eq, Hash)]

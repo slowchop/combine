@@ -37,7 +37,7 @@ pub fn attr_editor(mut egui_context: ResMut<EguiContext>, mut defs: ResMut<Defs>
                 ui.label(tower.emoji.to_string());
                 ui.label(format!("{}", cost));
                 ui.label(format!("{}", base_towers));
-                let dot = tower.damage as f32 / tower.reload;
+                let dot = tower.instant_damage as f32 / tower.reload;
                 ui.label(format!("{:.2}", dot));
                 ui.label(format!("{:0.2}", dot / *cost as f32));
 
@@ -51,10 +51,10 @@ pub fn attr_editor(mut egui_context: ResMut<EguiContext>, mut defs: ResMut<Defs>
                     }
                 }
 
-                let mut s = format!("{}", tower.damage);
+                let mut s = format!("{}", tower.instant_damage);
                 if ui.text_edit_singleline(&mut s).changed() {
                     if let Ok(c) = s.parse() {
-                        tower.damage = c;
+                        tower.instant_damage = c;
                     }
                 }
 

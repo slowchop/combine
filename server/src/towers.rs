@@ -81,7 +81,7 @@ pub fn shoot_towers(
             damage_creep_events.send(DamageCreepEvent {
                 game_id: *game_id,
                 server_entity_id: *server_entity_id,
-                amount: tower.damage,
+                amount: tower.instant_damage,
             });
         }
     }
