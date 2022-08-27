@@ -7,8 +7,8 @@ use shared::game::owner::Owner;
 
 #[derive(Default)]
 pub struct Editor {
-    name: String,
-    selected_sprite: String,
+    pub name: String,
+    pub selected_sprite: String,
 }
 
 pub struct NewEvent;

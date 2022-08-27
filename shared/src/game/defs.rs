@@ -251,6 +251,12 @@ impl From<Vec2> for NetVec2 {
     }
 }
 
+impl From<&Vec2> for NetVec2 {
+    fn from(v: &Vec2) -> Self {
+        NetVec2(v.clone())
+    }
+}
+
 impl From<&NetVec2> for Vec2 {
     fn from(nv: &NetVec2) -> Self {
         nv.0

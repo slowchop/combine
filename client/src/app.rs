@@ -2,6 +2,7 @@ use crate::net::{DestroyEntityEvent, GameOverEvent, ReleaseCreepEvent, UpdatePos
 use crate::settings::Settings;
 use crate::states::editor::load_map::load_map;
 use crate::states::editor::new::new_events;
+use crate::states::editor::path_lines::path_lines;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::console;
 use crate::states::playing::console::ConsoleItem;
@@ -240,6 +241,7 @@ pub fn play(args: &Args) {
             .with_system(load_map)
             .with_system(new_events)
             .with_system(move_camera)
+            .with_system(path_lines)
             .into(),
     );
 

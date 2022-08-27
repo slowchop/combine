@@ -5,7 +5,9 @@ use crate::states::playing::console::ConsoleItem;
 use crate::BillboardMaterial;
 use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
+use bevy_prototype_lyon::prelude::tess::path::Position;
 use shared::game::defs::{Defs, EntityDef, EntityType, LevelDef};
+use shared::game::position::vec2_to_vec3;
 use std::f32::consts::TAU;
 
 pub fn load_map(
@@ -41,6 +43,45 @@ pub fn load_map(
             let home = Some("editor/home.png".to_string());
             if entity_def.entity_type == EntityType::Base {
                 texture = &home;
+            }
+
+            let spawn = Some("editor/spawn-point.png".to_string());
+            if entity_def.entity_type == EntityType::Spawn {
+                texture = &spawn;
+            }
+
+            if entity_def.entity_type == EntityType::Path {
+                let owner = entity_def.owner.as_ref().unwrap();
+                let path = entity_def.path.as_ref().unwrap();
+                for (idx, waypoint) in path.iter().enumerate() {
+                    let texture = if idx == 0 {
+                        "editor/path-start.png"
+                    } else if idx == path.len() - 1 {
+                        "editor/path-end.png"
+                    } else {
+                        "editor/path-waypoint.png"
+                    };
+                    let material = billboard_materials.add(BillboardMaterial {
+                        alpha_mode: AlphaMode::Blend,
+                        color_texture: Some(asset_server.load(texture)),
+                        owner: owner.0 as i32,
+                        color: Color::WHITE,
+                    });
+                    let mesh = Mesh::from(BottomQuad {
+                        size: Vec2::new(1., 1.),
+                    });
+
+                    commands.spawn_bundle(MaterialMeshBundle {
+                        mesh: meshes.add(mesh),
+                        material,
+                        transform: Transform::from_translation(
+                            vec2_to_vec3(&waypoint.into()).into(),
+                        ),
+                        ..Default::default()
+                    });
+                }
+
+                continue;
             }
 
             let mesh = match entity_def.entity_type {
