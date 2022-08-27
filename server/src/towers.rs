@@ -33,7 +33,7 @@ pub fn shoot_towers(
         &Owner,
         &ServerEntityId,
     )>,
-    mut creeps: Query<(&CreepRef, &Transform, &Owner)>,
+    mut creeps: Query<(&CreepRef, &Transform, &Owner, &ServerEntityId)>,
     mut damage_creep_events: EventWriter<DamageCreepEvent>,
 ) {
     for (tower_ref, tower_transform, mut last_shot, game_id, tower_owner, server_entity_id) in
@@ -64,11 +64,12 @@ pub fn shoot_towers(
 
         // Check if there are any towers in range. Maybe randomly run this to save CPU cycles.
         for (server_entity_id, entity) in &game.entities {
-            let (creep_ref, creep_transform, creep_owner) = if let Ok(c) = creeps.get(*entity) {
-                c
-            } else {
-                continue;
-            };
+            let (creep_ref, creep_transform, creep_owner, creep_server_entity_id) =
+                if let Ok(c) = creeps.get(*entity) {
+                    c
+                } else {
+                    continue;
+                };
 
             if tower_owner == creep_owner {
                 continue;
@@ -90,8 +91,8 @@ pub fn shoot_towers(
 
             damage_creep_events.send(DamageCreepEvent {
                 game_id: *game_id,
-                tower_id: None,
-                creep_id: *server_entity_id,
+                tower_id: Some(*server_entity_id),
+                creep_id: *creep_server_entity_id,
                 amount: tower.instant_damage,
             });
         }

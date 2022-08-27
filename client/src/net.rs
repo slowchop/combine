@@ -1,4 +1,5 @@
 use crate::app::GameState;
+use crate::states::playing::hurt_entities::HurtEntityEvent;
 use crate::states::playing::spawn_entities::SpawnEntityEvent;
 use crate::states::playing::update_player::UpdatePlayerEvent;
 use bevy::prelude::*;
@@ -72,6 +73,7 @@ pub fn receive_message_event(
     mut destroy_entity_events: EventWriter<DestroyEntityEvent>,
     mut update_player_events: EventWriter<UpdatePlayerEvent>,
     mut game_over_events: EventWriter<GameOverEvent>,
+    mut hurt_entity_events: EventWriter<HurtEntityEvent>,
 ) {
     // dbg!(client.is_connected());
     for event in event_reader.iter() {
@@ -159,11 +161,11 @@ pub fn receive_message_event(
 
                     info!(?src, ?dst, ?total_damaged, "Hurt entity");
 
-                    // hurt_entity_events.send(HurtEntityEvent {
-                    //     src,
-                    //     dst,
-                    //     total_damaged,
-                    // });
+                    hurt_entity_events.send(HurtEntityEvent {
+                        src,
+                        dst,
+                        total_damaged,
+                    });
                 }
             }
         }

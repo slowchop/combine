@@ -73,7 +73,7 @@ pub fn damage_creeps(
             &mut server,
             &game_user_lookup,
             &damage_creep_event.game_id,
-            Channels::ServerUpdate,
+            Channels::ServerCommand,
             &message,
         );
 

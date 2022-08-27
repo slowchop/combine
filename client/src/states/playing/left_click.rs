@@ -86,10 +86,7 @@ pub fn mouse_action(
     buttons: Res<Input<MouseButton>>,
     query: Query<&Intersection<MyRaycastSet>, (Without<Guide>, Without<TowerRef>)>,
     towers: Query<(&TowerRef, &Transform, &ServerEntityId, &Owner), Without<Guide>>,
-    creeps: Query<
-        (&CreepRef, &Transform, &ServerEntityId, &Owner),
-        (Without<Guide>, Without<Released>),
-    >,
+    creeps: Query<(&CreepRef, &Transform, &ServerEntityId, &Owner, &Released), (Without<Guide>)>,
     mut materials: ResMut<Assets<BillboardMaterial>>,
     mut guide: Query<
         (&mut Transform, &Handle<BillboardMaterial>),
@@ -158,7 +155,11 @@ pub fn mouse_action(
     }
 
     let mut closest_creep = None;
-    for (other_creep_ref, transform, server_entity_id, creep_owner) in creeps.iter() {
+    for (other_creep_ref, transform, server_entity_id, creep_owner, released) in creeps.iter() {
+        // Can't upgrade creeps after they've released.
+        if released.0 == true {
+            continue;
+        }
         if client_game_info.i_am != *creep_owner {
             continue;
         }

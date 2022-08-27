@@ -19,6 +19,8 @@ use crate::states::playing::debug_lines::{debug_lines_path, debug_lines_tower};
 use crate::states::playing::destroy_entities::destroy_entities;
 use crate::states::playing::floaty_text::update_floaty_text_and_world_to_screen_pos;
 use crate::states::playing::game_over::{game_over, game_over_message};
+use crate::states::playing::health_bars::{add_health_bars, health_bars};
+use crate::states::playing::hurt_entities::{hurt_entities, HurtEntityEvent};
 use crate::states::playing::left_click::mouse_action;
 use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::states::playing::time::add_ticks_to_game;
@@ -148,6 +150,7 @@ pub fn play(args: &Args) {
         .add_event::<UpdatePlayerEvent>()
         .add_event::<GameOverEvent>()
         .add_event::<ConsoleItem>()
+        .add_event::<HurtEntityEvent>()
         .insert_resource(map_editor::menu::EditorInfo::default())
         .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)
@@ -220,6 +223,9 @@ pub fn play(args: &Args) {
             .with_system(update_floaty_text_and_world_to_screen_pos)
             .with_system(debug_lines_path)
             .with_system(debug_lines_tower)
+            .with_system(hurt_entities)
+            .with_system(add_health_bars)
+            .with_system(health_bars)
             .into(),
     );
 

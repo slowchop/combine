@@ -1,5 +1,7 @@
 use crate::app::{GameState, MyRaycastSet};
 use crate::states::playing::bottom_quad::BottomQuad;
+use crate::states::playing::creeps::Released;
+use crate::states::playing::hurt_entities::Damaged;
 use crate::states::playing::left_click::Guide;
 use crate::{
     shape, AlphaMode, AssetServer, Assets, BillboardMaterial, Color, Commands, EventReader, Handle,
@@ -143,7 +145,6 @@ pub fn spawn_entities(
                 warn!("Tower not found: {:?}", entity_def);
                 continue;
             };
-            dbg!(&tower);
 
             texture = Some(tower.texture.clone());
         };
@@ -252,7 +253,9 @@ pub fn spawn_entities(
                 entity
                     .insert(Name::new(format!("Creep {:?}", creep_ref)))
                     .insert(creep_ref.to_owned())
-                    .insert(owner);
+                    .insert(owner)
+                    .insert(Damaged(0))
+                    .insert(Released(false));
             }
             EntityType::Sprite => {
                 entity.insert(Name::new("Sprite"));
@@ -269,7 +272,6 @@ pub fn spawn_entities(
         }
 
         if let Some(server_entity_id) = &spawn.server_entity_id {
-            println!("Inserting server entity id: {:?}", server_entity_id);
             entity.insert(*server_entity_id);
             game.client_add_entity(*server_entity_id, entity.id());
         } else {

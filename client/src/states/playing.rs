@@ -7,6 +7,7 @@ pub mod destroy_entities;
 pub mod floaty_text;
 pub mod game_over;
 pub mod health_bars;
+pub mod hurt_entities;
 pub mod init;
 pub mod left_click;
 pub mod projectiles;

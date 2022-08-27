@@ -36,7 +36,7 @@ pub const URL: &str = "http://10.0.4.14";
 
 // 1000 / 20fps = 50ms
 pub const MS_PER_TICK: u64 = 50;
-pub const TICKS_PER_SECOND: u64 = 1000 / 50;
+pub const TICKS_PER_SECOND: u64 = 1000 / MS_PER_TICK;
 
 /// 0 is just after sunrise, so everything is bright.
 /// 10 is when the sun starts setting.
@@ -53,17 +53,8 @@ pub const RELEASE_CLOCK_TIME: Ticks = Ticks(20 * TICKS_PER_SECOND as i64);
 
 pub fn shared_config() -> SharedConfig<Channels> {
     let tick_interval = Some(Duration::from_millis(MS_PER_TICK as u64));
-    let link_condition = if false {
-        Some(LinkConditionerConfig::average_condition())
-    } else {
-        None
-    };
-
-    // let link_condition = Some(LinkConditionerConfig {
-    //     incoming_latency: 500,
-    //     incoming_jitter: 100,
-    //     incoming_loss: 0.01,
-    // });
+    let link_condition = None;
+    // let link_condition = Some(LinkConditionerConfig::poor_condition());
 
     SharedConfig::new(
         SocketConfig::new(link_condition, None),
@@ -78,7 +69,7 @@ pub fn shared_config() -> SharedConfig<Channels> {
 pub enum Channels {
     PlayerCommand,
     ServerCommand,
-    ServerUpdate,
+    ServerUnreliable,
 }
 
 pub const CHANNEL_CONFIG: &[Channel<Channels>] = &[
@@ -94,7 +85,7 @@ pub const CHANNEL_CONFIG: &[Channel<Channels>] = &[
     },
     // This was dropping packets 100% of the time, maybe the rng was unlucky...
     Channel {
-        index: Channels::ServerUpdate,
+        index: Channels::ServerUnreliable,
         direction: ChannelDirection::ServerToClient,
         mode: ChannelMode::UnorderedUnreliable,
     },

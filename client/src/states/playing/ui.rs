@@ -25,23 +25,23 @@ pub fn ui(
         });
     });
 
-    // egui::Window::new("General Stats").show(egui_context.ctx_mut(), |ui| {
-    //     ui.label(format!("Ticks: {:?}", game.ticks()));
-    //     ui.label(format!("Time: {:?}", game.duration()));
-    //
-    //     let ticks_left = Ticks(game.next_release_ticks().0.saturating_sub(game.ticks().0));
-    //     ui.label(format!("Ticks until release: {:?}", ticks_left));
-    //     ui.label(format!(
-    //         "Time until release: {:?}",
-    //         ticks_left.to_duration()
-    //     ));
-    //     ui.label(format!("Start of day: {:?}", game.start_of_day()));
-    //     ui.label(format!(
-    //         "Time of day: {:?}",
-    //         game.ticks_since_start_of_day()
-    //     ));
-    //
-    //     ui.label(format!("Connected: {:?}", client.is_connected()));
-    //     ui.label(format!("RTT: {:?}", client.rtt()));
-    // });
+    egui::Window::new("General Stats").show(egui_context.ctx_mut(), |ui| {
+        ui.label(format!("Ticks: {:?}", game.ticks()));
+        ui.label(format!("Time: {:?}", game.duration()));
+
+        let ticks_left = Ticks(game.next_release_ticks().0.saturating_sub(game.ticks().0));
+        ui.label(format!("Ticks until release: {:?}", ticks_left));
+        ui.label(format!(
+            "Time until release: {:?}",
+            ticks_left.to_duration()
+        ));
+        ui.label(format!("Start of day: {:?}", game.start_of_day()));
+        ui.label(format!(
+            "Time of day: {:?}",
+            game.ticks_since_start_of_day()
+        ));
+
+        ui.label(format!("Connected: {:?}", client.is_connected()));
+        ui.label(format!("RTT: {:?}", client.rtt()));
+    });
 }

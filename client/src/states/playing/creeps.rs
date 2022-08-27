@@ -5,12 +5,12 @@ use shared::game::owner::Owner;
 use shared::game::shared_game::{ServerEntityId, SharedGame};
 
 #[derive(Component)]
-pub struct Released;
+pub struct Released(pub bool);
 
 pub fn release_creeps(
-    mut commands: Commands,
     mut release_the_creeps_events: EventReader<ReleaseCreepEvent>,
     game: Query<&SharedGame>,
+    mut creeps: Query<&mut Released>,
 ) {
     // No client side creep release, just as a notification.
     // The creep positions will be sent from the server.
@@ -35,6 +35,10 @@ pub fn release_creeps(
                 continue;
             };
 
-        commands.entity(*entity).insert(Released);
+        if let Ok(mut released) = creeps.get_mut(*entity) {
+            released.0 = true;
+        } else {
+            warn!("Could not get creeps component for entity {:?}", entity);
+        }
     }
 }
