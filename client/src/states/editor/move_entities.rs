@@ -3,7 +3,7 @@ use crate::states::editor::load_map::PathInfo;
 use crate::states::editor::menu::EditorInfo;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
-use shared::game::defs::{Defs, EntityDef};
+use shared::game::defs::{Defs, EntityDef, EntityType};
 use shared::game::position::vec2_to_vec3;
 
 #[derive(Component)]
@@ -96,7 +96,24 @@ pub fn move_entities(
                     entity_def.position = Some(position.into());
                 }
                 if let Some(path_info) = maybe_path_info {
-                    todo!()
+                    let entity_def = level_def
+                        .entities
+                        .iter_mut()
+                        .find(|e| {
+                            if e.entity_type != EntityType::Path {
+                                return false;
+                            }
+
+                            if e.owner != Some(path_info.owner) {
+                                return false;
+                            }
+
+                            return true;
+                        })
+                        .unwrap();
+
+                    let path_waypoints = entity_def.path.as_mut().unwrap();
+                    path_waypoints[path_info.index] = position.into();
                 }
             }
         }

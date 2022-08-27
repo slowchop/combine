@@ -16,8 +16,8 @@ pub struct CreateEditorEntity(pub EntityDef);
 
 #[derive(Component, Debug, Clone)]
 pub struct PathInfo {
-    owner: Owner,
-    index: usize,
+    pub owner: Owner,
+    pub index: usize,
 }
 
 pub fn load_map(
@@ -103,6 +103,7 @@ pub fn create_editor_entities(
                             ),
                             ..Default::default()
                         })
+                        .insert(Draggable)
                         .insert(PathInfo {
                             owner: owner.clone(),
                             index: idx,
