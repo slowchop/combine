@@ -12,7 +12,7 @@ use crate::states::playing::camera::GameCamera;
 use crate::states::playing::console;
 use crate::states::playing::console::ConsoleItem;
 use crate::states::playing::creeps::release_creeps;
-use crate::states::playing::debug_lines::debug_lines_path;
+use crate::states::playing::debug_lines::{debug_lines_path, debug_lines_tower};
 use crate::states::playing::destroy_entities::destroy_entities;
 use crate::states::playing::floaty_text::update_floaty_text_and_world_to_screen_pos;
 use crate::states::playing::game_over::{game_over, game_over_message};
@@ -215,6 +215,7 @@ pub fn play(args: &Args) {
             .with_system(game_over_message)
             .with_system(update_floaty_text_and_world_to_screen_pos)
             .with_system(debug_lines_path)
+            .with_system(debug_lines_tower)
             .into(),
     );
 
