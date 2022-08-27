@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_egui::egui::{Label, TextEdit, Widget};
 use bevy_egui::{egui, EguiContext};
 use shared::game::defs::{Defs, Tower};
 
@@ -31,29 +32,33 @@ pub fn attr_editor(mut egui_context: ResMut<EguiContext>, mut defs: ResMut<Defs>
 
             for tower in towers {
                 ui.label(tower.emoji.to_string());
+                ui.label("C");
+                ui.label("C");
+                ui.label("DOT");
+                ui.label("$/DOT");
+
+                TextEdit::singleline(&mut tower.title)
+                    .desired_width(300.)
+                    .show(ui);
+
+                let mut s = format!("{}", tower.cost);
+                if ui.text_edit_singleline(&mut s).changed() {
+                    if let Ok(c) = s.parse() {
+                        tower.cost = c;
+                        defs.save();
+                    }
+                }
+
+                let mut s = format!("{}", tower.damage);
+                if ui.text_edit_singleline(&mut s).changed() {
+                    if let Ok(c) = s.parse() {
+                        tower.damage = c;
+                        defs.save();
+                    }
+                }
+
+                ui.end_row();
             }
-
-            ui.label("😬");
-            ui.label("😬😬");
-            ui.end_row();
-
-            ui.label("");
-            ui.label("");
-            ui.label("");
-            ui.label("");
-            ui.label("");
-            ui.label("");
-            ui.label("");
-            ui.label("");
-            ui.label("");
-            ui.end_row();
-
-            ui.horizontal(|ui| {
-                ui.label("Same");
-                ui.label("cell");
-            });
-            ui.label("?");
-            ui.end_row();
         });
     });
 }
