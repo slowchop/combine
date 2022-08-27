@@ -1,3 +1,4 @@
+pub mod add_buildable;
 pub mod add_path;
 pub mod add_sprite;
 pub mod init;

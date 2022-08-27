@@ -65,7 +65,7 @@ pub fn debug_lines_tower(
     }
 }
 
-fn circle(lines: &mut ResMut<DebugLines>, pos: Vec3, rad: f32, steps: usize, color: Color) {
+pub fn circle(lines: &mut ResMut<DebugLines>, pos: Vec3, rad: f32, steps: usize, color: Color) {
     for i in 0..steps {
         let a = i as f32 / steps as f32 * TAU;
         let b = (i + 1) as f32 / steps as f32 * TAU;

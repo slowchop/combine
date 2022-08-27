@@ -1,14 +1,25 @@
 use crate::states::playing::console::ConsoleItem;
 use bevy::prelude::*;
+use bevy_egui::egui::{Slider, Widget};
 use bevy_egui::{egui, EguiContext};
 use bevy_inspector_egui::egui::Align2;
 use shared::game::defs::Defs;
 use shared::game::owner::Owner;
 
-#[derive(Default)]
 pub struct EditorInfo {
     pub map_name: String,
     selected_sprite: String,
+    buildable_circle_size: f32,
+}
+
+impl Default for EditorInfo {
+    fn default() -> Self {
+        Self {
+            map_name: "".to_string(),
+            selected_sprite: "".to_string(),
+            buildable_circle_size: 1.0,
+        }
+    }
 }
 
 pub struct ClearEditorLevelEvent(pub String);
@@ -20,6 +31,8 @@ pub struct SaveEditorLevelEvent(pub String);
 pub struct AddEditorSpriteEvent(pub String);
 
 pub struct AddEditorPathEvent(pub Owner);
+
+pub struct AddEditorBuildableEvent(pub f32, pub Owner);
 
 pub struct DeleteEditorEntityEvent(pub Entity);
 
@@ -33,6 +46,7 @@ pub fn menu(
     mut save_events: EventWriter<SaveEditorLevelEvent>,
     mut add_sprite_events: EventWriter<AddEditorSpriteEvent>,
     mut add_path_events: EventWriter<AddEditorPathEvent>,
+    mut add_buildable_events: EventWriter<AddEditorBuildableEvent>,
     mut editor_map: ResMut<EditorInfo>,
 ) {
     egui::Window::new("Editor")
@@ -81,6 +95,25 @@ pub fn menu(
             };
             if ui.button("Player 2").clicked() {
                 add_path_events.send(AddEditorPathEvent(Owner::new(1)));
+            };
+
+            ui.separator();
+            ui.heading("A buildable area");
+
+            ui.label("Circle size");
+            Slider::new(&mut editor_map.buildable_circle_size, 0.5..=10.0).ui(ui);
+
+            if ui.button("Player 1").clicked() {
+                add_buildable_events.send(AddEditorBuildableEvent(
+                    editor_map.buildable_circle_size,
+                    Owner::new(0),
+                ));
+            };
+            if ui.button("Player 2").clicked() {
+                add_buildable_events.send(AddEditorBuildableEvent(
+                    editor_map.buildable_circle_size,
+                    Owner::new(1),
+                ));
             };
         });
 }

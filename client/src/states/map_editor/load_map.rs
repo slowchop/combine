@@ -7,7 +7,7 @@ use crate::BillboardMaterial;
 use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
 use bevy_prototype_lyon::prelude::tess::path::Position;
-use shared::game::defs::{Defs, EntityDef, EntityType, LevelDef};
+use shared::game::defs::{Defs, EntityDef, EntityType, LevelDef, PIXELS_PER_METER};
 use shared::game::owner::Owner;
 use shared::game::position::vec2_to_vec3;
 use shared::game::shared_game::ServerEntityId;
@@ -28,7 +28,6 @@ pub fn load_map(
     mut create_editor_entities: EventWriter<CreateEditorEntity>,
 ) {
     for map in load_map_events.iter() {
-        dbg!(&map.0);
         let level_def = match defs.levels.get(&map.0) {
             None => {
                 console.send(ConsoleItem::new(format!(
@@ -79,6 +78,17 @@ pub fn create_editor_entities(
                 texture = &spawn;
             }
 
+            if entity_def.entity_type == EntityType::BuildableCircle {
+                commands
+                    .spawn()
+                    .insert(entity_def.clone())
+                    .insert(Transform::from_translation(vec2_to_vec3(
+                        &entity_def.position.as_ref().unwrap().into(),
+                    )))
+                    .insert(Draggable);
+                return;
+            }
+
             if entity_def.entity_type == EntityType::Path {
                 let owner = entity_def.owner.as_ref().unwrap();
                 let path = entity_def.path.as_ref().unwrap();
@@ -120,12 +130,14 @@ pub fn create_editor_entities(
             let mesh = match entity_def.entity_type {
                 EntityType::Ground => Mesh::from(shape::Plane { size: 10000.0 }),
                 EntityType::Guide => Mesh::from(shape::Plane { size: 10.0 }),
+                EntityType::BuildableCircle => Mesh::from(shape::Plane { size: 10.0 }),
                 _ => Mesh::from(BottomQuad {
                     size: Vec2::new(1., 1.),
                 }),
             };
             let alpha_mode = match entity_def.entity_type {
                 EntityType::Ground => AlphaMode::Opaque,
+                EntityType::BuildableCircle => AlphaMode::Opaque,
                 _ => AlphaMode::Blend,
             };
 
@@ -148,6 +160,11 @@ pub fn create_editor_entities(
                 .level_entity_transform(&texture, &entity_def.position.as_ref().map(|p| p.into()))
                 .map(|mut transform| match entity_def.entity_type {
                     EntityType::Ground => transform,
+                    EntityType::BuildableCircle => {
+                        transform.translation.y += 0.1;
+                        transform.scale *= entity_def.radius.unwrap() / 4.0;
+                        transform
+                    }
                     _ => {
                         transform.rotation = Quat::from_rotation_x(TAU * -0.125);
                         transform
@@ -168,6 +185,9 @@ pub fn create_editor_entities(
             };
 
             match entity_def.entity_type {
+                EntityType::BuildableCircle => {
+                    entity.insert(Draggable);
+                }
                 EntityType::Ground => {
                     entity
                         .insert(Name::new("Ground"))

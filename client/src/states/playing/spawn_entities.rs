@@ -46,6 +46,10 @@ pub fn spawn_entities(
         let entity_def = &spawn.entity_def;
         let mut texture = entity_def.texture.clone();
 
+        if entity_def.entity_type == EntityType::BuildableCircle {
+            warn!("TODO: Ignoring buildable circle for now.");
+            continue;
+        }
         if entity_def.entity_type == EntityType::Spawn {
             warn!("TODO: Ignoring base for now.");
             continue;
@@ -268,6 +272,9 @@ pub fn spawn_entities(
             }
             EntityType::Path => {
                 entity.insert(Name::new("Path"));
+            }
+            EntityType::BuildableCircle => {
+                entity.insert(Name::new("Buildable Circle"));
             }
         }
 

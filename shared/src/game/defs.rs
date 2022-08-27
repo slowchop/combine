@@ -405,6 +405,7 @@ pub enum EntityType {
     Tower,
     Creep,
     Guide,
+    BuildableCircle,
 }
 
 impl Default for EntityType {

@@ -19,6 +19,13 @@ use tracing::warn;
 )]
 pub struct ServerEntityId(pub u32);
 
+impl ServerEntityId {
+    pub fn random() -> Self {
+        let mut rng = thread_rng();
+        Self(rng.gen())
+    }
+}
+
 impl Serde for ServerEntityId {
     fn ser(&self, writer: &mut dyn BitWrite) {
         self.0.ser(writer);
@@ -64,15 +71,20 @@ impl SharedGame {
         }
     }
 
-    pub fn server_add_entity(&mut self, entity: Entity) -> ServerEntityId {
+    pub fn free_server_id(&mut self) -> ServerEntityId {
         loop {
             let id = ServerEntityId(thread_rng().gen());
             if self.entities.contains_key(&id) {
                 continue;
             }
-            self.entities.insert(id.clone(), entity);
             return id;
         }
+    }
+
+    pub fn server_add_entity(&mut self, entity: Entity) -> ServerEntityId {
+        let id = self.free_server_id();
+        self.entities.insert(id, entity);
+        id
     }
 
     pub fn get_player_mut(&mut self, owner: Owner) -> Option<&mut SharedPlayer> {

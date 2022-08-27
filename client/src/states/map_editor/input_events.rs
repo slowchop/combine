@@ -93,9 +93,15 @@ pub fn input_events(
                 }
             }
             if closest_entity.is_none() {
+                if keys.just_released(KeyCode::Delete) {
+                    console.send(ConsoleItem::new("Nothing can be deleted!".to_string()));
+                }
                 return;
             }
-            if closest_distance.unwrap() > 5.0 {
+            if closest_distance.unwrap() > 2.0 {
+                if keys.just_released(KeyCode::Delete) {
+                    console.send(ConsoleItem::new("Nothing nearby to delete.".to_string()));
+                }
                 return;
             }
 
@@ -113,6 +119,11 @@ pub fn input_events(
                         return;
                     }
 
+                    let server_id = maybe_entity_def.unwrap().server_entity_id.unwrap();
+                    level_def
+                        .entities
+                        .retain(|e| e.server_entity_id != Some(server_id));
+
                     console.send(ConsoleItem::new(format!("Deleted {:?}", entity_def)));
                 } else if let Some(path_info) = maybe_path_info {
                     console.send(ConsoleItem::new(
@@ -123,7 +134,11 @@ pub fn input_events(
 
                 commands.entity(entity).despawn();
             } else if buttons.just_pressed(MouseButton::Left) {
-                println!("pressed");
+                console.send(ConsoleItem::new(format!(
+                    "Dragging {}.",
+                    closest_entity.unwrap().id()
+                )));
+
                 if let Some(entity) = closest_entity {
                     *drag_state = EditorDragState::Dragging {
                         entity,
@@ -154,7 +169,19 @@ pub fn input_events(
 
             transform.translation = mouse_position;
             if let Some(entity_def) = maybe_entity_def {
+                // Update the entity's position in the game.
                 entity_def.position = Some(position.into());
+
+                // Update the entity's position inside level_def.
+                // Get the entity_def from the level_def.
+                let entity_def = level_def
+                    .entities
+                    .iter_mut()
+                    .find(|e| e.server_entity_id == entity_def.server_entity_id)
+                    .unwrap();
+                entity_def.position = Some(position.into());
+
+                println!("Updated entity def position");
             }
             if let Some(path_info) = maybe_path_info {
                 let entity_def = level_def

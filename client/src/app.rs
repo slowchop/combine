@@ -1,6 +1,7 @@
 use crate::net::{DestroyEntityEvent, GameOverEvent, ReleaseCreepEvent, UpdatePositionEvent};
 use crate::settings::Settings;
 use crate::states::attr_editor::attr_editor;
+use crate::states::map_editor::add_buildable::add_buildable_area;
 use crate::states::map_editor::add_path::add_path;
 use crate::states::map_editor::add_sprite::add_sprite;
 use crate::states::map_editor::input_events::{input_events, EditorDragState};
@@ -9,7 +10,7 @@ use crate::states::map_editor::new::new_events;
 use crate::states::map_editor::no_pointer_capture::{
     is_pointer_captured_system, IsPointerCaptured,
 };
-use crate::states::map_editor::path_lines::path_lines;
+use crate::states::map_editor::path_lines::editor_lines;
 use crate::states::map_editor::save_map::save_map;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::console;
@@ -249,6 +250,7 @@ pub fn play(args: &Args) {
         .add_event::<map_editor::menu::LoadEditorLevelEvent>()
         .add_event::<map_editor::menu::AddEditorSpriteEvent>()
         .add_event::<map_editor::menu::AddEditorPathEvent>()
+        .add_event::<map_editor::menu::AddEditorBuildableEvent>()
         .add_event::<map_editor::menu::DeleteEditorEntityEvent>()
         .add_event::<map_editor::menu::MoveEditorEntityEvent>();
     app.add_system_set(
@@ -261,11 +263,12 @@ pub fn play(args: &Args) {
             .with_system(create_editor_entities)
             .with_system(new_events)
             .with_system(move_camera)
-            .with_system(path_lines)
+            .with_system(editor_lines)
             .with_system(add_sprite)
             .with_system(input_events)
             .with_system(add_path)
             .with_system(save_map)
+            .with_system(add_buildable_area)
             .with_system(is_pointer_captured_system)
             .into(),
     );
