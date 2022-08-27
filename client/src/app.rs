@@ -1,13 +1,15 @@
 use crate::net::{DestroyEntityEvent, GameOverEvent, ReleaseCreepEvent, UpdatePositionEvent};
 use crate::settings::Settings;
-use crate::states::editor::add_path::add_path;
-use crate::states::editor::add_sprite::add_sprite;
-use crate::states::editor::input_events::{input_events, EditorDragState};
-use crate::states::editor::load_map::{create_editor_entities, load_map, CreateEditorEntity};
-use crate::states::editor::new::new_events;
-use crate::states::editor::no_pointer_capture::{is_pointer_captured_system, IsPointerCaptured};
-use crate::states::editor::path_lines::path_lines;
-use crate::states::editor::save_map::save_map;
+use crate::states::map_editor::add_path::add_path;
+use crate::states::map_editor::add_sprite::add_sprite;
+use crate::states::map_editor::input_events::{input_events, EditorDragState};
+use crate::states::map_editor::load_map::{create_editor_entities, load_map, CreateEditorEntity};
+use crate::states::map_editor::new::new_events;
+use crate::states::map_editor::no_pointer_capture::{
+    is_pointer_captured_system, IsPointerCaptured,
+};
+use crate::states::map_editor::path_lines::path_lines;
+use crate::states::map_editor::save_map::save_map;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::console;
 use crate::states::playing::console::ConsoleItem;
@@ -27,7 +29,7 @@ use crate::states::playing::update_positions::{
 use crate::states::{
     connecting, loading_level, main_menu, playing, splash, waiting_for_random, ContinueState,
 };
-use crate::states::{disconnected, editor};
+use crate::states::{disconnected, map_editor};
 use crate::{
     move_camera, net, App, Args, AssetServer, AssetServerSettings, BillboardMaterial,
     Camera3dBundle, ClearColor, Color, Commands, DefaultPlugins, MaterialPlugin, Msaa, Res,
@@ -145,7 +147,7 @@ pub fn play(args: &Args) {
         .add_event::<UpdatePlayerEvent>()
         .add_event::<GameOverEvent>()
         .add_event::<ConsoleItem>()
-        .insert_resource(editor::menu::EditorInfo::default())
+        .insert_resource(map_editor::menu::EditorInfo::default())
         .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)
         .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
@@ -229,22 +231,22 @@ pub fn play(args: &Args) {
     );
 
     // Editor
-    app.add_enter_system(GameState::Editor, editor::init::init);
+    app.add_enter_system(GameState::Editor, map_editor::init::init);
     app.add_exit_system(GameState::Editor, init_egui);
     app.add_event::<CreateEditorEntity>()
         .insert_resource(EditorDragState::default())
         .insert_resource(IsPointerCaptured(false))
-        .add_event::<editor::menu::ClearEditorLevelEvent>()
-        .add_event::<editor::menu::SaveEvent>()
-        .add_event::<editor::menu::LoadEvent>()
-        .add_event::<editor::menu::AddSpriteEvent>()
-        .add_event::<editor::menu::AddPathEvent>()
-        .add_event::<editor::menu::DeleteEvent>()
-        .add_event::<editor::menu::MoveEvent>();
+        .add_event::<map_editor::menu::ClearEditorLevelEvent>()
+        .add_event::<map_editor::menu::SaveEvent>()
+        .add_event::<map_editor::menu::LoadEvent>()
+        .add_event::<map_editor::menu::AddSpriteEvent>()
+        .add_event::<map_editor::menu::AddPathEvent>()
+        .add_event::<map_editor::menu::DeleteEvent>()
+        .add_event::<map_editor::menu::MoveEvent>();
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::Editor)
-            .with_system(editor::menu::menu)
+            .with_system(map_editor::menu::menu)
             .with_system(console::handle_console_events)
             .with_system(console::update_console)
             .with_system(load_map)

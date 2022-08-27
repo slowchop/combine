@@ -1,6 +1,6 @@
-use crate::states::editor::input_events::Draggable;
-use crate::states::editor::load_map::PathInfo;
-use crate::states::editor::menu::{AddPathEvent, EditorInfo};
+use crate::states::map_editor::input_events::Draggable;
+use crate::states::map_editor::load_map::PathInfo;
+use crate::states::map_editor::menu::{AddPathEvent, EditorInfo};
 use crate::states::playing::bottom_quad::BottomQuad;
 use crate::BillboardMaterial;
 use bevy::prelude::*;

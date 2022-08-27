@@ -1,5 +1,5 @@
-use crate::states::editor::load_map::CreateEditorEntity;
-use crate::states::editor::menu::{AddSpriteEvent, ClearEditorLevelEvent};
+use crate::states::map_editor::load_map::CreateEditorEntity;
+use crate::states::map_editor::menu::{AddSpriteEvent, ClearEditorLevelEvent};
 use crate::states::playing::camera::GameCamera;
 use bevy::prelude::*;
 use shared::game::defs::{EntityDef, EntityType};

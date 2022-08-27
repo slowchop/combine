@@ -1,6 +1,6 @@
-use crate::states::editor::input_events::Draggable;
-use crate::states::editor::load_map::PathInfo;
-use crate::states::editor::menu::{EditorInfo, SaveEvent};
+use crate::states::map_editor::input_events::Draggable;
+use crate::states::map_editor::load_map::PathInfo;
+use crate::states::map_editor::menu::{EditorInfo, SaveEvent};
 use bevy::prelude::*;
 use bevy::utils::HashMap;
 use shared::game::defs::{Defs, EntityDef, EntityType};

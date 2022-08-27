@@ -1,6 +1,6 @@
 use crate::app::MyRaycastSet;
-use crate::states::editor::input_events::Draggable;
-use crate::states::editor::menu::{ClearEditorLevelEvent, EditorInfo, LoadEvent};
+use crate::states::map_editor::input_events::Draggable;
+use crate::states::map_editor::menu::{ClearEditorLevelEvent, EditorInfo, LoadEvent};
 use crate::states::playing::bottom_quad::BottomQuad;
 use crate::states::playing::console::ConsoleItem;
 use crate::BillboardMaterial;

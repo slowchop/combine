@@ -1,7 +1,7 @@
 use crate::app::MyRaycastSet;
-use crate::states::editor::load_map::PathInfo;
-use crate::states::editor::menu::EditorInfo;
-use crate::states::editor::no_pointer_capture::IsPointerCaptured;
+use crate::states::map_editor::load_map::PathInfo;
+use crate::states::map_editor::menu::EditorInfo;
+use crate::states::map_editor::no_pointer_capture::IsPointerCaptured;
 use crate::states::playing::console::ConsoleItem;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;

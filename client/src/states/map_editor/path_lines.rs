@@ -1,4 +1,4 @@
-use crate::states::editor::menu::EditorInfo;
+use crate::states::map_editor::menu::EditorInfo;
 use bevy::prelude::*;
 use bevy_prototype_debug_lines::DebugLines;
 use shared::game::defs::{Defs, EntityType};

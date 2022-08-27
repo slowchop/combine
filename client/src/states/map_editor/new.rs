@@ -1,4 +1,4 @@
-use crate::states::editor::menu::ClearEditorLevelEvent;
+use crate::states::map_editor::menu::ClearEditorLevelEvent;
 use crate::{Commands, Entity, EventReader, Query, With};
 use shared::game::defs::EntityDef;
 
