@@ -3,6 +3,7 @@ use crate::protocol::combo_tower_request::ComboTowerRequest;
 use crate::protocol::destroy_entity::DestroyEntity;
 use crate::protocol::game_over::GameOver;
 use crate::protocol::game_ready::GameReady;
+use crate::protocol::hurt_entity::HurtEntity;
 use crate::protocol::release_creep::ReleaseCreeps;
 use crate::protocol::request_tower_placement::NewTowerRequest;
 use crate::protocol::spawn_entity::SpawnEntity;
@@ -21,6 +22,7 @@ pub mod combo_tower_request;
 pub mod destroy_entity;
 pub mod game_over;
 pub mod game_ready;
+pub mod hurt_entity;
 pub mod join_friend_game;
 pub mod join_random_game;
 pub mod release_creep;
@@ -32,6 +34,7 @@ pub mod update_position;
 #[derive(Protocolize)]
 pub enum Protocol {
     UpdatePosition(UpdatePosition),
+    HurtEntity(HurtEntity),
     DestroyEntity(DestroyEntity),
     UpdatePlayer(UpdatePlayer),
     SpawnEntity(SpawnEntity),

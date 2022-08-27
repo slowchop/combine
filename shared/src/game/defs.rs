@@ -20,12 +20,24 @@ pub struct Defs {
     pub towers: HashMap<TowerRef, Tower>,
     pub creeps: HashMap<CreepRef, Creep>,
     pub textures: HashMap<String, TextureDefinition>,
+
+    #[serde(skip)]
+    pub tower_costs: Option<HashMap<TowerRef, (u32, u32)>>,
 }
 
 impl Defs {
     pub fn load() -> Self {
         let data = include_str!("../../../client/assets/defs.yaml");
-        serde_yaml::from_str(data).unwrap()
+        let mut defs: Defs = serde_yaml::from_str(data).unwrap();
+
+        let mut tower_costs = HashMap::new();
+        for tower_ref in defs.towers.keys() {
+            let (cost, base_towers) = defs.calc_total_tower_cost(tower_ref);
+            tower_costs.insert(tower_ref.clone(), (cost, base_towers));
+        }
+        defs.tower_costs = Some(tower_costs);
+
+        defs
     }
 
     // This has to be run from the game directory!
@@ -77,6 +89,23 @@ impl Defs {
         }
         info!("not found!");
         None
+    }
+
+    // Cost in base towers and in $
+    pub fn calc_total_tower_cost(&self, tower_ref: &TowerRef) -> ((u32, u32)) {
+        let tower = self.towers.get(tower_ref).unwrap();
+        let mut cost = tower.cost;
+        let mut base_towers = 0;
+        if tower.combo.len() == 0 {
+            base_towers += 1;
+        } else {
+            for parent in &tower.combo {
+                let (this_cost, this_base_towers) = self.calc_total_tower_cost(parent);
+                cost += this_cost;
+                base_towers += this_base_towers;
+            }
+        }
+        (cost, base_towers)
     }
 
     pub fn creep(&self, creep_ref: &CreepRef) -> Option<Creep> {
@@ -136,7 +165,7 @@ pub struct Creep {
     pub texture: String,
     pub speed: f32,
     pub cost: u32,
-    pub health: f32,
+    pub health: u32,
     pub size: f32,
 }
 

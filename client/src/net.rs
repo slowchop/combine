@@ -150,6 +150,9 @@ pub fn receive_message_event(
                 Protocol::ComboCreepRequest(_) => {
                     warn!("Got a combo creep request message");
                 }
+                Protocol::HurtEntity(_) => {
+                    warn!("Got a hurt entity message");
+                }
             }
         }
     }

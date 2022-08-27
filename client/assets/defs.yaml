@@ -1,77 +1,12 @@
 levels:
-  test:
-    name: Hide the pain
-    entities:
-    - texture: hover.png
-      type: guide
-      position:
-      - 0.0
-      - 0.0
-    - type: base
-      position:
-      - -20.0
-      - -2.0
-      owner: 0
-    - type: spawn
-      position:
-      - -20.0
-      - 2.0
-      owner: 0
-    - type: path
-      owner: 0
-      path:
-      - - -18.0
-        - 2.0
-      - - 10.0
-        - 5.0
-      - - -10.0
-        - -5.0
-      - - 18.0
-        - -2.0
-    - type: base
-      position:
-      - 20.0
-      - -2.0
-      owner: 1
-    - type: spawn
-      position:
-      - 20.0
-      - 2.0
-      owner: 1
-    - type: path
-      owner: 1
-      path:
-      - - 18.0
-        - 2.0
-      - - -10.0
-        - 5.0
-      - - 10.0
-        - -5.0
-      - - -18.0
-        - -2.0
-    - texture: tree.png
-      type: sprite
-      position:
-      - -25.0
-      - -2.0
-    - texture: tree.png
-      type: sprite
-      position:
-      - 25.0
-      - -2.0
-    - texture: ground.png
-      type: ground
-      position:
-      - 0.0
-      - 0.0
   test3:
     name: test3
     entities:
     - texture: hover.png
       type: guide
       position:
-        - 0.0
-        - 0.0
+      - 0.0
+      - 0.0
     - type: base
       position:
       - -20.0
@@ -277,19 +212,112 @@ levels:
         - -10.0385895
       - - 20.192291
         - -3.6978683
+  test:
+    name: Hide the pain
+    entities:
+    - texture: hover.png
+      type: guide
+      position:
+      - 0.0
+      - 0.0
+    - type: base
+      position:
+      - -20.0
+      - -2.0
+      owner: 0
+    - type: spawn
+      position:
+      - -20.0
+      - 2.0
+      owner: 0
+    - type: path
+      owner: 0
+      path:
+      - - -18.0
+        - 2.0
+      - - 10.0
+        - 5.0
+      - - -10.0
+        - -5.0
+      - - 18.0
+        - -2.0
+    - type: base
+      position:
+      - 20.0
+      - -2.0
+      owner: 1
+    - type: spawn
+      position:
+      - 20.0
+      - 2.0
+      owner: 1
+    - type: path
+      owner: 1
+      path:
+      - - 18.0
+        - 2.0
+      - - -10.0
+        - 5.0
+      - - 10.0
+        - -5.0
+      - - -18.0
+        - -2.0
+    - texture: tree.png
+      type: sprite
+      position:
+      - -25.0
+      - -2.0
+    - texture: tree.png
+      type: sprite
+      position:
+      - 25.0
+      - -2.0
+    - texture: ground.png
+      type: ground
+      position:
+      - 0.0
+      - 0.0
 towers:
   fire:
-    emoji: 🔥
+    emoji: "\U0001F525"
     name: fire
     title: Windy Candle
     combo:
     - machine
     - cold
     texture: towers/flame-thrower.png
-    damage: 50.0
+    damage: 10.0
     range: 3.0
     size: 1.0
     cost: 100
+    reload: 0.5
+    instant_fire: true
+  cold:
+    emoji: ❄️
+    name: cold
+    title: Ice Cream Gun
+    combo:
+    - machine
+    - machine
+    texture: towers/cold-tower.png
+    damage: 20.0
+    range: 3.0
+    size: 1.0
+    cost: 100
+    reload: 0.8
+    instant_fire: true
+  laser-boss:
+    emoji: ✨
+    name: laser-boss
+    title: Pew Pew Surveillance Camera
+    combo:
+    - laser
+    - laser
+    texture: towers/boss-laser.png
+    damage: 150.0
+    range: 7.0
+    size: 2.0
+    cost: 200
     reload: 1.0
     instant_fire: true
   electric:
@@ -300,96 +328,68 @@ towers:
     - fire
     - cold
     texture: towers/electric-tower.png
-    damage: 50.0
-    range: 3.0
+    damage: 100.0
+    range: 5.0
+    size: 2.0
+    cost: 100
+    reload: 1.0
+    instant_fire: true
+  laser:
+    emoji: "\U0001F3AF"
+    name: laser
+    title: Cat Laser Toy
+    combo:
+    - machine
+    - fire
+    texture: towers/laser-tower.png
+    damage: 100.0
+    range: 6.0
     size: 1.0
     cost: 100
     reload: 1.0
     instant_fire: true
   machine:
-    emoji: 🔫
+    emoji: "\U0001F52B"
     name: machine
     title: Machine Gun
     combo: []
     texture: towers/machine-gun.png
     damage: 50.0
-    range: 5.0
+    range: 4.0
     size: 1.0
-    cost: 100
-    reload: 1.0
-    instant_fire: true
-  fire-boss:
-    emoji: 🔫
-    name: fire-boss
-    title: Flaming Barbeque
-    combo:
-    - fire
-    - fire
-    texture: towers/boss-fire.png
-    damage: 50.0
-    range: 5.0
-    size: 1.0
-    cost: 100
+    cost: 50
     reload: 1.0
     instant_fire: true
   missile:
-    emoji: 🚀
+    emoji: "\U0001F680"
     name: missile
     title: Fireworks Launcher
     combo:
     - electric
     - cold
     texture: towers/seeking-missile.png
-    damage: 50.0
-    range: 5.0
-    size: 1.0
-    cost: 100
+    damage: 100.0
+    range: 6.0
+    size: 2.0
+    cost: 200
     reload: 1.0
     instant_fire: true
-  cold:
-    emoji: ❄️
-    name: cold
-    title: Ice Cream Gun
+  fire-boss:
+    emoji: "\U0001F52B"
+    name: fire-boss
+    title: Flaming Barbeque
     combo:
-    - machine
-    - machine
-    texture: towers/cold-tower.png
-    damage: 50.0
-    range: 1.0
-    size: 1.0
-    cost: 100
-    reload: 1.0
-    instant_fire: true
-  electric-boss:
-    emoji: 🌩️
-    name: electric-boss
-    title: Electric Record Player
-    combo:
-    - electric
-    - electric
-    texture: towers/boss-electric.png
-    damage: 50.0
+    - fire
+    - fire
+    texture: towers/boss-fire.png
+    damage: 150.0
     range: 5.0
-    size: 1.0
-    cost: 100
-    reload: 1.0
-    instant_fire: true
-  laser-boss:
-    emoji: ✨
-    name: laser-boss
-    title: Pew Pew Surveillance Camera
-    combo:
-    - laser
-    - laser
-    texture: towers/boss-laser.png
-    damage: 50.0
-    range: 5.0
-    size: 1.0
-    cost: 100
+    size: 2.0
+    cost: 200
     reload: 1.0
     instant_fire: true
   cold-boss:
-    emoji: 🥶
+    emoji: "\U0001F976"
     name: cold-boss
     title: Ice Cream Cart
     combo:
@@ -397,46 +397,26 @@ towers:
     - cold
     texture: towers/boss-cold.png
     damage: 50.0
-    range: 1.0
-    size: 1.0
-    cost: 100
-    reload: 1.0
-    instant_fire: true
-  laser:
-    emoji: 🎯
-    name: laser
-    title: Cat Laser Toy
-    combo:
-    - machine
-    - fire
-    texture: towers/laser-tower.png
-    damage: 50.0
     range: 5.0
-    size: 1.0
-    cost: 100
+    size: 2.0
+    cost: 200
+    reload: 0.5
+    instant_fire: true
+  electric-boss:
+    emoji: "\U0001F329️"
+    name: electric-boss
+    title: Electric Record Player
+    combo:
+    - electric
+    - electric
+    texture: towers/boss-electric.png
+    damage: 1000.0
+    range: 7.0
+    size: 3.0
+    cost: 500
     reload: 1.0
     instant_fire: true
 creeps:
-  strong:
-    name: strong
-    title: Strong
-    combo:
-    - robot
-    - robot
-    texture: gnome.png
-    speed: 1.0
-    cost: 100
-    health: 250.0
-    size: 5.0
-  monster:
-    name: monster
-    title: Monster
-    combo: []
-    texture: gnome.png
-    speed: 1.0
-    cost: 100
-    health: 100.0
-    size: 5.0
   fast:
     name: fast
     title: Fast
@@ -446,7 +426,7 @@ creeps:
     texture: gnome.png
     speed: 2.0
     cost: 100
-    health: 100.0
+    health: 100
     size: 5.0
   robot:
     name: robot
@@ -455,29 +435,93 @@ creeps:
     texture: gnome.png
     speed: 1.0
     cost: 100
-    health: 100.0
+    health: 100
+    size: 5.0
+  strong:
+    name: strong
+    title: Strong
+    combo:
+    - robot
+    - robot
+    texture: gnome.png
+    speed: 1.0
+    cost: 100
+    health: 250
+    size: 5.0
+  monster:
+    name: monster
+    title: Monster
+    combo: []
+    texture: gnome.png
+    speed: 1.0
+    cost: 100
+    health: 100
     size: 5.0
 textures:
-  towers/orbital-cold.png:
+  click-tooltip.png:
     size:
-    - 785.0
-    - 452.0
-  gnome.png:
+    - 256.0
+    - 256.0
+  editor/spawn-point.png:
     size:
-    - 263.0
-    - 582.0
-  towers/electric-tower.png:
+    - 256.0
+    - 256.0
+  tree.png:
     size:
-    - 556.0
-    - 411.0
+    - 984.0
+    - 1120.0
+  Outline.png:
+    size:
+    - 360.0
+    - 531.0
+  towers/orbital-electric.png:
+    size:
+    - 684.0
+    - 499.0
+  Blue.png:
+    size:
+    - 572.0
+    - 600.0
+  towers/boss-laser.png:
+    size:
+    - 617.0
+    - 305.0
+  towers/boss-fire.png:
+    size:
+    - 346.0
+    - 633.0
+  grass.png:
+    size:
+    - 256.0
+    - 256.0
+  editor/path-waypoint.png:
+    size:
+    - 256.0
+    - 256.0
   harold.png:
     size:
     - 846.0
     - 1199.0
-  editor/path-end.png:
+  towers/boss-cold.png:
+    size:
+    - 336.0
+    - 611.0
+  towers/seeking-missile.png:
+    size:
+    - 511.0
+    - 457.0
+  ground.png:
     size:
     - 256.0
     - 256.0
+  tooltip.png:
+    size:
+    - 256.0
+    - 256.0
+  tower.png:
+    size:
+    - 280.0
+    - 311.0
   AAAAA.png:
     size:
     - 352.0
@@ -486,31 +530,47 @@ textures:
     size:
     - 826.0
     - 635.0
-  tower.png:
+  towers/machine-gun.png:
     size:
-    - 280.0
-    - 311.0
-  towers/boss-laser.png:
+    - 293.0
+    - 391.0
+  Yellow.png:
     size:
-    - 617.0
-    - 305.0
-  ground.png:
-    size:
-    - 256.0
-    - 256.0
-  Blue.png:
-    size:
-    - 572.0
+    - 578.0
     - 600.0
+  towers/laser-tower.png:
+    size:
+    - 208.0
+    - 236.0
+  towers/orbital-fire.png:
+    size:
+    - 505.0
+    - 452.0
+  gnome.png:
+    size:
+    - 263.0
+    - 582.0
+  editor/path-end.png:
+    size:
+    - 256.0
+    - 256.0
   props.png:
     size:
     - 4096.0
     - 4096.0
-  editor/spawn-point.png:
+  towers/boss-electric.png:
     size:
-    - 256.0
-    - 256.0
-  editor/path-start.png:
+    - 495.0
+    - 469.0
+  TESTDIS.png:
+    size:
+    - 572.0
+    - 600.0
+  towers/orbital-cold.png:
+    size:
+    - 785.0
+    - 452.0
+  editor/home.png:
     size:
     - 256.0
     - 256.0
@@ -518,79 +578,19 @@ textures:
     size:
     - 256.0
     - 256.0
-  towers/machine-gun.png:
-    size:
-    - 293.0
-    - 391.0
-  towers/boss-electric.png:
-    size:
-    - 495.0
-    - 469.0
-  towers/orbital-electric.png:
-    size:
-    - 684.0
-    - 499.0
-  towers/laser-tower.png:
-    size:
-    - 208.0
-    - 236.0
-  Outline.png:
-    size:
-    - 360.0
-    - 531.0
-  TESTDIS.png:
-    size:
-    - 572.0
-    - 600.0
-  towers/orbital-fire.png:
-    size:
-    - 505.0
-    - 452.0
-  tree.png:
-    size:
-    - 984.0
-    - 1120.0
   towers/cold-tower.png:
     size:
     - 244.0
     - 318.0
-  Yellow.png:
-    size:
-    - 578.0
-    - 600.0
-  towers/boss-cold.png:
-    size:
-    - 336.0
-    - 611.0
-  towers/boss-fire.png:
-    size:
-    - 346.0
-    - 633.0
   towers/flame-thrower.png:
     size:
     - 311.0
     - 502.0
-  tooltip.png:
+  editor/path-start.png:
     size:
     - 256.0
     - 256.0
-  grass.png:
+  towers/electric-tower.png:
     size:
-    - 256.0
-    - 256.0
-  click-tooltip.png:
-    size:
-    - 256.0
-    - 256.0
-  editor/home.png:
-    size:
-    - 256.0
-    - 256.0
-  towers/seeking-missile.png:
-    size:
-    - 511.0
-    - 457.0
-  editor/path-waypoint.png:
-    size:
-    - 256.0
-    - 256.0
+    - 556.0
+    - 411.0
