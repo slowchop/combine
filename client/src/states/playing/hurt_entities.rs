@@ -25,8 +25,6 @@ pub fn hurt_entities(
     };
 
     for hurt_entity_event in hurt_entity_events.iter() {
-        println!("HurtEntityEvent: {:?}", hurt_entity_event);
-        // Find the dst entity, attach a Damaged component to it.
         let dst_entity = if let Some(dst_entity) = game.entities.get(&hurt_entity_event.dst) {
             dst_entity
         } else {
