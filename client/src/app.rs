@@ -1,9 +1,11 @@
 use crate::net::{DestroyEntityEvent, GameOverEvent, ReleaseCreepEvent, UpdatePositionEvent};
 use crate::settings::Settings;
+use crate::states::editor::add_path::add_path;
 use crate::states::editor::add_sprite::add_sprite;
+use crate::states::editor::input_events::{input_events, EditorDragState};
 use crate::states::editor::load_map::{create_editor_entities, load_map, CreateEditorEntity};
-use crate::states::editor::move_entities::{input_events, EditorDragState};
 use crate::states::editor::new::new_events;
+use crate::states::editor::no_pointer_capture::{is_pointer_captured_system, IsPointerCaptured};
 use crate::states::editor::path_lines::path_lines;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::console;
@@ -229,6 +231,7 @@ pub fn play(args: &Args) {
     app.add_exit_system(GameState::Editor, init_egui);
     app.add_event::<CreateEditorEntity>()
         .insert_resource(EditorDragState::default())
+        .insert_resource(IsPointerCaptured(false))
         .add_event::<editor::menu::ClearEditorLevelEvent>()
         .add_event::<editor::menu::SaveEvent>()
         .add_event::<editor::menu::LoadEvent>()
@@ -249,6 +252,8 @@ pub fn play(args: &Args) {
             .with_system(path_lines)
             .with_system(add_sprite)
             .with_system(input_events)
+            .with_system(add_path)
+            .with_system(is_pointer_captured_system)
             .into(),
     );
 

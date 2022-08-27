@@ -63,7 +63,7 @@ pub fn update_console(
         style.position.left = Val::Px(20.);
         style.position.bottom = Val::Px(pos);
         pos += 25.0;
-        let alpha = 1. - (time.time_since_startup() - item.published).as_secs_f32() / 5.;
+        let alpha = 1. - (time.time_since_startup() - item.published).as_secs_f32() / 10.;
 
         if alpha <= 0. {
             text.sections[0].value = "".to_string();

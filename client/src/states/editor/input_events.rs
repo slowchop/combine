@@ -1,10 +1,13 @@
 use crate::app::MyRaycastSet;
 use crate::states::editor::load_map::PathInfo;
 use crate::states::editor::menu::EditorInfo;
+use crate::states::editor::no_pointer_capture::IsPointerCaptured;
+use crate::states::playing::console::ConsoleItem;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
 use shared::game::defs::{Defs, EntityDef, EntityType};
 use shared::game::position::vec2_to_vec3;
+use std::time::Duration;
 
 #[derive(Component)]
 pub struct Draggable;
@@ -14,11 +17,15 @@ pub enum EditorDragState {
     #[default]
     NotDragging,
     Dragging {
+        start_time: Duration,
+        original_position: Vec2,
         entity: Entity,
     },
 }
 
 pub fn input_events(
+    time: Res<Time>,
+    mut console: EventWriter<ConsoleItem>,
     mut commands: Commands,
     mut defs: ResMut<Defs>,
     editor_info: Res<EditorInfo>,
@@ -52,13 +59,13 @@ pub fn input_events(
         };
         position = Some(Vec2::new(intersection.x, intersection.z));
     }
-    let position = if let Some(p) = position {
+    let mut position = if let Some(p) = position {
         p
     } else {
         return;
     };
 
-    let mouse_position = vec2_to_vec3(&position);
+    let mut mouse_position = vec2_to_vec3(&position);
 
     match *drag_state {
         EditorDragState::NotDragging => {
@@ -90,6 +97,9 @@ pub fn input_events(
             if closest_entity.is_none() {
                 return;
             }
+            if closest_distance.unwrap() > 5.0 {
+                return;
+            }
 
             if keys.just_released(KeyCode::Delete) {
                 let (entity, transform, maybe_entity_def, maybe_path_info) =
@@ -104,64 +114,70 @@ pub fn input_events(
                     {
                         return;
                     }
+
+                    console.send(ConsoleItem::new(format!("Deleted {:?}", entity_def)));
                 } else if let Some(path_info) = maybe_path_info {
-                    let entity_def = level_def
-                        .entities
-                        .iter_mut()
-                        .find(|e| {
-                            if e.entity_type != EntityType::Path {
-                                return false;
-                            }
-
-                            if e.owner != Some(path_info.owner) {
-                                return false;
-                            }
-
-                            return true;
-                        })
-                        .unwrap();
-
-                    let path = entity_def.path.as_mut().unwrap();
+                    console.send(ConsoleItem::new(
+                        "TODO: Can't remove paths yet.".to_string(),
+                    ));
+                    return;
                 }
 
                 commands.entity(entity).despawn();
             } else if buttons.just_pressed(MouseButton::Left) {
+                println!("pressed");
                 if let Some(entity) = closest_entity {
-                    *drag_state = EditorDragState::Dragging { entity };
+                    *drag_state = EditorDragState::Dragging {
+                        entity,
+                        start_time: time.time_since_startup(),
+                        original_position: position,
+                    };
                 }
             }
         }
-        EditorDragState::Dragging { entity } => {
+        EditorDragState::Dragging {
+            entity,
+            start_time,
+            original_position,
+        } => {
             let (_, mut transform, ref mut maybe_entity_def, ref mut maybe_path_info) =
                 query.get_mut(entity).unwrap();
 
             if buttons.just_released(MouseButton::Left) {
                 *drag_state = EditorDragState::NotDragging;
-            } else {
-                transform.translation = mouse_position;
-                if let Some(entity_def) = maybe_entity_def {
-                    entity_def.position = Some(position.into());
+                // Drag time was too short, ignoring.
+                println!("Drag time was too short, ignoring.");
+                if time.time_since_startup() - start_time < Duration::from_secs_f32(0.4) {
+                    mouse_position = vec2_to_vec3(&original_position);
+                    position = original_position;
+                } else {
+                    return;
                 }
-                if let Some(path_info) = maybe_path_info {
-                    let entity_def = level_def
-                        .entities
-                        .iter_mut()
-                        .find(|e| {
-                            if e.entity_type != EntityType::Path {
-                                return false;
-                            }
+            }
 
-                            if e.owner != Some(path_info.owner) {
-                                return false;
-                            }
+            transform.translation = mouse_position;
+            if let Some(entity_def) = maybe_entity_def {
+                entity_def.position = Some(position.into());
+            }
+            if let Some(path_info) = maybe_path_info {
+                let entity_def = level_def
+                    .entities
+                    .iter_mut()
+                    .find(|e| {
+                        if e.entity_type != EntityType::Path {
+                            return false;
+                        }
 
-                            return true;
-                        })
-                        .unwrap();
+                        if e.owner != Some(path_info.owner) {
+                            return false;
+                        }
 
-                    let path_waypoints = entity_def.path.as_mut().unwrap();
-                    path_waypoints[path_info.index] = position.into();
-                }
+                        return true;
+                    })
+                    .unwrap();
+
+                let path_waypoints = entity_def.path.as_mut().unwrap();
+                path_waypoints[path_info.index] = position.into();
             }
         }
     }

@@ -1,6 +1,6 @@
 use crate::app::MyRaycastSet;
+use crate::states::editor::input_events::Draggable;
 use crate::states::editor::menu::{ClearEditorLevelEvent, EditorInfo, LoadEvent};
-use crate::states::editor::move_entities::Draggable;
 use crate::states::playing::bottom_quad::BottomQuad;
 use crate::states::playing::console::ConsoleItem;
 use crate::BillboardMaterial;
@@ -85,8 +85,6 @@ pub fn create_editor_entities(
                 for (idx, waypoint) in path.iter().enumerate() {
                     let texture = if idx == 0 {
                         "editor/path-start.png"
-                    } else if idx == path.len() - 1 {
-                        "editor/path-end.png"
                     } else {
                         "editor/path-waypoint.png"
                     };

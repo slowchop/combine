@@ -163,6 +163,25 @@ pub struct LevelDef {
     pub entities: Vec<EntityDef>,
 }
 
+impl LevelDef {
+    pub fn get_path(&mut self, owner: Owner) -> &mut EntityDef {
+        self.entities
+            .iter_mut()
+            .find(|e| {
+                if e.entity_type != EntityType::Path {
+                    return false;
+                }
+
+                if e.owner != Some(owner) {
+                    return false;
+                }
+
+                return true;
+            })
+            .unwrap()
+    }
+}
+
 #[derive(Clone, Default, Debug, Serialize, Deserialize, PartialEq, Eq, Component)]
 pub struct EntityDef {
     #[serde(skip_serializing_if = "Option::is_none")]
