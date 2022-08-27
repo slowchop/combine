@@ -2,7 +2,7 @@ use crate::net::{DestroyEntityEvent, GameOverEvent, ReleaseCreepEvent, UpdatePos
 use crate::settings::Settings;
 use crate::states::editor::add_sprite::add_sprite;
 use crate::states::editor::load_map::{create_editor_entities, load_map, CreateEditorEntity};
-use crate::states::editor::move_entities::{move_entities, EditorDragState};
+use crate::states::editor::move_entities::{input_events, EditorDragState};
 use crate::states::editor::new::new_events;
 use crate::states::editor::path_lines::path_lines;
 use crate::states::playing::camera::GameCamera;
@@ -248,7 +248,7 @@ pub fn play(args: &Args) {
             .with_system(move_camera)
             .with_system(path_lines)
             .with_system(add_sprite)
-            .with_system(move_entities)
+            .with_system(input_events)
             .into(),
     );
 

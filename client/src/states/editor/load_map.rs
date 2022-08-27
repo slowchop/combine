@@ -10,6 +10,7 @@ use bevy_prototype_lyon::prelude::tess::path::Position;
 use shared::game::defs::{Defs, EntityDef, EntityType, LevelDef};
 use shared::game::owner::Owner;
 use shared::game::position::vec2_to_vec3;
+use shared::game::shared_game::ServerEntityId;
 use std::f32::consts::TAU;
 
 pub struct CreateEditorEntity(pub EntityDef);
@@ -39,7 +40,11 @@ pub fn load_map(
             Some(m) => m,
         };
 
-        for entity_def in &level_def.entities {
+        for (idx, entity_def) in level_def.entities.iter().enumerate() {
+            let mut entity_def = entity_def.clone();
+            // Hackily adding an ID so that we can delete entities in the editor without
+            // reordering the level.entities vec.
+            entity_def.server_entity_id = Some(ServerEntityId(idx as u32));
             create_editor_entities.send(CreateEditorEntity(entity_def.clone()));
         }
     }
@@ -60,6 +65,7 @@ pub fn create_editor_entities(
             let mut texture = &entity_def.texture;
 
             if entity_def.entity_type == EntityType::Guide {
+                commands.spawn().insert(entity_def.clone());
                 continue;
             }
 

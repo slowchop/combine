@@ -18,7 +18,8 @@ pub enum EditorDragState {
     },
 }
 
-pub fn move_entities(
+pub fn input_events(
+    mut commands: Commands,
     mut defs: ResMut<Defs>,
     editor_info: Res<EditorInfo>,
     mut query: Query<
@@ -32,6 +33,7 @@ pub fn move_entities(
     >,
     intersection_query: Query<&Intersection<MyRaycastSet>>,
     buttons: Res<Input<MouseButton>>,
+    keys: Res<Input<KeyCode>>,
     mut drag_state: ResMut<EditorDragState>,
 ) {
     let level_def = match defs.levels.get_mut(&editor_info.map_name) {
@@ -60,14 +62,20 @@ pub fn move_entities(
 
     match *drag_state {
         EditorDragState::NotDragging => {
-            if !buttons.just_pressed(MouseButton::Left) {
-                return;
-            }
-
             // Find closest entity from mouse_position
             let mut closest_entity = None;
             let mut closest_distance = None;
-            for (entity, transform, _, _) in query.iter() {
+            for (entity, transform, maybe_entity_def, _) in query.iter() {
+                if let Some(entity_def) = maybe_entity_def {
+                    if entity_def.entity_type == EntityType::Spawn
+                        || entity_def.entity_type == EntityType::Base
+                        || entity_def.entity_type == EntityType::Guide
+                        || entity_def.entity_type == EntityType::Ground
+                    {
+                        continue;
+                    }
+                }
+
                 let distance = (transform.translation - mouse_position).length();
                 if let Some(d) = closest_distance {
                     if distance < d {
@@ -79,9 +87,48 @@ pub fn move_entities(
                     closest_entity = Some(entity);
                 }
             }
+            if closest_entity.is_none() {
+                return;
+            }
 
-            if let Some(entity) = closest_entity {
-                *drag_state = EditorDragState::Dragging { entity };
+            if keys.just_released(KeyCode::Delete) {
+                let (entity, transform, maybe_entity_def, maybe_path_info) =
+                    query.get(closest_entity.unwrap()).unwrap();
+
+                if let Some(entity_def) = maybe_entity_def {
+                    if entity_def.entity_type == EntityType::Path
+                        || entity_def.entity_type == EntityType::Spawn
+                        || entity_def.entity_type == EntityType::Base
+                        || entity_def.entity_type == EntityType::Guide
+                        || entity_def.entity_type == EntityType::Ground
+                    {
+                        return;
+                    }
+                } else if let Some(path_info) = maybe_path_info {
+                    let entity_def = level_def
+                        .entities
+                        .iter_mut()
+                        .find(|e| {
+                            if e.entity_type != EntityType::Path {
+                                return false;
+                            }
+
+                            if e.owner != Some(path_info.owner) {
+                                return false;
+                            }
+
+                            return true;
+                        })
+                        .unwrap();
+
+                    let path = entity_def.path.as_mut().unwrap();
+                }
+
+                commands.entity(entity).despawn();
+            } else if buttons.just_pressed(MouseButton::Left) {
+                if let Some(entity) = closest_entity {
+                    *drag_state = EditorDragState::Dragging { entity };
+                }
             }
         }
         EditorDragState::Dragging { entity } => {
