@@ -15,8 +15,9 @@ pub struct LastShot(pub Duration);
 #[derive(Debug)]
 pub struct DamageCreepEvent {
     pub game_id: GameId,
-    pub server_entity_id: ServerEntityId,
-    pub amount: f32,
+    pub tower_id: Option<ServerEntityId>,
+    pub creep_id: ServerEntityId,
+    pub amount: u32,
 }
 
 pub fn shoot_towers(
@@ -24,11 +25,20 @@ pub fn shoot_towers(
     time: Res<Time>,
     defs: Res<Defs>,
     game_lookup: Res<GameLookup>,
-    mut towers: Query<(&TowerRef, &Transform, &mut LastShot, &GameId, &Owner)>,
+    mut towers: Query<(
+        &TowerRef,
+        &Transform,
+        &mut LastShot,
+        &GameId,
+        &Owner,
+        &ServerEntityId,
+    )>,
     mut creeps: Query<(&CreepRef, &Transform, &Owner)>,
     mut damage_creep_events: EventWriter<DamageCreepEvent>,
 ) {
-    for (tower_ref, tower_transform, mut last_shot, game_id, tower_owner) in towers.iter_mut() {
+    for (tower_ref, tower_transform, mut last_shot, game_id, tower_owner, server_entity_id) in
+        towers.iter_mut()
+    {
         let tower = if let Some(tower) = defs.tower(&tower_ref) {
             tower
         } else {
@@ -80,7 +90,8 @@ pub fn shoot_towers(
 
             damage_creep_events.send(DamageCreepEvent {
                 game_id: *game_id,
-                server_entity_id: *server_entity_id,
+                tower_id: None,
+                creep_id: *server_entity_id,
                 amount: tower.instant_damage,
             });
         }

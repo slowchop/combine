@@ -93,9 +93,9 @@ pub const CHANNEL_CONFIG: &[Channel<Channels>] = &[
         mode: ChannelMode::OrderedReliable(ReliableSettings::default()),
     },
     // This was dropping packets 100% of the time, maybe the rng was unlucky...
-    // Channel {
-    //     index: Channels::ServerUpdate,
-    //     direction: ChannelDirection::ServerToClient,
-    //     mode: ChannelMode::UnorderedReliable(ReliableSettings::default()),
-    // },
+    Channel {
+        index: Channels::ServerUpdate,
+        direction: ChannelDirection::ServerToClient,
+        mode: ChannelMode::UnorderedUnreliable,
+    },
 ];

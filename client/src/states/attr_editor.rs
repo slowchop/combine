@@ -30,6 +30,7 @@ pub fn attr_editor(mut egui_context: ResMut<EguiContext>, mut defs: ResMut<Defs>
             ui.label("Reload");
             ui.label("Range");
             ui.label("Size");
+            ui.label("Slow");
             ui.end_row();
 
             for tower in towers.iter_mut() {
@@ -76,6 +77,20 @@ pub fn attr_editor(mut egui_context: ResMut<EguiContext>, mut defs: ResMut<Defs>
                 if ui.text_edit_singleline(&mut s).changed() {
                     if let Ok(c) = s.parse() {
                         tower.size = c;
+                    }
+                }
+
+                match tower.cold_slowdown {
+                    Some(slowdown) => {
+                        let mut s = format!("{:0.1}", slowdown);
+                        if ui.text_edit_singleline(&mut s).changed() {
+                            if let Ok(c) = s.parse() {
+                                tower.cold_slowdown = Some(c);
+                            }
+                        }
+                    }
+                    None => {
+                        ui.label("-");
                     }
                 }
 

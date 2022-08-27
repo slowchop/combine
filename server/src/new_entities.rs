@@ -61,8 +61,8 @@ pub fn add_new_entities_to_game(
         let message = SpawnEntity::new(&entity_def);
         send_message_to_game(
             &mut server,
-            &game_id,
             &game_user_lookup,
+            &game_id,
             Channels::ServerCommand,
             &message,
         );

@@ -172,8 +172,8 @@ pub fn move_along_path(
                 UpdatePosition::new(server_entity_id.clone(), transform.translation, velocity);
             send_message_to_game(
                 &mut server,
-                &game_id,
                 &*game_user_lookup,
+                &game_id,
                 Channels::ServerCommand,
                 &message,
             );

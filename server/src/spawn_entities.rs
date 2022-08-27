@@ -201,7 +201,7 @@ pub fn spawn_entities(
                     .insert(owner)
                     .insert(game_id)
                     .insert(Speed(creep.speed))
-                    .insert(Damaged(0.))
+                    .insert(Damaged(0))
                     .id();
 
                 created_entity = Some(id);

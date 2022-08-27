@@ -59,8 +59,8 @@ pub fn lose_a_life(
         let message = UpdatePlayer::new(lose_a_life_event.who, player.gold, player.lives);
         send_message_to_game(
             &mut server,
-            &lose_a_life_event.game_id,
             &*game_user_lookup,
+            &lose_a_life_event.game_id,
             Channels::ServerCommand,
             &message,
         );

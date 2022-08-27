@@ -150,8 +150,20 @@ pub fn receive_message_event(
                 Protocol::ComboCreepRequest(_) => {
                     warn!("Got a combo creep request message");
                 }
-                Protocol::HurtEntity(_) => {
-                    warn!("Got a hurt entity message");
+                Protocol::HurtEntity(hurt_entity) => {
+                    info!("Got a hurt entity message");
+
+                    let src = *hurt_entity.src_server_entity_id;
+                    let dst = *hurt_entity.dst_server_entity_id;
+                    let total_damaged = *hurt_entity.total_damaged;
+
+                    info!(?src, ?dst, ?total_damaged, "Hurt entity");
+
+                    // hurt_entity_events.send(HurtEntityEvent {
+                    //     src,
+                    //     dst,
+                    //     total_damaged,
+                    // });
                 }
             }
         }

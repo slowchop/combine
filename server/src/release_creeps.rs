@@ -103,8 +103,8 @@ pub fn tell_clients_to_release_the_creeps(
         let message = ReleaseCreeps::new(collected_server_entity_ids);
         send_message_to_game(
             &mut server,
-            &release_creeps_event.game_id,
             &*game_user_lookup,
+            &release_creeps_event.game_id,
             Channels::ServerCommand,
             &message,
         );
@@ -113,8 +113,8 @@ pub fn tell_clients_to_release_the_creeps(
 
 pub fn send_message_to_game<R, P>(
     server: &mut Server<Protocol, Channels>,
-    game_id: &GameId,
     game_user_lookup: &GameUserLookup,
+    game_id: &GameId,
     channel: Channels,
     message: &R,
 ) where

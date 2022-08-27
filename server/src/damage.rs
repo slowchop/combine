@@ -1,19 +1,26 @@
-use crate::{DamageCreepEvent, DestroyEntityEvent, GameLookup};
+use crate::release_creeps::send_message_to_game;
+use crate::{DamageCreepEvent, DestroyEntityEvent, GameLookup, GameUserLookup};
 use bevy_ecs::prelude::*;
 use bevy_log::warn;
+use naia_bevy_server::Server;
 use shared::game::defs::{CreepRef, Defs};
 use shared::game::destroyment_method::DestroymentMethod;
+use shared::protocol::hurt_entity::HurtEntity;
+use shared::protocol::Protocol;
+use shared::Channels;
 
 #[derive(Component, Debug)]
-pub struct Damaged(pub f32);
+pub struct Damaged(pub u32);
 
 pub fn damage_creeps(
     defs: Res<Defs>,
     mut commands: Commands,
     mut damage_creep_events: EventReader<DamageCreepEvent>,
+    game_user_lookup: Res<GameUserLookup>,
     game_lookup: Res<GameLookup>,
     mut creeps: Query<(&mut Damaged, &CreepRef)>,
     mut destroy_entity_events: EventWriter<DestroyEntityEvent>,
+    mut server: Server<Protocol, Channels>,
 ) {
     for damage_creep_event in damage_creep_events.iter() {
         let game = if let Some(game) = game_lookup.0.get(&damage_creep_event.game_id) {
@@ -26,12 +33,12 @@ pub fn damage_creeps(
             continue;
         };
 
-        let entity = if let Some(entity) = game.entities.get(&damage_creep_event.server_entity_id) {
+        let entity = if let Some(entity) = game.entities.get(&damage_creep_event.creep_id) {
             entity
         } else {
             warn!(
                 "Entity not found in game.entities for damage_creeps: {:?}",
-                damage_creep_event.server_entity_id
+                damage_creep_event.creep_id
             );
             continue;
         };
@@ -41,7 +48,7 @@ pub fn damage_creeps(
         } else {
             warn!(
                 "Entity not found in creeps for damage_creeps: {:?}",
-                damage_creep_event.server_entity_id
+                damage_creep_event.creep_id
             );
             continue;
         };
@@ -54,9 +61,21 @@ pub fn damage_creeps(
         };
 
         damaged.0 += damage_creep_event.amount;
-        // TODO: Emit "TowerShooting"
 
         println!("damaged creep: {:?}", damaged.0);
+
+        let message = HurtEntity::new(
+            damage_creep_event.tower_id,
+            damage_creep_event.creep_id,
+            damaged.0,
+        );
+        send_message_to_game(
+            &mut server,
+            &game_user_lookup,
+            &damage_creep_event.game_id,
+            Channels::ServerUpdate,
+            &message,
+        );
 
         if damaged.0 < creep.health {
             continue;
@@ -66,7 +85,7 @@ pub fn damage_creeps(
 
         destroy_entity_events.send(DestroyEntityEvent {
             game_id: damage_creep_event.game_id,
-            server_entity_id: damage_creep_event.server_entity_id,
+            server_entity_id: damage_creep_event.creep_id,
             destroyment_method: DestroymentMethod::Quiet,
         });
     }

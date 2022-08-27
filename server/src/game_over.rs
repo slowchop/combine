@@ -29,8 +29,8 @@ pub fn game_over(
         let game_over = GameOver::new(game_over_event.winner);
         send_message_to_game(
             &mut server,
-            &game_over_event.game_id,
             &game_user_lookup,
+            &game_over_event.game_id,
             Channels::ServerCommand,
             &game_over,
         );

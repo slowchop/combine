@@ -343,6 +343,9 @@ pub fn receive_message_event(
                 Protocol::GameOver(_) => {
                     warn!("Got a game over from client");
                 }
+                Protocol::HurtEntity(hurt_entity) => {
+                    warn!("Got a hurt entity from client");
+                }
             }
             info!(key = ?user_key.to_u64())
         }

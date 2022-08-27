@@ -47,8 +47,8 @@ pub fn destroy_entities(
         );
         send_message_to_game(
             &mut server,
-            &destroy_entity_event.game_id,
             &*game_user_lookup,
+            &destroy_entity_event.game_id,
             Channels::ServerCommand,
             &message,
         );
