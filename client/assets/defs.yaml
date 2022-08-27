@@ -279,6 +279,7 @@ levels:
         - -3.6978683
 towers:
   fire:
+    emoji: 🔥
     name: fire
     title: Windy Candle
     combo:
@@ -292,6 +293,7 @@ towers:
     reload: 1.0
     instant_fire: true
   electric:
+    emoji: ⚡
     name: electric
     title: Overloaded Mobile Cell Phone
     combo:
@@ -305,6 +307,7 @@ towers:
     reload: 1.0
     instant_fire: true
   machine:
+    emoji: 🔫
     name: machine
     title: Machine Gun
     combo: []
@@ -316,6 +319,7 @@ towers:
     reload: 1.0
     instant_fire: true
   fire-boss:
+    emoji: 🔫
     name: fire-boss
     title: Flaming Barbeque
     combo:
@@ -329,6 +333,7 @@ towers:
     reload: 1.0
     instant_fire: true
   missile:
+    emoji: 🚀
     name: missile
     title: Fireworks Launcher
     combo:
@@ -342,6 +347,7 @@ towers:
     reload: 1.0
     instant_fire: true
   cold:
+    emoji: ❄️
     name: cold
     title: Ice Cream Gun
     combo:
@@ -355,6 +361,7 @@ towers:
     reload: 1.0
     instant_fire: true
   electric-boss:
+    emoji: 🌩️
     name: electric-boss
     title: Electric Record Player
     combo:
@@ -368,6 +375,7 @@ towers:
     reload: 1.0
     instant_fire: true
   laser-boss:
+    emoji: ✨
     name: laser-boss
     title: Pew Pew Surveillance Camera
     combo:
@@ -381,6 +389,7 @@ towers:
     reload: 1.0
     instant_fire: true
   cold-boss:
+    emoji: 🥶
     name: cold-boss
     title: Ice Cream Cart
     combo:
@@ -394,6 +403,7 @@ towers:
     reload: 1.0
     instant_fire: true
   laser:
+    emoji: 🎯
     name: laser
     title: Cat Laser Toy
     combo:

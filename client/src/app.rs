@@ -1,5 +1,6 @@
 use crate::net::{DestroyEntityEvent, GameOverEvent, ReleaseCreepEvent, UpdatePositionEvent};
 use crate::settings::Settings;
+use crate::states::attr_editor::attr_editor;
 use crate::states::map_editor::add_path::add_path;
 use crate::states::map_editor::add_sprite::add_sprite;
 use crate::states::map_editor::input_events::{input_events, EditorDragState};
@@ -173,6 +174,7 @@ pub fn play(args: &Args) {
         ConditionSet::new()
             .run_in_state(GameState::MainMenu)
             .with_system(main_menu::update)
+            .with_system(attr_editor)
             .into(),
     );
 
@@ -342,6 +344,7 @@ fn init(
 }
 
 fn init_egui(mut egui_context: ResMut<EguiContext>) {
+    return;
     let ctx = egui_context.ctx_mut();
     let mut style = (*ctx.style()).clone();
     style.text_styles.insert(

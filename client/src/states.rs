@@ -1,3 +1,4 @@
+pub mod attr_editor;
 pub mod connecting;
 pub mod disconnected;
 pub mod loading_level;

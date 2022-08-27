@@ -102,6 +102,7 @@ impl Defs {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Tower {
+    pub emoji: String,
     pub name: TowerRef,
     pub title: String,
     pub combo: Vec<TowerRef>,
