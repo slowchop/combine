@@ -7,3 +7,4 @@ pub mod menu;
 pub mod new;
 pub mod no_pointer_capture;
 pub mod path_lines;
+pub mod save_map;

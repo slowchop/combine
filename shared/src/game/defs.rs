@@ -157,7 +157,7 @@ pub struct TextureDefinition {
     pub size: Vec2,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Default)]
 pub struct LevelDef {
     pub name: String,
     pub entities: Vec<EntityDef>,
