@@ -6,9 +6,9 @@ use shared::game::defs::Defs;
 use shared::game::owner::Owner;
 
 #[derive(Default)]
-pub struct Editor {
-    pub name: String,
-    pub selected_sprite: String,
+pub struct EditorInfo {
+    pub map_name: String,
+    selected_sprite: String,
 }
 
 pub struct ClearEditorLevelEvent;
@@ -33,7 +33,7 @@ pub fn menu(
     mut save_events: EventWriter<SaveEvent>,
     mut add_sprite_events: EventWriter<AddSpriteEvent>,
     mut add_path_events: EventWriter<AddPathEvent>,
-    mut editor_map: ResMut<Editor>,
+    mut editor_map: ResMut<EditorInfo>,
 ) {
     egui::Window::new("Editor")
         .default_pos(egui::Pos2::new(16., 16.))
@@ -45,12 +45,12 @@ pub fn menu(
 
             ui.separator();
             ui.label("Map name:");
-            ui.text_edit_singleline(&mut editor_map.name);
+            ui.text_edit_singleline(&mut editor_map.map_name);
             if ui.button("Load").clicked() {
-                load_events.send(LoadEvent(editor_map.name.clone()));
+                load_events.send(LoadEvent(editor_map.map_name.clone()));
             };
             if ui.button("Save").clicked() {
-                save_events.send(SaveEvent(editor_map.name.clone()));
+                save_events.send(SaveEvent(editor_map.map_name.clone()));
             };
 
             ui.separator();

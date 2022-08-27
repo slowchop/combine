@@ -1,11 +1,11 @@
-use crate::states::editor::menu::Editor;
+use crate::states::editor::menu::EditorInfo;
 use bevy::prelude::*;
 use bevy_prototype_debug_lines::DebugLines;
 use shared::game::defs::{Defs, EntityType};
 use shared::game::position::vec2_to_vec3;
 
-pub fn path_lines(mut lines: ResMut<DebugLines>, defs: Res<Defs>, editor: Res<Editor>) {
-    let level_def = match defs.levels.get(&editor.name) {
+pub fn path_lines(mut lines: ResMut<DebugLines>, defs: Res<Defs>, editor: Res<EditorInfo>) {
+    let level_def = match defs.levels.get(&editor.map_name) {
         None => {
             return;
         }

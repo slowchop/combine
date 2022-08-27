@@ -2,6 +2,7 @@ use crate::net::{DestroyEntityEvent, GameOverEvent, ReleaseCreepEvent, UpdatePos
 use crate::settings::Settings;
 use crate::states::editor::add_sprite::add_sprite;
 use crate::states::editor::load_map::{create_editor_entities, load_map, CreateEditorEntity};
+use crate::states::editor::move_entities::{move_entities, EditorDragState};
 use crate::states::editor::new::new_events;
 use crate::states::editor::path_lines::path_lines;
 use crate::states::playing::camera::GameCamera;
@@ -96,7 +97,7 @@ pub fn play(args: &Args) {
         resizable: false,
         width: 1024f32,
         height: 768f32,
-        title: "Combined Towers".to_string(),
+        title: "Tower Combos".to_string(),
         present_mode: PresentMode::AutoNoVsync,
         position,
         ..Default::default()
@@ -141,7 +142,7 @@ pub fn play(args: &Args) {
         .add_event::<UpdatePlayerEvent>()
         .add_event::<GameOverEvent>()
         .add_event::<ConsoleItem>()
-        .insert_resource(editor::menu::Editor::default())
+        .insert_resource(editor::menu::EditorInfo::default())
         .add_plugin(MaterialPlugin::<BillboardMaterial>::default())
         .add_system_to_stage(NaiaStage::Connection, net::connect_event)
         .add_system_to_stage(NaiaStage::Disconnection, net::disconnect_event)
@@ -227,6 +228,7 @@ pub fn play(args: &Args) {
     app.add_enter_system(GameState::Editor, editor::init::init);
     app.add_exit_system(GameState::Editor, init_egui);
     app.add_event::<CreateEditorEntity>()
+        .insert_resource(EditorDragState::default())
         .add_event::<editor::menu::ClearEditorLevelEvent>()
         .add_event::<editor::menu::SaveEvent>()
         .add_event::<editor::menu::LoadEvent>()
@@ -246,6 +248,7 @@ pub fn play(args: &Args) {
             .with_system(move_camera)
             .with_system(path_lines)
             .with_system(add_sprite)
+            .with_system(move_entities)
             .into(),
     );
 

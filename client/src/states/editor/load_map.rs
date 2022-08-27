@@ -1,5 +1,6 @@
 use crate::app::MyRaycastSet;
-use crate::states::editor::menu::{LoadEvent, ClearEditorLevelEvent};
+use crate::states::editor::menu::{ClearEditorLevelEvent, EditorInfo, LoadEvent};
+use crate::states::editor::move_entities::Draggable;
 use crate::states::playing::bottom_quad::BottomQuad;
 use crate::states::playing::console::ConsoleItem;
 use crate::BillboardMaterial;
@@ -7,10 +8,17 @@ use bevy::prelude::*;
 use bevy_mod_raycast::RayCastMesh;
 use bevy_prototype_lyon::prelude::tess::path::Position;
 use shared::game::defs::{Defs, EntityDef, EntityType, LevelDef};
+use shared::game::owner::Owner;
 use shared::game::position::vec2_to_vec3;
 use std::f32::consts::TAU;
 
 pub struct CreateEditorEntity(pub EntityDef);
+
+#[derive(Component, Debug, Clone)]
+pub struct PathInfo {
+    owner: Owner,
+    index: usize,
+}
 
 pub fn load_map(
     mut console: EventWriter<ConsoleItem>,
@@ -86,14 +94,19 @@ pub fn create_editor_entities(
                         size: Vec2::new(1., 1.),
                     });
 
-                    commands.spawn_bundle(MaterialMeshBundle {
-                        mesh: meshes.add(mesh),
-                        material,
-                        transform: Transform::from_translation(
-                            vec2_to_vec3(&waypoint.into()).into(),
-                        ),
-                        ..Default::default()
-                    });
+                    commands
+                        .spawn_bundle(MaterialMeshBundle {
+                            mesh: meshes.add(mesh),
+                            material,
+                            transform: Transform::from_translation(
+                                vec2_to_vec3(&waypoint.into()).into(),
+                            ),
+                            ..Default::default()
+                        })
+                        .insert(PathInfo {
+                            owner: owner.clone(),
+                            index: idx,
+                        });
                 }
 
                 continue;
@@ -156,13 +169,13 @@ pub fn create_editor_entities(
                         .insert(RayCastMesh::<MyRaycastSet>::default());
                 }
                 EntityType::Sprite => {
-                    entity.insert(Name::new("Sprite"));
+                    entity.insert(Name::new("Sprite")).insert(Draggable);
                 }
                 EntityType::Spawn => {
-                    entity.insert(Name::new("Spawn"));
+                    entity.insert(Name::new("Spawn")).insert(Draggable);
                 }
                 EntityType::Base => {
-                    entity.insert(Name::new("Base"));
+                    entity.insert(Name::new("Base")).insert(Draggable);
                 }
                 EntityType::Path => {
                     entity.insert(Name::new("Path"));
