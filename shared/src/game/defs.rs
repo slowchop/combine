@@ -88,7 +88,6 @@ impl Defs {
                 return Some(tower.clone());
             }
         }
-        info!("not found!");
         None
     }
 

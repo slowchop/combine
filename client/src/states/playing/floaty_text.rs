@@ -23,6 +23,7 @@ pub fn floaty_style() -> Style {
             width: Val::Undefined,
             height: Val::Undefined,
         },
+        position_type: PositionType::Absolute,
         ..default()
     }
 }
@@ -43,7 +44,6 @@ pub fn update_floaty_text_and_world_to_screen_pos(
             None => continue,
         };
 
-        style.position_type = PositionType::Absolute;
         style.position.left = Val::Px(viewport_pos.x);
         style.position.bottom = Val::Px(viewport_pos.y);
         text.sections[0].value = floaty.text.clone();

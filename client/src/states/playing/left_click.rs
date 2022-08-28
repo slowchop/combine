@@ -1,6 +1,7 @@
 use crate::app::MyRaycastSet;
 use crate::states::playing::creeps::Released;
 use crate::states::playing::floaty_text::{floaty_text_bundle, FloatyText};
+use crate::states::playing::hover_stats::HoverStats;
 use crate::states::playing::init::MouseHoverText;
 use crate::states::playing::spawn_entities::SpawnEntityEvent;
 use crate::BillboardMaterial;
@@ -191,8 +192,6 @@ pub fn mouse_action(
             }
         }
     }
-
-    // println!("hovering on: {:?}", hovering_on);
 
     let mut set_guide = SetGuide::new();
     let mut set_text: String = "".to_string();

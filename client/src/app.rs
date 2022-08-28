@@ -21,6 +21,7 @@ use crate::states::playing::destroy_entities::destroy_entities;
 use crate::states::playing::floaty_text::update_floaty_text_and_world_to_screen_pos;
 use crate::states::playing::game_over::{game_over, game_over_message};
 use crate::states::playing::health_bars::{add_health_bars, health_bars};
+use crate::states::playing::hover_stats::hover_stats;
 use crate::states::playing::hurt_entities::{hurt_entities, HurtEntityEvent};
 use crate::states::playing::left_click::mouse_action;
 use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
@@ -234,6 +235,7 @@ pub fn play(args: &Args) {
             .with_system(hurt_entities)
             .with_system(add_health_bars)
             .with_system(health_bars)
+            .with_system(hover_stats)
             .into(),
     );
 
