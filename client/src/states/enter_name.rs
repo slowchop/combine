@@ -63,6 +63,8 @@ pub fn update(
     keys: Res<Input<KeyCode>>,
     mut name: ResMut<PlayerName>,
     mut query: Query<&mut Text>,
+    windows: Res<Windows>,
+    buttons: Res<Input<MouseButton>>,
 ) {
     if keys.just_pressed(KeyCode::Return) {
         if name.0.len() == 0 {
@@ -70,6 +72,24 @@ pub fn update(
         }
         commands.insert_resource(NextState(GameState::MainMenu));
         return;
+    }
+
+    let window = match windows.get_primary() {
+        Some(window) => window,
+        None => return,
+    };
+    let window_height = window.height();
+    let cursor_y = match window.cursor_position() {
+        Some(cursor_position) => cursor_position.y,
+        None => return,
+    };
+    let vertical_fraction = cursor_y / window_height;
+
+    // Play
+    if buttons.just_pressed(MouseButton::Left) {
+        if vertical_fraction < 0.25 {
+            commands.insert_resource(NextState(GameState::MainMenu));
+        }
     }
 
     for key in keys.get_just_pressed() {

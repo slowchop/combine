@@ -47,8 +47,10 @@ impl PlayerName {
         let mut s = c.to_string();
         s = s.to_ascii_uppercase();
 
-        if c.len() != 3 {
-            PlayerName("PLR".into())
+        if c.len() == 0 {
+            PlayerName::random()
+        } else if c.len() > 3 {
+            PlayerName(s[0..3].to_string())
         } else {
             PlayerName(s)
         }
