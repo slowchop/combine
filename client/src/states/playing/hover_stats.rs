@@ -86,7 +86,7 @@ pub fn hover_stats(
                 };
                 text.sections[0].value = format!("{}\n", title);
 
-                text.sections[1].style.color = client_game_info.i_am.color();
+                text.sections[1].style.color = closest.owner.color();
                 if client_game_info.i_am == closest.owner {
                     text.sections[1].value = "This is yours!\n".to_string();
                 } else {

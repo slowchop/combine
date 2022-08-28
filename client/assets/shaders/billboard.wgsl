@@ -75,10 +75,12 @@ fn fragment(in: FragmentInput) -> @location(0) vec4<f32> {
     if (sampled.r == 1.0 && sampled.g == 0.0 && sampled.b == 0.0) {
         if (owner == 0) {
             // Yellow
-            sampled = vec4<f32>(0.956862745, 0.850980392, 0.552941176, sampled.a);
+            // efc06f
+            sampled = vec4<f32>(0.937, 0.753, 0.435, sampled.a);
         } else if (owner == 1) {
             // Blue
-            sampled = vec4<f32>(0.0, 0.0, 1.0, sampled.a);
+            // 437edd
+            sampled = vec4<f32>(0.262, 0.494, 0.866, sampled.a);
         }
     } else {
         sampled = sampled * material.color;

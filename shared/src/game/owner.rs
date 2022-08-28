@@ -3,8 +3,11 @@ use bevy_render::color::Color;
 use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use serde::{Deserialize, Serialize};
 
-pub const PLAYER_1_COLOR: Color = Color::rgb(0.956862745, 0.850980392, 0.552941176);
-pub const PLAYER_2_COLOR: Color = Color::BLUE;
+// Yellow
+pub const PLAYER_1_COLOR: Color = Color::rgb(0.937, 0.753, 0.435);
+
+// Blue
+pub const PLAYER_2_COLOR: Color = Color::rgb(0.262, 0.494, 0.866);
 
 /// 0 or 1.
 #[derive(Component, Default, Serialize, Deserialize, Copy, Clone, Debug, Eq, PartialEq, Hash)]
