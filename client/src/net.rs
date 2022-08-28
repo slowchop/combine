@@ -63,6 +63,7 @@ pub struct GameOverEvent {
 }
 
 pub fn receive_message_event(
+    time: Res<Time>,
     mut commands: Commands,
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
     mut spawn_entity_event: EventWriter<SpawnEntityEvent>,
@@ -185,15 +186,16 @@ pub fn receive_message_event(
                 Protocol::ColdCreep(cold) => {
                     let server_entity_id = *cold.server_entity_id;
                     let game = game.get_single().unwrap();
-                    let entity = if let Ok(e) = &game.entities.get(&server_entity_id) {
-                        e
-                    } else {
-                        continue;
-                    };
-
-                    let mut cold_effect = cold_query.get_mut(*entity).unwrap();
-                    cold_effect.until =
-                        time.time_since_startup() + Duration::from_secs_f32(*cold.duration);
+                    // let entity = if let Ok(e) = &game.entities.get(&server_entity_id) {
+                    //     e
+                    // } else {
+                    //     continue;
+                    // };
+                    //
+                    // let mut cold_effect = cold_query.get_mut(*entity).unwrap();
+                    // cold_effect.until =
+                    //     time.time_since_startup() + Duration::from_secs_f32(*cold.duration);
+                    warn!("TODO Protocol::ColdCreep in net.rs");
                 }
             }
         }

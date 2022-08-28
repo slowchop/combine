@@ -1,3 +1,4 @@
+use crate::app::MyRaycastSet;
 use crate::states::playing::camera::GameCamera;
 use crate::states::playing::console::ConsoleItem;
 use crate::states::playing::floaty_text;
@@ -6,6 +7,7 @@ use crate::states::playing::hover_stats::HoverStats;
 use crate::states::playing::left_click::Selected;
 use crate::states::playing::top_helper_text::TopHelperText;
 use bevy::prelude::*;
+use bevy_mod_raycast::RayCastSource;
 use shared::game::defs::Defs;
 use shared::game::position::vec2_to_vec3;
 use shared::game::shared_game::SharedGame;
@@ -14,7 +16,6 @@ use shared::game::ClientGameInfo;
 pub fn init(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    game: Query<&SharedGame>,
     defs: Res<Defs>,
     mut camera: Query<&mut GameCamera>,
     game_info: Query<&ClientGameInfo>,
@@ -101,4 +102,12 @@ pub fn init(
     ])
     .with_alignment(TextAlignment::BOTTOM_RIGHT);
     commands.spawn_bundle(text_bundle).insert(HoverStats);
+}
+
+pub fn exit(mut commands: Commands, mut other_cameras: Query<Entity, With<Camera>>) {
+    for other_camera in other_cameras.iter_mut() {
+        commands.entity(other_camera).despawn();
+    }
+
+    commands.spawn_bundle(Camera2dBundle::default());
 }

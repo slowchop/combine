@@ -110,6 +110,8 @@ pub fn play(args: &Args) {
 
     let image_settings = ImageSettings::default_linear();
 
+    let clear_color = Color::hex("f5f6f5").unwrap();
+
     app.insert_resource(WindowDescriptor {
         resizable: true,
         width: 1024f32,
@@ -126,7 +128,7 @@ pub fn play(args: &Args) {
     })
     .insert_resource(settings)
     .insert_resource(Defs::load())
-    .insert_resource(ClearColor(Color::rgb(0.1, 0.3, 0.4)))
+    .insert_resource(ClearColor(clear_color))
     .insert_resource(image_settings)
     .insert_resource(AmbientLight {
         color: Color::WHITE,
