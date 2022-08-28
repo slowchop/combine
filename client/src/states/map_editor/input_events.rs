@@ -172,14 +172,16 @@ pub fn input_events(
                 // Update the entity's position in the game.
                 entity_def.position = Some(position.into());
 
+                dbg!(&entity_def);
                 // Update the entity's position inside level_def.
                 // Get the entity_def from the level_def.
                 let entity_def = level_def
                     .entities
                     .iter_mut()
                     .find(|e| e.server_entity_id == entity_def.server_entity_id)
-                    .unwrap();
-                entity_def.position = Some(position.into());
+                    .map(|e| {
+                        e.position = Some(position.into());
+                    });
 
                 println!("Updated entity def position");
             }

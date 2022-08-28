@@ -107,6 +107,14 @@ pub fn mouse_action(
         }
     };
 
+    let level = match defs.levels.get(&client_game_info.map) {
+        None => {
+            warn!("No level");
+            return;
+        }
+        Some(level) => level,
+    };
+
     let (mut guide_transform, material_handle) = if let Ok(g) = guide.get_single_mut() {
         g
     } else {
@@ -193,16 +201,26 @@ pub fn mouse_action(
             // Nothing selected
             match hovering_on {
                 HoveringOn::Nothing => {
-                    set_text = "Place a tower here".into();
-                    set_guide = SetGuide {
-                        visibility: SetGuideVisibility::Good,
-                        position: SetGuidePosition::Normal,
-                    };
+                    // Work out if the player can build here first.
 
-                    if buttons.just_released(MouseButton::Left) {
-                        let place_tower =
-                            NewTowerRequest::new(mouse_position_vec2, "machine", 1230);
-                        client.send_message(Channels::PlayerCommand, &place_tower);
+                    if level.can_build_here(client_game_info.i_am, &mouse_position_vec2) {
+                        set_text = "Place a tower here".into();
+                        set_guide = SetGuide {
+                            visibility: SetGuideVisibility::Good,
+                            position: SetGuidePosition::Normal,
+                        };
+
+                        if buttons.just_released(MouseButton::Left) {
+                            let place_tower =
+                                NewTowerRequest::new(mouse_position_vec2, "machine", 1230);
+                            client.send_message(Channels::PlayerCommand, &place_tower);
+                        }
+                    } else {
+                        set_text = "Try building somewhere else!".into();
+                        set_guide = SetGuide {
+                            visibility: SetGuideVisibility::Bad,
+                            position: SetGuidePosition::Normal,
+                        };
                     }
                 }
                 HoveringOn::Creep(hovering_creep_id, hovering_creep_position, creep) => {

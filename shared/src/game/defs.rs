@@ -249,6 +249,24 @@ impl LevelDef {
             })
             .unwrap()
     }
+
+    pub fn can_build_here(&self, owner: Owner, requested_position: &Vec2) -> bool {
+        self.entities
+            .iter()
+            .find(|e| {
+                if e.entity_type != EntityType::BuildableCircle {
+                    return false;
+                }
+                if e.owner != Some(owner) {
+                    return false;
+                }
+
+                let position: Vec2 = e.position.as_ref().unwrap().into();
+                let radius = e.radius.unwrap();
+                position.distance(*requested_position) < radius
+            })
+            .is_some()
+    }
 }
 
 #[derive(Clone, Default, Debug, Serialize, Deserialize, PartialEq, Eq, Component)]

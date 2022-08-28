@@ -11,6 +11,7 @@ use naia_shared::serde::{BitReader, BitWrite, Serde, SerdeErr};
 use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 use std::fmt::{Debug, Formatter};
+use std::slice::Iter;
 use std::time::Duration;
 use tracing::warn;
 
