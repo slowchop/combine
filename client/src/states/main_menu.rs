@@ -104,7 +104,7 @@ pub fn menu_clicks(
 
     // Exit
     if vertical_fraction > 0.09 && vertical_fraction < 0.22 {
-        std::process::exit(0);
+        exit(0);
     }
 
     println!(
