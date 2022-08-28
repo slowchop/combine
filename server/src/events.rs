@@ -397,6 +397,12 @@ pub fn receive_message_event(
                 Protocol::ServerMessage(_) => {
                     warn!("Got a hurt entity from client");
                 }
+                Protocol::HotCreep(_) => {
+                    warn!("Got a hot creep from client");
+                }
+                Protocol::ColdCreep(_) => {
+                    warn!("Got a cold creep from client");
+                }
             }
             info!(key = ?user_key.to_u64())
         }

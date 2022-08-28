@@ -150,7 +150,7 @@ pub fn mouse_action(
         }
         let other_tower = defs.tower(&other_tower_ref).unwrap();
         // let min_distance = &other_tower.size / 2.0 + &other_tower.size / 2.0;
-        let min_distance = 4.0;
+        let min_distance = 2.0;
         let distance = (transform.translation - mouse_position_vec3).length();
         if distance < min_distance {
             hovering_on = HoveringOn::Tower(

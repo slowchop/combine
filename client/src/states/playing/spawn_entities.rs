@@ -19,6 +19,17 @@ use shared::game::path::Path;
 use shared::game::position::{vec2_to_vec3, Position, Velocity};
 use shared::game::shared_game::{ServerEntityId, SharedGame};
 use std::f32::consts::TAU;
+use std::time::Duration;
+
+#[derive(Component, Debug, Default)]
+pub struct HasColdEffect {
+    until: Duration,
+}
+
+#[derive(Component, Debug, Default)]
+pub struct HasFireEffect {
+    until: Duration,
+}
 
 #[derive(Debug, Clone)]
 pub struct SpawnEntityEvent {
@@ -263,6 +274,8 @@ pub fn spawn_entities(
                     .insert(Damaged(0))
                     .insert(Position(position))
                     .insert(Velocity(Vec3::ZERO))
+                    .insert(HasColdEffect::default())
+                    .insert(HasFireEffect::default())
                     .insert(Released(false));
             }
             EntityType::Sprite => {

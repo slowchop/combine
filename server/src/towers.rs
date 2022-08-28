@@ -1,14 +1,19 @@
 use crate::creeps::{ColdEffect, CreepNeedsPositionUpdate};
+use crate::release_creeps::send_message_to_game;
 use crate::state::GameId;
-use crate::GameLookup;
+use crate::{GameLookup, GameUserLookup};
 use bevy_ecs::prelude::*;
 use bevy_log::warn;
 use bevy_time::Time;
 use bevy_transform::prelude::Transform;
+use naia_bevy_server::Server;
 use shared::game::defs::{CreepRef, Defs, TowerRef};
 use shared::game::owner::Owner;
 use shared::game::shared_game::ServerEntityId;
+use shared::protocol::cold_creep::ColdCreep;
 use shared::protocol::update_position::UpdatePosition;
+use shared::protocol::Protocol;
+use shared::Channels;
 use std::time::Duration;
 
 #[derive(Component, Debug)]
@@ -39,6 +44,8 @@ pub fn shoot_towers(
     mut creeps: Query<(&CreepRef, &Transform, &Owner, &ServerEntityId)>,
     mut damage_creep_events: EventWriter<DamageCreepEvent>,
     mut creeps_that_need_position_update: EventWriter<CreepNeedsPositionUpdate>,
+    mut server: Server<Protocol, Channels>,
+    game_user_lookup: Res<GameUserLookup>,
 ) {
     for (tower_ref, tower_transform, mut last_shot, game_id, tower_owner, server_entity_id) in
         towers.iter_mut()
@@ -110,6 +117,15 @@ pub fn shoot_towers(
 
                 creeps_that_need_position_update
                     .send(CreepNeedsPositionUpdate(*creep_server_entity_id));
+
+                let message = ColdCreep::new(*creep_server_entity_id, cold_slowdown_duration);
+                send_message_to_game(
+                    &mut server,
+                    &game_user_lookup,
+                    game_id,
+                    Channels::ServerCommand,
+                    &message,
+                );
             }
 
             break;

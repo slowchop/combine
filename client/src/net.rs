@@ -176,6 +176,12 @@ pub fn receive_message_event(
                     let s = &*msg.text;
                     console.send(ConsoleItem::new(s.to_string()));
                 }
+                Protocol::HotCreep(_) => {
+                    warn!("Got a hot creep message");
+                }
+                Protocol::ColdCreep(_) => {
+                    warn!("Got a cold creep message");
+                }
             }
         }
     }

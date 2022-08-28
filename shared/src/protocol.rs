@@ -1,8 +1,10 @@
+use crate::protocol::cold_creep::ColdCreep;
 use crate::protocol::combo_creep_request::ComboCreepRequest;
 use crate::protocol::combo_tower_request::ComboTowerRequest;
 use crate::protocol::destroy_entity::DestroyEntity;
 use crate::protocol::game_over::GameOver;
 use crate::protocol::game_ready::GameReady;
+use crate::protocol::hot_creep::HotCreep;
 use crate::protocol::hurt_entity::HurtEntity;
 use crate::protocol::release_creep::ReleaseCreeps;
 use crate::protocol::request_tower_placement::NewTowerRequest;
@@ -18,11 +20,13 @@ use naia_shared::{
 };
 
 pub mod auth;
+pub mod cold_creep;
 pub mod combo_creep_request;
 pub mod combo_tower_request;
 pub mod destroy_entity;
 pub mod game_over;
 pub mod game_ready;
+pub mod hot_creep;
 pub mod hurt_entity;
 pub mod join_friend_game;
 pub mod join_random_game;
@@ -38,6 +42,8 @@ pub enum Protocol {
     UpdatePosition(UpdatePosition),
     HurtEntity(HurtEntity),
     DestroyEntity(DestroyEntity),
+    HotCreep(HotCreep),
+    ColdCreep(ColdCreep),
     UpdatePlayer(UpdatePlayer),
     SpawnEntity(SpawnEntity),
     ReleaseCreeps(ReleaseCreeps),
