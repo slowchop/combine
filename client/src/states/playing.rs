@@ -15,6 +15,7 @@ pub mod projectiles;
 pub mod spawn_entities;
 pub mod time;
 pub mod tooltips;
+pub mod top_helper_text;
 pub mod ui;
 pub mod update_player;
 pub mod update_positions;

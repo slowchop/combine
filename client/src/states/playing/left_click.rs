@@ -2,8 +2,8 @@ use crate::app::MyRaycastSet;
 use crate::states::playing::creeps::Released;
 use crate::states::playing::floaty_text::{floaty_text_bundle, FloatyText};
 use crate::states::playing::hover_stats::HoverStats;
-use crate::states::playing::init::MouseHoverText;
 use crate::states::playing::spawn_entities::SpawnEntityEvent;
+use crate::states::playing::top_helper_text::TopHelperText;
 use crate::BillboardMaterial;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
@@ -94,11 +94,8 @@ pub fn mouse_action(
         (With<Guide>, Without<TowerRef>),
     >,
     mut selected: ResMut<Selected>,
-    mut hover_text_query: Query<
-        &mut FloatyText,
-        (With<MouseHoverText>, Without<CombineFloatyText>),
-    >,
     mut combine_floaty_text_query: Query<Entity, (With<FloatyText>, With<CombineFloatyText>)>,
+    mut top_helper_text: Query<&mut TopHelperText>,
 ) {
     let client_game_info = match client_game_info.get_single() {
         Ok(client_game_info) => client_game_info,
@@ -427,7 +424,8 @@ pub fn mouse_action(
     }
     guide_transform.translation += Vec3::new(0.0, 0.5, 0.0);
 
-    let mut floaty = hover_text_query.single_mut();
-    floaty.world_position = guide_transform.translation;
-    floaty.text = set_text;
+    // let mut floaty = hover_text_query.single_mut();
+    // floaty.world_position = guide_transform.translation;
+    // floaty.text = set_text;
+    top_helper_text.single_mut().0 = set_text;
 }

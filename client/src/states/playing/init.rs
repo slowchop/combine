@@ -4,14 +4,12 @@ use crate::states::playing::floaty_text;
 use crate::states::playing::floaty_text::{floaty_text_bundle, FloatyText, FONT};
 use crate::states::playing::hover_stats::HoverStats;
 use crate::states::playing::left_click::Selected;
+use crate::states::playing::top_helper_text::TopHelperText;
 use bevy::prelude::*;
 use shared::game::defs::Defs;
 use shared::game::position::vec2_to_vec3;
 use shared::game::shared_game::SharedGame;
 use shared::game::ClientGameInfo;
-
-#[derive(Component)]
-pub struct MouseHoverText;
 
 pub fn init(
     mut commands: Commands,
@@ -33,10 +31,6 @@ pub fn init(
     ));
 
     commands.insert_resource(Selected::Nothing);
-    commands
-        .spawn_bundle(floaty_text_bundle(&asset_server))
-        .insert(FloatyText::default())
-        .insert(MouseHoverText);
 
     let game_info = game_info.single();
     let owner = game_info.i_am;
@@ -53,10 +47,32 @@ pub fn init(
     let mut camera = camera.single_mut();
     camera.target = base.position.as_ref().unwrap().into();
 
+    // Top hover text
+    let mut text_bundle = floaty_text_bundle(&asset_server);
+    text_bundle.style.position.top = Val::Px(100.0);
+    text_bundle.style.position.left = Val::Px(16.0);
+    text_bundle.style.position.right = Val::Px(16.0);
+    text_bundle.style.position_type = PositionType::Absolute;
+    text_bundle.style.align_self = AlignSelf::Center;
+    text_bundle.style.justify_content = JustifyContent::Center;
+    text_bundle.style.align_items = AlignItems::Center;
+    text_bundle.text = Text::from_section(
+        "testing 123./.........",
+        TextStyle {
+            font: asset_server.load(FONT),
+            font_size: 40.0,
+            color: Color::BLACK,
+        },
+    )
+    .with_alignment(TextAlignment::TOP_CENTER);
+    commands
+        .spawn_bundle(text_bundle)
+        .insert(TopHelperText("Top Helper Text".to_string()));
+
+    // Bottom right hover text
     let mut text_bundle = floaty_text_bundle(&asset_server);
     text_bundle.style.position.right = Val::Px(16.0);
     text_bundle.style.position.bottom = Val::Px(16.0);
-    text_bundle.style.align_content = AlignContent::FlexEnd;
     text_bundle.text = Text::from_sections(vec![
         TextSection::new(
             "\n",

@@ -26,6 +26,7 @@ use crate::states::playing::hurt_entities::{hurt_entities, HurtEntityEvent};
 use crate::states::playing::left_click::mouse_action;
 use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::states::playing::time::add_ticks_to_game;
+use crate::states::playing::top_helper_text::top_helper_text;
 use crate::states::playing::ui::ui;
 use crate::states::playing::update_player::{update_player, UpdatePlayerEvent};
 use crate::states::playing::update_positions::{
@@ -229,12 +230,13 @@ pub fn play(args: &Args) {
             .with_system(update_player)
             .with_system(game_over)
             .with_system(game_over_message)
-            .with_system(update_floaty_text_and_world_to_screen_pos)
+            // .with_system(update_floaty_text_and_world_to_screen_pos)
             .with_system(debug_lines_path)
             .with_system(debug_lines_tower)
             .with_system(hurt_entities)
             .with_system(add_health_bars)
             .with_system(health_bars)
+            .with_system(top_helper_text)
             .with_system(hover_stats)
             .with_system(console::handle_console_events)
             .with_system(console::update_console)
