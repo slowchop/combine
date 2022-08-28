@@ -15,7 +15,7 @@ pub struct EditorInfo {
 impl Default for EditorInfo {
     fn default() -> Self {
         Self {
-            map_name: "".to_string(),
+            map_name: "jam".to_string(),
             selected_sprite: "".to_string(),
             buildable_circle_size: 1.0,
         }

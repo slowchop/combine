@@ -23,12 +23,12 @@ pub struct PathInfo {
 
 pub fn load_map(
     mut console: EventWriter<ConsoleItem>,
-    defs: Res<Defs>,
+    mut defs: ResMut<Defs>,
     mut load_map_events: EventReader<LoadEditorLevelEvent>,
     mut create_editor_entities: EventWriter<CreateEditorEntity>,
 ) {
     for map in load_map_events.iter() {
-        let level_def = match defs.levels.get(&map.0) {
+        let mut level_def = match defs.levels.get_mut(&map.0) {
             None => {
                 console.send(ConsoleItem::new(format!(
                     "Could not find map: \"{}\"",
@@ -39,8 +39,7 @@ pub fn load_map(
             Some(m) => m,
         };
 
-        for (idx, entity_def) in level_def.entities.iter().enumerate() {
-            let mut entity_def = entity_def.clone();
+        for (idx, entity_def) in level_def.entities.iter_mut().enumerate() {
             // Hackily adding an ID so that we can delete entities in the editor without
             // reordering the level.entities vec.
             entity_def.server_entity_id = Some(ServerEntityId(idx as u32));
@@ -60,6 +59,7 @@ pub fn create_editor_entities(
     {
         for create_editor_entity in create_editor_entities.iter() {
             let entity_def = &create_editor_entity.0;
+            dbg!(entity_def.entity_type);
 
             let mut texture = &entity_def.texture;
 
@@ -86,7 +86,7 @@ pub fn create_editor_entities(
                         &entity_def.position.as_ref().unwrap().into(),
                     )))
                     .insert(Draggable);
-                return;
+                continue;
             }
 
             if entity_def.entity_type == EntityType::Path {
@@ -124,8 +124,11 @@ pub fn create_editor_entities(
                         });
                 }
 
+                println!("path");
                 continue;
             }
+
+            println!("???");
 
             let mesh = match entity_def.entity_type {
                 EntityType::Ground => Mesh::from(shape::Plane { size: 10000.0 }),
