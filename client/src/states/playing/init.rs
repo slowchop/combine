@@ -26,6 +26,9 @@ pub fn init(
         "Protect your home from the creeps baddies.".to_string(),
     ));
     console.send(ConsoleItem::new(
+        "Combine your towers and creeps to upgrade them.".to_string(),
+    ));
+    console.send(ConsoleItem::new(
         "You have your own creeps that you can upgrade which are near your home.".to_string(),
     ));
 
