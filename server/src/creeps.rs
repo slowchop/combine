@@ -158,6 +158,8 @@ pub fn move_along_path(
                     game_id: *game_id,
                     server_entity_id: *server_entity_id,
                     destroyment_method: DestroymentMethod::Quiet,
+                    gold_earned: 0,
+                    gold_earned_for: None,
                 });
 
                 break;

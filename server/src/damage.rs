@@ -81,12 +81,18 @@ pub fn damage_creeps(
             continue;
         }
 
-        println!("dead creep: {:?}", damaged.0);
+        let (gold_earned, gold_earned_for) = if let Some(o) = damage_creep_event.tower_owner {
+            ((creep.health as f32 * 0.25) as u32, Some(o))
+        } else {
+            (0, None)
+        };
 
         destroy_entity_events.send(DestroyEntityEvent {
             game_id: damage_creep_event.game_id,
             server_entity_id: damage_creep_event.creep_id,
             destroyment_method: DestroymentMethod::Quiet,
+            gold_earned,
+            gold_earned_for,
         });
     }
 }

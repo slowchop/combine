@@ -16,6 +16,7 @@ pub struct LastShot(pub Duration);
 pub struct DamageCreepEvent {
     pub game_id: GameId,
     pub tower_id: Option<ServerEntityId>,
+    pub tower_owner: Option<Owner>,
     pub creep_id: ServerEntityId,
     pub amount: u32,
 }
@@ -92,6 +93,7 @@ pub fn shoot_towers(
             damage_creep_events.send(DamageCreepEvent {
                 game_id: *game_id,
                 tower_id: Some(*server_entity_id),
+                tower_owner: Some(*tower_owner),
                 creep_id: *creep_server_entity_id,
                 amount: tower.instant_damage,
             });

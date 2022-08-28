@@ -72,6 +72,7 @@ pub fn receive_message_event(
     mut game_over_events: EventWriter<GameOverEvent>,
     mut hurt_entity_events: EventWriter<HurtEntityEvent>,
     mut console: EventWriter<ConsoleItem>,
+    client_game_info: Query<&ClientGameInfo>,
 ) {
     // dbg!(client.is_connected());
     for event in event_reader.iter() {
@@ -130,6 +131,16 @@ pub fn receive_message_event(
                         server_entity_id: (*destroy_entity.server_entity_id),
                         how: (*destroy_entity.how),
                     });
+
+                    if let Some(earned_for) = *destroy_entity.gold_earned_for {
+                        let client_game_info = client_game_info.get_single().unwrap();
+                        if earned_for == client_game_info.i_am {
+                            console.send(ConsoleItem::new(format!(
+                                "You earned {} gold for killing a creep!",
+                                *destroy_entity.gold_earned
+                            )));
+                        }
+                    }
                 }
                 Protocol::UpdatePlayer(update_player) => {
                     update_player_events.send(UpdatePlayerEvent {

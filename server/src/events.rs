@@ -109,7 +109,7 @@ pub fn receive_message_event(
                     // TODO: Check if possible
                     warn!("Check if building is possible");
                     let position = Some(place_tower.position().into());
-                    let player = match player_lookup.0.get(&user_key) {
+                    let player = match player_lookup.0.get_mut(&user_key) {
                         Some(a) => a,
                         None => {
                             warn!("Player not found in lookup");
@@ -123,6 +123,28 @@ pub fn receive_message_event(
                             continue;
                         }
                     };
+
+                    let tower = defs.tower(&TowerRef("machine".into())).unwrap();
+
+                    // Check if the player has enough $.
+                    let cost = tower.cost;
+                    if player.gold < cost {
+                        let message = ServerMessage::new(format!(
+                            "Sorry, you don't have enough $ to buy a {}.",
+                            tower.title
+                        ));
+                        server.send_message(user_key, Channels::ServerCommand, &message);
+                        continue;
+                    }
+                    player.gold -= cost;
+                    let message = UpdatePlayer::new(player.owner, player.gold, player.lives);
+                    send_message_to_game(
+                        &mut server,
+                        &*game_user_lookup,
+                        &game_id,
+                        Channels::ServerCommand,
+                        &message,
+                    );
 
                     spawn_entity_events.send(SpawnEntityEvent {
                         game_id,
@@ -249,6 +271,8 @@ pub fn receive_message_event(
                             game_id,
                             server_entity_id: server_entity_id.clone(),
                             destroyment_method: DestroymentMethod::Quiet,
+                            gold_earned: 0,
+                            gold_earned_for: None,
                         });
                     }
                 }
@@ -344,6 +368,8 @@ pub fn receive_message_event(
                             game_id,
                             server_entity_id: server_entity_id.clone(),
                             destroyment_method: DestroymentMethod::Quiet,
+                            gold_earned: 0,
+                            gold_earned_for: None,
                         });
                     }
                 }
