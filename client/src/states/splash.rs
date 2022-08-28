@@ -64,10 +64,13 @@ pub fn init(
 pub fn update(
     mut commands: Commands,
     time: Res<Time>,
-    asset_server: Res<AssetServer>,
-    mut images: ResMut<PersistImages>,
+    buttons: Res<Input<MouseButton>>,
+    keyboard: Res<Input<KeyCode>>,
 ) {
-    if time.time_since_startup() > Duration::from_secs(4) {
-        commands.insert_resource(NextState(GameState::MainMenu));
+    if time.time_since_startup() > Duration::from_secs(4)
+        || buttons.just_pressed(MouseButton::Left)
+        || keyboard.any_pressed([KeyCode::Space, KeyCode::Return, KeyCode::Escape])
+    {
+        commands.insert_resource(NextState(GameState::EnterName));
     }
 }

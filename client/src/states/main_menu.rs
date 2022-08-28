@@ -22,6 +22,7 @@ pub fn init(
     asset_server: Res<AssetServer>,
     defs: Res<Defs>,
     mut windows: ResMut<Windows>,
+    player_name: Res<PlayerName>,
 ) {
     println!("Main menu...");
 
@@ -43,7 +44,7 @@ pub fn init(
     commands
         .spawn_bundle(Text2dBundle {
             text: Text::from_section(
-                "GAK",
+                player_name.0.to_string(),
                 TextStyle {
                     font: asset_server.load(FONT),
                     font_size: 200.0 * scale,

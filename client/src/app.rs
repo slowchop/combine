@@ -34,7 +34,8 @@ use crate::states::playing::update_positions::{
 };
 use crate::states::splash::{PersistFonts, PersistImages};
 use crate::states::{
-    connecting, loading_level, main_menu, playing, splash, waiting_for_random, ContinueState,
+    connecting, enter_name, loading_level, main_menu, playing, splash, waiting_for_random,
+    ContinueState,
 };
 use crate::states::{disconnected, map_editor};
 use crate::{
@@ -59,6 +60,7 @@ use iyes_loopless::prelude::*;
 use naia_bevy_client::Plugin as ClientPlugin;
 use naia_bevy_client::{Client, ClientConfig, Stage as NaiaStage};
 use shared::game::defs::Defs;
+use shared::game::player::PlayerName;
 use shared::protocol::Protocol;
 use shared::{shared_config, Auth, Channels};
 
@@ -67,6 +69,7 @@ pub enum GameState {
     Splash,
     PickName,
     MainMenu,
+    EnterName,
     Settings,
 
     Connecting,
@@ -189,6 +192,17 @@ pub fn play(args: &Args) {
         ConditionSet::new()
             .run_in_state(GameState::Splash)
             .with_system(splash::update)
+            .into(),
+    );
+
+    // Enter Name
+    app.add_enter_system(GameState::EnterName, enter_name::init);
+    app.add_exit_system(GameState::EnterName, despawn_with::<ThisState>);
+    app.insert_resource(PlayerName::default());
+    app.add_system_set(
+        ConditionSet::new()
+            .run_in_state(GameState::EnterName)
+            .with_system(enter_name::update)
             .into(),
     );
 

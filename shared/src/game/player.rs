@@ -40,7 +40,7 @@ impl Serde for SharedPlayer {
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub struct PlayerName(String);
+pub struct PlayerName(pub String);
 
 impl PlayerName {
     pub fn new(c: &str) -> Self {
