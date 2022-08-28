@@ -32,6 +32,7 @@ use crate::states::playing::update_player::{update_player, UpdatePlayerEvent};
 use crate::states::playing::update_positions::{
     update_positions_from_server, update_transform_from_velocity, update_transforms_from_positions,
 };
+use crate::states::splash::{PersistFonts, PersistImages};
 use crate::states::{
     connecting, loading_level, main_menu, playing, splash, waiting_for_random, ContinueState,
 };
@@ -88,6 +89,9 @@ pub enum GameState {
     Editor,
 }
 
+#[derive(Component)]
+pub struct ThisState;
+
 pub fn play(args: &Args) {
     let mut app = App::new();
 
@@ -128,6 +132,8 @@ pub fn play(args: &Args) {
         watch_for_changes: true,
         ..Default::default()
     })
+    .insert_resource(PersistImages(Vec::new()))
+    .insert_resource(PersistFonts(Vec::new()))
     .insert_resource(settings)
     .insert_resource(Defs::load())
     .insert_resource(ClearColor(clear_color))
@@ -178,6 +184,7 @@ pub fn play(args: &Args) {
 
     // Splash
     app.add_enter_system(GameState::Splash, splash::init);
+    app.add_exit_system(GameState::Splash, despawn_with::<ThisState>);
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::Splash)
@@ -187,7 +194,7 @@ pub fn play(args: &Args) {
 
     // Main Menu
     app.add_enter_system(GameState::MainMenu, main_menu::init);
-    app.add_exit_system(GameState::MainMenu, despawn_with::<Transform>);
+    app.add_exit_system(GameState::MainMenu, despawn_with::<ThisState>);
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::MainMenu)

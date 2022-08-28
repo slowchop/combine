@@ -1,4 +1,4 @@
-use crate::app::GameState;
+use crate::app::{GameState, ThisState};
 use crate::settings::Settings;
 use crate::states::playing::floaty_text::FONT;
 use crate::states::ContinueState;
@@ -32,28 +32,32 @@ pub fn init(
     let scale = window_height / texture_height;
     // let scale = 1.;
 
-    commands.spawn_bundle(SpriteBundle {
-        texture: asset_server.load("menus/main-menu.png"),
-        transform: Transform::from_scale(Vec3::new(scale, scale, 1.0)),
-        ..Default::default()
-    });
+    commands
+        .spawn_bundle(SpriteBundle {
+            texture: asset_server.load("menus/main-menu.png"),
+            transform: Transform::from_scale(Vec3::new(scale, scale, 1.0)),
+            ..Default::default()
+        })
+        .insert(ThisState);
 
-    commands.spawn_bundle(Text2dBundle {
-        text: Text::from_section(
-            "GAK",
-            TextStyle {
-                font: asset_server.load(FONT),
-                font_size: 200.0 * scale,
-                color: Color::BLACK,
-            },
-        )
-        .with_alignment(TextAlignment {
-            horizontal: HorizontalAlign::Center,
-            vertical: VerticalAlign::Center,
-        }),
-        transform: Transform::from_translation(Vec3::new(0.0, window_height * 0.1, 5.0)),
-        ..Default::default()
-    });
+    commands
+        .spawn_bundle(Text2dBundle {
+            text: Text::from_section(
+                "GAK",
+                TextStyle {
+                    font: asset_server.load(FONT),
+                    font_size: 200.0 * scale,
+                    color: Color::BLACK,
+                },
+            )
+            .with_alignment(TextAlignment {
+                horizontal: HorizontalAlign::Center,
+                vertical: VerticalAlign::Center,
+            }),
+            transform: Transform::from_translation(Vec3::new(0.0, window_height * 0.1, 5.0)),
+            ..Default::default()
+        })
+        .insert(ThisState);
 }
 
 pub fn menu_clicks(
