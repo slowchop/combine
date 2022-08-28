@@ -7,7 +7,7 @@ pub fn update_positions_from_server(
     mut commands: Commands,
     mut update_positions_events: EventReader<UpdatePositionEvent>,
     game: Query<&SharedGame>,
-    // mut query: Query<(&mut Position, &mut Velocity)>,
+    mut query: Query<(&mut Position, &mut Velocity)>,
 ) {
     let game = if let Ok(game) = game.get_single() {
         game
@@ -28,10 +28,15 @@ pub fn update_positions_from_server(
                 continue;
             };
 
-        commands
-            .entity(*entity)
-            .insert(Position(update_position_event.position))
-            .insert(Velocity(update_position_event.velocity));
+        // commands
+        //     .entity(*entity)
+        //     .insert(Position(update_position_event.position))
+        //     .insert(Velocity(update_position_event.velocity));
+
+        if let Ok((mut position, mut velocity)) = query.get_mut(*entity) {
+            position.0 = update_position_event.position;
+            velocity.0 = update_position_event.velocity;
+        }
     }
 }
 

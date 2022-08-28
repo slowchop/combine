@@ -37,9 +37,13 @@ pub const URL: &str = "http://10.0.4.14";
 pub const MS_PER_TICK: u64 = 250;
 pub const TICKS_PER_SECOND: u64 = 1000 / MS_PER_TICK;
 
+// pub const TICKS_PER_DAY: Ticks = Ticks(60 * TICKS_PER_SECOND as i64);
+// pub const RESPAWN_CLOCK_TIME: Ticks = Ticks(1 * TICKS_PER_SECOND as i64);
+// pub const RELEASE_CLOCK_TIME: Ticks = Ticks(31 * TICKS_PER_SECOND as i64);
+
 pub const TICKS_PER_DAY: Ticks = Ticks(60 * TICKS_PER_SECOND as i64);
 pub const RESPAWN_CLOCK_TIME: Ticks = Ticks(1 * TICKS_PER_SECOND as i64);
-pub const RELEASE_CLOCK_TIME: Ticks = Ticks(31 * TICKS_PER_SECOND as i64);
+pub const RELEASE_CLOCK_TIME: Ticks = Ticks(2 * TICKS_PER_SECOND as i64);
 
 pub fn shared_config() -> SharedConfig<Channels> {
     let tick_interval = Some(Duration::from_millis(MS_PER_TICK as u64));

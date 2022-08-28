@@ -126,6 +126,7 @@ pub fn move_along_path(
         &GameId,
         &Speed,
         Option<&PathLeaveAt>,
+        &ColdEffect,
     )>,
     mut server: Server<Protocol, Channels>,
     mut destroy_entity_events: EventWriter<DestroyEntityEvent>,
@@ -147,6 +148,7 @@ pub fn move_along_path(
         game_id,
         speed,
         path_leave_at,
+        cold_effect,
     ) in query.iter_mut()
     {
         let mut need_to_broadcast = false;
@@ -163,8 +165,15 @@ pub fn move_along_path(
             need_to_broadcast = true;
         }
 
+        let mut speed = speed.0;
+        // Cold
+        if time.time_since_startup() <= cold_effect.until {
+            speed -= cold_effect.amount;
+            speed = speed.min(0.0);
+        }
+
         // Reduce this for each new path we take. Usually should be 0 or 1 times!
-        let mut movement_this_frame = speed.0 * time.delta_seconds();
+        let mut movement_this_frame = speed * time.delta_seconds();
 
         // Final velocity after any paths turned.
         let mut velocity = Vec3::ZERO;
@@ -177,7 +186,7 @@ pub fn move_along_path(
             // If we're still on the same path, move and break out.
             if movement_this_frame < distance_left {
                 transform.translation += direction * movement_this_frame;
-                velocity = direction * speed.0;
+                velocity = direction * speed;
                 break;
             }
 

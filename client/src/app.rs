@@ -187,7 +187,7 @@ pub fn play(args: &Args) {
         ConditionSet::new()
             .run_in_state(GameState::MainMenu)
             .with_system(main_menu::update)
-            // .with_system(attr_editor)
+            .with_system(attr_editor)
             .into(),
     );
 
