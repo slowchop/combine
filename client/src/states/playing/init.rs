@@ -22,7 +22,7 @@ pub fn init(
 ) {
     commands.insert_resource(Selected::Nothing);
     commands
-        .spawn_bundle(floaty_text::floaty_text_bundle(&asset_server))
+        .spawn_bundle(floaty_text_bundle(&asset_server))
         .insert(FloatyText::default())
         .insert(MouseHoverText);
 
