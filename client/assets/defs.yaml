@@ -1,61 +1,31 @@
 levels:
-  pewpew:
-    name: pewpew
+  jam:
+    name: jam
     entities:
-    - texture: ground.png
-      type: ground
+    - type: buildable_circle
       position:
-      - 0.0
-      - 0.0
-    - type: base
-      position:
-      - 2.9460983
-      - 4.6553173
+      - 12.119122
+      - 15.790108
       owner: 0
-    - type: spawn
+      radius: 4.0
+    - type: buildable_circle
       position:
-      - -1.0788184
-      - -1.662343
+      - 7.7966666
+      - 7.069973
       owner: 0
-    - type: base
+      radius: 3.0
+    - type: buildable_circle
       position:
-      - -5.2789354
-      - 2.59482
-      owner: 1
-    - type: spawn
-      position:
-      - 0.074301764
-      - -1.5485773
-      owner: 1
-    - type: path
+      - 9.8528385
+      - 7.8570786
       owner: 0
-      path:
-      - - -1.0
-        - 0.0
-      - - -1.0
-        - 1.0
-      - - -1.0
-        - 2.0
-      - - -1.0
-        - 3.0
-      - - -2.8216984
-        - 3.951992
-    - type: path
-      owner: 1
-      path:
-      - - 0.0
-        - 0.0
-      - - 0.0
-        - 1.0
-      - - 0.0
-        - 2.0
-      - - 0.0
-        - 3.0
-      - - 2.4712079
-        - 3.8079004
-  test3:
-    name: test3
-    entities:
+      radius: 3.0
+    - type: buildable_circle
+      position:
+      - 10.732895
+      - 5.326584
+      owner: 0
+      radius: 3.0
     - type: base
       position:
       - -20.311577
@@ -236,142 +206,11 @@ levels:
       position:
       - 0.0
       - 0.0
-    - type: buildable_circle
-      position:
-      - 12.119122
-      - 15.790108
-      owner: 0
-      radius: 4.0
-    - type: buildable_circle
-      position:
-      - 5.943792
-      - 16.195984
-      owner: 0
-      radius: 4.0
-    - type: buildable_circle
-      position:
-      - 2.2609458
-      - 14.252197
-      owner: 0
-      radius: 4.0
-    - type: buildable_circle
-      position:
-      - -3.9470003
-      - 16.160732
-      owner: 0
-      radius: 4.0
-    - type: buildable_circle
-      position:
-      - -9.788561
-      - 16.526037
-      owner: 0
-      radius: 4.0
-    - type: buildable_circle
-      position:
-      - -15.982024
-      - 15.889313
-      owner: 0
-      radius: 4.0
-    - type: buildable_circle
-      position:
-      - -21.763948
-      - 12.615843
-      owner: 0
-      radius: 4.0
-    - type: buildable_circle
-      position:
-      - -24.26537
-      - 6.4933014
-      owner: 0
-      radius: 4.0
-    - type: buildable_circle
-      position:
-      - 6.0474124
-      - -0.7713165
-      owner: 0
-      radius: 4.0
-    - type: buildable_circle
-      position:
-      - -0.70171195
-      - 10.730766
-      owner: 0
-      radius: 2.1
-    - type: buildable_circle
-      position:
-      - -2.4202344
-      - 12.162283
-      owner: 0
-      radius: 2.1
-    - type: buildable_circle
-      position:
-      - 1.5645045
-      - 8.169109
-      owner: 0
-      radius: 2.1
-    - type: buildable_circle
-      position:
-      - 1.639732
-      - 5.3003807
-      owner: 0
-      radius: 2.1
-    - type: buildable_circle
-      position:
-      - 0.22922707
-      - 7.669445
-      owner: 0
-      radius: 2.1
-    - type: buildable_circle
-      position:
-      - 2.2345889
-      - 1.3149948
-      owner: 0
-      radius: 2.1
-    - type: buildable_circle
-      position:
-      - 1.7731574
-      - 3.3687134
-      owner: 0
-      radius: 2.1
-    - type: path
-      owner: 0
-      path:
-      - - -24.973047
-        - -3.105585
-      - - -19.42547
-        - -9.50745
-      - - -15.224381
-        - -13.63942
-      - - -11.266147
-        - -14.584007
-      - - -6.84298
-        - -10.465408
-      - - -7.7914767
-        - -5.368847
-      - - -13.52408
-        - -4.542351
-      - - -15.645846
-        - 0.9030533
-      - - -12.046523
-        - 6.3534813
-      - - -5.409025
-        - 6.850456
-      - - -1.9979557
-        - -2.172615
-      - - -2.5412617
-        - -10.939133
-      - - 2.5497677
-        - -16.319916
-      - - 18.930595
-        - -16.229198
-      - - 20.291723
-        - -10.0385895
-      - - 20.192291
-        - -3.6978683
     - type: path
       owner: 1
       path:
-      - - 24.724737
-        - 1.0520134
+      - - 19.768896
+        - 2.7361221
       - - 14.229495
         - 9.366966
       - - 10.590966
@@ -390,110 +229,54 @@ levels:
         - -6.2807083
       - - 2.8037922
         - -4.643482
-      - - 0.54941016
-        - -1.3657265
-      - - -2.1357198
-        - 7.3011246
-      - - -4.915967
-        - 10.457453
+      - - 0.22535352
+        - -0.7085457
+      - - -0.6128711
+        - 9.190777
+      - - -2.3833683
+        - 11.0113125
       - - -13.718971
         - 10.809288
       - - -17.011189
         - 9.2828045
-      - - -20.069193
-        - 2.9333534
-  test:
-    name: Hide the pain
-    entities:
-    - texture: hover.png
-      type: guide
-      position:
-      - 0.0
-      - 0.0
-    - type: base
-      position:
-      - -20.0
-      - -2.0
-      owner: 0
-    - type: spawn
-      position:
-      - -20.0
-      - 2.0
-      owner: 0
+      - - -19.911732
+        - 4.8748245
     - type: path
       owner: 0
       path:
-      - - -18.0
-        - 2.0
-      - - 10.0
-        - 5.0
-      - - -10.0
-        - -5.0
-      - - 18.0
-        - -2.0
-    - type: base
-      position:
-      - 20.0
-      - -2.0
-      owner: 1
-    - type: spawn
-      position:
-      - 20.0
-      - 2.0
-      owner: 1
-    - type: path
-      owner: 1
-      path:
-      - - 18.0
-        - 2.0
-      - - -10.0
-        - 5.0
-      - - 10.0
-        - -5.0
-      - - -18.0
-        - -2.0
-    - texture: tree.png
-      type: sprite
-      position:
-      - -25.0
-      - -2.0
-    - texture: tree.png
-      type: sprite
-      position:
-      - 25.0
-      - -2.0
-    - texture: ground.png
-      type: ground
-      position:
-      - 0.0
-      - 0.0
+      - - -19.610157
+        - 0.8720093
+      - - -19.42547
+        - -9.50745
+      - - -15.224381
+        - -13.63942
+      - - -11.266147
+        - -14.584007
+      - - -6.84298
+        - -10.465408
+      - - -7.7914767
+        - -5.368847
+      - - -13.52408
+        - -4.542351
+      - - -15.645846
+        - 0.9030533
+      - - -12.804354
+        - 5.6163406
+      - - -7.8466263
+        - 4.1183205
+      - - -2.9378889
+        - -2.5597153
+      - - -2.5412617
+        - -10.939133
+      - - 2.5497677
+        - -16.319916
+      - - 18.930595
+        - -16.229198
+      - - 20.291723
+        - -10.0385895
+      - - 20.192291
+        - -3.6978683
 towers:
-  laser:
-    emoji: "\U0001F3AF"
-    name: laser
-    title: Cat Laser Toy
-    combo:
-    - machine
-    - fire
-    texture: towers/laser-tower.png
-    range: 6.0
-    size: 1.0
-    cost: 100
-    reload: 1.0
-    instant_damage: 100
-  laser-boss:
-    emoji: ✨
-    name: laser-boss
-    title: Pew Pew Surveillance Camera
-    combo:
-    - laser
-    - laser
-    texture: towers/boss-laser.png
-    range: 7.0
-    size: 2.0
-    cost: 200
-    reload: 1.0
-    instant_damage: 150
   missile:
     emoji: "\U0001F680"
     name: missile
@@ -520,6 +303,87 @@ towers:
     cost: 100
     reload: 1.0
     instant_damage: 100
+  laser:
+    emoji: "\U0001F3AF"
+    name: laser
+    title: Cat Laser Toy
+    combo:
+    - machine
+    - fire
+    texture: towers/laser-tower.png
+    range: 6.0
+    size: 1.0
+    cost: 100
+    reload: 1.0
+    instant_damage: 100
+  fire-boss:
+    emoji: "\U0001F52B"
+    name: fire-boss
+    title: Flaming Barbeque
+    combo:
+    - fire
+    - fire
+    texture: towers/boss-fire.png
+    range: 5.0
+    size: 2.0
+    cost: 200
+    reload: 1.0
+    instant_damage: 150
+  laser-boss:
+    emoji: ✨
+    name: laser-boss
+    title: Pew Pew Surveillance Camera
+    combo:
+    - laser
+    - laser
+    texture: towers/boss-laser.png
+    range: 7.0
+    size: 2.0
+    cost: 200
+    reload: 1.0
+    instant_damage: 150
+  fire:
+    emoji: "\U0001F525"
+    name: fire
+    title: Windy Candle
+    combo:
+    - machine
+    - cold
+    texture: towers/flame-thrower.png
+    range: 3.0
+    size: 1.0
+    cost: 100
+    reload: 0.5
+    instant_damage: 10
+    fire_damage_seconds: 3.0
+    fire_damage_interval: 0.5
+  electric-boss:
+    emoji: "\U0001F329"
+    name: electric-boss
+    title: Electric Record Player
+    combo:
+    - electric
+    - electric
+    texture: towers/boss-electric.png
+    range: 7.0
+    size: 3.0
+    cost: 500
+    reload: 1.0
+    instant_damage: 1000
+  cold:
+    emoji: ❄️
+    name: cold
+    title: Ice Cream Gun
+    combo:
+    - machine
+    - machine
+    texture: towers/cold-tower.png
+    range: 3.0
+    size: 1.0
+    cost: 100
+    reload: 0.8
+    instant_damage: 20
+    cold_slowdown: 1.0
   cold-boss:
     emoji: "\U0001F976"
     name: cold-boss
@@ -546,82 +410,7 @@ towers:
     cost: 50
     reload: 1.0
     instant_damage: 5
-  electric-boss:
-    emoji: "\U0001F329"
-    name: electric-boss
-    title: Electric Record Player
-    combo:
-    - electric
-    - electric
-    texture: towers/boss-electric.png
-    range: 7.0
-    size: 3.0
-    cost: 500
-    reload: 1.0
-    instant_damage: 1000
-  fire-boss:
-    emoji: "\U0001F52B"
-    name: fire-boss
-    title: Flaming Barbeque
-    combo:
-    - fire
-    - fire
-    texture: towers/boss-fire.png
-    range: 5.0
-    size: 2.0
-    cost: 200
-    reload: 1.0
-    instant_damage: 150
-  fire:
-    emoji: "\U0001F525"
-    name: fire
-    title: Windy Candle
-    combo:
-    - machine
-    - cold
-    texture: towers/flame-thrower.png
-    range: 3.0
-    size: 1.0
-    cost: 100
-    reload: 0.5
-    instant_damage: 10
-    fire_damage_seconds: 3.0
-    fire_damage_interval: 0.5
-  cold:
-    emoji: ❄️
-    name: cold
-    title: Ice Cream Gun
-    combo:
-    - machine
-    - machine
-    texture: towers/cold-tower.png
-    range: 3.0
-    size: 1.0
-    cost: 100
-    reload: 0.8
-    instant_damage: 20
-    cold_slowdown: 1.0
 creeps:
-  robot:
-    name: robot
-    title: Robot
-    combo: []
-    texture: gnome.png
-    speed: 1.0
-    cost: 100
-    health: 100
-    size: 5.0
-  strong:
-    name: strong
-    title: Strong
-    combo:
-    - robot
-    - robot
-    texture: gnome.png
-    speed: 1.0
-    cost: 100
-    health: 250
-    size: 5.0
   fast:
     name: fast
     title: Fast
@@ -642,76 +431,48 @@ creeps:
     cost: 100
     health: 100
     size: 5.0
+  strong:
+    name: strong
+    title: Strong
+    combo:
+    - robot
+    - robot
+    texture: gnome.png
+    speed: 1.0
+    cost: 100
+    health: 250
+    size: 5.0
+  robot:
+    name: robot
+    title: Robot
+    combo: []
+    texture: gnome.png
+    speed: 1.0
+    cost: 100
+    health: 100
+    size: 5.0
 textures:
-  towers/boss-laser.png:
-    size:
-    - 616.0
-    - 365.0
-  hover.png:
+  click-tooltip.png:
     size:
     - 256.0
     - 256.0
-  tooltip.png:
-    size:
-    - 256.0
-    - 256.0
-  Blue.png:
-    size:
-    - 572.0
-    - 600.0
-  towers/seeking-missile.png:
-    size:
-    - 510.0
-    - 483.0
-  towers/boss-fire.png:
-    size:
-    - 347.0
-    - 633.0
-  towers/cold-tower.png:
-    size:
-    - 334.0
-    - 379.0
-  Yellow.png:
-    size:
-    - 578.0
-    - 600.0
-  towers/flame-thrower.png:
-    size:
-    - 376.0
-    - 521.0
-  Outline.png:
-    size:
-    - 360.0
-    - 531.0
-  tree.png:
-    size:
-    - 984.0
-    - 1120.0
-  editor/home.png:
-    size:
-    - 256.0
-    - 256.0
-  towers/boss-of-bosses.png:
-    size:
-    - 911.0
-    - 676.0
   props.png:
     size:
     - 4096.0
     - 4096.0
+  editor/home.png:
+    size:
+    - 256.0
+    - 256.0
   gnome.png:
     size:
     - 263.0
     - 582.0
-  harold.png:
-    size:
-    - 846.0
-    - 1199.0
-  editor/spawn-point.png:
+  editor/path-end.png:
     size:
     - 256.0
     - 256.0
-  grass.png:
+  editor/path-waypoint.png:
     size:
     - 256.0
     - 256.0
@@ -727,11 +488,55 @@ textures:
     size:
     - 256.0
     - 256.0
-  AAAAA.png:
+  towers/machine-gun.png:
     size:
-    - 352.0
-    - 523.0
-  editor/path-start.png:
+    - 334.0
+    - 444.0
+  towers/seeking-missile.png:
+    size:
+    - 510.0
+    - 483.0
+  Outline.png:
+    size:
+    - 360.0
+    - 531.0
+  TESTDIS.png:
+    size:
+    - 572.0
+    - 600.0
+  towers/boss-of-bosses.png:
+    size:
+    - 911.0
+    - 676.0
+  towers/orbital-electric.png:
+    size:
+    - 719.0
+    - 498.0
+  Blue.png:
+    size:
+    - 572.0
+    - 600.0
+  towers/cold-tower.png:
+    size:
+    - 334.0
+    - 379.0
+  editor/spawn-point.png:
+    size:
+    - 256.0
+    - 256.0
+  towers/boss-fire.png:
+    size:
+    - 347.0
+    - 633.0
+  towers/flame-thrower.png:
+    size:
+    - 376.0
+    - 521.0
+  towers/boss-laser.png:
+    size:
+    - 616.0
+    - 365.0
+  tooltip.png:
     size:
     - 256.0
     - 256.0
@@ -739,47 +544,51 @@ textures:
     size:
     - 540.0
     - 498.0
-  tower.png:
-    size:
-    - 280.0
-    - 311.0
-  editor/buildable-circle.png:
+  editor/path-start.png:
     size:
     - 256.0
     - 256.0
-  editor/path-end.png:
-    size:
-    - 256.0
-    - 256.0
-  click-tooltip.png:
-    size:
-    - 256.0
-    - 256.0
-  towers/machine-gun.png:
-    size:
-    - 334.0
-    - 444.0
   towers/electric-tower.png:
     size:
     - 556.0
     - 452.0
-  towers/boss-electric.png:
+  grass.png:
     size:
-    - 524.0
-    - 536.0
-  TESTDIS.png:
+    - 256.0
+    - 256.0
+  hover.png:
     size:
-    - 572.0
-    - 600.0
+    - 256.0
+    - 256.0
+  AAAAA.png:
+    size:
+    - 352.0
+    - 523.0
+  editor/buildable-circle.png:
+    size:
+    - 256.0
+    - 256.0
   towers/boss-cold.png:
     size:
     - 488.0
     - 617.0
-  towers/orbital-electric.png:
+  tower.png:
     size:
-    - 719.0
-    - 498.0
-  editor/path-waypoint.png:
+    - 280.0
+    - 311.0
+  tree.png:
     size:
-    - 256.0
-    - 256.0
+    - 984.0
+    - 1120.0
+  harold.png:
+    size:
+    - 846.0
+    - 1199.0
+  towers/boss-electric.png:
+    size:
+    - 524.0
+    - 536.0
+  Yellow.png:
+    size:
+    - 578.0
+    - 600.0
