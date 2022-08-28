@@ -50,7 +50,7 @@ pub fn init(
             "Title\n",
             TextStyle {
                 font: asset_server.load(FONT),
-                font_size: 25.0,
+                font_size: 30.0,
                 color: Color::BLACK,
             },
         ),
@@ -58,7 +58,7 @@ pub fn init(
             "Owner\n",
             TextStyle {
                 font: asset_server.load(FONT),
-                font_size: 20.0,
+                font_size: 25.0,
                 color: Color::BLUE,
             },
         ),
@@ -66,7 +66,7 @@ pub fn init(
             "Info Text\nblah blah\nblahaaaaaaaaaaa",
             TextStyle {
                 font: asset_server.load(FONT),
-                font_size: 20.0,
+                font_size: 25.0,
                 color: Color::DARK_GRAY,
             },
         ),

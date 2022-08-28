@@ -24,7 +24,7 @@ enum TowerOrCreep {
 
 pub fn hover_stats(
     defs: Res<Defs>,
-    mut hover_stats: Query<(&HoverStats, &mut Text, &mut Style)>,
+    mut hover_stats: Query<(&mut Text, &mut Style), With<HoverStats>>,
     client_game_info: Query<&ClientGameInfo>,
     raycast_query: Query<&Intersection<MyRaycastSet>>,
     hoverable_query: Query<(&Transform, &Owner, Option<&TowerRef>, Option<&CreepRef>)>,
@@ -70,7 +70,7 @@ pub fn hover_stats(
 
     dbg!(&closest);
 
-    for (hover_stats, mut text, mut style) in hover_stats.get_single_mut() {
+    for (mut text, mut style) in hover_stats.get_single_mut() {
         match &closest {
             Some(closest) => {
                 let (title, other) = match &closest.thing {
