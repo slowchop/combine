@@ -2,6 +2,11 @@ levels:
   jam:
     name: jam
     entities:
+    - type: guide
+      texture: "hover.png"
+      position:
+        - 12.126487
+        - 16.438929
     - type: buildable_circle
       position:
       - 12.126487
