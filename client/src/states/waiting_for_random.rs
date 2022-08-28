@@ -9,9 +9,14 @@ use shared::game::player::PlayerName;
 use shared::protocol::Protocol;
 use shared::{Auth, Channels, JoinRandomGame};
 
-pub fn init(mut commands: Commands, time: Res<Time>, mut client: Client<Protocol, Channels>) {
+pub fn init(
+    mut commands: Commands,
+    time: Res<Time>,
+    mut client: Client<Protocol, Channels>,
+    player_name: Res<PlayerName>,
+) {
     println!("Waiting for random...");
-    let name = PlayerName::random();
+    let name = player_name.clone();
     let command = JoinRandomGame::new(name);
     client.send_message(Channels::PlayerCommand, &command);
 }

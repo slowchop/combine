@@ -15,6 +15,7 @@ use shared::game::player::SharedPlayer;
 use shared::game::shared_game::SharedGame;
 use shared::protocol::Protocol;
 use shared::Channels;
+use std::process::exit;
 
 pub fn init(
     mut commands: Commands,
@@ -66,9 +67,18 @@ pub fn menu_clicks(
     mut windows: ResMut<Windows>,
     buttons: Res<Input<MouseButton>>,
     mut client: Client<Protocol, Channels>,
+    keys: Res<Input<KeyCode>>,
 ) {
     if client.is_connected() {
         client.disconnect();
+    }
+
+    if keys.just_pressed(KeyCode::Escape) {
+        exit(0);
+    }
+    if keys.just_pressed(KeyCode::Return) {
+        commands.insert_resource(NextState(GameState::WaitingForRandom));
+        return;
     }
 
     if !buttons.just_pressed(MouseButton::Left) {
