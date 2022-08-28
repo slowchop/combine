@@ -26,7 +26,7 @@ use crate::game_over::game_over;
 use crate::new_entities::{add_new_entities_to_game, NewEntityEvent};
 use crate::release_creeps::tell_clients_to_release_the_creeps;
 use crate::spawn_entities::{spawn_entities, SpawnEntityEvent};
-use crate::state::{GameLookup, GameUserLookup, PlayerLookup, PlayerQueue};
+use crate::state::{GameLookup, GameUserLookup, PlayerQueue};
 use crate::stats::{lose_a_life, GameOverEvent, LoseALifeEvent};
 use crate::time::{add_ticks_to_games, emit_time_events, ReleaseCreepsEvent, SpawnCreepsEvent};
 use crate::towers::{shoot_towers, DamageCreepEvent};
@@ -82,7 +82,6 @@ fn main() {
         ))
         .insert_resource(Defs::load())
         .insert_resource(PlayerQueue::default())
-        .insert_resource(PlayerLookup::default())
         .insert_resource(GameLookup::default())
         .insert_resource(GameUserLookup::default())
         .add_event::<SpawnEntityEvent>()

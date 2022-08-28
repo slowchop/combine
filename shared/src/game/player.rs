@@ -12,6 +12,14 @@ pub struct SharedPlayer {
 }
 
 impl SharedPlayer {
+    pub fn new(name: PlayerName, owner: Owner) -> Self {
+        Self {
+            name,
+            owner,
+            gold: 200,
+            lives: 20,
+        }
+    }
     pub fn new_waiting(name: PlayerName) -> Self {
         SharedPlayer {
             name,

@@ -1,4 +1,4 @@
-use crate::state::{GameId, GameLookup, GameUserLookup, PlayerLookup};
+use crate::state::{GameId, GameLookup, GameUserLookup};
 use crate::SpawnEntityEvent;
 use bevy_ecs::prelude::*;
 use bevy_log::{error, info, warn};
@@ -13,14 +13,13 @@ use shared::protocol::Protocol;
 use shared::Channels;
 
 pub struct CreateGameEvent {
-    pub user_keys: Vec<UserKey>,
+    pub user_keys: Vec<(UserKey, PlayerName)>,
 }
 
 pub fn create_games(
     mut server: Server<Protocol, Channels>,
     mut game_user_lookup: ResMut<GameUserLookup>,
     mut game_lookup: ResMut<GameLookup>,
-    mut player_lookup: ResMut<PlayerLookup>,
     mut spawn_entities: EventWriter<SpawnEntityEvent>,
     mut create_game_events: EventReader<CreateGameEvent>,
     defs: Res<Defs>,
@@ -30,10 +29,8 @@ pub fn create_games(
             .user_keys
             .iter()
             .enumerate()
-            .map(|(idx, u)| {
-                let player = player_lookup.0.get_mut(&u).unwrap();
-                player.owner = Owner::new(idx as u8);
-                player.clone()
+            .map(|(idx, (user_key, player_name))| {
+                SharedPlayer::new(player_name.clone(), Owner::new(idx as u8))
             })
             .collect::<Vec<_>>();
 
@@ -45,14 +42,20 @@ pub fn create_games(
         );
 
         // Create GameId.
-        let game_id = game_user_lookup.create_game_reference(create_game_event.user_keys.clone());
+        let user_keys_and_owners = create_game_event
+            .user_keys
+            .iter()
+            .enumerate()
+            .map(|(idx, (user_key, player_name))| (user_key.clone(), Owner::new(idx as u8)))
+            .collect::<Vec<(UserKey, Owner)>>()
+            .clone();
+
+        let game_id = game_user_lookup.create_game_reference(user_keys_and_owners);
         info!(?game_id, ?game, "Creating game");
         game_lookup.0.insert(game_id, game);
 
-        dbg!(&shared_players);
-
         // Send GameReady to each player.
-        for (idx, player) in create_game_event.user_keys.iter().enumerate() {
+        for (idx, (user_key, player_name)) in create_game_event.user_keys.iter().enumerate() {
             println!("Sending GameReady to {:?}", shared_players[idx]);
             let client_game_info = ClientGameInfo {
                 i_am: Owner::new(idx as u8),
@@ -60,7 +63,7 @@ pub fn create_games(
                 players: shared_players.clone(),
             };
             let message = GameReady::new(client_game_info);
-            server.send_message(player, Channels::ServerCommand, &message);
+            server.send_message(user_key, Channels::ServerCommand, &message);
         }
 
         // Get the level and start spawn requesting!

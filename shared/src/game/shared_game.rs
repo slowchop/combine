@@ -88,6 +88,10 @@ impl SharedGame {
         id
     }
 
+    pub fn get_player(&mut self, owner: Owner) -> Option<&SharedPlayer> {
+        self.players.iter().find(|p| p.owner == owner)
+    }
+
     pub fn get_player_mut(&mut self, owner: Owner) -> Option<&mut SharedPlayer> {
         self.players.iter_mut().find(|p| p.owner == owner)
     }

@@ -1,6 +1,6 @@
 use crate::release_creeps::send_message_to_game;
+use crate::state::GameId;
 use crate::state::PlayerQueue;
-use crate::state::{GameId, PlayerLookup};
 use crate::{DestroyEntityEvent, GameLookup, GameUserLookup, SpawnEntityEvent};
 use bevy_ecs::prelude::*;
 use bevy_ecs::{event::EventReader, system::ResMut};
@@ -71,9 +71,8 @@ pub fn disconnection_event(
 pub fn receive_message_event(
     mut event_reader: EventReader<MessageEvent<Protocol, Channels>>,
     mut player_queue: ResMut<PlayerQueue>,
-    mut player_lookup: ResMut<PlayerLookup>,
     game_user_lookup: Res<GameUserLookup>,
-    game_lookup: Res<GameLookup>,
+    mut game_lookup: ResMut<GameLookup>,
     mut server: Server<Protocol, Channels>,
     mut spawn_entity_events: EventWriter<SpawnEntityEvent>,
 
@@ -93,11 +92,7 @@ pub fn receive_message_event(
                     let name = (*join_random_game.name).clone();
                     let player_name = PlayerName::new(name.as_str());
                     println!("player requesting random game! {:?}", &player_name);
-
-                    let player = SharedPlayer::new_waiting(player_name);
-                    player_lookup.0.insert(user_key.clone(), player);
-
-                    player_queue.add(user_key.clone());
+                    player_queue.add(user_key.clone(), player_name);
                 }
                 Protocol::JoinFriendGame(_) => {
                     warn!("TODO JoinFriendGame");
@@ -109,20 +104,31 @@ pub fn receive_message_event(
                     // TODO: Check if possible
                     warn!("Check if building is possible");
                     let position = Some(place_tower.position().into());
-                    let player = match player_lookup.0.get_mut(&user_key) {
+                    let (game_id, owner) = match game_user_lookup.get_user_game_and_owner(&user_key)
+                    {
                         Some(a) => a,
                         None => {
                             warn!("Player not found in lookup");
                             continue;
                         }
                     };
-                    let game_id = match game_user_lookup.get_user_game(&user_key) {
-                        Some(a) => a.clone(),
+                    // let game_id = match game_user_lookup.get_user_game(&user_key) {
+                    //     Some(a) => a.clone(),
+                    //     None => {
+                    //         warn!("Player not found in game_user lookup");
+                    //         continue;
+                    //     }
+                    // };
+
+                    let mut game = match game_lookup.0.get_mut(&game_id) {
+                        Some(a) => a,
                         None => {
-                            warn!("Player not found in game_user lookup");
+                            warn!("Game not found in game lookup");
                             continue;
                         }
                     };
+
+                    let mut player = game.get_player_mut(*owner).unwrap();
 
                     let tower = defs.tower(&TowerRef("machine".into())).unwrap();
 
@@ -130,8 +136,8 @@ pub fn receive_message_event(
                     let cost = tower.cost;
                     if player.gold < cost {
                         let message = ServerMessage::new(format!(
-                            "Sorry, you don't have enough $ to buy a {}. You have ${} and it costs ${}.",
-                            tower.title, player.gold, cost
+                            "Sorry, you don't have enough $ to buy a {}.",
+                            tower.title
                         ));
                         server.send_message(user_key, Channels::ServerCommand, &message);
                         continue;
@@ -147,7 +153,7 @@ pub fn receive_message_event(
                     );
 
                     spawn_entity_events.send(SpawnEntityEvent {
-                        game_id,
+                        game_id: *game_id,
                         entity_def: EntityDef {
                             entity_type: EntityType::Tower,
                             position,
@@ -160,22 +166,16 @@ pub fn receive_message_event(
                     // server.send_message(user_key, Channels::ServerCommand, &assignment_message);
                 }
                 Protocol::ComboTowerRequest(combo_tower_request) => {
-                    let mut player = match player_lookup.0.get_mut(&user_key) {
-                        Some(a) => a,
-                        None => {
-                            warn!("Player not found in lookup");
-                            continue;
-                        }
-                    };
-                    let game_id = match game_user_lookup.get_user_game(&user_key) {
-                        Some(a) => a.clone(),
-                        None => {
-                            warn!("Player not found in game_user lookup");
-                            continue;
-                        }
-                    };
+                    let (game_id, player_owner) =
+                        match game_user_lookup.get_user_game_and_owner(&user_key) {
+                            Some(a) => a,
+                            None => {
+                                warn!("Player not found in lookup");
+                                continue;
+                            }
+                        };
 
-                    let game = match game_lookup.0.get(&game_id) {
+                    let game = match game_lookup.0.get_mut(&game_id) {
                         None => {
                             warn!("Game not found in lookup for combo tower request");
                             continue;
@@ -183,34 +183,38 @@ pub fn receive_message_event(
                         Some(s) => s,
                     };
 
-                    let server_ids = &*combo_tower_request.towers;
-
-                    // Check for owner and return tower_refs.
-                    let towers = match server_ids
-                        .iter()
-                        .map(|server_id| {
-                            let entity = game.entities.get(server_id)?;
-                            let (_, tower_ref, tower_owner) = tower_query.get(*entity).ok()?;
-                            if tower_owner != &player.owner {
-                                return None;
+                    let mut tower_refs = Vec::new();
+                    for tower_server_id in &*combo_tower_request.towers {
+                        let tower_entity = match game.entities.get(tower_server_id) {
+                            Some(t) => t,
+                            None => {
+                                warn!("Tower not found in game entities");
+                                continue;
                             }
-                            Some(tower_ref)
-                        })
-                        .collect::<Option<Vec<&TowerRef>>>()
-                    {
-                        Some(towers) => towers,
-                        None => {
-                            warn!(
-                                "One of the towers couldnt be found in list: {:?}",
-                                server_ids
-                            );
+                        };
+
+                        let (_, tower_ref, tower_owner) = match tower_query.get(*tower_entity) {
+                            Ok(t) => t,
+                            Err(e) => {
+                                warn!("Tower not found in query");
+                                continue;
+                            }
+                        };
+
+                        if tower_owner != player_owner {
+                            warn!("Tower owner does not match player");
                             continue;
                         }
-                    };
 
-                    let tower = match defs.tower_for_combo(&towers) {
+                        tower_refs.push(tower_ref.clone());
+                    }
+
+                    let server_ids = &*combo_tower_request.towers;
+
+                    let towers = tower_refs.iter().map(|tr| tr).collect::<Vec<&TowerRef>>();
+                    let tower = match defs.tower_for_combo(towers.as_slice()) {
                         None => {
-                            warn!("No match for combo {:?}", &towers);
+                            warn!("No match for combo {:?}", &tower_refs);
                             continue;
                         }
                         Some(c) => c,
@@ -235,6 +239,7 @@ pub fn receive_message_event(
 
                     // Check if the player has enough $.
                     let cost = tower.cost;
+                    let player = game.get_player_mut(*player_owner).unwrap();
                     if player.gold < cost {
                         let message = ServerMessage::new(format!(
                             "Sorry, you don't have enough $ to buy a {}.",
@@ -256,7 +261,7 @@ pub fn receive_message_event(
                     info!(?tower.name, "Creating tower");
 
                     spawn_entity_events.send(SpawnEntityEvent {
-                        game_id,
+                        game_id: *game_id,
                         entity_def: EntityDef {
                             entity_type: EntityType::Tower,
                             position: Some(position.into()),
@@ -268,7 +273,7 @@ pub fn receive_message_event(
 
                     for server_entity_id in server_ids {
                         destroy_entity_event.send(DestroyEntityEvent {
-                            game_id,
+                            game_id: *game_id,
                             server_entity_id: server_entity_id.clone(),
                             destroyment_method: DestroymentMethod::Quiet,
                             gold_earned: 0,
@@ -277,22 +282,16 @@ pub fn receive_message_event(
                     }
                 }
                 Protocol::ComboCreepRequest(combo_creep_request) => {
-                    let player = match player_lookup.0.get(&user_key) {
-                        Some(a) => a,
-                        None => {
-                            warn!("Player not found in lookup");
-                            continue;
-                        }
-                    };
-                    let game_id = match game_user_lookup.get_user_game(&user_key) {
-                        Some(a) => a.clone(),
-                        None => {
-                            warn!("Player not found in game_user lookup");
-                            continue;
-                        }
-                    };
+                    let (game_id, player_owner) =
+                        match game_user_lookup.get_user_game_and_owner(&user_key) {
+                            Some(a) => a,
+                            None => {
+                                warn!("Player not found in lookup");
+                                continue;
+                            }
+                        };
 
-                    let game = match game_lookup.0.get(&game_id) {
+                    let game = match game_lookup.0.get_mut(&game_id) {
                         None => {
                             warn!("Game not found in lookup for combo creep request");
                             continue;
@@ -302,30 +301,34 @@ pub fn receive_message_event(
 
                     let server_ids = &*combo_creep_request.creeps;
 
-                    // Check for owner and return creep_refs.
-                    let creeps = match server_ids
-                        .iter()
-                        .map(|server_id| {
-                            let entity = game.entities.get(server_id)?;
-                            let (_, creep_ref, creep_owner) = creep_query.get(*entity).ok()?;
-                            if creep_owner != &player.owner {
-                                return None;
+                    let mut creep_refs = Vec::new();
+                    for creep_server_id in &*combo_creep_request.creeps {
+                        let creep_entity = match game.entities.get(creep_server_id) {
+                            Some(t) => t,
+                            None => {
+                                warn!("Creep not found in game entities");
+                                continue;
                             }
-                            Some(creep_ref)
-                        })
-                        .collect::<Option<Vec<&CreepRef>>>()
-                    {
-                        Some(creeps) => creeps,
-                        None => {
-                            warn!(
-                                "One of the creeps couldnt be found in list: {:?}",
-                                server_ids
-                            );
+                        };
+
+                        let (_, creep_ref, creep_owner) = match creep_query.get(*creep_entity) {
+                            Ok(t) => t,
+                            Err(e) => {
+                                warn!("Creep not found in query");
+                                continue;
+                            }
+                        };
+
+                        if creep_owner != player_owner {
+                            warn!("Creep owner does not match player");
                             continue;
                         }
-                    };
 
-                    let creep = match defs.creep_for_combo(&creeps) {
+                        creep_refs.push(creep_ref.clone());
+                    }
+
+                    let creeps = creep_refs.iter().map(|tr| tr).collect::<Vec<&CreepRef>>();
+                    let creep = match defs.creep_for_combo(creeps.as_slice()) {
                         None => {
                             warn!("No match for combo {:?}", &creeps);
                             continue;
@@ -350,10 +353,28 @@ pub fn receive_message_event(
                     };
                     let position = vec3_to_vec2(&transform.translation);
 
-                    warn!("TODO: Check money and deduct.");
+                    let cost = creep.cost;
+                    let player = game.get_player_mut(*player_owner).unwrap();
+                    if player.gold < cost {
+                        let message = ServerMessage::new(format!(
+                            "Sorry, you don't have enough $ to buy a {}.",
+                            creep.title
+                        ));
+                        server.send_message(user_key, Channels::ServerCommand, &message);
+                        continue;
+                    }
+                    player.gold -= cost;
+                    let message = UpdatePlayer::new(player.owner, player.gold, player.lives);
+                    send_message_to_game(
+                        &mut server,
+                        &*game_user_lookup,
+                        &game_id,
+                        Channels::ServerCommand,
+                        &message,
+                    );
 
                     spawn_entity_events.send(SpawnEntityEvent {
-                        game_id,
+                        game_id: *game_id,
                         entity_def: EntityDef {
                             entity_type: EntityType::Creep,
                             position: Some(position.into()),
@@ -365,7 +386,7 @@ pub fn receive_message_event(
 
                     for server_entity_id in server_ids {
                         destroy_entity_event.send(DestroyEntityEvent {
-                            game_id,
+                            game_id: *game_id,
                             server_entity_id: server_entity_id.clone(),
                             destroyment_method: DestroymentMethod::Quiet,
                             gold_earned: 0,

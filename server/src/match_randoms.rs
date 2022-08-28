@@ -1,6 +1,6 @@
 use crate::create_games::CreateGameEvent;
 use crate::spawn_entities::SpawnEntityEvent;
-use crate::state::{GameLookup, GameUserLookup, PlayerLookup, PlayerQueue};
+use crate::state::{GameLookup, GameUserLookup, PlayerQueue};
 use bevy_ecs::prelude::*;
 use bevy_ecs::system::ResMut;
 use bevy_log::{error, info};
