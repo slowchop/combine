@@ -6,6 +6,7 @@ use crate::protocol::game_ready::GameReady;
 use crate::protocol::hurt_entity::HurtEntity;
 use crate::protocol::release_creep::ReleaseCreeps;
 use crate::protocol::request_tower_placement::NewTowerRequest;
+use crate::protocol::server_message::ServerMessage;
 use crate::protocol::spawn_entity::SpawnEntity;
 use crate::protocol::update_player::UpdatePlayer;
 use crate::protocol::update_position::UpdatePosition;
@@ -27,6 +28,7 @@ pub mod join_friend_game;
 pub mod join_random_game;
 pub mod release_creep;
 pub mod request_tower_placement;
+pub mod server_message;
 pub mod spawn_entity;
 pub mod update_player;
 pub mod update_position;
@@ -39,6 +41,7 @@ pub enum Protocol {
     UpdatePlayer(UpdatePlayer),
     SpawnEntity(SpawnEntity),
     ReleaseCreeps(ReleaseCreeps),
+    ServerMessage(ServerMessage),
 
     NewTowerRequest(NewTowerRequest),
     ComboTowerRequest(ComboTowerRequest),

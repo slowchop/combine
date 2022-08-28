@@ -1,4 +1,5 @@
 use crate::states::playing::camera::GameCamera;
+use crate::states::playing::console::ConsoleItem;
 use crate::states::playing::floaty_text;
 use crate::states::playing::floaty_text::{floaty_text_bundle, FloatyText, FONT};
 use crate::states::playing::hover_stats::HoverStats;
@@ -19,7 +20,15 @@ pub fn init(
     defs: Res<Defs>,
     mut camera: Query<&mut GameCamera>,
     game_info: Query<&ClientGameInfo>,
+    mut console: EventWriter<ConsoleItem>,
 ) {
+    console.send(ConsoleItem::new(
+        "Protect your home from the creeps baddies.".to_string(),
+    ));
+    console.send(ConsoleItem::new(
+        "You have your own creeps that you can upgrade which are near your home.".to_string(),
+    ));
+
     commands.insert_resource(Selected::Nothing);
     commands
         .spawn_bundle(floaty_text_bundle(&asset_server))

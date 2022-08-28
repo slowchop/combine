@@ -1,4 +1,5 @@
 use crate::app::GameState;
+use crate::states::playing::console::ConsoleItem;
 use crate::states::playing::hurt_entities::HurtEntityEvent;
 use crate::states::playing::spawn_entities::SpawnEntityEvent;
 use crate::states::playing::update_player::UpdatePlayerEvent;
@@ -21,11 +22,7 @@ pub fn connect_event(client: Client<Protocol, Channels>) {
     println!("Client connected {}", client.server_address());
 }
 
-pub fn disconnect_event(
-    client: Client<Protocol, Channels>,
-    mut commands: Commands,
-    game: Query<&SharedGame>,
-) {
+pub fn disconnect_event(mut commands: Commands, game: Query<&SharedGame>) {
     let game = if let Ok(game) = game.get_single() {
         game
     } else {
@@ -74,6 +71,7 @@ pub fn receive_message_event(
     mut update_player_events: EventWriter<UpdatePlayerEvent>,
     mut game_over_events: EventWriter<GameOverEvent>,
     mut hurt_entity_events: EventWriter<HurtEntityEvent>,
+    mut console: EventWriter<ConsoleItem>,
 ) {
     // dbg!(client.is_connected());
     for event in event_reader.iter() {
@@ -162,6 +160,10 @@ pub fn receive_message_event(
                         dst,
                         total_damaged,
                     });
+                }
+                Protocol::ServerMessage(msg) => {
+                    let s = &*msg.text;
+                    console.send(ConsoleItem::new(s.to_string()));
                 }
             }
         }

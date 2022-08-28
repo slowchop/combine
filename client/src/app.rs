@@ -236,6 +236,8 @@ pub fn play(args: &Args) {
             .with_system(add_health_bars)
             .with_system(health_bars)
             .with_system(hover_stats)
+            .with_system(console::handle_console_events)
+            .with_system(console::update_console)
             .into(),
     );
 

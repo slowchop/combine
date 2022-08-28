@@ -68,8 +68,6 @@ pub fn hover_stats(
         }
     }
 
-    dbg!(&closest);
-
     for (mut text, mut style) in hover_stats.get_single_mut() {
         match &closest {
             Some(closest) => {

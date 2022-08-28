@@ -1,3 +1,4 @@
+use crate::release_creeps::send_message_to_game;
 use crate::state::PlayerQueue;
 use crate::state::{GameId, PlayerLookup};
 use crate::{DestroyEntityEvent, GameLookup, GameUserLookup, SpawnEntityEvent};
@@ -16,6 +17,8 @@ use shared::game::owner::Owner;
 use shared::game::player::{PlayerName, SharedPlayer};
 use shared::game::position::vec3_to_vec2;
 use shared::game::shared_game::SharedGame;
+use shared::protocol::server_message::ServerMessage;
+use shared::protocol::update_player::UpdatePlayer;
 use shared::protocol::Protocol;
 use shared::Channels;
 
@@ -135,7 +138,7 @@ pub fn receive_message_event(
                     // server.send_message(user_key, Channels::ServerCommand, &assignment_message);
                 }
                 Protocol::ComboTowerRequest(combo_tower_request) => {
-                    let player = match player_lookup.0.get(&user_key) {
+                    let mut player = match player_lookup.0.get_mut(&user_key) {
                         Some(a) => a,
                         None => {
                             warn!("Player not found in lookup");
@@ -208,7 +211,26 @@ pub fn receive_message_event(
                     };
                     let position = vec3_to_vec2(&transform.translation);
 
-                    warn!("TODO: Drop money");
+                    // Check if the player has enough $.
+                    let cost = tower.cost;
+                    if player.gold < cost {
+                        let message = ServerMessage::new(format!(
+                            "Sorry, you don't have enough $ to buy a {}.",
+                            tower.title
+                        ));
+                        server.send_message(user_key, Channels::ServerCommand, &message);
+                        continue;
+                    }
+                    player.gold -= cost;
+                    let message = UpdatePlayer::new(player.owner, player.gold, player.lives);
+                    send_message_to_game(
+                        &mut server,
+                        &*game_user_lookup,
+                        &game_id,
+                        Channels::ServerCommand,
+                        &message,
+                    );
+
                     info!(?tower.name, "Creating tower");
 
                     spawn_entity_events.send(SpawnEntityEvent {
@@ -344,6 +366,9 @@ pub fn receive_message_event(
                     warn!("Got a game over from client");
                 }
                 Protocol::HurtEntity(hurt_entity) => {
+                    warn!("Got a hurt entity from client");
+                }
+                Protocol::ServerMessage(_) => {
                     warn!("Got a hurt entity from client");
                 }
             }
