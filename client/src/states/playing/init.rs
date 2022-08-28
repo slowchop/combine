@@ -47,7 +47,7 @@ pub fn init(
     text_bundle.style.align_content = AlignContent::FlexEnd;
     text_bundle.text = Text::from_sections(vec![
         TextSection::new(
-            "Title\n",
+            "\n",
             TextStyle {
                 font: asset_server.load(FONT),
                 font_size: 30.0,
@@ -55,7 +55,7 @@ pub fn init(
             },
         ),
         TextSection::new(
-            "Owner\n",
+            "\n",
             TextStyle {
                 font: asset_server.load(FONT),
                 font_size: 25.0,
@@ -63,7 +63,7 @@ pub fn init(
             },
         ),
         TextSection::new(
-            "Info Text\nblah blah\nblahaaaaaaaaaaa",
+            "",
             TextStyle {
                 font: asset_server.load(FONT),
                 font_size: 25.0,
