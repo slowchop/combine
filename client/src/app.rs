@@ -103,6 +103,8 @@ pub fn play(args: &Args) {
         _ => WindowMode::BorderlessFullscreen,
     };
 
+    // let window_mode = WindowMode::Windowed;
+
     let mut settings = Settings::default();
     if args.skip_to_random_player {
         settings.start_multiplayer_immediately = true;
@@ -185,10 +187,12 @@ pub fn play(args: &Args) {
 
     // Main Menu
     app.add_enter_system(GameState::MainMenu, main_menu::init);
+    app.add_exit_system(GameState::MainMenu, despawn_with::<Transform>);
     app.add_system_set(
         ConditionSet::new()
             .run_in_state(GameState::MainMenu)
-            .with_system(main_menu::update)
+            .with_system(main_menu::menu_clicks)
+            .with_system(main_menu::egui)
             // .with_system(attr_editor)
             .into(),
     );
@@ -216,6 +220,7 @@ pub fn play(args: &Args) {
 
     // Playing
     app.add_enter_system(GameState::Playing, playing::init::init);
+    app.add_exit_system(GameState::Playing, playing::init::init);
     app.add_exit_system(GameState::Playing, disconnected::init);
     app.add_system_set(
         ConditionSet::new()
@@ -357,14 +362,8 @@ fn init(
     asset_server: Res<AssetServer>,
     mut client: Client<Protocol, Channels>,
 ) {
-    commands
-        .spawn_bundle(Camera3dBundle {
-            ..Default::default()
-        })
-        .insert(GameCamera::default())
-        .insert(RayCastSource::<MyRaycastSet>::new());
-
     commands.insert_resource(DefaultPluginState::<MyRaycastSet>::default().with_debug_cursor());
+    commands.spawn_bundle(Camera2dBundle::default());
 }
 
 fn init_egui(mut egui_context: ResMut<EguiContext>) {

@@ -17,21 +17,13 @@ pub fn init(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     defs: Res<Defs>,
-    mut camera: Query<&mut GameCamera>,
     game_info: Query<&ClientGameInfo>,
     mut console: EventWriter<ConsoleItem>,
+    mut other_cameras: Query<Entity, With<Camera>>,
 ) {
-    console.send(ConsoleItem::new(
-        "Protect your home from the creeps baddies.".to_string(),
-    ));
-    console.send(ConsoleItem::new(
-        "Combine your towers and creeps to upgrade them.".to_string(),
-    ));
-    console.send(ConsoleItem::new(
-        "You have your own creeps that you can upgrade which are near your home.".to_string(),
-    ));
-
-    commands.insert_resource(Selected::Nothing);
+    for other_camera in other_cameras.iter() {
+        commands.entity(other_camera).despawn();
+    }
 
     let game_info = game_info.single();
     let owner = game_info.i_am;
@@ -44,9 +36,28 @@ pub fn init(
         .iter()
         .find(|e| e.owner == Some(owner) && e.entity_type == shared::game::defs::EntityType::Base)
         .unwrap();
+    let camera_target: Vec2 = base.position.as_ref().unwrap().into();
+    let mut game_camera = GameCamera::default();
+    game_camera.target = camera_target;
 
-    let mut camera = camera.single_mut();
-    camera.target = base.position.as_ref().unwrap().into();
+    commands
+        .spawn_bundle(Camera3dBundle {
+            ..Default::default()
+        })
+        .insert(game_camera)
+        .insert(RayCastSource::<MyRaycastSet>::new());
+
+    console.send(ConsoleItem::new(
+        "Protect your home from the creeps baddies.".to_string(),
+    ));
+    console.send(ConsoleItem::new(
+        "Combine your towers and creeps to upgrade them.".to_string(),
+    ));
+    console.send(ConsoleItem::new(
+        "You have your own creeps that you can upgrade which are near your home.".to_string(),
+    ));
+
+    commands.insert_resource(Selected::Nothing);
 
     // Top hover text
     let mut text_bundle = floaty_text_bundle(&asset_server);
@@ -54,11 +65,11 @@ pub fn init(
     text_bundle.style.position.left = Val::Px(16.0);
     text_bundle.style.position.right = Val::Px(16.0);
     text_bundle.style.position_type = PositionType::Absolute;
-    text_bundle.style.align_self = AlignSelf::Center;
-    text_bundle.style.justify_content = JustifyContent::Center;
-    text_bundle.style.align_items = AlignItems::Center;
+    // text_bundle.style.align_self = AlignSelf::Center;
+    // text_bundle.style.justify_content = JustifyContent::Center;
+    // text_bundle.style.align_items = AlignItems::Center;
     text_bundle.text = Text::from_section(
-        "testing 123./.........",
+        "",
         TextStyle {
             font: asset_server.load(FONT),
             font_size: 40.0,
