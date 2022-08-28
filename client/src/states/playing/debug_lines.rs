@@ -51,16 +51,9 @@ pub fn debug_lines_tower(
         circle(
             &mut lines,
             transform.translation,
-            tower.size,
-            6,
-            Color::BLACK,
-        );
-        circle(
-            &mut lines,
-            transform.translation,
             tower.range,
-            8,
-            Color::BLACK,
+            15,
+            Color::rgba(0.0, 0.0, 0.0, 0.2),
         );
     }
 }

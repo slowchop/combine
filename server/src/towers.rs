@@ -111,6 +111,8 @@ pub fn shoot_towers(
                 creeps_that_need_position_update
                     .send(CreepNeedsPositionUpdate(*creep_server_entity_id));
             }
+
+            break;
         }
     }
 }

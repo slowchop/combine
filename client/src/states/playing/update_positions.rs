@@ -36,6 +36,11 @@ pub fn update_positions_from_server(
         if let Ok((mut position, mut velocity)) = query.get_mut(*entity) {
             position.0 = update_position_event.position;
             velocity.0 = update_position_event.velocity;
+        } else {
+            warn!(
+                "Could not update position and velocity for entity {:?}",
+                entity
+            );
         }
     }
 }

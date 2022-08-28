@@ -16,7 +16,7 @@ use bevy_prototype_lyon::shapes;
 use bevy_prototype_lyon::shapes::Polygon;
 use shared::game::defs::{CreepRef, Defs, EntityDef, EntityType, TowerRef, PIXELS_PER_METER};
 use shared::game::path::Path;
-use shared::game::position::vec2_to_vec3;
+use shared::game::position::{vec2_to_vec3, Position, Velocity};
 use shared::game::shared_game::{ServerEntityId, SharedGame};
 use std::f32::consts::TAU;
 
@@ -254,11 +254,15 @@ pub fn spawn_entities(
 
                 // Already checked
                 let creep_ref = entity_def.creep.as_ref().unwrap();
+                let position = entity_def.position.as_ref().unwrap();
+                let position = vec2_to_vec3(&position.into());
                 entity
                     .insert(Name::new(format!("Creep {:?}", creep_ref)))
                     .insert(creep_ref.to_owned())
                     .insert(owner)
                     .insert(Damaged(0))
+                    .insert(Position(position))
+                    .insert(Velocity(Vec3::ZERO))
                     .insert(Released(false));
             }
             EntityType::Sprite => {
