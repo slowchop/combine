@@ -38,15 +38,6 @@ pub const URL: &str = "http://10.0.4.14";
 pub const MS_PER_TICK: u64 = 50;
 pub const TICKS_PER_SECOND: u64 = 1000 / MS_PER_TICK;
 
-/// 0 is just after sunrise, so everything is bright.
-/// 10 is when the sun starts setting.
-/// 15 it gets dark -- Creeps released!
-///
-/// 28 "sunrise"
-// pub const TICKS_PER_DAY: Ticks = Ticks(30 * TICKS_PER_SECOND as i64);
-// pub const RESPAWN_CLOCK_TIME: Ticks = Ticks(20 * TICKS_PER_SECOND as i64);
-// pub const RELEASE_CLOCK_TIME: Ticks = Ticks(15 * TICKS_PER_SECOND as i64);
-
 pub const TICKS_PER_DAY: Ticks = Ticks(60 * TICKS_PER_SECOND as i64);
 pub const RESPAWN_CLOCK_TIME: Ticks = Ticks(1 * TICKS_PER_SECOND as i64);
 pub const RELEASE_CLOCK_TIME: Ticks = Ticks(31 * TICKS_PER_SECOND as i64);

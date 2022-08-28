@@ -74,7 +74,8 @@ pub fn health_bars(
         let material = materials.get_mut(&material).unwrap();
         material.base_color = Color::rgba(1.0 - fraction, fraction, 1.0, 1.0);
 
-        health_bar_transform.translation = transform.translation + Vec3::new(0.0, 0.0, 0.0);
+        // Slightly ahead of the creep
+        health_bar_transform.translation = transform.translation + Vec3::new(0.0, 0.0, 0.1);
         health_bar_transform.scale.x = fraction;
     }
 }
