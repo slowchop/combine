@@ -110,7 +110,7 @@ pub fn play(args: &Args) {
         _ => WindowMode::BorderlessFullscreen,
     };
 
-    // let window_mode = WindowMode::Windowed;
+    let window_mode = WindowMode::Windowed;
 
     let mut settings = Settings::default();
     if args.skip_to_random_player {

@@ -130,8 +130,8 @@ pub fn receive_message_event(
                     let cost = tower.cost;
                     if player.gold < cost {
                         let message = ServerMessage::new(format!(
-                            "Sorry, you don't have enough $ to buy a {}.",
-                            tower.title
+                            "Sorry, you don't have enough $ to buy a {}. You have ${} and it costs ${}.",
+                            tower.title, player.gold, cost
                         ));
                         server.send_message(user_key, Channels::ServerCommand, &message);
                         continue;

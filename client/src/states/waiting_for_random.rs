@@ -15,14 +15,14 @@ pub fn init(
     mut client: Client<Protocol, Channels>,
     player_name: Res<PlayerName>,
 ) {
-    println!("Waiting for random...");
+    println!("Waiting for another player to join...");
     let name = player_name.clone();
     let command = JoinRandomGame::new(name);
     client.send_message(Channels::PlayerCommand, &command);
 }
 
 pub fn update(mut egui_context: ResMut<EguiContext>) {
-    egui::Window::new("Waiting for random")
+    egui::Window::new("Waiting for another player to join...")
         .anchor(Align2::CENTER_CENTER, [0.0, 0.0])
         .show(egui_context.ctx_mut(), |ui| {});
 }

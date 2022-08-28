@@ -77,7 +77,8 @@ pub fn menu_clicks(
         exit(0);
     }
     if keys.just_pressed(KeyCode::Return) {
-        commands.insert_resource(NextState(GameState::WaitingForRandom));
+        commands.insert_resource(NextState(GameState::Connecting));
+        commands.insert_resource(ContinueState(Some(GameState::WaitingForRandom)));
         return;
     }
 
@@ -98,8 +99,8 @@ pub fn menu_clicks(
 
     // Play
     if vertical_fraction > 0.345 && vertical_fraction < 0.49 {
-        commands.insert_resource(ContinueState(Some(GameState::WaitingForRandom)));
         commands.insert_resource(NextState(GameState::Connecting));
+        commands.insert_resource(ContinueState(Some(GameState::WaitingForRandom)));
     }
 
     // Exit

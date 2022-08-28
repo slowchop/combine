@@ -67,9 +67,8 @@ pub fn update(
     buttons: Res<Input<MouseButton>>,
 ) {
     if keys.just_pressed(KeyCode::Return) {
-        if name.0.len() == 0 {
-            *name = PlayerName::random();
-        }
+        // Feed it back in so we can handle bad names
+        *name = PlayerName::new(name.0.as_str());
         commands.insert_resource(NextState(GameState::MainMenu));
         return;
     }

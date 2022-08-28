@@ -53,7 +53,7 @@ pub fn debug_lines_tower(
             transform.translation,
             tower.range,
             15,
-            Color::rgba(0.0, 0.0, 0.0, 0.2),
+            Color::rgb(0.8, 0.8, 0.8),
         );
     }
 }

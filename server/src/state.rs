@@ -2,6 +2,7 @@ use bevy_ecs::prelude::*;
 use bevy_utils::HashMap;
 use naia_bevy_server::{RoomKey, UserKey};
 use rand::{thread_rng, Rng};
+use shared::game::owner::Owner;
 use shared::game::player::PlayerName;
 use shared::game::player::SharedPlayer;
 use shared::game::shared_game::SharedGame;
