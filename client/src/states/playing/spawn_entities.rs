@@ -23,7 +23,7 @@ use std::time::Duration;
 
 #[derive(Component, Debug, Default)]
 pub struct HasColdEffect {
-    until: Duration,
+    pub until: Duration,
 }
 
 #[derive(Component, Debug, Default)]

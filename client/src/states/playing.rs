@@ -4,6 +4,7 @@ pub mod console;
 pub mod creeps;
 pub mod debug_lines;
 pub mod destroy_entities;
+pub mod effect_bubble;
 pub mod floaty_text;
 pub mod game_over;
 pub mod health_bars;

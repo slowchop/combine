@@ -1,7 +1,7 @@
 use crate::app::GameState;
 use crate::states::playing::console::ConsoleItem;
 use crate::states::playing::hurt_entities::HurtEntityEvent;
-use crate::states::playing::spawn_entities::SpawnEntityEvent;
+use crate::states::playing::spawn_entities::{HasColdEffect, SpawnEntityEvent};
 use crate::states::playing::update_player::UpdatePlayerEvent;
 use bevy::prelude::*;
 use bevy::utils::HashSet;
@@ -17,6 +17,7 @@ use shared::protocol::{Protocol, ProtocolKind};
 use shared::ticks::Ticks;
 use shared::Channels;
 use std::thread::spawn;
+use std::time::Duration;
 
 pub fn connect_event(client: Client<Protocol, Channels>) {
     println!("Client connected {}", client.server_address());
@@ -73,6 +74,8 @@ pub fn receive_message_event(
     mut hurt_entity_events: EventWriter<HurtEntityEvent>,
     mut console: EventWriter<ConsoleItem>,
     client_game_info: Query<&ClientGameInfo>,
+    game: Query<&SharedGame>,
+    mut cold_query: Query<&mut HasColdEffect>,
 ) {
     // dbg!(client.is_connected());
     for event in event_reader.iter() {
@@ -179,8 +182,18 @@ pub fn receive_message_event(
                 Protocol::HotCreep(_) => {
                     warn!("Got a hot creep message");
                 }
-                Protocol::ColdCreep(_) => {
-                    warn!("Got a cold creep message");
+                Protocol::ColdCreep(cold) => {
+                    let server_entity_id = *cold.server_entity_id;
+                    let game = game.get_single().unwrap();
+                    let entity = if let Ok(e) = &game.entities.get(&server_entity_id) {
+                        e
+                    } else {
+                        continue;
+                    };
+
+                    let mut cold_effect = cold_query.get_mut(*entity).unwrap();
+                    cold_effect.until =
+                        time.time_since_startup() + Duration::from_secs_f32(*cold.duration);
                 }
             }
         }
