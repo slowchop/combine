@@ -42,7 +42,7 @@ use crate::{
 use bevy::prelude::*;
 use bevy::render::render_resource::SamplerDescriptor;
 use bevy::render::texture::ImageSettings;
-use bevy::window::PresentMode;
+use bevy::window::{PresentMode, WindowMode};
 use bevy_egui::egui::{FontFamily, FontId};
 use bevy_egui::{egui, EguiContext, EguiPlugin};
 use bevy_inspector_egui::{WorldInspectorParams, WorldInspectorPlugin};
@@ -95,6 +95,12 @@ pub fn play(args: &Args) {
         _ => WindowPosition::Automatic,
     };
 
+    let window_mode = match args.window_position_shift {
+        Some(0) => WindowMode::Windowed,
+        Some(1) => WindowMode::Windowed,
+        _ => WindowMode::BorderlessFullscreen,
+    };
+
     let mut settings = Settings::default();
     if args.skip_to_random_player {
         settings.start_multiplayer_immediately = true;
@@ -103,11 +109,12 @@ pub fn play(args: &Args) {
     let image_settings = ImageSettings::default_linear();
 
     app.insert_resource(WindowDescriptor {
-        resizable: false,
+        resizable: true,
         width: 1024f32,
         height: 768f32,
         title: "Tower Combos".to_string(),
         present_mode: PresentMode::AutoNoVsync,
+        mode: window_mode,
         position,
         ..Default::default()
     })

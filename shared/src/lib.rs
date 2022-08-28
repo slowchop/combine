@@ -34,8 +34,7 @@ pub const URL: &str = "http://45.248.51.162";
 #[cfg(feature = "dev")]
 pub const URL: &str = "http://10.0.4.14";
 
-// 1000 / 20fps = 50ms
-pub const MS_PER_TICK: u64 = 50;
+pub const MS_PER_TICK: u64 = 250;
 pub const TICKS_PER_SECOND: u64 = 1000 / MS_PER_TICK;
 
 pub const TICKS_PER_DAY: Ticks = Ticks(60 * TICKS_PER_SECOND as i64);
@@ -44,8 +43,8 @@ pub const RELEASE_CLOCK_TIME: Ticks = Ticks(31 * TICKS_PER_SECOND as i64);
 
 pub fn shared_config() -> SharedConfig<Channels> {
     let tick_interval = Some(Duration::from_millis(MS_PER_TICK as u64));
-    // let link_condition = None;
-    let link_condition = Some(LinkConditionerConfig::poor_condition());
+    let link_condition = None;
+    // let link_condition = Some(LinkConditionerConfig::poor_condition());
 
     SharedConfig::new(
         SocketConfig::new(link_condition, None),

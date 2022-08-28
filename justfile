@@ -12,12 +12,12 @@ build_client_release:
 
 build_client_windows:
     cd client && cargo build --release --target x86_64-pc-windows-gnu --features shared/prod
-    rm -rf tmp
+    rm -rf tmp TowerCombo-Windows.zip
     mkdir -p tmp/TowerCombo
-    cp deploy/WIN-README.txt tmp/
-    cp target/x86_64-pc-windows-gnu/release/towercombo.exe TowerCombo/TowerCombo.exe
-    cp -r client/assets TowerCombo
-    zip -r TowerCombo-Windows.zip TowerCombo
+    cp deploy/WIN-README.txt tmp/README.txt
+    cp target/x86_64-pc-windows-gnu/release/towercombo.exe tmp/TowerCombo/TowerCombo.exe
+    cp -r client/assets tmp/TowerCombo/
+    cd tmp && zip -r ../TowerCombo-Windows.zip *
 
 build_client_mac:
     cd client && cargo build --release --target x86_64-apple-darwin --features shared/prod

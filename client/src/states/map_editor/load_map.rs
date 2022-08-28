@@ -59,7 +59,6 @@ pub fn create_editor_entities(
     {
         for create_editor_entity in create_editor_entities.iter() {
             let entity_def = &create_editor_entity.0;
-            dbg!(entity_def.entity_type);
 
             let mut texture = &entity_def.texture;
 
@@ -124,11 +123,8 @@ pub fn create_editor_entities(
                         });
                 }
 
-                println!("path");
                 continue;
             }
-
-            println!("???");
 
             let mesh = match entity_def.entity_type {
                 EntityType::Ground => Mesh::from(shape::Plane { size: 10000.0 }),

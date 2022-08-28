@@ -12,7 +12,7 @@ impl Default for GameCamera {
     fn default() -> Self {
         Self {
             target: Vec2::ZERO,
-            zoom: 50.0,
+            zoom: 20.0,
         }
     }
 }
