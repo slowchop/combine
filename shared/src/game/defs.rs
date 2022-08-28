@@ -138,20 +138,20 @@ pub enum DamageType {
     Missile,
 }
 
-#[derive(Component, Debug, Clone)]
-pub struct DamageOverTimeState {
-    pub damage: u32,
-    pub last_trigger: Duration,
-    pub end_at: Duration,
-}
-
-#[derive(Component, Debug, Clone)]
-pub struct DamageOverTime {
-    pub damage: u32,
-    pub interval: f32,
-    pub total_duration: f32,
-    pub damage_type: DamageType,
-}
+// #[derive(Component, Debug, Clone)]
+// pub struct DamageOverTimeState {
+//     pub damage: u32,
+//     pub last_trigger: Duration,
+//     pub end_at: Duration,
+// }
+//
+// #[derive(Component, Debug, Clone)]
+// pub struct DamageOverTime {
+//     pub damage: u32,
+//     pub interval: f32,
+//     pub total_duration: f32,
+//     pub damage_type: DamageType,
+// }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Tower {
@@ -168,7 +168,9 @@ pub struct Tower {
 
     /// How much to slow down creeps.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cold_slowdown: Option<f32>,
+    pub cold_slowdown_amount: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cold_slowdown_duration: Option<f32>,
 
     /// Use instant damage as the interval for damage over time
     #[serde(skip_serializing_if = "Option::is_none")]

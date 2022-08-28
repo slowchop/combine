@@ -9,6 +9,7 @@ use bevy_log::warn;
 use bevy_math::{Vec2, Vec3};
 use bevy_time::Time;
 use bevy_transform::prelude::*;
+use bevy_utils::HashSet;
 use naia_bevy_server::Server;
 use shared::game::components::Speed;
 use shared::game::defs::{Creep, CreepRef, EntityDef, EntityType};
@@ -23,6 +24,29 @@ use shared::protocol::update_position::UpdatePosition;
 use shared::protocol::Protocol;
 use shared::Channels;
 use std::time::Duration;
+
+#[derive(Component, Debug)]
+pub struct ColdEffect {
+    pub until: Duration,
+    /// Creep speed becomes their normal speed minus this amount.
+    pub amount: f32,
+}
+
+impl ColdEffect {
+    pub fn zero() -> Self {
+        Self {
+            until: Duration::from_micros(0),
+            amount: 0.0,
+        }
+    }
+}
+
+#[derive(Component, Debug)]
+pub struct FireEffect {
+    pub until: Duration,
+    pub interval: Duration,
+    pub amount: f32,
+}
 
 pub fn spawn_creeps(
     mut spawn_entity_events: EventWriter<SpawnEntityEvent>,
@@ -86,6 +110,8 @@ pub fn spawn_creeps(
     }
 }
 
+pub struct CreepNeedsPositionUpdate(pub ServerEntityId);
+
 pub fn move_along_path(
     mut commands: Commands,
     time: Res<Time>,
@@ -104,7 +130,13 @@ pub fn move_along_path(
     mut server: Server<Protocol, Channels>,
     mut destroy_entity_events: EventWriter<DestroyEntityEvent>,
     mut lose_a_life_events: EventWriter<LoseALifeEvent>,
+    mut creeps_that_need_position_update: EventReader<CreepNeedsPositionUpdate>,
 ) {
+    let mut creep_ids_that_need_position_update = HashSet::new();
+    for CreepNeedsPositionUpdate(creep_id) in creeps_that_need_position_update.iter() {
+        creep_ids_that_need_position_update.insert(*creep_id);
+    }
+
     for (
         entity,
         mut transform,
@@ -118,6 +150,9 @@ pub fn move_along_path(
     ) in query.iter_mut()
     {
         let mut need_to_broadcast = false;
+        if creep_ids_that_need_position_update.contains(server_entity_id) {
+            need_to_broadcast = true;
+        }
 
         if let Some(path_leave_at) = path_leave_at {
             if time.time_since_startup() < path_leave_at.0 {

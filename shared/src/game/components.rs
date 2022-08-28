@@ -1,4 +1,5 @@
 use bevy_ecs::prelude::*;
+use std::time::Duration;
 
 #[derive(Component, Debug)]
 pub struct Speed(pub f32);

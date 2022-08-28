@@ -2,6 +2,11 @@ levels:
   jam:
     name: jam
     entities:
+    - texture: hover.png
+      type: guide
+      position:
+      - 12.126487
+      - 16.438929
     - type: buildable_circle
       position:
       - 12.126487
@@ -690,7 +695,8 @@ towers:
     cost: 100
     reload: 0.8
     instant_damage: 20
-    cold_slowdown: 1.0
+    cold_slowdown_amount: 1.0
+    cold_slowdown_duration: 3.0
   fire-boss:
     emoji: "\U0001F52B"
     name: fire-boss
@@ -784,7 +790,8 @@ towers:
     cost: 200
     reload: 0.5
     instant_damage: 50
-    cold_slowdown: 3.0
+    cold_slowdown_amount: 3.0
+    cold_slowdown_duration: 5.0
     area: 1.0
   electric:
     emoji: ⚡

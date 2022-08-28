@@ -1,3 +1,4 @@
+use crate::creeps::ColdEffect;
 use crate::damage::Damaged;
 use crate::new_entities::NewEntityEvent;
 use crate::state::GameId;
@@ -202,6 +203,7 @@ pub fn spawn_entities(
                     .insert(game_id)
                     .insert(Speed(creep.speed))
                     .insert(Damaged(0))
+                    .insert(ColdEffect::zero())
                     .id();
 
                 created_entity = Some(id);

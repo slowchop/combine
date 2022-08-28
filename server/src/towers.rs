@@ -1,3 +1,4 @@
+use crate::creeps::{ColdEffect, CreepNeedsPositionUpdate};
 use crate::state::GameId;
 use crate::GameLookup;
 use bevy_ecs::prelude::*;
@@ -7,6 +8,7 @@ use bevy_transform::prelude::Transform;
 use shared::game::defs::{CreepRef, Defs, TowerRef};
 use shared::game::owner::Owner;
 use shared::game::shared_game::ServerEntityId;
+use shared::protocol::update_position::UpdatePosition;
 use std::time::Duration;
 
 #[derive(Component, Debug)]
@@ -36,6 +38,7 @@ pub fn shoot_towers(
     )>,
     mut creeps: Query<(&CreepRef, &Transform, &Owner, &ServerEntityId)>,
     mut damage_creep_events: EventWriter<DamageCreepEvent>,
+    mut creeps_that_need_position_update: EventWriter<CreepNeedsPositionUpdate>,
 ) {
     for (tower_ref, tower_transform, mut last_shot, game_id, tower_owner, server_entity_id) in
         towers.iter_mut()
@@ -64,9 +67,9 @@ pub fn shoot_towers(
         };
 
         // Check if there are any towers in range. Maybe randomly run this to save CPU cycles.
-        for (server_entity_id, entity) in &game.entities {
+        for (server_entity_id, creep_entity) in &game.entities {
             let (creep_ref, creep_transform, creep_owner, creep_server_entity_id) =
-                if let Ok(c) = creeps.get(*entity) {
+                if let Ok(c) = creeps.get(*creep_entity) {
                     c
                 } else {
                     continue;
@@ -97,6 +100,17 @@ pub fn shoot_towers(
                 creep_id: *creep_server_entity_id,
                 amount: tower.instant_damage,
             });
+
+            if let Some(cold_slowdown_duration) = tower.cold_slowdown_duration {
+                commands.entity(*creep_entity).insert(ColdEffect {
+                    until: time.time_since_startup()
+                        + Duration::from_secs_f32(cold_slowdown_duration),
+                    amount: tower.cold_slowdown_amount.unwrap(),
+                });
+
+                creeps_that_need_position_update
+                    .send(CreepNeedsPositionUpdate(*creep_server_entity_id));
+            }
         }
     }
 }

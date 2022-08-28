@@ -80,12 +80,12 @@ pub fn attr_editor(mut egui_context: ResMut<EguiContext>, mut defs: ResMut<Defs>
                     }
                 }
 
-                match tower.cold_slowdown {
+                match tower.cold_slowdown_amount {
                     Some(slowdown) => {
                         let mut s = format!("{:0.1}", slowdown);
                         if ui.text_edit_singleline(&mut s).changed() {
                             if let Ok(c) = s.parse() {
-                                tower.cold_slowdown = Some(c);
+                                tower.cold_slowdown_amount = Some(c);
                             }
                         }
                     }

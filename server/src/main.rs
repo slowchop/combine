@@ -1,3 +1,4 @@
+mod cold;
 mod create_games;
 mod creeps;
 mod damage;
@@ -15,9 +16,10 @@ mod tick;
 mod time;
 mod towers;
 
+use crate::cold::monitor_cold_changes;
 use crate::create_games::create_games;
 use crate::create_games::CreateGameEvent;
-use crate::creeps::{move_along_path, spawn_creeps};
+use crate::creeps::{move_along_path, spawn_creeps, CreepNeedsPositionUpdate};
 use crate::damage::damage_creeps;
 use crate::destroy::{destroy_entities, DestroyEntityEvent};
 use crate::game_over::game_over;
@@ -92,6 +94,7 @@ fn main() {
         .add_event::<LoseALifeEvent>()
         .add_event::<GameOverEvent>()
         .add_event::<DamageCreepEvent>()
+        .add_event::<CreepNeedsPositionUpdate>()
         .add_startup_system(init)
         .add_system_to_stage(Stage::ReceiveEvents, events::authorization_event)
         .add_system_to_stage(Stage::ReceiveEvents, events::connection_event)
@@ -112,5 +115,6 @@ fn main() {
         .add_system(game_over)
         .add_system(shoot_towers)
         .add_system(damage_creeps)
+        .add_system(monitor_cold_changes)
         .run();
 }
