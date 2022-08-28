@@ -4,6 +4,7 @@ use crate::states::playing::camera::GameCamera;
 use bevy::prelude::*;
 use shared::game::defs::{EntityDef, EntityType};
 use shared::game::position::vec3_to_vec2;
+use shared::game::shared_game::ServerEntityId;
 
 pub fn add_sprite(
     mut create_event: EventReader<AddEditorSpriteEvent>,
@@ -16,6 +17,7 @@ pub fn add_sprite(
             texture: Some(event.0.clone()),
             entity_type: EntityType::Sprite,
             position: Some(game_camera.target.into()),
+            server_entity_id: Some(ServerEntityId::random()),
             ..Default::default()
         };
         create_editor_entity.send(CreateEditorEntity(entity_def));
