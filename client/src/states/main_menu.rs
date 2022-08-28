@@ -60,12 +60,17 @@ pub fn menu_clicks(
     mut commands: Commands,
     mut windows: ResMut<Windows>,
     buttons: Res<Input<MouseButton>>,
+    mut client: Client<Protocol, Channels>,
 ) {
+    if client.is_connected() {
+        client.disconnect();
+    }
+
     if !buttons.just_pressed(MouseButton::Left) {
         return;
     }
 
-    let window = match windows.get_primary_mut() {
+    let window = match windows.get_primary() {
         Some(window) => window,
         None => return,
     };

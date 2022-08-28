@@ -174,7 +174,7 @@ pub fn play(args: &Args) {
         .add_system_to_stage(NaiaStage::Tick, add_ticks_to_game);
 
     app.add_startup_system(init);
-    app.add_startup_system(init_egui);
+    // app.add_startup_system(init_egui);
 
     // Splash
     app.add_enter_system(GameState::Splash, splash::init);
