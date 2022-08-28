@@ -4549,6 +4549,7 @@ dependencies = [
  "iyes_loopless",
  "miette",
  "naia-bevy-client",
+ "rand",
  "sentry",
  "serde",
  "serde_yaml",

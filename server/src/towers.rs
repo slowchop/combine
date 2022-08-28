@@ -47,7 +47,7 @@ pub fn shoot_towers(
     mut server: Server<Protocol, Channels>,
     game_user_lookup: Res<GameUserLookup>,
 ) {
-    for (tower_ref, tower_transform, mut last_shot, game_id, tower_owner, server_entity_id) in
+    for (tower_ref, tower_transform, mut last_shot, game_id, tower_owner, tower_server_entity_id) in
         towers.iter_mut()
     {
         let tower = if let Some(tower) = defs.tower(&tower_ref) {
@@ -74,7 +74,7 @@ pub fn shoot_towers(
         };
 
         // Check if there are any towers in range. Maybe randomly run this to save CPU cycles.
-        for (server_entity_id, creep_entity) in &game.entities {
+        for (creep_server_id, creep_entity) in &game.entities {
             let (creep_ref, creep_transform, creep_owner, creep_server_entity_id) =
                 if let Ok(c) = creeps.get(*creep_entity) {
                     c
@@ -102,7 +102,7 @@ pub fn shoot_towers(
 
             damage_creep_events.send(DamageCreepEvent {
                 game_id: *game_id,
-                tower_id: Some(*server_entity_id),
+                tower_id: Some(*tower_server_entity_id),
                 tower_owner: Some(*tower_owner),
                 creep_id: *creep_server_entity_id,
                 amount: tower.instant_damage,
