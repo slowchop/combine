@@ -9,7 +9,7 @@ use shared::game::owner::Owner;
 pub struct EditorInfo {
     pub map_name: String,
     selected_sprite: String,
-    buildable_circle_size: f32,
+    pub(crate) buildable_circle_size: f32,
 }
 
 impl Default for EditorInfo {
@@ -32,7 +32,7 @@ pub struct AddEditorSpriteEvent(pub String);
 
 pub struct AddEditorPathEvent(pub Owner);
 
-pub struct AddEditorBuildableEvent(pub f32, pub Owner);
+pub struct AddEditorBuildableEvent(pub f32, pub Owner, pub Option<Vec2>);
 
 pub struct DeleteEditorEntityEvent(pub Entity);
 
@@ -107,12 +107,14 @@ pub fn menu(
                 add_buildable_events.send(AddEditorBuildableEvent(
                     editor_map.buildable_circle_size,
                     Owner::new(0),
+                    None,
                 ));
             };
             if ui.button("Player 2").clicked() {
                 add_buildable_events.send(AddEditorBuildableEvent(
                     editor_map.buildable_circle_size,
                     Owner::new(1),
+                    None,
                 ));
             };
         });

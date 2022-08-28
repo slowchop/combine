@@ -1,11 +1,12 @@
 use crate::app::MyRaycastSet;
 use crate::states::map_editor::load_map::PathInfo;
-use crate::states::map_editor::menu::EditorInfo;
+use crate::states::map_editor::menu::{AddEditorBuildableEvent, EditorInfo};
 use crate::states::map_editor::no_pointer_capture::IsPointerCaptured;
 use crate::states::playing::console::ConsoleItem;
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
 use shared::game::defs::{Defs, EntityDef, EntityType};
+use shared::game::owner::Owner;
 use shared::game::position::vec2_to_vec3;
 use std::time::Duration;
 
@@ -25,6 +26,7 @@ pub enum EditorDragState {
 
 pub fn input_events(
     time: Res<Time>,
+    editor_map: Res<EditorInfo>,
     mut console: EventWriter<ConsoleItem>,
     mut commands: Commands,
     mut defs: ResMut<Defs>,
@@ -42,6 +44,7 @@ pub fn input_events(
     buttons: Res<Input<MouseButton>>,
     keys: Res<Input<KeyCode>>,
     mut drag_state: ResMut<EditorDragState>,
+    mut add_buildable_events: EventWriter<AddEditorBuildableEvent>,
 ) {
     let level_def = match defs.levels.get_mut(&editor_info.map_name) {
         Some(m) => m,
@@ -69,6 +72,21 @@ pub fn input_events(
 
     match *drag_state {
         EditorDragState::NotDragging => {
+            // 1 and 2 will add a buildable area and the mouse position.
+            if keys.just_released(KeyCode::Key1) || keys.just_released(KeyCode::Key2) {
+                let owner = Owner::new(if keys.just_released(KeyCode::Key1) {
+                    0
+                } else {
+                    1
+                });
+                add_buildable_events.send(AddEditorBuildableEvent(
+                    editor_map.buildable_circle_size,
+                    owner,
+                    Some(position),
+                ));
+                return;
+            }
+
             // Find closest entity from mouse_position
             let mut closest_entity = None;
             let mut closest_distance = None;

@@ -26,7 +26,7 @@ pub fn add_buildable_area(
     for event in create_event.iter() {
         let entity_def = EntityDef {
             entity_type: EntityType::BuildableCircle,
-            position: Some(game_camera.target.into()),
+            position: Some(event.2.unwrap_or(game_camera.target).into()),
             radius: Some(event.0),
             owner: Some(event.1),
             server_entity_id: Some(ServerEntityId::random()),
