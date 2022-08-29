@@ -16,15 +16,7 @@ impl SharedPlayer {
         Self {
             name,
             owner,
-            gold: 200,
-            lives: 20,
-        }
-    }
-    pub fn new_waiting(name: PlayerName) -> Self {
-        SharedPlayer {
-            name,
-            owner: Owner::waiting(),
-            gold: 1000,
+            gold: 500,
             lives: 20,
         }
     }

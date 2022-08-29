@@ -169,7 +169,10 @@ pub fn move_along_path(
         // Cold
         if time.time_since_startup() <= cold_effect.until {
             speed -= cold_effect.amount;
-            speed = speed.min(0.0);
+        }
+
+        if speed < 0. {
+            speed = 0.;
         }
 
         // Reduce this for each new path we take. Usually should be 0 or 1 times!
