@@ -94,10 +94,6 @@ pub fn shoot_towers(
                 continue;
             }
 
-            println!(
-                "Shooting from tower on team {:?} to a creep on team {:?}!",
-                tower_owner, creep_owner
-            );
             last_shot.0 = time.time_since_startup().clone();
 
             damage_creep_events.send(DamageCreepEvent {

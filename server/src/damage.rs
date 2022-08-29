@@ -63,8 +63,6 @@ pub fn damage_creeps(
 
         damaged.0 += damage_creep_event.amount;
 
-        println!("damaged creep: {:?}", damaged.0);
-
         let message = HurtEntity::new(
             damage_creep_event.tower_id,
             damage_creep_event.creep_id,

@@ -7,6 +7,7 @@ use bevy_transform::prelude::*;
 use naia_bevy_server::shared::{ChannelIndex, Protocolize, ReplicateSafe};
 use naia_bevy_server::{Server, UserKey};
 use rand::{thread_rng, Rng};
+use shared::game::components::Speed;
 use shared::game::defs::CreepRef;
 use shared::game::owner::Owner;
 use shared::game::path::{Path, PathLeaveAt, PathProgress};
@@ -25,7 +26,10 @@ pub fn tell_clients_to_release_the_creeps(
     mut server: Server<Protocol, Channels>,
     game_user_lookup: Res<GameUserLookup>,
     game_lookup: Res<GameLookup>,
-    creep_query: Query<(&ServerEntityId, &Transform, &Owner), (With<CreepRef>, Without<Path>)>,
+    creep_query: Query<
+        (&ServerEntityId, &Transform, &Owner, &Speed),
+        (With<CreepRef>, Without<Path>),
+    >,
 ) {
     for release_creeps_event in release_creeps_events.iter() {
         let users = match game_user_lookup.get_game_users(&release_creeps_event.game_id) {
@@ -65,7 +69,7 @@ pub fn tell_clients_to_release_the_creeps(
         // Send a ReleaseCreep message to each client for each entity.
         let mut collected_server_entity_ids = Vec::with_capacity(40);
         for (idx, (server_entity_id, entity)) in game.entities.iter().enumerate() {
-            let (server_entity_id_2, transform, owner) = match creep_query.get(*entity) {
+            let (server_entity_id_2, transform, owner, speed) = match creep_query.get(*entity) {
                 Ok(e) => e,
                 Err(_) => {
                     warn!(
@@ -94,7 +98,7 @@ pub fn tell_clients_to_release_the_creeps(
                     current_path_target: 0,
                 })
                 .insert(PathLeaveAt(
-                    time.time_since_startup() + Duration::from_secs_f32(idx as f32),
+                    time.time_since_startup() + Duration::from_secs_f32(idx as f32 / speed.0),
                 ));
         }
 
