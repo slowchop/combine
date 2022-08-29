@@ -63,7 +63,12 @@ pub fn create_editor_entities(
             let mut texture = &entity_def.texture;
 
             if entity_def.entity_type == EntityType::Guide {
-                commands.spawn().insert(entity_def.clone());
+                commands
+                    .spawn()
+                    .insert(entity_def.clone())
+                    .insert(Transform::from_translation(vec2_to_vec3(
+                        &entity_def.position.as_ref().unwrap().into(),
+                    )));
                 continue;
             }
 
