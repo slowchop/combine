@@ -69,6 +69,10 @@ pub fn update(
     keyboard: Res<Input<KeyCode>>,
     settings: Res<Settings>,
 ) {
+    if settings.start_map_editor_immediately {
+        commands.insert_resource(NextState(GameState::Editor));
+    }
+
     if time.time_since_startup() > Duration::from_secs(4)
         || buttons.just_pressed(MouseButton::Left)
         || keyboard.any_pressed([KeyCode::Space, KeyCode::Return, KeyCode::Escape])

@@ -121,6 +121,9 @@ pub fn play(args: &Args) {
     if args.skip_to_random_player {
         settings.start_multiplayer_immediately = true;
     }
+    if args.map_editor {
+        settings.start_map_editor_immediately = true;
+    }
 
     let image_settings = ImageSettings::default_linear();
 
@@ -294,6 +297,7 @@ pub fn play(args: &Args) {
 
     // Editor
     app.add_enter_system(GameState::Editor, map_editor::init::init);
+    app.add_enter_system(GameState::Editor, despawn_with::<Camera>);
     app.add_exit_system(GameState::Editor, init_egui);
     app.add_event::<CreateEditorEntity>()
         .insert_resource(EditorDragState::default())

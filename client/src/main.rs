@@ -36,6 +36,10 @@ pub struct Args {
     /// Windowed mode
     #[clap(long)]
     windowed: bool,
+
+    /// Windowed mode
+    #[clap(long)]
+    map_editor: bool,
 }
 
 #[derive(Debug, clap::Subcommand)]
