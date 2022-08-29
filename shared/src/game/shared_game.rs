@@ -36,6 +36,11 @@ impl Serde for ServerEntityId {
     }
 }
 
+pub struct Multiplier {
+    pub speed: f32,
+    pub health: f32,
+}
+
 #[derive(Component)]
 pub struct SharedGame {
     pub map: String,
@@ -44,6 +49,7 @@ pub struct SharedGame {
     pub paths: HashMap<Owner, Path>,
     pub entities: HashMap<ServerEntityId, Entity>,
     pub winner: Option<Owner>,
+    pub round: u32,
     ticks: Ticks,
 }
 
@@ -69,6 +75,14 @@ impl SharedGame {
             ticks: 0u64.into(),
             paths: Default::default(),
             winner: None,
+            round: 0,
+        }
+    }
+
+    pub fn multipliers(&self) -> Multiplier {
+        Multiplier {
+            speed: (self.round as f32) * 0.3 + 1.0,
+            health: (self.round as f32) * 0.3 + 1.0,
         }
     }
 

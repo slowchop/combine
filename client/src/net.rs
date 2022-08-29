@@ -8,6 +8,7 @@ use bevy::utils::HashSet;
 use iyes_loopless::prelude::NextState;
 use naia_bevy_client::events::{InsertComponentEvent, MessageEvent, UpdateComponentEvent};
 use naia_bevy_client::{Client, CommandsExt};
+use shared::game::defs::EntityType;
 use shared::game::destroyment_method::DestroymentMethod;
 use shared::game::owner::Owner;
 use shared::game::shared_game::{ServerEntityId, SharedGame};
@@ -83,16 +84,20 @@ pub fn receive_message_event(
         if let MessageEvent(Channels::ServerCommand, msg) = event {
             match msg {
                 Protocol::SpawnEntity(spawn_entity) => {
-                    let spawn_entity = &*spawn_entity.entity_def;
-                    if spawn_entity.server_entity_id.is_none() {
+                    let entity_def = &*spawn_entity.entity_def;
+                    let health_multiplier = &*spawn_entity.health_multiplier;
+                    let speed_multiplier = &*spawn_entity.speed_multiplier;
+                    if entity_def.server_entity_id.is_none() {
                         warn!(
                             "Got a spawn entity message without a server entity id {:?}",
-                            spawn_entity
+                            entity_def
                         );
                     }
                     spawn_entity_event.send(SpawnEntityEvent {
-                        server_entity_id: spawn_entity.server_entity_id,
-                        entity_def: spawn_entity.clone(),
+                        server_entity_id: entity_def.server_entity_id,
+                        entity_def: entity_def.clone(),
+                        health_multiplier: health_multiplier.clone(),
+                        speed_multiplier: speed_multiplier.clone(),
                     });
                 }
                 Protocol::Auth(_) => {}

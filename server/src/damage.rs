@@ -3,6 +3,7 @@ use crate::{DamageCreepEvent, DestroyEntityEvent, GameLookup, GameUserLookup};
 use bevy_ecs::prelude::*;
 use bevy_log::warn;
 use naia_bevy_server::Server;
+use shared::game::components::MaxHealth;
 use shared::game::defs::{CreepRef, Defs};
 use shared::game::destroyment_method::DestroymentMethod;
 use shared::protocol::hurt_entity::HurtEntity;
@@ -18,7 +19,7 @@ pub fn damage_creeps(
     mut damage_creep_events: EventReader<DamageCreepEvent>,
     game_user_lookup: Res<GameUserLookup>,
     game_lookup: Res<GameLookup>,
-    mut creeps: Query<(&mut Damaged, &CreepRef)>,
+    mut creeps: Query<(&mut Damaged, &MaxHealth, &CreepRef)>,
     mut destroy_entity_events: EventWriter<DestroyEntityEvent>,
     mut server: Server<Protocol, Channels>,
 ) {
@@ -43,7 +44,7 @@ pub fn damage_creeps(
             continue;
         };
 
-        let (mut damaged, creep_ref) = if let Ok(c) = creeps.get_mut(*entity) {
+        let (mut damaged, max_health, creep_ref) = if let Ok(c) = creeps.get_mut(*entity) {
             c
         } else {
             warn!(
@@ -77,12 +78,12 @@ pub fn damage_creeps(
             &message,
         );
 
-        if damaged.0 < creep.health {
+        if damaged.0 < max_health.0 {
             continue;
         }
 
         let (gold_earned, gold_earned_for) = if let Some(o) = damage_creep_event.tower_owner {
-            ((creep.health as f32 * 0.25) as u32, Some(o))
+            ((max_health.0 as f32 * 0.25) as u32, Some(o))
         } else {
             (0, None)
         };

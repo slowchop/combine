@@ -25,16 +25,17 @@ pub fn add_ticks_to_games(mut game_lookup: ResMut<GameLookup>) {
 }
 
 pub fn emit_time_events(
-    game_lookup: Res<GameLookup>,
+    mut game_lookup: ResMut<GameLookup>,
     mut release_creeps_events: EventWriter<ReleaseCreepsEvent>,
     mut respawn_creeps_events: EventWriter<SpawnCreepsEvent>,
 ) {
-    for (game_id, game) in game_lookup.0.iter() {
+    for (game_id, game) in game_lookup.0.iter_mut() {
         let clock = game.ticks_since_start_of_day();
         if clock == RELEASE_CLOCK_TIME {
             release_creeps_events.send(ReleaseCreepsEvent { game_id: *game_id });
         }
         if clock == RESPAWN_CLOCK_TIME {
+            game.round += 1;
             respawn_creeps_events.send(SpawnCreepsEvent { game_id: *game_id });
         }
     }

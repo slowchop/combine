@@ -20,6 +20,8 @@ pub fn init(
     new_entities.send_batch(level.entities.iter().map(|e| SpawnEntityEvent {
         server_entity_id: None,
         entity_def: e.clone(),
+        speed_multiplier: 1.0,
+        health_multiplier: 1.0,
     }));
 
     commands.insert_resource(NextState(GameState::Playing));

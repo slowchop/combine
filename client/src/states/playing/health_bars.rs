@@ -1,5 +1,6 @@
 use crate::states::playing::hurt_entities::Damaged;
 use bevy::prelude::*;
+use shared::game::components::MaxHealth;
 use shared::game::defs::{CreepRef, Defs};
 
 #[derive(Component)]
@@ -38,7 +39,7 @@ pub fn health_bars(
     mut commands: Commands,
     defs: Res<Defs>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    creep_query: Query<(&Damaged, &Transform, &CreepRef), With<HasHealthBar>>,
+    creep_query: Query<(&Damaged, &Transform, &CreepRef, &MaxHealth), With<HasHealthBar>>,
     mut health_bar_query: Query<
         (
             Entity,
@@ -52,25 +53,26 @@ pub fn health_bars(
     for (health_bar_entity, mut health_bar_transform, health_bar, material) in
         health_bar_query.iter_mut()
     {
-        let (damaged, &transform, creep_ref) = if let Ok(c) = creep_query.get(health_bar.0) {
-            c
-        } else {
-            // warn!(
-            //     "Entity not found in creep_query for health_bars: {:?} Despawning. It's cool.",
-            //     health_bar.0
-            // );
-            // commands.entity(health_bar_entity).despawn();
-            continue;
-        };
+        let (damaged, &transform, creep_ref, max_health) =
+            if let Ok(c) = creep_query.get(health_bar.0) {
+                c
+            } else {
+                // warn!(
+                //     "Entity not found in creep_query for health_bars: {:?} Despawning. It's cool.",
+                //     health_bar.0
+                // );
+                // commands.entity(health_bar_entity).despawn();
+                continue;
+            };
 
-        let creep = if let Some(creep) = defs.creep(&creep_ref) {
-            creep
-        } else {
-            warn!("Creep not found in defs: {:?}", creep_ref);
-            continue;
-        };
+        // let creep = if let Some(creep) = defs.creep(&creep_ref) {
+        //     creep
+        // } else {
+        //     warn!("Creep not found in defs: {:?}", creep_ref);
+        //     continue;
+        // };
 
-        let fraction = 1.0 - damaged.0 as f32 / creep.health as f32;
+        let fraction = 1.0 - damaged.0 as f32 / max_health.0 as f32;
         let material = materials.get_mut(&material).unwrap();
         material.base_color = Color::rgba(1.0 - fraction, fraction, 1.0, 1.0);
 

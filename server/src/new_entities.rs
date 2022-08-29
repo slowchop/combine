@@ -15,6 +15,8 @@ pub struct NewEntityEvent {
     pub game_id: GameId,
     pub entity: Entity,
     pub entity_def: EntityDef,
+    pub health_multiplier: f32,
+    pub speed_multiplier: f32,
 }
 
 pub fn add_new_entities_to_game(
@@ -58,7 +60,11 @@ pub fn add_new_entities_to_game(
             continue;
         }
 
-        let message = SpawnEntity::new(&entity_def);
+        let message = SpawnEntity::new(
+            &entity_def,
+            new_entity_event.health_multiplier,
+            new_entity_event.speed_multiplier,
+        );
         send_message_to_game(
             &mut server,
             &game_user_lookup,

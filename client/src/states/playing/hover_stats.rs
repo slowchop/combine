@@ -2,6 +2,7 @@ use crate::app::MyRaycastSet;
 use crate::states::playing::floaty_text::{floaty_text_bundle, FONT};
 use bevy::prelude::*;
 use bevy_mod_raycast::Intersection;
+use shared::game::components::{MaxHealth, Speed};
 use shared::game::defs::{CreepRef, Defs, TowerRef};
 use shared::game::owner::Owner;
 use shared::game::position::vec2_to_vec3;
@@ -19,7 +20,7 @@ struct Closest {
 #[derive(Debug)]
 enum TowerOrCreep {
     Tower(TowerRef),
-    Creep(CreepRef),
+    Creep(CreepRef, u32, f32),
 }
 
 pub fn hover_stats(
@@ -27,7 +28,14 @@ pub fn hover_stats(
     mut hover_stats: Query<(&mut Text, &mut Style), With<HoverStats>>,
     client_game_info: Query<&ClientGameInfo>,
     raycast_query: Query<&Intersection<MyRaycastSet>>,
-    hoverable_query: Query<(&Transform, &Owner, Option<&TowerRef>, Option<&CreepRef>)>,
+    hoverable_query: Query<(
+        &Transform,
+        &Owner,
+        Option<&TowerRef>,
+        Option<&CreepRef>,
+        Option<&MaxHealth>,
+        Option<&Speed>,
+    )>,
 ) {
     let client_game_info = client_game_info.single();
 
@@ -48,7 +56,9 @@ pub fn hover_stats(
     let mouse_position_vec3 = vec2_to_vec3(&mouse_position_vec2);
 
     let mut closest = None;
-    for (transform, owner, maybe_tower, maybe_creep) in hoverable_query.iter() {
+    for (transform, owner, maybe_tower, maybe_creep, maybe_max_health, maybe_speed) in
+        hoverable_query.iter()
+    {
         let min_distance = 2.0;
         let distance = (transform.translation - mouse_position_vec3).length();
         if distance < min_distance {
@@ -59,7 +69,11 @@ pub fn hover_stats(
                 })
             } else if let Some(creep_ref) = maybe_creep {
                 Some(Closest {
-                    thing: TowerOrCreep::Creep(creep_ref.clone()),
+                    thing: TowerOrCreep::Creep(
+                        creep_ref.clone(),
+                        maybe_max_health.unwrap().0,
+                        maybe_speed.unwrap().0,
+                    ),
                     owner: *owner,
                 })
             } else {
@@ -79,9 +93,18 @@ pub fn hover_stats(
                             format!("Damage: {}\nRange: {}\n", tower.instant_damage, tower.range),
                         )
                     }
-                    TowerOrCreep::Creep(creep_ref) => {
+                    TowerOrCreep::Creep(creep_ref, max_health, speed) => {
                         let creep = defs.creeps.get(creep_ref).unwrap();
-                        (creep.title.clone(), format!("Health: {}", creep.health))
+                        (
+                            creep.title.clone(),
+                            format!(
+                                "Max Health: {} (+{} cycle extra)\nSpeed: {} (+{} cycle extra)",
+                                max_health,
+                                max_health - creep.health,
+                                speed,
+                                speed - creep.speed
+                            ),
+                        )
                     }
                 };
                 text.sections[0].value = format!("{}\n", title);

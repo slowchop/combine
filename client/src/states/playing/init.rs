@@ -62,10 +62,11 @@ pub fn init(
     // Top hover text
     let mut text_bundle = floaty_text_bundle(&asset_server);
     text_bundle.style.position.top = Val::Px(100.0);
-    text_bundle.style.position.left = Val::Px(16.0);
-    text_bundle.style.position.right = Val::Px(16.0);
+    // text_bundle.style.position.left = Val::Px(16.0);
+    // text_bundle.style.position.right = Val::Px(16.0);
     text_bundle.style.position_type = PositionType::Absolute;
-    // text_bundle.style.align_self = AlignSelf::Center;
+    // text_bundle.node.size = Vec2::new(1000.0, 100.0);
+    text_bundle.style.align_self = AlignSelf::FlexStart;
     // text_bundle.style.justify_content = JustifyContent::Center;
     // text_bundle.style.align_items = AlignItems::Center;
     text_bundle.text = Text::from_section(

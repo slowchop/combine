@@ -14,6 +14,7 @@ use bevy_prototype_lyon::prelude::{
 };
 use bevy_prototype_lyon::shapes;
 use bevy_prototype_lyon::shapes::Polygon;
+use shared::game::components::{MaxHealth, Speed};
 use shared::game::defs::{CreepRef, Defs, EntityDef, EntityType, TowerRef, PIXELS_PER_METER};
 use shared::game::path::Path;
 use shared::game::position::{vec2_to_vec3, Position, Velocity};
@@ -35,6 +36,8 @@ pub struct HasFireEffect {
 pub struct SpawnEntityEvent {
     pub server_entity_id: Option<ServerEntityId>,
     pub entity_def: EntityDef,
+    pub speed_multiplier: f32,
+    pub health_multiplier: f32,
 }
 
 pub fn spawn_entities(
@@ -267,6 +270,7 @@ pub fn spawn_entities(
                 let creep_ref = entity_def.creep.as_ref().unwrap();
                 let position = entity_def.position.as_ref().unwrap();
                 let position = vec2_to_vec3(&position.into());
+                let creep = defs.creep(creep_ref).unwrap();
                 entity
                     .insert(Name::new(format!("Creep {:?}", creep_ref)))
                     .insert(creep_ref.to_owned())
@@ -276,6 +280,10 @@ pub fn spawn_entities(
                     .insert(Velocity(Vec3::ZERO))
                     .insert(HasColdEffect::default())
                     .insert(HasFireEffect::default())
+                    .insert(MaxHealth(
+                        (creep.health as f32 * spawn.health_multiplier) as u32,
+                    ))
+                    .insert(Speed(creep.speed * spawn.speed_multiplier))
                     .insert(Released(false));
             }
             EntityType::Sprite => {

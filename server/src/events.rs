@@ -16,7 +16,7 @@ use shared::game::destroyment_method::DestroymentMethod;
 use shared::game::owner::Owner;
 use shared::game::player::{PlayerName, SharedPlayer};
 use shared::game::position::vec3_to_vec2;
-use shared::game::shared_game::SharedGame;
+use shared::game::shared_game::{Multiplier, SharedGame};
 use shared::protocol::server_message::ServerMessage;
 use shared::protocol::update_player::UpdatePlayer;
 use shared::protocol::Protocol;
@@ -161,6 +161,8 @@ pub fn receive_message_event(
                             tower: Some(TowerRef("machine".to_string())),
                             ..Default::default()
                         },
+                        speed_multiplier: 1.0,
+                        health_multiplier: 1.0,
                     })
 
                     // server.send_message(user_key, Channels::ServerCommand, &assignment_message);
@@ -269,6 +271,8 @@ pub fn receive_message_event(
                             tower: Some(tower.name),
                             ..Default::default()
                         },
+                        speed_multiplier: 1.0,
+                        health_multiplier: 1.0,
                     });
 
                     for server_entity_id in server_ids {
@@ -298,6 +302,10 @@ pub fn receive_message_event(
                         }
                         Some(s) => s,
                     };
+                    let Multiplier {
+                        health: health_multiplier,
+                        speed: speed_multiplier,
+                    } = game.multipliers();
 
                     let server_ids = &*combo_creep_request.creeps;
 
@@ -382,6 +390,8 @@ pub fn receive_message_event(
                             creep: Some(creep.name),
                             ..Default::default()
                         },
+                        speed_multiplier,
+                        health_multiplier,
                     });
 
                     for server_entity_id in server_ids {

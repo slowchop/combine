@@ -81,6 +81,8 @@ pub fn create_games(
                     spawn_entities.send(SpawnEntityEvent {
                         game_id,
                         entity_def: entity_def.clone(),
+                        speed_multiplier: 1.0,
+                        health_multiplier: 1.0,
                     });
                 }
             }

@@ -8,7 +8,7 @@ use bevy_ecs::prelude::*;
 use bevy_log::{error, info, warn};
 use bevy_math::{Vec2, Vec3};
 use bevy_transform::prelude::Transform;
-use shared::game::components::Speed;
+use shared::game::components::{MaxHealth, Speed};
 use shared::game::defs::{CreepRef, Defs, EntityDef, EntityType, TowerRef};
 use shared::game::owner::Owner;
 use shared::game::path::Path;
@@ -20,6 +20,8 @@ use std::time::Duration;
 pub struct SpawnEntityEvent {
     pub game_id: GameId,
     pub entity_def: EntityDef,
+    pub speed_multiplier: f32,
+    pub health_multiplier: f32,
 }
 
 pub fn spawn_entities(
@@ -201,7 +203,10 @@ pub fn spawn_entities(
                     .insert(creep_ref.clone())
                     .insert(owner)
                     .insert(game_id)
-                    .insert(Speed(creep.speed))
+                    .insert(Speed(creep.speed * spawn.speed_multiplier))
+                    .insert(MaxHealth(
+                        (creep.health as f32 * spawn.health_multiplier) as u32,
+                    ))
                     .insert(Damaged(0))
                     .insert(ColdEffect::zero())
                     .id();
@@ -219,6 +224,8 @@ pub fn spawn_entities(
                 game_id,
                 entity,
                 entity_def: entity_def.clone(),
+                speed_multiplier: spawn.speed_multiplier,
+                health_multiplier: spawn.health_multiplier,
             });
         }
     }

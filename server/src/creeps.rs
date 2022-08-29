@@ -51,11 +51,11 @@ pub struct FireEffect {
 pub fn spawn_creeps(
     mut spawn_entity_events: EventWriter<SpawnEntityEvent>,
     mut respawn_creeps_events: EventReader<SpawnCreepsEvent>,
-    game_lookup: Res<GameLookup>,
+    mut game_lookup: ResMut<GameLookup>,
 ) {
     for spawn_creep_event in respawn_creeps_events.iter() {
         let game_id = spawn_creep_event.game_id;
-        let game = match game_lookup.0.get(&game_id) {
+        let game = match game_lookup.0.get_mut(&game_id) {
             Some(game) => game,
             None => {
                 warn!(
@@ -92,6 +92,7 @@ pub fn spawn_creeps(
                     };
 
                     let pos = *position + Vec2::new((x - 2) as f32 * 3.0, (y - 2) as f32 * 3.0);
+                    let multiplier = game.multipliers();
                     let spawn_entity_event = SpawnEntityEvent {
                         game_id,
                         entity_def: EntityDef {
@@ -101,6 +102,8 @@ pub fn spawn_creeps(
                             creep: Some(creep_ref),
                             ..Default::default()
                         },
+                        speed_multiplier: multiplier.speed,
+                        health_multiplier: multiplier.health,
                     };
 
                     spawn_entity_events.send(spawn_entity_event);

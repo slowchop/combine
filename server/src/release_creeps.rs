@@ -100,6 +100,7 @@ pub fn tell_clients_to_release_the_creeps(
 
         // We're only sending one "release" message to each client. The server will send position
         // updates to the client for the creeps.
+        let multiplier = game.multipliers();
         let message = ReleaseCreeps::new(collected_server_entity_ids);
         send_message_to_game(
             &mut server,
