@@ -94,8 +94,8 @@ pub fn top_status_init(
     for o in 0..2 {
         let owner = Owner::new(o);
         let alignment = match owner.0 {
-            0 => HorizontalAlign::Left,
-            1 => HorizontalAlign::Right,
+            0 => HorizontalAlign::Right,
+            1 => HorizontalAlign::Left,
             _ => unreachable!(),
         };
         let player = game.get_single().unwrap().get_player(owner).unwrap();
