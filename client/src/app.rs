@@ -104,13 +104,15 @@ pub fn play(args: &Args) {
         _ => WindowPosition::Automatic,
     };
 
-    let window_mode = match args.window_position_shift {
+    let mut window_mode = match args.window_position_shift {
         Some(0) => WindowMode::Windowed,
         Some(1) => WindowMode::Windowed,
         _ => WindowMode::BorderlessFullscreen,
     };
 
-    let window_mode = WindowMode::Windowed;
+    if args.windowed {
+        window_mode = WindowMode::Windowed
+    }
 
     let mut settings = Settings::default();
     if args.skip_to_random_player {

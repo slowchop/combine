@@ -32,6 +32,10 @@ pub struct Args {
     /// Sets the server to gak's IP address.
     #[clap(short)]
     debug: bool,
+
+    /// Windowed mode
+    #[clap(long)]
+    windowed: bool,
 }
 
 #[derive(Debug, clap::Subcommand)]

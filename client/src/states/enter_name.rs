@@ -1,4 +1,5 @@
 use crate::app::{GameState, ThisState};
+use crate::settings::Settings;
 use crate::states::playing::bottom_quad::BottomQuad;
 use crate::states::playing::floaty_text::FONT;
 use crate::states::splash::{PersistFonts, PersistImages};
@@ -65,7 +66,13 @@ pub fn update(
     mut query: Query<&mut Text>,
     windows: Res<Windows>,
     buttons: Res<Input<MouseButton>>,
+    settings: Res<Settings>,
 ) {
+    if settings.start_multiplayer_immediately {
+        *name = PlayerName::random();
+        commands.insert_resource(NextState(GameState::MainMenu));
+    }
+
     if keys.just_pressed(KeyCode::Return) {
         // Feed it back in so we can handle bad names
         *name = PlayerName::new(name.0.as_str());

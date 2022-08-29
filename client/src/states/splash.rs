@@ -1,4 +1,5 @@
 use crate::app::{GameState, ThisState};
+use crate::settings::Settings;
 use crate::states::playing::bottom_quad::BottomQuad;
 use crate::states::playing::floaty_text::FONT;
 use crate::BillboardMaterial;
@@ -66,10 +67,12 @@ pub fn update(
     time: Res<Time>,
     buttons: Res<Input<MouseButton>>,
     keyboard: Res<Input<KeyCode>>,
+    settings: Res<Settings>,
 ) {
     if time.time_since_startup() > Duration::from_secs(4)
         || buttons.just_pressed(MouseButton::Left)
         || keyboard.any_pressed([KeyCode::Space, KeyCode::Return, KeyCode::Escape])
+        || settings.start_multiplayer_immediately
     {
         commands.insert_resource(NextState(GameState::EnterName));
     }
