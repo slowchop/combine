@@ -217,7 +217,7 @@ pub fn top_names(
 ) {
     let window = windows.get_primary().unwrap();
     for (mut transform, owner) in query.iter_mut() {
-        let flip = if owner.0 == 1 { -1. } else { 1. };
+        let flip = if owner.0 == 0 { -1. } else { 1. };
         transform.translation.x = 666.0 * flip;
         transform.translation.y = window.height() / 2.0 - 10.;
         transform.translation.z = 2.0;
@@ -235,7 +235,7 @@ pub fn top_gold(
         let player = game.get_player(*owner).unwrap();
         text.sections[0].value = format!("{}", player.gold);
 
-        let flip = if owner.0 == 1 { -1. } else { 1. };
+        let flip = if owner.0 == 0 { -1. } else { 1. };
         transform.translation.x = 260.0 * flip;
         transform.translation.y = window.height() / 2.0 - 30.;
         transform.translation.z = 2.0;
@@ -253,7 +253,7 @@ pub fn top_lives(
         let player = game.get_player(*owner).unwrap();
         text.sections[0].value = format!("{}", player.lives);
 
-        let flip = if owner.0 == 1 { -1. } else { 1. };
+        let flip = if owner.0 == 0 { -1. } else { 1. };
         transform.translation.x = 520.0 * flip;
         transform.translation.y = window.height() / 2.0 - 30.;
         transform.translation.z = 2.0;

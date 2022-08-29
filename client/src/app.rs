@@ -401,6 +401,11 @@ fn init(
 ) {
     commands.insert_resource(DefaultPluginState::<MyRaycastSet>::default().with_debug_cursor());
     commands.spawn_bundle(Camera2dBundle::default());
+
+    // audio.play_with_settings(
+    //     asset_server.load("my_sound.ogg"),
+    //     PlaybackSettings::LOOP.with_volume(0.75),
+    // );
 }
 
 fn init_egui(mut egui_context: ResMut<EguiContext>) {
