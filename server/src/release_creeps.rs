@@ -72,10 +72,11 @@ pub fn tell_clients_to_release_the_creeps(
             let (server_entity_id_2, transform, owner, speed) = match creep_query.get(*entity) {
                 Ok(e) => e,
                 Err(_) => {
-                    warn!(
-                        "Could not get creep for entity while trying to release: {:?}",
-                        entity
-                    );
+                    // warn!(
+                    //     "Could not get creep for entity while trying to release: {:?}",
+                    //     entity
+                    // );
+                    // TODO: This spams a lot
                     continue;
                 }
             };

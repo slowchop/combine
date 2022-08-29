@@ -68,6 +68,7 @@ pub fn menu_clicks(
     buttons: Res<Input<MouseButton>>,
     mut client: Client<Protocol, Channels>,
     keys: Res<Input<KeyCode>>,
+    settings: Res<Settings>,
 ) {
     if client.is_connected() {
         client.disconnect();
@@ -98,7 +99,9 @@ pub fn menu_clicks(
     let vertical_fraction = cursor_y / window_height;
 
     // Play
-    if vertical_fraction > 0.345 && vertical_fraction < 0.49 {
+    if vertical_fraction > 0.345 && vertical_fraction < 0.49
+        || settings.start_multiplayer_immediately
+    {
         commands.insert_resource(NextState(GameState::Connecting));
         commands.insert_resource(ContinueState(Some(GameState::WaitingForRandom)));
     }

@@ -110,7 +110,7 @@ pub fn spawn_entities(
                     }
                 };
 
-                info!("Inserting path for owner {:?}", owner);
+                // info!("Inserting path for owner {:?}", owner);
                 let path: Vec<Vec3> = path.iter().map(|p| vec2_to_vec3(&p.into())).collect();
                 game.paths.insert(owner, Path(path));
             }
@@ -214,7 +214,7 @@ pub fn spawn_entities(
                 created_entity = Some(id);
             }
             _ => {
-                warn!("no spawn for entity {:?}", entity_def);
+                // warn!("no spawn for entity {:?}", entity_def);
                 continue;
             }
         }

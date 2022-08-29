@@ -1,5 +1,5 @@
 use bevy_ecs::prelude::*;
-use bevy_utils::HashMap;
+use bevy_utils::{HashMap, HashSet};
 use naia_bevy_server::{RoomKey, UserKey};
 use rand::{thread_rng, Rng};
 use shared::game::owner::Owner;
@@ -37,10 +37,15 @@ pub struct GameId(pub u32);
 #[derive(Default)]
 pub struct GameLookup(pub HashMap<GameId, SharedGame>);
 
+/// Insert when one player disconnects from a game.
+/// When the other player disconnects, check if exists and drop the game.
+#[derive(Default)]
+pub struct GamePlayerHasDisconnected(pub HashSet<GameId>);
+
 #[derive(Default)]
 pub struct GameUserLookup {
-    game_to_users: HashMap<GameId, Vec<UserKey>>,
-    user_to_game: HashMap<UserKey, (GameId, Owner)>,
+    pub game_to_users: HashMap<GameId, Vec<UserKey>>,
+    pub user_to_game: HashMap<UserKey, (GameId, Owner)>,
 }
 
 impl GameUserLookup {

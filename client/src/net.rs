@@ -121,7 +121,6 @@ pub fn receive_message_event(
                     warn!("Got a request tower placement message, but we are not a server");
                 }
                 Protocol::ReleaseCreeps(release_creeps_event) => {
-                    info!("got a release the creeps network message.");
                     for server_entity_id in &*release_creeps_event.creeps {
                         release_the_creeps_events.send(ReleaseCreepEvent {
                             server_entity_id: *server_entity_id,

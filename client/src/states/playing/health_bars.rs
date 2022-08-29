@@ -17,7 +17,7 @@ pub fn add_health_bars(
     query: Query<(Entity, &Transform), (With<CreepRef>, With<Damaged>, Without<HasHealthBar>)>,
 ) {
     for (entity, transform) in query.iter() {
-        println!("No health bar, spawning for {:?}", entity);
+        // println!("No health bar, spawning for {:?}", entity);
         let mesh = meshes.add(shape::Quad::new(Vec2::new(1.0, 0.2)).into());
         let material = materials.add(StandardMaterial::from(Color::rgba(1.0, 0.0, 0.0, 1.0)));
 

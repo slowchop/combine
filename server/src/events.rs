@@ -1,7 +1,9 @@
 use crate::release_creeps::send_message_to_game;
 use crate::state::GameId;
 use crate::state::PlayerQueue;
-use crate::{DestroyEntityEvent, GameLookup, GameUserLookup, SpawnEntityEvent};
+use crate::{
+    DestroyEntityEvent, GameLookup, GamePlayerHasDisconnected, GameUserLookup, SpawnEntityEvent,
+};
 use bevy_ecs::prelude::*;
 use bevy_ecs::{event::EventReader, system::ResMut};
 use bevy_log::{info, warn};
@@ -49,13 +51,55 @@ pub fn connection_event<'world, 'state>(
 }
 
 pub fn disconnection_event(
+    mut commands: Commands,
     mut event_reader: EventReader<DisconnectionEvent>,
-    mut server: Server<Protocol, Channels>,
+    mut game_player_has_disconnected: ResMut<GamePlayerHasDisconnected>,
+    mut game_user_lookup: ResMut<GameUserLookup>,
+    mut game_lookup: ResMut<GameLookup>,
 ) {
     for event in event_reader.iter() {
         let DisconnectionEvent(user_key, user) = event;
         info!("Disconnected: {:?}", user.address);
-        warn!("TODO: Cleanup");
+
+        let (game_id, _) = if let Some(g) = game_user_lookup.get_user_game_and_owner(user_key) {
+            g.clone()
+        } else {
+            warn!(
+                "Could not find game for disconnected user {:?}",
+                user.address
+            );
+            continue;
+        };
+
+        let previous_player_has_disconnected = game_player_has_disconnected.0.contains(&game_id);
+        if previous_player_has_disconnected {
+            info!("Cleaning up game: {:?}", game_id);
+
+            // game_player_has_disconnected
+            game_player_has_disconnected.0.remove(&game_id);
+
+            // game_user_lookup
+            let v = vec![];
+            let existing_user_keys = game_user_lookup.get_game_users(&game_id).unwrap_or(&v);
+
+            for existing_user_key in existing_user_keys.clone() {
+                game_user_lookup.user_to_game.remove(&existing_user_key);
+            }
+            game_user_lookup.game_to_users.remove(&game_id);
+
+            // game_lookup
+            if let Some(game) = game_lookup.0.get(&game_id) {
+                let mut count = 0;
+                for (_, entity) in &game.entities {
+                    commands.entity(*entity).despawn();
+                    count += 1;
+                }
+                info!("Despawned {} entities", count);
+            }
+            game_lookup.0.remove(&game_id);
+        } else {
+            game_player_has_disconnected.0.insert(game_id);
+        }
     }
 }
 
@@ -82,7 +126,7 @@ pub fn receive_message_event(
                 Protocol::JoinRandomGame(join_random_game) => {
                     let name = (*join_random_game.name).clone();
                     let player_name = PlayerName::new(name.as_str());
-                    println!("player requesting random game! {:?}", &player_name);
+                    info!("player requesting random game! {:?}", &player_name);
                     player_queue.add(user_key.clone(), player_name);
                 }
                 Protocol::JoinFriendGame(_) => {
@@ -93,7 +137,7 @@ pub fn receive_message_event(
                 }
                 Protocol::NewTowerRequest(place_tower) => {
                     // TODO: Check if possible
-                    warn!("Check if building is possible");
+                    // warn!("Check if building is possible");
                     let position = Some(place_tower.position().into());
                     let (game_id, owner) = match game_user_lookup.get_user_game_and_owner(&user_key)
                     {
@@ -426,7 +470,6 @@ pub fn receive_message_event(
                     warn!("Got a cold creep from client");
                 }
             }
-            info!(key = ?user_key.to_u64())
         }
     }
 }

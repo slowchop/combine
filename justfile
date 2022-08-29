@@ -10,6 +10,14 @@ play_multi:
 build_client_release:
     cd client && cargo build --release
 
+build_client_linux:
+    cd client && cargo build --release --target x86_64-unknown-linux-gnu --features shared/prod
+    rm -rf tmp TowerCombo-Linux.zip
+    mkdir -p tmp/TowerCombo
+    cp target/x86_64-unknown-linux-gnu/release/towercombo tmp/TowerCombo/TowerCombo
+    cp -r client/assets tmp/TowerCombo/
+    cd tmp && zip -r ../TowerCombo-Linux.zip *
+
 build_client_windows:
     cd client && cargo build --release --target x86_64-pc-windows-gnu --features shared/prod
     rm -rf tmp TowerCombo-Windows.zip

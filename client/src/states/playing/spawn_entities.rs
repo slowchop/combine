@@ -61,15 +61,15 @@ pub fn spawn_entities(
         let mut texture = entity_def.texture.clone();
 
         if entity_def.entity_type == EntityType::BuildableCircle {
-            warn!("TODO: Ignoring buildable circle for now.");
+            // warn!("TODO: Ignoring buildable circle for now.");
             continue;
         }
         if entity_def.entity_type == EntityType::Spawn {
-            warn!("TODO: Ignoring base for now.");
+            // warn!("TODO: Ignoring base for now.");
             continue;
         }
         if entity_def.entity_type == EntityType::Base {
-            warn!("TODO: Ignoring base for now.");
+            // warn!("TODO: Ignoring base for now.");
             continue;
         }
 

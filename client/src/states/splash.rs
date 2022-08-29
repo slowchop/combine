@@ -2,6 +2,7 @@ use crate::app::{GameState, ThisState};
 use crate::settings::Settings;
 use crate::states::playing::bottom_quad::BottomQuad;
 use crate::states::playing::floaty_text::FONT;
+use crate::states::ContinueState;
 use crate::BillboardMaterial;
 use bevy::asset::LoadState;
 use bevy::prelude::*;
@@ -73,10 +74,14 @@ pub fn update(
         commands.insert_resource(NextState(GameState::Editor));
     }
 
+    if settings.start_multiplayer_immediately {
+        commands.insert_resource(NextState(GameState::Connecting));
+        commands.insert_resource(ContinueState(Some(GameState::WaitingForRandom)));
+    }
+
     if time.time_since_startup() > Duration::from_secs(4)
         || buttons.just_released(MouseButton::Left)
         || keyboard.any_just_released([KeyCode::Space, KeyCode::Return, KeyCode::Escape])
-        || settings.start_multiplayer_immediately
     {
         commands.insert_resource(NextState(GameState::Help));
     }
