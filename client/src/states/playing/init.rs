@@ -21,7 +21,13 @@ pub fn init(
     game_info: Query<&ClientGameInfo>,
     mut console: EventWriter<ConsoleItem>,
     mut other_cameras: Query<Entity, With<Camera>>,
+    audio: Res<Audio>,
 ) {
+    audio.play_with_settings(
+        asset_server.load("music/sneaky.mp3"),
+        PlaybackSettings::LOOP.with_volume(0.75),
+    );
+
     for other_camera in other_cameras.iter() {
         commands.entity(other_camera).despawn();
     }

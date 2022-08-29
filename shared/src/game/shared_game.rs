@@ -96,8 +96,8 @@ impl SharedGame {
 
     pub fn multipliers(&self) -> Multiplier {
         Multiplier {
-            speed: (self.round as f32) * 0.3 + 1.0,
-            health: (self.round as f32) * 0.3 + 1.0,
+            speed: (self.round as f32) * 0.3 + 1.0 + ((self.round as f32).powf(2.1)) * 0.1,
+            health: (self.round as f32) * 0.3 + 1.0 + ((self.round as f32).powf(1.8)) * 0.1,
         }
     }
 

@@ -46,6 +46,7 @@ use crate::{
     Camera3dBundle, ClearColor, Color, Commands, DefaultPlugins, MaterialPlugin, Msaa, Res,
     Transform, Vec3, WindowDescriptor,
 };
+use bevy::audio::AudioLoader;
 use bevy::prelude::*;
 use bevy::render::render_resource::SamplerDescriptor;
 use bevy::render::texture::ImageSettings;
@@ -394,18 +395,14 @@ fn tick(
     }
 }
 
-fn init(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    mut client: Client<Protocol, Channels>,
-) {
+fn init(mut commands: Commands, asset_server: Res<AssetServer>, audio: Res<Audio>) {
     commands.insert_resource(DefaultPluginState::<MyRaycastSet>::default().with_debug_cursor());
     commands.spawn_bundle(Camera2dBundle::default());
 
-    // audio.play_with_settings(
-    //     asset_server.load("my_sound.ogg"),
-    //     PlaybackSettings::LOOP.with_volume(0.75),
-    // );
+    audio.play_with_settings(
+        asset_server.load("music/sneaky.mp3"),
+        PlaybackSettings::LOOP.with_volume(0.5),
+    );
 }
 
 fn init_egui(mut egui_context: ResMut<EguiContext>) {
