@@ -48,6 +48,7 @@ pub struct Args {
 enum Command {
     Textures,
     MirrorHack,
+    ScaleHack,
 }
 
 fn main() -> miette::Result<()> {
@@ -65,7 +66,23 @@ fn main() -> miette::Result<()> {
         None => app::play(&args),
         Some(Command::Textures) => update_texture_sizes()?,
         Some(Command::MirrorHack) => mirror_hack()?,
+        Some(Command::ScaleHack) => scale_hack()?,
     }
+    Ok(())
+}
+
+fn scale_hack() -> miette::Result<()> {
+    let mut defs = Defs::load();
+    let map = defs.levels.get_mut("j").unwrap();
+    for entity in map.entities.iter_mut() {
+        if let Some(p) = &mut entity.position {
+            p.x *= 4.0;
+            p.y *= 4.0;
+            entity.position = Some(p);
+        }
+    }
+    defs.save();
+
     Ok(())
 }
 
