@@ -16,7 +16,7 @@ pub fn add_sprite(
         let entity_def = EntityDef {
             texture: Some(event.0.clone()),
             entity_type: EntityType::Sprite,
-            position: Some(game_camera.target.into()),
+            position: Some(event.1.unwrap_or(game_camera.target).into()),
             server_entity_id: Some(ServerEntityId::random()),
             ..Default::default()
         };

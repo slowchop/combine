@@ -1,6 +1,6 @@
 use crate::app::MyRaycastSet;
 use crate::states::map_editor::load_map::PathInfo;
-use crate::states::map_editor::menu::{AddEditorBuildableEvent, EditorInfo};
+use crate::states::map_editor::menu::{AddEditorBuildableEvent, AddEditorSpriteEvent, EditorInfo};
 use crate::states::map_editor::no_pointer_capture::IsPointerCaptured;
 use crate::states::playing::console::ConsoleItem;
 use bevy::prelude::*;
@@ -45,6 +45,7 @@ pub fn input_events(
     keys: Res<Input<KeyCode>>,
     mut drag_state: ResMut<EditorDragState>,
     mut add_buildable_events: EventWriter<AddEditorBuildableEvent>,
+    mut add_sprite_events: EventWriter<AddEditorSpriteEvent>,
 ) {
     let level_def = match defs.levels.get_mut(&editor_info.map_name) {
         Some(m) => m,
@@ -82,6 +83,14 @@ pub fn input_events(
                 add_buildable_events.send(AddEditorBuildableEvent(
                     editor_map.buildable_circle_size,
                     owner,
+                    Some(position),
+                ));
+                return;
+            }
+
+            if keys.just_released(KeyCode::E) {
+                add_sprite_events.send(AddEditorSpriteEvent(
+                    editor_map.selected_sprite.clone(),
                     Some(position),
                 ));
                 return;
@@ -189,7 +198,6 @@ pub fn input_events(
             if let Some(entity_def) = maybe_entity_def {
                 // Update the entity's position in the game.
                 entity_def.position = Some(position.into());
-                dbg!(&entity_def);
 
                 // Update the entity's position inside level_def.
                 // Get the entity_def from the level_def.
@@ -199,8 +207,6 @@ pub fn input_events(
                     .find(|e| e.server_entity_id == entity_def.server_entity_id)
                     .unwrap();
                 entity_def.position = Some(position.into());
-
-                println!("Updated entity def position");
             }
             if let Some(path_info) = maybe_path_info {
                 let entity_def = level_def

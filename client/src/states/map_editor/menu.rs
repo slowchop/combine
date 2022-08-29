@@ -8,14 +8,14 @@ use shared::game::owner::Owner;
 
 pub struct EditorInfo {
     pub map_name: String,
-    selected_sprite: String,
+    pub(crate) selected_sprite: String,
     pub(crate) buildable_circle_size: f32,
 }
 
 impl Default for EditorInfo {
     fn default() -> Self {
         Self {
-            map_name: "jam".to_string(),
+            map_name: "j".to_string(),
             selected_sprite: "".to_string(),
             buildable_circle_size: 1.0,
         }
@@ -28,7 +28,7 @@ pub struct LoadEditorLevelEvent(pub String);
 
 pub struct SaveEditorLevelEvent(pub String);
 
-pub struct AddEditorSpriteEvent(pub String);
+pub struct AddEditorSpriteEvent(pub String, pub Option<Vec2>);
 
 pub struct AddEditorPathEvent(pub Owner);
 
@@ -76,7 +76,16 @@ pub fn menu(
                 .width(260.)
                 .selected_text(&editor_map.selected_sprite)
                 .show_ui(ui, |ui| {
-                    let mut textures = defs.textures.iter().collect::<Vec<_>>();
+                    let mut textures = defs
+                        .textures
+                        .iter()
+                        .filter(|n| {
+                            if n.0.starts_with("towers/") || n.0.starts_with("creeps/") {
+                                return false;
+                            }
+                            true
+                        })
+                        .collect::<Vec<_>>();
                     textures.sort_by(|a, b| a.0.cmp(b.0));
 
                     for (name, def) in textures {
@@ -85,7 +94,10 @@ pub fn menu(
                     }
                 });
             if ui.button("Add Sprite").clicked() {
-                add_sprite_events.send(AddEditorSpriteEvent(editor_map.selected_sprite.clone()));
+                add_sprite_events.send(AddEditorSpriteEvent(
+                    editor_map.selected_sprite.clone(),
+                    None,
+                ));
             };
 
             ui.separator();
