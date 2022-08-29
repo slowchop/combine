@@ -6,6 +6,7 @@ use crate::states::playing::floaty_text::{floaty_text_bundle, FloatyText, FONT};
 use crate::states::playing::hover_stats::HoverStats;
 use crate::states::playing::left_click::Selected;
 use crate::states::playing::top_helper_text::TopHelperText;
+use bevy::core_pipeline::clear_color::ClearColorConfig;
 use bevy::prelude::*;
 use bevy_mod_raycast::RayCastSource;
 use shared::game::defs::Defs;
@@ -39,6 +40,17 @@ pub fn init(
     let camera_target: Vec2 = base.position.as_ref().unwrap().into();
     let mut game_camera = GameCamera::default();
     game_camera.target = camera_target;
+
+    commands.spawn_bundle(Camera2dBundle {
+        camera: Camera {
+            priority: 1,
+            ..Default::default()
+        },
+        camera_2d: Camera2d {
+            clear_color: ClearColorConfig::None,
+        },
+        ..Default::default()
+    });
 
     commands
         .spawn_bundle(Camera3dBundle {

@@ -1,16 +1,141 @@
+use crate::states::playing::floaty_text::{floaty_text_bundle, FONT};
 use bevy::prelude::*;
+use bevy::text::Text2dSize;
 use bevy_egui::{egui, EguiContext};
 use naia_bevy_client::Client;
-use shared::game::shared_game::SharedGame;
+use shared::game::defs::Defs;
+use shared::game::shared_game::{SharedGame, TimeLeft};
 use shared::protocol::Protocol;
 use shared::ticks::Ticks;
 use shared::Channels;
+use std::time::Duration;
 
-pub fn ui(
+#[derive(Component)]
+pub struct TopStatusBackground;
+
+#[derive(Component)]
+pub struct TopIcons;
+
+#[derive(Component)]
+pub struct TopTimerNumber;
+
+#[derive(Component)]
+pub struct TopTimerText;
+
+const TOP_BACKGROUND_GRADIENT: &str = "ui/top-background-gradient.png";
+const TOP_ICONS: &str = "ui/top-icons.png";
+
+pub fn top_status_init(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands
+        .spawn_bundle(SpriteBundle {
+            texture: asset_server.load(TOP_BACKGROUND_GRADIENT),
+            ..Default::default()
+        })
+        .insert(TopStatusBackground);
+
+    commands
+        .spawn_bundle(SpriteBundle {
+            texture: asset_server.load(TOP_ICONS),
+            ..Default::default()
+        })
+        .insert(TopIcons);
+
+    commands
+        .spawn_bundle(Text2dBundle {
+            text: Text::from_sections([TextSection::new(
+                "29",
+                TextStyle {
+                    font: asset_server.load(FONT),
+                    font_size: 70.0,
+                    color: Color::BLACK,
+                },
+            )])
+            .with_alignment(TextAlignment {
+                vertical: VerticalAlign::Top,
+                horizontal: HorizontalAlign::Center,
+            }),
+            ..Default::default()
+        })
+        .insert(TopTimerNumber);
+
+    commands
+        .spawn_bundle(Text2dBundle {
+            text: Text::from_sections([TextSection::new(
+                "release",
+                TextStyle {
+                    font: asset_server.load(FONT),
+                    font_size: 30.0,
+                    color: Color::BLACK,
+                },
+            )])
+            .with_alignment(TextAlignment {
+                vertical: VerticalAlign::Top,
+                horizontal: HorizontalAlign::Center,
+            }),
+            ..Default::default()
+        })
+        .insert(TopTimerText);
+}
+
+pub fn top_status_update(
+    defs: Res<Defs>,
+    windows: Res<Windows>,
+    mut status_background: Query<&mut Transform, (With<TopStatusBackground>, Without<TopIcons>)>,
+    mut icons: Query<&mut Transform, (With<TopIcons>, Without<TopStatusBackground>)>,
+) {
+    let window = windows.get_primary().unwrap();
+
+    let mut transform = status_background.single_mut();
+    let top_background_def = defs.textures.get(TOP_BACKGROUND_GRADIENT).unwrap();
+    transform.translation.x = -window.width() / 2.0 - &top_background_def.size.x / 2.0;
+    transform.translation.y = window.height() / 2.0 - &top_background_def.size.y / 2.0;
+    transform.scale.x = window.width() / &top_background_def.size.y;
+
+    let mut transform = icons.single_mut();
+    let texture_def = defs.textures.get(TOP_ICONS).unwrap();
+    transform.translation.y = window.height() / 2.0 - &texture_def.size.y / 2.0 - 20.;
+    transform.translation.z = 1.0;
+}
+
+pub fn top_timer_number(
+    windows: Res<Windows>,
+    shared_game: Query<&SharedGame>,
+    mut timer_number: Query<(&mut Transform, &mut Text, &Text2dSize), With<TopTimerNumber>>,
+) {
+    let window = windows.get_primary().unwrap();
+    let game = shared_game.single();
+    let time_left = game.time_left();
+    let (mut transform, mut text, text_2d_size) = timer_number.single_mut();
+    transform.translation.x = -text_2d_size.size.x / 2.0;
+    transform.translation.y = window.height() / 2.0;
+    transform.translation.z = 2.0;
+    text.sections[0].value = format!("{:0.0}", time_left.duration().as_secs_f32());
+}
+
+pub fn top_timer_text(
+    windows: Res<Windows>,
+    shared_game: Query<&SharedGame>,
+    mut timer_text: Query<(&mut Transform, &mut Text, &Text2dSize), With<TopTimerText>>,
+) {
+    let window = windows.get_primary().unwrap();
+    let game = shared_game.single();
+    let time_left = game.time_left();
+    let (mut transform, mut text, text_2d_size) = timer_text.single_mut();
+    transform.translation.x = -text_2d_size.size.x / 2.0 + 15.;
+    transform.translation.y = window.height() / 2.0 - 60.;
+    transform.translation.z = 2.0;
+    text.sections[0].value = match time_left {
+        TimeLeft::ReleaseCreeps(_) => "release".to_string(),
+        TimeLeft::RespawnCreeps(_) => "respawn".to_string(),
+    };
+}
+
+pub fn ui_egui(
     mut egui_context: ResMut<EguiContext>,
     game: Query<&SharedGame>,
     client: Client<Protocol, Channels>,
 ) {
+    return;
     let game = game.single();
 
     egui::Window::new("Players").show(egui_context.ctx_mut(), |ui| {

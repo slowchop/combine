@@ -27,7 +27,9 @@ use crate::states::playing::left_click::mouse_action;
 use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::states::playing::time::add_ticks_to_game;
 use crate::states::playing::top_helper_text::top_helper_text;
-use crate::states::playing::ui::ui;
+use crate::states::playing::ui::{
+    top_status_init, top_status_update, top_timer_number, top_timer_text, ui_egui,
+};
 use crate::states::playing::update_player::{update_player, UpdatePlayerEvent};
 use crate::states::playing::update_positions::{
     update_positions_from_server, update_transform_from_velocity, update_transforms_from_positions,
@@ -243,6 +245,7 @@ pub fn play(args: &Args) {
 
     // Playing
     app.add_enter_system(GameState::Playing, playing::init::init);
+    app.add_enter_system(GameState::Playing, top_status_init);
     app.add_exit_system(GameState::Playing, playing::init::init);
     app.add_exit_system(GameState::Playing, disconnected::init);
     app.add_system_set(
@@ -252,7 +255,7 @@ pub fn play(args: &Args) {
             .with_system(move_camera)
             .with_system(spawn_entities)
             .with_system(release_creeps)
-            .with_system(ui)
+            .with_system(ui_egui)
             .with_system(update_positions_from_server)
             .with_system(update_transforms_from_positions)
             .with_system(update_transform_from_velocity)
@@ -267,6 +270,9 @@ pub fn play(args: &Args) {
             .with_system(add_health_bars)
             .with_system(health_bars)
             .with_system(top_helper_text)
+            .with_system(top_status_update)
+            .with_system(top_timer_number)
+            .with_system(top_timer_text)
             .with_system(hover_stats)
             .with_system(console::handle_console_events)
             .with_system(console::update_console)

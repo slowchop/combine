@@ -3,7 +3,7 @@ use crate::game::owner::Owner;
 use crate::game::path::Path;
 use crate::game::player::SharedPlayer;
 use crate::ticks::Ticks;
-use crate::{RELEASE_CLOCK_TIME, TICKS_PER_DAY, TICKS_PER_SECOND};
+use crate::{RELEASE_CLOCK_TIME, RESPAWN_CLOCK_TIME, TICKS_PER_DAY, TICKS_PER_SECOND};
 use bevy_ecs::prelude::*;
 use bevy_math::Vec2;
 use bevy_utils::{HashMap, HashSet};
@@ -41,6 +41,20 @@ pub struct Multiplier {
     pub health: f32,
 }
 
+pub enum TimeLeft {
+    ReleaseCreeps(Duration),
+    RespawnCreeps(Duration),
+}
+
+impl TimeLeft {
+    pub fn duration(&self) -> Duration {
+        match self {
+            TimeLeft::ReleaseCreeps(d) => *d,
+            TimeLeft::RespawnCreeps(d) => *d,
+        }
+    }
+}
+
 #[derive(Component)]
 pub struct SharedGame {
     pub map: String,
@@ -50,6 +64,7 @@ pub struct SharedGame {
     pub entities: HashMap<ServerEntityId, Entity>,
     pub winner: Option<Owner>,
     pub round: u32,
+    // pub seconds_left: SecondsLeft,
     ticks: Ticks,
 }
 
@@ -149,6 +164,27 @@ impl SharedGame {
             next
         } else {
             next + TICKS_PER_DAY
+        }
+    }
+
+    pub fn next_respawn_ticks(&self) -> Ticks {
+        let next = Ticks(self.day() * TICKS_PER_DAY.0 + RESPAWN_CLOCK_TIME.0);
+        if self.ticks <= next {
+            next
+        } else {
+            next + TICKS_PER_DAY
+        }
+    }
+
+    pub fn time_left(&self) -> TimeLeft {
+        let release = self.next_release_ticks();
+        let respawn = self.next_respawn_ticks();
+        if self.ticks < release {
+            TimeLeft::ReleaseCreeps((release - self.ticks).to_duration().unwrap())
+        } else if self.ticks < respawn {
+            TimeLeft::RespawnCreeps((respawn - self.ticks).to_duration().unwrap())
+        } else {
+            TimeLeft::ReleaseCreeps(Duration::default())
         }
     }
 }
