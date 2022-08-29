@@ -2,6 +2,7 @@ pub mod attr_editor;
 pub mod connecting;
 pub mod disconnected;
 pub mod enter_name;
+pub mod help;
 pub mod loading_level;
 pub mod main_menu;
 pub mod map_editor;

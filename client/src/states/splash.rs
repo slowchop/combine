@@ -74,10 +74,10 @@ pub fn update(
     }
 
     if time.time_since_startup() > Duration::from_secs(4)
-        || buttons.just_pressed(MouseButton::Left)
-        || keyboard.any_pressed([KeyCode::Space, KeyCode::Return, KeyCode::Escape])
+        || buttons.just_released(MouseButton::Left)
+        || keyboard.any_just_released([KeyCode::Space, KeyCode::Return, KeyCode::Escape])
         || settings.start_multiplayer_immediately
     {
-        commands.insert_resource(NextState(GameState::EnterName));
+        commands.insert_resource(NextState(GameState::Help));
     }
 }

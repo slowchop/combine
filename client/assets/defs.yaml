@@ -1,772 +1,4 @@
 levels:
-  jam:
-    name: jam
-    entities:
-    - texture: hover.png
-      type: guide
-      position:
-      - 12.126487
-      - 16.438929
-      server_entity_id: 0
-    - type: buildable_circle
-      position:
-      - 12.126487
-      - 16.438929
-      owner: 0
-      radius: 4.0
-      server_entity_id: 1
-    - type: buildable_circle
-      position:
-      - 7.7966666
-      - 7.069973
-      owner: 0
-      radius: 3.0
-      server_entity_id: 2
-    - type: buildable_circle
-      position:
-      - 9.8528385
-      - 7.8570786
-      owner: 0
-      radius: 3.0
-      server_entity_id: 3
-    - type: buildable_circle
-      position:
-      - 11.625958
-      - 6.1910725
-      owner: 0
-      radius: 3.0
-      server_entity_id: 4
-    - type: buildable_circle
-      position:
-      - 6.460548
-      - 16.36632
-      owner: 0
-      radius: 4.0
-      server_entity_id: 5
-    - type: buildable_circle
-      position:
-      - 2.1272774
-      - 14.210482
-      owner: 0
-      radius: 4.0
-      server_entity_id: 6
-    - type: buildable_circle
-      position:
-      - -3.506135
-      - 16.610476
-      owner: 0
-      radius: 4.0
-      server_entity_id: 7
-    - type: buildable_circle
-      position:
-      - -7.5185685
-      - 16.72343
-      owner: 0
-      radius: 4.0
-      server_entity_id: 8
-    - type: buildable_circle
-      position:
-      - -11.429942
-      - 16.509977
-      owner: 0
-      radius: 4.0
-      server_entity_id: 9
-    - type: buildable_circle
-      position:
-      - -15.473649
-      - 16.333866
-      owner: 0
-      radius: 4.0
-      server_entity_id: 10
-    - type: buildable_circle
-      position:
-      - -19.364548
-      - 15.059307
-      owner: 0
-      radius: 4.0
-      server_entity_id: 11
-    - type: buildable_circle
-      position:
-      - -23.040764
-      - 10.616501
-      owner: 0
-      radius: 4.0
-      server_entity_id: 12
-    - type: buildable_circle
-      position:
-      - -25.17984
-      - 5.7244186
-      owner: 0
-      radius: 4.0
-      server_entity_id: 13
-    - type: buildable_circle
-      position:
-      - -3.2424114
-      - 8.031704
-      owner: 0
-      radius: 2.0
-      server_entity_id: 14
-    - type: buildable_circle
-      position:
-      - -5.720605
-      - 8.412811
-      owner: 0
-      radius: 2.0
-      server_entity_id: 15
-    - type: buildable_circle
-      position:
-      - -2.4271672
-      - 5.780554
-      owner: 0
-      radius: 2.0
-      server_entity_id: 16
-    - type: buildable_circle
-      position:
-      - 2.921881
-      - 1.3494835
-      owner: 0
-      radius: 2.0
-      server_entity_id: 17
-    - type: buildable_circle
-      position:
-      - 2.369918
-      - 4.538685
-      owner: 0
-      radius: 2.0
-      server_entity_id: 18
-    - type: buildable_circle
-      position:
-      - 2.0689514
-      - 6.7841988
-      owner: 0
-      radius: 2.0
-      server_entity_id: 19
-    - type: buildable_circle
-      position:
-      - 1.8354396
-      - 9.207897
-      owner: 0
-      radius: 2.0
-      server_entity_id: 20
-    - type: buildable_circle
-      position:
-      - 4.2906966
-      - -1.6757469
-      owner: 0
-      radius: 2.0
-      server_entity_id: 21
-    - type: buildable_circle
-      position:
-      - 6.7988997
-      - -2.6426697
-      owner: 0
-      radius: 2.0
-      server_entity_id: 22
-    - type: buildable_circle
-      position:
-      - 7.9952044
-      - -0.9061928
-      owner: 0
-      radius: 2.0
-      server_entity_id: 23
-    - type: buildable_circle
-      position:
-      - 6.015092
-      - 1.1857109
-      owner: 0
-      radius: 2.0
-      server_entity_id: 24
-    - type: buildable_circle
-      position:
-      - 5.328095
-      - -0.3835678
-      owner: 0
-      radius: 2.0
-      server_entity_id: 25
-    - type: buildable_circle
-      position:
-      - -8.008835
-      - -9.972549
-      owner: 1
-      radius: 3.2
-      server_entity_id: 26
-    - type: buildable_circle
-      position:
-      - -14.740271
-      - -19.207478
-      owner: 1
-      radius: 3.2
-      server_entity_id: 27
-    - type: buildable_circle
-      position:
-      - -11.429019
-      - -19.776676
-      owner: 1
-      radius: 3.2
-      server_entity_id: 28
-    - type: buildable_circle
-      position:
-      - -7.8834496
-      - -19.847904
-      owner: 1
-      radius: 3.2
-      server_entity_id: 29
-    - type: buildable_circle
-      position:
-      - -4.286252
-      - -19.860767
-      owner: 1
-      radius: 3.2
-      server_entity_id: 30
-    - type: buildable_circle
-      position:
-      - -0.3306885
-      - -18.227015
-      owner: 1
-      radius: 4.5
-      server_entity_id: 31
-    - type: buildable_circle
-      position:
-      - 1.2445469
-      - -14.594166
-      owner: 1
-      radius: 3.2
-      server_entity_id: 32
-    - type: buildable_circle
-      position:
-      - -8.200849
-      - -0.30054474
-      owner: 1
-      radius: 3.2
-      server_entity_id: 33
-    - type: buildable_circle
-      position:
-      - -8.335746
-      - 0.9473953
-      owner: 1
-      radius: 3.2
-      server_entity_id: 34
-    - type: buildable_circle
-      position:
-      - -5.4778576
-      - -0.6682129
-      owner: 1
-      radius: 3.2
-      server_entity_id: 35
-    - type: buildable_circle
-      position:
-      - 4.3393803
-      - -15.171747
-      owner: 1
-      radius: 3.2
-      server_entity_id: 36
-    - type: buildable_circle
-      position:
-      - 7.713219
-      - -16.724934
-      owner: 1
-      radius: 3.2
-      server_entity_id: 37
-    - type: buildable_circle
-      position:
-      - 11.406054
-      - -18.011896
-      owner: 1
-      radius: 3.2
-      server_entity_id: 38
-    - type: buildable_circle
-      position:
-      - 15.050883
-      - -18.97316
-      owner: 1
-      radius: 3.2
-      server_entity_id: 39
-    - type: buildable_circle
-      position:
-      - 18.950907
-      - -20.2052
-      owner: 1
-      radius: 3.2
-      server_entity_id: 40
-    - type: buildable_circle
-      position:
-      - 23.367067
-      - -18.583002
-      owner: 1
-      radius: 3.2
-      server_entity_id: 41
-    - type: buildable_circle
-      position:
-      - 24.204645
-      - -14.666988
-      owner: 1
-      radius: 3.2
-      server_entity_id: 42
-    - type: buildable_circle
-      position:
-      - 24.654785
-      - -10.195709
-      owner: 1
-      radius: 3.2
-      server_entity_id: 43
-    - type: buildable_circle
-      position:
-      - 24.55307
-      - -6.0040436
-      owner: 1
-      radius: 3.2
-      server_entity_id: 44
-    - type: buildable_circle
-      position:
-      - 24.698223
-      - -1.3673706
-      owner: 1
-      radius: 3.2
-      server_entity_id: 45
-    - type: buildable_circle
-      position:
-      - 15.932799
-      - -0.17194366
-      owner: 1
-      radius: 3.2
-      server_entity_id: 46
-    - type: buildable_circle
-      position:
-      - 16.179672
-      - -4.440674
-      owner: 1
-      radius: 3.2
-      server_entity_id: 47
-    - type: buildable_circle
-      position:
-      - 16.129408
-      - -9.5772705
-      owner: 1
-      radius: 3.2
-      server_entity_id: 48
-    - type: buildable_circle
-      position:
-      - 12.789334
-      - -9.332649
-      owner: 1
-      radius: 3.2
-      server_entity_id: 49
-    - type: buildable_circle
-      position:
-      - 3.162386
-      - -20.324022
-      owner: 1
-      radius: 4.5
-      server_entity_id: 50
-    - type: buildable_circle
-      position:
-      - -18.532896
-      - -17.934002
-      owner: 1
-      radius: 4.5
-      server_entity_id: 51
-    - type: buildable_circle
-      position:
-      - -15.089129
-      - 5.4211884
-      owner: 0
-      radius: 2.7
-      server_entity_id: 52
-    - type: buildable_circle
-      position:
-      - -13.927963
-      - 7.9340134
-      owner: 0
-      radius: 1.5
-      server_entity_id: 53
-    - type: buildable_circle
-      position:
-      - -12.017516
-      - 6.8169594
-      owner: 0
-      radius: 1.5
-      server_entity_id: 54
-    - type: buildable_circle
-      position:
-      - -12.018275
-      - 8.638916
-      owner: 0
-      radius: 1.5
-      server_entity_id: 55
-    - type: buildable_circle
-      position:
-      - -9.892287
-      - 8.664419
-      owner: 0
-      radius: 1.5
-      server_entity_id: 56
-    - type: buildable_circle
-      position:
-      - -8.030206
-      - 8.878344
-      owner: 0
-      radius: 1.5
-      server_entity_id: 57
-    - type: buildable_circle
-      position:
-      - -7.9601154
-      - 7.755659
-      owner: 0
-      radius: 1.5
-      server_entity_id: 58
-    - type: buildable_circle
-      position:
-      - -4.8060236
-      - 6.209835
-      owner: 0
-      radius: 1.5
-      server_entity_id: 59
-    - type: buildable_circle
-      position:
-      - -16.231312
-      - 1.7827225
-      owner: 0
-      radius: 3.2
-      server_entity_id: 60
-    - type: buildable_circle
-      position:
-      - -26.167841
-      - 1.5383835
-      owner: 0
-      radius: 3.2
-      server_entity_id: 61
-    - type: buildable_circle
-      position:
-      - -23.662748
-      - -1.7715034
-      owner: 0
-      radius: 3.2
-      server_entity_id: 62
-    - type: buildable_circle
-      position:
-      - -15.921206
-      - -1.5309181
-      owner: 0
-      radius: 3.2
-      server_entity_id: 63
-    - type: buildable_circle
-      position:
-      - 24.083336
-      - 2.1610909
-      owner: 1
-      radius: 3.2
-      server_entity_id: 64
-    - type: buildable_circle
-      position:
-      - 22.318224
-      - 5.7878265
-      owner: 1
-      radius: 3.2
-      server_entity_id: 65
-    - type: buildable_circle
-      position:
-      - 16.433529
-      - 3.2368622
-      owner: 1
-      radius: 1.2
-      server_entity_id: 66
-    - type: buildable_circle
-      position:
-      - 20.177794
-      - 7.829582
-      owner: 1
-      radius: 1.2
-      server_entity_id: 67
-    - type: buildable_circle
-      position:
-      - 20.177794
-      - 7.829582
-      owner: 1
-      radius: 1.2
-      server_entity_id: 68
-    - type: buildable_circle
-      position:
-      - 18.999157
-      - 6.3944473
-      owner: 1
-      radius: 1.2
-      server_entity_id: 69
-    - type: base
-      position:
-      - -20.311577
-      - 2.3079243
-      owner: 0
-      server_entity_id: 70
-    - type: spawn
-      position:
-      - -32.45627
-      - -2.6788883
-      owner: 0
-      server_entity_id: 71
-    - type: base
-      position:
-      - 20.0
-      - -2.0
-      owner: 1
-      server_entity_id: 72
-    - type: spawn
-      position:
-      - 31.314672
-      - 1.5973263
-      owner: 1
-      server_entity_id: 73
-    - texture: tree.png
-      type: sprite
-      position:
-      - 25.697792
-      - -10.484489
-      server_entity_id: 74
-    - texture: tree.png
-      type: sprite
-      position:
-      - 32.06047
-      - -7.372673
-      server_entity_id: 75
-    - texture: tree.png
-      type: sprite
-      position:
-      - -21.963114
-      - -19.467724
-      server_entity_id: 77
-    - texture: tree.png
-      type: sprite
-      position:
-      - -14.993531
-      - -23.996044
-      server_entity_id: 78
-    - texture: tree.png
-      type: sprite
-      position:
-      - -6.5748158
-      - -24.941849
-      server_entity_id: 79
-    - texture: tree.png
-      type: sprite
-      position:
-      - 0.221292
-      - -24.983837
-      server_entity_id: 80
-    - texture: tree.png
-      type: sprite
-      position:
-      - 6.170603
-      - -24.864258
-      server_entity_id: 81
-    - texture: tree.png
-      type: sprite
-      position:
-      - 13.733394
-      - -24.647068
-      server_entity_id: 82
-    - texture: tree.png
-      type: sprite
-      position:
-      - 20.885643
-      - -24.1828
-      server_entity_id: 83
-    - texture: tree.png
-      type: sprite
-      position:
-      - 26.23392
-      - -19.099277
-      server_entity_id: 84
-    - texture: tree.png
-      type: sprite
-      position:
-      - -30.230005
-      - 9.274853
-      server_entity_id: 85
-    - texture: tree.png
-      type: sprite
-      position:
-      - -23.53016
-      - 8.523357
-      server_entity_id: 86
-    - texture: tree.png
-      type: sprite
-      position:
-      - -19.382763
-      - 13.401373
-      server_entity_id: 87
-    - texture: tree.png
-      type: sprite
-      position:
-      - -14.388548
-      - 17.925884
-      server_entity_id: 88
-    - texture: tree.png
-      type: sprite
-      position:
-      - -3.3320208
-      - 19.318901
-      server_entity_id: 89
-    - texture: tree.png
-      type: sprite
-      position:
-      - 2.152131
-      - 19.581295
-      server_entity_id: 90
-    - texture: tree.png
-      type: sprite
-      position:
-      - 8.487595
-      - 18.638783
-      server_entity_id: 91
-    - texture: tree.png
-      type: sprite
-      position:
-      - 13.812889
-      - 17.224201
-      server_entity_id: 92
-    - texture: tree.png
-      type: sprite
-      position:
-      - 18.79828
-      - 14.488338
-      server_entity_id: 93
-    - texture: tree.png
-      type: sprite
-      position:
-      - 25.70776
-      - 10.846577
-      server_entity_id: 94
-    - texture: tree.png
-      type: sprite
-      position:
-      - -9.000587
-      - 18.709934
-      server_entity_id: 95
-    - texture: tree.png
-      type: sprite
-      position:
-      - 36.917873
-      - -5.4496193
-      server_entity_id: 96
-    - texture: tree.png
-      type: sprite
-      position:
-      - 38.37859
-      - 2.6679688
-      server_entity_id: 97
-    - texture: tree.png
-      type: sprite
-      position:
-      - 36.190247
-      - 11.573452
-      server_entity_id: 98
-    - texture: tree.png
-      type: sprite
-      position:
-      - 31.336021
-      - 11.994774
-      server_entity_id: 99
-    - texture: tree.png
-      type: sprite
-      position:
-      - -36.567577
-      - 9.423126
-      server_entity_id: 102
-    - texture: tree.png
-      type: sprite
-      position:
-      - -40.1381
-      - 6.8176193
-      server_entity_id: 103
-    - texture: base-yellow.png
-      type: sprite
-      position:
-      - -18.933064
-      - 6.244834
-      server_entity_id: 105
-    - texture: base-blue.png
-      type: sprite
-      position:
-      - 21.209814
-      - -2.0440817
-      server_entity_id: 106
-    - texture: ground.png
-      type: ground
-      position:
-      - 0.0
-      - 0.0
-      server_entity_id: 107
-    - type: path
-      owner: 1
-      path:
-      - - 19.768896
-        - 2.7361221
-      - - 14.229495
-        - 9.366966
-      - - 10.590966
-        - 11.169718
-      - - 6.9168706
-        - 11.500271
-      - - 4.0789337
-        - 8.632023
-      - - 4.6420226
-        - 4.635277
-      - - 9.232889
-        - 2.659977
-      - - 10.720692
-        - -2.3030205
-      - - 8.406418
-        - -6.2807083
-      - - 2.8037922
-        - -4.643482
-      - - 0.22535352
-        - -0.7085457
-      - - -0.6128711
-        - 9.190777
-      - - -2.3833683
-        - 11.0113125
-      - - -13.718971
-        - 10.809288
-      - - -17.011189
-        - 9.2828045
-      - - -19.911732
-        - 4.8748245
-      server_entity_id: 108
-    - type: path
-      owner: 0
-      path:
-      - - -19.610157
-        - 0.8720093
-      - - -18.9175
-        - -9.87986
-      - - -12.638444
-        - -14.704353
-      - - -5.730066
-        - -15.208656
-      - - -3.2544484
-        - -11.412792
-      - - -4.6081448
-        - -5.7130775
-      - - -10.757519
-        - -4.2558365
-      - - -13.096757
-        - 0.9446564
-      - - -10.4137745
-        - 5.602333
-      - - -5.6188097
-        - 4.327877
-      - - -2.1005962
-        - 1.1704292
-      - - -0.6302788
-        - -4.3406677
-      - - 2.9343185
-        - -10.0142975
-      - - 18.930595
-        - -16.229198
-      - - 20.291723
-        - -10.0385895
-      - - 20.192291
-        - -3.6978683
-      server_entity_id: 109
   j:
     name: j
     entities:
@@ -3470,22 +2702,775 @@ levels:
         - 6.167427
       - - 24.412153
         - 0.48168755
+  jam:
+    name: jam
+    entities:
+    - texture: hover.png
+      type: guide
+      position:
+      - 12.126487
+      - 16.438929
+      server_entity_id: 0
+    - type: buildable_circle
+      position:
+      - 12.126487
+      - 16.438929
+      owner: 0
+      radius: 4.0
+      server_entity_id: 1
+    - type: buildable_circle
+      position:
+      - 7.7966666
+      - 7.069973
+      owner: 0
+      radius: 3.0
+      server_entity_id: 2
+    - type: buildable_circle
+      position:
+      - 9.8528385
+      - 7.8570786
+      owner: 0
+      radius: 3.0
+      server_entity_id: 3
+    - type: buildable_circle
+      position:
+      - 11.625958
+      - 6.1910725
+      owner: 0
+      radius: 3.0
+      server_entity_id: 4
+    - type: buildable_circle
+      position:
+      - 6.460548
+      - 16.36632
+      owner: 0
+      radius: 4.0
+      server_entity_id: 5
+    - type: buildable_circle
+      position:
+      - 2.1272774
+      - 14.210482
+      owner: 0
+      radius: 4.0
+      server_entity_id: 6
+    - type: buildable_circle
+      position:
+      - -3.506135
+      - 16.610476
+      owner: 0
+      radius: 4.0
+      server_entity_id: 7
+    - type: buildable_circle
+      position:
+      - -7.5185685
+      - 16.72343
+      owner: 0
+      radius: 4.0
+      server_entity_id: 8
+    - type: buildable_circle
+      position:
+      - -11.429942
+      - 16.509977
+      owner: 0
+      radius: 4.0
+      server_entity_id: 9
+    - type: buildable_circle
+      position:
+      - -15.473649
+      - 16.333866
+      owner: 0
+      radius: 4.0
+      server_entity_id: 10
+    - type: buildable_circle
+      position:
+      - -19.364548
+      - 15.059307
+      owner: 0
+      radius: 4.0
+      server_entity_id: 11
+    - type: buildable_circle
+      position:
+      - -23.040764
+      - 10.616501
+      owner: 0
+      radius: 4.0
+      server_entity_id: 12
+    - type: buildable_circle
+      position:
+      - -25.17984
+      - 5.7244186
+      owner: 0
+      radius: 4.0
+      server_entity_id: 13
+    - type: buildable_circle
+      position:
+      - -3.2424114
+      - 8.031704
+      owner: 0
+      radius: 2.0
+      server_entity_id: 14
+    - type: buildable_circle
+      position:
+      - -5.720605
+      - 8.412811
+      owner: 0
+      radius: 2.0
+      server_entity_id: 15
+    - type: buildable_circle
+      position:
+      - -2.4271672
+      - 5.780554
+      owner: 0
+      radius: 2.0
+      server_entity_id: 16
+    - type: buildable_circle
+      position:
+      - 2.921881
+      - 1.3494835
+      owner: 0
+      radius: 2.0
+      server_entity_id: 17
+    - type: buildable_circle
+      position:
+      - 2.369918
+      - 4.538685
+      owner: 0
+      radius: 2.0
+      server_entity_id: 18
+    - type: buildable_circle
+      position:
+      - 2.0689514
+      - 6.7841988
+      owner: 0
+      radius: 2.0
+      server_entity_id: 19
+    - type: buildable_circle
+      position:
+      - 1.8354396
+      - 9.207897
+      owner: 0
+      radius: 2.0
+      server_entity_id: 20
+    - type: buildable_circle
+      position:
+      - 4.2906966
+      - -1.6757469
+      owner: 0
+      radius: 2.0
+      server_entity_id: 21
+    - type: buildable_circle
+      position:
+      - 6.7988997
+      - -2.6426697
+      owner: 0
+      radius: 2.0
+      server_entity_id: 22
+    - type: buildable_circle
+      position:
+      - 7.9952044
+      - -0.9061928
+      owner: 0
+      radius: 2.0
+      server_entity_id: 23
+    - type: buildable_circle
+      position:
+      - 6.015092
+      - 1.1857109
+      owner: 0
+      radius: 2.0
+      server_entity_id: 24
+    - type: buildable_circle
+      position:
+      - 5.328095
+      - -0.3835678
+      owner: 0
+      radius: 2.0
+      server_entity_id: 25
+    - type: buildable_circle
+      position:
+      - -8.008835
+      - -9.972549
+      owner: 1
+      radius: 3.2
+      server_entity_id: 26
+    - type: buildable_circle
+      position:
+      - -14.740271
+      - -19.207478
+      owner: 1
+      radius: 3.2
+      server_entity_id: 27
+    - type: buildable_circle
+      position:
+      - -11.429019
+      - -19.776676
+      owner: 1
+      radius: 3.2
+      server_entity_id: 28
+    - type: buildable_circle
+      position:
+      - -7.8834496
+      - -19.847904
+      owner: 1
+      radius: 3.2
+      server_entity_id: 29
+    - type: buildable_circle
+      position:
+      - -4.286252
+      - -19.860767
+      owner: 1
+      radius: 3.2
+      server_entity_id: 30
+    - type: buildable_circle
+      position:
+      - -0.3306885
+      - -18.227015
+      owner: 1
+      radius: 4.5
+      server_entity_id: 31
+    - type: buildable_circle
+      position:
+      - 1.2445469
+      - -14.594166
+      owner: 1
+      radius: 3.2
+      server_entity_id: 32
+    - type: buildable_circle
+      position:
+      - -8.200849
+      - -0.30054474
+      owner: 1
+      radius: 3.2
+      server_entity_id: 33
+    - type: buildable_circle
+      position:
+      - -8.335746
+      - 0.9473953
+      owner: 1
+      radius: 3.2
+      server_entity_id: 34
+    - type: buildable_circle
+      position:
+      - -5.4778576
+      - -0.6682129
+      owner: 1
+      radius: 3.2
+      server_entity_id: 35
+    - type: buildable_circle
+      position:
+      - 4.3393803
+      - -15.171747
+      owner: 1
+      radius: 3.2
+      server_entity_id: 36
+    - type: buildable_circle
+      position:
+      - 7.713219
+      - -16.724934
+      owner: 1
+      radius: 3.2
+      server_entity_id: 37
+    - type: buildable_circle
+      position:
+      - 11.406054
+      - -18.011896
+      owner: 1
+      radius: 3.2
+      server_entity_id: 38
+    - type: buildable_circle
+      position:
+      - 15.050883
+      - -18.97316
+      owner: 1
+      radius: 3.2
+      server_entity_id: 39
+    - type: buildable_circle
+      position:
+      - 18.950907
+      - -20.2052
+      owner: 1
+      radius: 3.2
+      server_entity_id: 40
+    - type: buildable_circle
+      position:
+      - 23.367067
+      - -18.583002
+      owner: 1
+      radius: 3.2
+      server_entity_id: 41
+    - type: buildable_circle
+      position:
+      - 24.204645
+      - -14.666988
+      owner: 1
+      radius: 3.2
+      server_entity_id: 42
+    - type: buildable_circle
+      position:
+      - 24.654785
+      - -10.195709
+      owner: 1
+      radius: 3.2
+      server_entity_id: 43
+    - type: buildable_circle
+      position:
+      - 24.55307
+      - -6.0040436
+      owner: 1
+      radius: 3.2
+      server_entity_id: 44
+    - type: buildable_circle
+      position:
+      - 24.698223
+      - -1.3673706
+      owner: 1
+      radius: 3.2
+      server_entity_id: 45
+    - type: buildable_circle
+      position:
+      - 15.932799
+      - -0.17194366
+      owner: 1
+      radius: 3.2
+      server_entity_id: 46
+    - type: buildable_circle
+      position:
+      - 16.179672
+      - -4.440674
+      owner: 1
+      radius: 3.2
+      server_entity_id: 47
+    - type: buildable_circle
+      position:
+      - 16.129408
+      - -9.5772705
+      owner: 1
+      radius: 3.2
+      server_entity_id: 48
+    - type: buildable_circle
+      position:
+      - 12.789334
+      - -9.332649
+      owner: 1
+      radius: 3.2
+      server_entity_id: 49
+    - type: buildable_circle
+      position:
+      - 3.162386
+      - -20.324022
+      owner: 1
+      radius: 4.5
+      server_entity_id: 50
+    - type: buildable_circle
+      position:
+      - -18.532896
+      - -17.934002
+      owner: 1
+      radius: 4.5
+      server_entity_id: 51
+    - type: buildable_circle
+      position:
+      - -15.089129
+      - 5.4211884
+      owner: 0
+      radius: 2.7
+      server_entity_id: 52
+    - type: buildable_circle
+      position:
+      - -13.927963
+      - 7.9340134
+      owner: 0
+      radius: 1.5
+      server_entity_id: 53
+    - type: buildable_circle
+      position:
+      - -12.017516
+      - 6.8169594
+      owner: 0
+      radius: 1.5
+      server_entity_id: 54
+    - type: buildable_circle
+      position:
+      - -12.018275
+      - 8.638916
+      owner: 0
+      radius: 1.5
+      server_entity_id: 55
+    - type: buildable_circle
+      position:
+      - -9.892287
+      - 8.664419
+      owner: 0
+      radius: 1.5
+      server_entity_id: 56
+    - type: buildable_circle
+      position:
+      - -8.030206
+      - 8.878344
+      owner: 0
+      radius: 1.5
+      server_entity_id: 57
+    - type: buildable_circle
+      position:
+      - -7.9601154
+      - 7.755659
+      owner: 0
+      radius: 1.5
+      server_entity_id: 58
+    - type: buildable_circle
+      position:
+      - -4.8060236
+      - 6.209835
+      owner: 0
+      radius: 1.5
+      server_entity_id: 59
+    - type: buildable_circle
+      position:
+      - -16.231312
+      - 1.7827225
+      owner: 0
+      radius: 3.2
+      server_entity_id: 60
+    - type: buildable_circle
+      position:
+      - -26.167841
+      - 1.5383835
+      owner: 0
+      radius: 3.2
+      server_entity_id: 61
+    - type: buildable_circle
+      position:
+      - -23.662748
+      - -1.7715034
+      owner: 0
+      radius: 3.2
+      server_entity_id: 62
+    - type: buildable_circle
+      position:
+      - -15.921206
+      - -1.5309181
+      owner: 0
+      radius: 3.2
+      server_entity_id: 63
+    - type: buildable_circle
+      position:
+      - 24.083336
+      - 2.1610909
+      owner: 1
+      radius: 3.2
+      server_entity_id: 64
+    - type: buildable_circle
+      position:
+      - 22.318224
+      - 5.7878265
+      owner: 1
+      radius: 3.2
+      server_entity_id: 65
+    - type: buildable_circle
+      position:
+      - 16.433529
+      - 3.2368622
+      owner: 1
+      radius: 1.2
+      server_entity_id: 66
+    - type: buildable_circle
+      position:
+      - 20.177794
+      - 7.829582
+      owner: 1
+      radius: 1.2
+      server_entity_id: 67
+    - type: buildable_circle
+      position:
+      - 20.177794
+      - 7.829582
+      owner: 1
+      radius: 1.2
+      server_entity_id: 68
+    - type: buildable_circle
+      position:
+      - 18.999157
+      - 6.3944473
+      owner: 1
+      radius: 1.2
+      server_entity_id: 69
+    - type: base
+      position:
+      - -20.311577
+      - 2.3079243
+      owner: 0
+      server_entity_id: 70
+    - type: spawn
+      position:
+      - -32.45627
+      - -2.6788883
+      owner: 0
+      server_entity_id: 71
+    - type: base
+      position:
+      - 20.0
+      - -2.0
+      owner: 1
+      server_entity_id: 72
+    - type: spawn
+      position:
+      - 31.314672
+      - 1.5973263
+      owner: 1
+      server_entity_id: 73
+    - texture: tree.png
+      type: sprite
+      position:
+      - 25.697792
+      - -10.484489
+      server_entity_id: 74
+    - texture: tree.png
+      type: sprite
+      position:
+      - 32.06047
+      - -7.372673
+      server_entity_id: 75
+    - texture: tree.png
+      type: sprite
+      position:
+      - -21.963114
+      - -19.467724
+      server_entity_id: 77
+    - texture: tree.png
+      type: sprite
+      position:
+      - -14.993531
+      - -23.996044
+      server_entity_id: 78
+    - texture: tree.png
+      type: sprite
+      position:
+      - -6.5748158
+      - -24.941849
+      server_entity_id: 79
+    - texture: tree.png
+      type: sprite
+      position:
+      - 0.221292
+      - -24.983837
+      server_entity_id: 80
+    - texture: tree.png
+      type: sprite
+      position:
+      - 6.170603
+      - -24.864258
+      server_entity_id: 81
+    - texture: tree.png
+      type: sprite
+      position:
+      - 13.733394
+      - -24.647068
+      server_entity_id: 82
+    - texture: tree.png
+      type: sprite
+      position:
+      - 20.885643
+      - -24.1828
+      server_entity_id: 83
+    - texture: tree.png
+      type: sprite
+      position:
+      - 26.23392
+      - -19.099277
+      server_entity_id: 84
+    - texture: tree.png
+      type: sprite
+      position:
+      - -30.230005
+      - 9.274853
+      server_entity_id: 85
+    - texture: tree.png
+      type: sprite
+      position:
+      - -23.53016
+      - 8.523357
+      server_entity_id: 86
+    - texture: tree.png
+      type: sprite
+      position:
+      - -19.382763
+      - 13.401373
+      server_entity_id: 87
+    - texture: tree.png
+      type: sprite
+      position:
+      - -14.388548
+      - 17.925884
+      server_entity_id: 88
+    - texture: tree.png
+      type: sprite
+      position:
+      - -3.3320208
+      - 19.318901
+      server_entity_id: 89
+    - texture: tree.png
+      type: sprite
+      position:
+      - 2.152131
+      - 19.581295
+      server_entity_id: 90
+    - texture: tree.png
+      type: sprite
+      position:
+      - 8.487595
+      - 18.638783
+      server_entity_id: 91
+    - texture: tree.png
+      type: sprite
+      position:
+      - 13.812889
+      - 17.224201
+      server_entity_id: 92
+    - texture: tree.png
+      type: sprite
+      position:
+      - 18.79828
+      - 14.488338
+      server_entity_id: 93
+    - texture: tree.png
+      type: sprite
+      position:
+      - 25.70776
+      - 10.846577
+      server_entity_id: 94
+    - texture: tree.png
+      type: sprite
+      position:
+      - -9.000587
+      - 18.709934
+      server_entity_id: 95
+    - texture: tree.png
+      type: sprite
+      position:
+      - 36.917873
+      - -5.4496193
+      server_entity_id: 96
+    - texture: tree.png
+      type: sprite
+      position:
+      - 38.37859
+      - 2.6679688
+      server_entity_id: 97
+    - texture: tree.png
+      type: sprite
+      position:
+      - 36.190247
+      - 11.573452
+      server_entity_id: 98
+    - texture: tree.png
+      type: sprite
+      position:
+      - 31.336021
+      - 11.994774
+      server_entity_id: 99
+    - texture: tree.png
+      type: sprite
+      position:
+      - -36.567577
+      - 9.423126
+      server_entity_id: 102
+    - texture: tree.png
+      type: sprite
+      position:
+      - -40.1381
+      - 6.8176193
+      server_entity_id: 103
+    - texture: base-yellow.png
+      type: sprite
+      position:
+      - -18.933064
+      - 6.244834
+      server_entity_id: 105
+    - texture: base-blue.png
+      type: sprite
+      position:
+      - 21.209814
+      - -2.0440817
+      server_entity_id: 106
+    - texture: ground.png
+      type: ground
+      position:
+      - 0.0
+      - 0.0
+      server_entity_id: 107
+    - type: path
+      owner: 1
+      path:
+      - - 19.768896
+        - 2.7361221
+      - - 14.229495
+        - 9.366966
+      - - 10.590966
+        - 11.169718
+      - - 6.9168706
+        - 11.500271
+      - - 4.0789337
+        - 8.632023
+      - - 4.6420226
+        - 4.635277
+      - - 9.232889
+        - 2.659977
+      - - 10.720692
+        - -2.3030205
+      - - 8.406418
+        - -6.2807083
+      - - 2.8037922
+        - -4.643482
+      - - 0.22535352
+        - -0.7085457
+      - - -0.6128711
+        - 9.190777
+      - - -2.3833683
+        - 11.0113125
+      - - -13.718971
+        - 10.809288
+      - - -17.011189
+        - 9.2828045
+      - - -19.911732
+        - 4.8748245
+      server_entity_id: 108
+    - type: path
+      owner: 0
+      path:
+      - - -19.610157
+        - 0.8720093
+      - - -18.9175
+        - -9.87986
+      - - -12.638444
+        - -14.704353
+      - - -5.730066
+        - -15.208656
+      - - -3.2544484
+        - -11.412792
+      - - -4.6081448
+        - -5.7130775
+      - - -10.757519
+        - -4.2558365
+      - - -13.096757
+        - 0.9446564
+      - - -10.4137745
+        - 5.602333
+      - - -5.6188097
+        - 4.327877
+      - - -2.1005962
+        - 1.1704292
+      - - -0.6302788
+        - -4.3406677
+      - - 2.9343185
+        - -10.0142975
+      - - 18.930595
+        - -16.229198
+      - - 20.291723
+        - -10.0385895
+      - - 20.192291
+        - -3.6978683
+      server_entity_id: 109
 towers:
-  cold:
-    emoji: ❄️
-    name: cold
-    title: Ice Cream Gun
-    combo:
-    - machine
-    - machine
-    texture: towers/cold-tower.png
-    range: 4.0
-    size: 1.0
-    cost: 100
-    reload: 0.8
-    instant_damage: 10
-    cold_slowdown_amount: 1.0
-    cold_slowdown_duration: 3.0
   fire:
     emoji: "\U0001F525"
     name: fire
@@ -3501,17 +3486,34 @@ towers:
     instant_damage: 20
     fire_damage_seconds: 3.0
     fire_damage_interval: 0.5
-  machine:
-    emoji: "\U0001F52B"
-    name: machine
-    title: Machine Gun
-    combo: []
-    texture: towers/machine-gun.png
+  electric-boss:
+    emoji: "\U0001F329"
+    name: electric-boss
+    title: Electric Record Player
+    combo:
+    - electric
+    - electric
+    texture: towers/boss-electric.png
+    range: 7.0
+    size: 3.0
+    cost: 500
+    reload: 1.0
+    instant_damage: 1500
+  cold:
+    emoji: ❄️
+    name: cold
+    title: Ice Cream Gun
+    combo:
+    - machine
+    - machine
+    texture: towers/cold-tower.png
     range: 4.0
     size: 1.0
-    cost: 50
-    reload: 1.0
-    instant_damage: 25
+    cost: 100
+    reload: 0.8
+    instant_damage: 10
+    cold_slowdown_amount: 1.0
+    cold_slowdown_duration: 3.0
   laser-boss:
     emoji: ✨
     name: laser-boss
@@ -3525,19 +3527,17 @@ towers:
     cost: 400
     reload: 1.0
     instant_damage: 750
-  electric:
-    emoji: ⚡
-    name: electric
-    title: Overloaded Mobile Cell Phone
-    combo:
-    - fire
-    - cold
-    texture: towers/electric-tower.png
-    range: 5.0
-    size: 2.0
-    cost: 100
+  machine:
+    emoji: "\U0001F52B"
+    name: machine
+    title: Machine Gun
+    combo: []
+    texture: towers/machine-gun.png
+    range: 4.0
+    size: 1.0
+    cost: 50
     reload: 1.0
-    instant_damage: 100
+    instant_damage: 25
   missile:
     emoji: "\U0001F680"
     name: missile
@@ -3551,19 +3551,19 @@ towers:
     cost: 300
     reload: 0.5
     instant_damage: 250
-  fire-boss:
-    emoji: "\U0001F52B"
-    name: fire-boss
-    title: Flaming Barbeque
+  laser:
+    emoji: "\U0001F3AF"
+    name: laser
+    title: Cat Laser Toy
     combo:
+    - machine
     - fire
-    - fire
-    texture: towers/boss-fire.png
-    range: 5.0
-    size: 2.0
-    cost: 200
+    texture: towers/laser-tower.png
+    range: 6.0
+    size: 1.0
+    cost: 100
     reload: 1.0
-    instant_damage: 150
+    instant_damage: 250
   cold-boss:
     emoji: "\U0001F976"
     name: cold-boss
@@ -3580,53 +3580,33 @@ towers:
     cold_slowdown_amount: 3.0
     cold_slowdown_duration: 5.0
     area: 1.0
-  laser:
-    emoji: "\U0001F3AF"
-    name: laser
-    title: Cat Laser Toy
+  fire-boss:
+    emoji: "\U0001F52B"
+    name: fire-boss
+    title: Flaming Barbeque
     combo:
-    - machine
     - fire
-    texture: towers/laser-tower.png
-    range: 6.0
-    size: 1.0
+    - fire
+    texture: towers/boss-fire.png
+    range: 5.0
+    size: 2.0
+    cost: 200
+    reload: 1.0
+    instant_damage: 150
+  electric:
+    emoji: ⚡
+    name: electric
+    title: Overloaded Mobile Cell Phone
+    combo:
+    - fire
+    - cold
+    texture: towers/electric-tower.png
+    range: 5.0
+    size: 2.0
     cost: 100
     reload: 1.0
-    instant_damage: 250
-  electric-boss:
-    emoji: "\U0001F329"
-    name: electric-boss
-    title: Electric Record Player
-    combo:
-    - electric
-    - electric
-    texture: towers/boss-electric.png
-    range: 7.0
-    size: 3.0
-    cost: 500
-    reload: 1.0
-    instant_damage: 1500
+    instant_damage: 100
 creeps:
-  cold:
-    name: cold
-    title: Coldernetic
-    combo:
-    - monster
-    - robot
-    texture: creeps/mb-front.png
-    speed: 2.0
-    cost: 100
-    health: 250
-    size: 2.0
-  monster:
-    name: monster
-    title: Baby Monster
-    combo: []
-    texture: creeps/m-front.png
-    speed: 2.0
-    cost: 100
-    health: 100
-    size: 2.0
   strong:
     name: strong
     title: Strongobot
@@ -3658,36 +3638,72 @@ creeps:
     cost: 100
     health: 100
     size: 2.0
+  monster:
+    name: monster
+    title: Baby Monster
+    combo: []
+    texture: creeps/m-front.png
+    speed: 2.0
+    cost: 100
+    health: 100
+    size: 2.0
+  cold:
+    name: cold
+    title: Coldernetic
+    combo:
+    - monster
+    - robot
+    texture: creeps/mb-front.png
+    speed: 2.0
+    cost: 100
+    health: 250
+    size: 2.0
 textures:
-  editor/path-end.png:
+  menus/main-menu.png:
     size:
-    - 256.0
-    - 256.0
-  towers/boss-of-bosses.png:
+    - 1920.0
+    - 1080.0
+  towers/cold-tower.png:
     size:
-    - 911.0
-    - 676.0
-  creeps/mb-back.png:
+    - 334.0
+    - 379.0
+  menus/name.png:
+    size:
+    - 1920.0
+    - 1080.0
+  creeps/b-side.png:
+    size:
+    - 489.0
+    - 506.0
+  creeps/m-back.png:
     size:
     - 347.0
-    - 426.0
-  towers/seeking-missile.png:
+    - 335.0
+  tree.png:
     size:
-    - 510.0
-    - 483.0
-  fence-yellow.png:
+    - 984.0
+    - 1120.0
+  towers/orbital-electric.png:
     size:
-    - 132.0
+    - 719.0
+    - 498.0
+  fence-yellow-5.png:
+    size:
+    - 660.0
     - 301.0
-  fence-blue-5.png:
+  menus/splash.png:
     size:
-    - 665.0
-    - 301.0
-  tower.png:
+    - 933.0
+    - 526.0
+  Yellow.png:
     size:
-    - 280.0
-    - 311.0
-  grass.png:
+    - 578.0
+    - 600.0
+  editor/path-start.png:
+    size:
+    - 256.0
+    - 256.0
+  editor/path-waypoint.png:
     size:
     - 256.0
     - 256.0
@@ -3695,123 +3711,239 @@ textures:
     size:
     - 256.0
     - 256.0
-  item-blue.png:
+  creeps/bigboss-back.png:
     size:
-    - 296.0
-    - 338.0
-  towers/machine-gun.png:
-    size:
-    - 334.0
-    - 444.0
+    - 391.0
+    - 841.0
   creeps/b-front.png:
     size:
     - 558.0
     - 436.0
+  editor/spawn-point.png:
+    size:
+    - 256.0
+    - 256.0
   editor/buildable-circle.png:
     size:
     - 256.0
     - 256.0
-  creeps/mm-front.png:
+  creeps/bb-side.png:
     size:
-    - 347.0
-    - 362.0
-  AAAAA.png:
+    - 564.0
+    - 506.0
+  item-blue.png:
     size:
-    - 352.0
-    - 523.0
-  props.png:
+    - 296.0
+    - 338.0
+  fence-blue_1.png:
     size:
-    - 4096.0
-    - 4096.0
-  towers/boss-laser.png:
-    size:
-    - 616.0
-    - 365.0
-  creeps/m-back.png:
-    size:
-    - 347.0
-    - 335.0
-  menus/loading-animation.png:
-    size:
-    - 6262.0
-    - 2514.0
-  tree.png:
-    size:
-    - 984.0
-    - 1120.0
-  editor/path-waypoint.png:
-    size:
-    - 256.0
-    - 256.0
-  ui/top-icons.png:
-    size:
-    - 1715.0
-    - 73.0
-  creeps/mm-side.png:
-    size:
-    - 347.0
-    - 360.0
+    - 132.0
+    - 301.0
   towers/boss-fire.png:
     size:
     - 347.0
     - 633.0
-  towers/cold-tower.png:
-    size:
-    - 334.0
-    - 379.0
-  towers/boss-electric.png:
-    size:
-    - 524.0
-    - 536.0
-  creeps/mb-side.png:
-    size:
-    - 347.0
-    - 405.0
   click-tooltip.png:
     size:
     - 256.0
     - 256.0
-  TESTDIS.png:
+  towers/laser-tower.png:
     size:
-    - 572.0
-    - 600.0
-  creeps/mm-back.png:
-    size:
-    - 347.0
-    - 362.0
-  menus/name.png:
-    size:
-    - 1920.0
-    - 1080.0
-  editor/path-start.png:
-    size:
-    - 256.0
-    - 256.0
+    - 334.0
+    - 287.0
   editor/home.png:
     size:
     - 256.0
     - 256.0
+  props.png:
+    size:
+    - 4096.0
+    - 4096.0
+  TESTDIS.png:
+    size:
+    - 572.0
+    - 600.0
+  base-yellow.png:
+    size:
+    - 993.0
+    - 816.0
+  creeps/m-side.png:
+    size:
+    - 347.0
+    - 333.0
+  animations/loading-animation.png:
+    size:
+    - 6262.0
+    - 2514.0
+  creeps/mb-side.png:
+    size:
+    - 347.0
+    - 405.0
+  creeps/mm-back.png:
+    size:
+    - 347.0
+    - 362.0
+  towers/boss-cold.png:
+    size:
+    - 488.0
+    - 617.0
+  harold.png:
+    size:
+    - 846.0
+    - 1199.0
+  menus/loading-animation.png:
+    size:
+    - 6262.0
+    - 2514.0
   fence-blue.png:
     size:
     - 133.0
     - 301.0
-  towers/electric-tower.png:
+  ui/loading-animation.png:
     size:
-    - 556.0
-    - 452.0
-  menus/main-menu.png:
+    - 6262.0
+    - 2514.0
+  towers/machine-gun.png:
     size:
-    - 1920.0
-    - 1080.0
-  towers/orbital-electric.png:
+    - 334.0
+    - 444.0
+  hover.png:
     size:
-    - 719.0
-    - 498.0
+    - 256.0
+    - 256.0
+  ground.png:
+    size:
+    - 256.0
+    - 256.0
+  Outline.png:
+    size:
+    - 360.0
+    - 531.0
+  towers/orbital-cold.png:
+    size:
+    - 785.0
+    - 488.0
+  creeps/bigboss-side.png:
+    size:
+    - 914.0
+    - 540.0
+  editor/path-end.png:
+    size:
+    - 256.0
+    - 256.0
+  base-blue.png:
+    size:
+    - 1000.0
+    - 816.0
+  menus/logo.png:
+    size:
+    - 700.0
+    - 77.0
+  Blue.png:
+    size:
+    - 572.0
+    - 600.0
+  creeps/b-back.png:
+    size:
+    - 559.0
+    - 407.0
+  gnome.png:
+    size:
+    - 263.0
+    - 582.0
+  creeps/bb-back.png:
+    size:
+    - 489.0
+    - 583.0
+  towers/boss-electric.png:
+    size:
+    - 524.0
+    - 536.0
+  towers/boss-of-bosses.png:
+    size:
+    - 911.0
+    - 676.0
+  towers/flame-thrower.png:
+    size:
+    - 376.0
+    - 521.0
+  creeps/mm-front.png:
+    size:
+    - 347.0
+    - 362.0
+  creeps/mm-side.png:
+    size:
+    - 347.0
+    - 360.0
+  creeps/bigboss-front.png:
+    size:
+    - 392.0
+    - 564.0
+  item-yellow.png:
+    size:
+    - 194.0
+    - 272.0
+  logo.png:
+    size:
+    - 700.0
+    - 77.0
+  creeps/m-front.png:
+    size:
+    - 347.0
+    - 335.0
+  fence-blue-5.png:
+    size:
+    - 665.0
+    - 301.0
   ui/top-background-gradient.png:
     size:
     - 550.0
     - 230.0
-  hover.png:
+  menus/help.png:
+    size:
+    - 1920.0
+    - 1080.0
+  towers/boss-laser.png:
+    size:
+    - 616.0
+    - 365.0
+  creeps/mb-back.png:
+    size:
+    - 347.0
+    - 426.0
+  tower.png:
+    size:
+    - 280.0
+    - 311.0
+  creeps/bb-front.png:
+    size:
+    - 489.0
+    - 449.0
+  towers/seeking-missile.png:
+    size:
+    - 510.0
+    - 483.0
+  AAAAA.png:
+    size:
+    - 352.0
+    - 523.0
+  ui/top-icons.png:
+    size:
+    - 1715.0
+    - 73.0
+  towers/electric-tower.png:
+    size:
+    - 556.0
+    - 452.0
+  creeps/mb-front.png:
+    size:
+    - 347.0
+    - 423.0
+  fence-yellow.png:
+    size:
+    - 132.0
+    - 301.0
+  grass.png:
     size:
     - 256.0
     - 256.0
@@ -3819,131 +3951,3 @@ textures:
     size:
     - 540.0
     - 498.0
-  creeps/bigboss-front.png:
-    size:
-    - 392.0
-    - 564.0
-  base-yellow.png:
-    size:
-    - 993.0
-    - 816.0
-  towers/laser-tower.png:
-    size:
-    - 334.0
-    - 287.0
-  creeps/bb-side.png:
-    size:
-    - 564.0
-    - 506.0
-  towers/boss-cold.png:
-    size:
-    - 488.0
-    - 617.0
-  creeps/bigboss-side.png:
-    size:
-    - 914.0
-    - 540.0
-  creeps/bb-back.png:
-    size:
-    - 489.0
-    - 583.0
-  creeps/m-front.png:
-    size:
-    - 347.0
-    - 335.0
-  harold.png:
-    size:
-    - 846.0
-    - 1199.0
-  ground.png:
-    size:
-    - 256.0
-    - 256.0
-  Yellow.png:
-    size:
-    - 578.0
-    - 600.0
-  Blue.png:
-    size:
-    - 572.0
-    - 600.0
-  Outline.png:
-    size:
-    - 360.0
-    - 531.0
-  menus/logo.png:
-    size:
-    - 700.0
-    - 77.0
-  creeps/b-back.png:
-    size:
-    - 559.0
-    - 407.0
-  creeps/mb-front.png:
-    size:
-    - 347.0
-    - 423.0
-  creeps/b-side.png:
-    size:
-    - 489.0
-    - 506.0
-  gnome.png:
-    size:
-    - 263.0
-    - 582.0
-  creeps/bb-front.png:
-    size:
-    - 489.0
-    - 449.0
-  menus/splash.png:
-    size:
-    - 933.0
-    - 526.0
-  ui/loading-animation.png:
-    size:
-    - 6262.0
-    - 2514.0
-  fence-blue_1.png:
-    size:
-    - 132.0
-    - 301.0
-  base-blue.png:
-    size:
-    - 1000.0
-    - 816.0
-  towers/orbital-cold.png:
-    size:
-    - 785.0
-    - 488.0
-  logo.png:
-    size:
-    - 700.0
-    - 77.0
-  fence-yellow-5.png:
-    size:
-    - 660.0
-    - 301.0
-  creeps/bigboss-back.png:
-    size:
-    - 391.0
-    - 841.0
-  creeps/m-side.png:
-    size:
-    - 347.0
-    - 333.0
-  editor/spawn-point.png:
-    size:
-    - 256.0
-    - 256.0
-  animations/loading-animation.png:
-    size:
-    - 6262.0
-    - 2514.0
-  towers/flame-thrower.png:
-    size:
-    - 376.0
-    - 521.0
-  item-yellow.png:
-    size:
-    - 194.0
-    - 272.0

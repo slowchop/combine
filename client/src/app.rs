@@ -37,7 +37,7 @@ use crate::states::playing::update_positions::{
 };
 use crate::states::splash::{PersistFonts, PersistImages};
 use crate::states::{
-    connecting, enter_name, loading_level, main_menu, playing, splash, waiting_for_random,
+    connecting, enter_name, help, loading_level, main_menu, playing, splash, waiting_for_random,
     ContinueState,
 };
 use crate::states::{disconnected, map_editor};
@@ -71,6 +71,7 @@ use shared::{shared_config, Auth, Channels};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum GameState {
     Splash,
+    Help,
     PickName,
     MainMenu,
     EnterName,
@@ -204,6 +205,16 @@ pub fn play(args: &Args) {
             .into(),
     );
 
+    // Help
+    app.add_enter_system(GameState::Help, help::init);
+    app.add_exit_system(GameState::Help, despawn_with::<ThisState>);
+    app.add_system_set(
+        ConditionSet::new()
+            .run_in_state(GameState::Help)
+            .with_system(help::update)
+            .into(),
+    );
+
     // Enter Name
     app.add_enter_system(GameState::EnterName, enter_name::init);
     app.add_exit_system(GameState::EnterName, despawn_with::<ThisState>);
@@ -222,7 +233,7 @@ pub fn play(args: &Args) {
         ConditionSet::new()
             .run_in_state(GameState::MainMenu)
             .with_system(main_menu::menu_clicks)
-            .with_system(main_menu::egui)
+            // .with_system(main_menu::egui)
             // .with_system(attr_editor)
             .into(),
     );
