@@ -151,7 +151,7 @@ pub fn input_events(
                         .entities
                         .retain(|e| e.server_entity_id != Some(server_id));
 
-                    console.send(ConsoleItem::new(format!("Deleted {:?}", entity_def)));
+                    // console.send(ConsoleItem::new(format!("Deleted {:?}", entity_def)));
                 } else if let Some(path_info) = maybe_path_info {
                     console.send(ConsoleItem::new(
                         "TODO: Can't remove paths yet.".to_string(),

@@ -75,10 +75,11 @@ fn scale_hack() -> miette::Result<()> {
     let mut defs = Defs::load();
     let map = defs.levels.get_mut("j").unwrap();
     for entity in map.entities.iter_mut() {
-        if let Some(p) = &mut entity.position {
-            p.x *= 4.0;
-            p.y *= 4.0;
-            entity.position = Some(p);
+        if let Some(path) = &mut entity.path {
+            for p in path {
+                p.0.x *= 3.0;
+                p.0.y *= 3.0;
+            }
         }
     }
     defs.save();

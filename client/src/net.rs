@@ -144,10 +144,10 @@ pub fn receive_message_event(
                     if let Some(earned_for) = *destroy_entity.gold_earned_for {
                         let client_game_info = client_game_info.get_single().unwrap();
                         if earned_for == client_game_info.i_am {
-                            console.send(ConsoleItem::new(format!(
-                                "You earned {} gold for killing a creep!",
-                                *destroy_entity.gold_earned
-                            )));
+                            // console.send(ConsoleItem::new(format!(
+                            //     "You earned {} gold for killing a creep!",
+                            //     *destroy_entity.gold_earned
+                            // )));
                         }
                     }
                 }

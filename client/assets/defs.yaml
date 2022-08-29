@@ -792,624 +792,211 @@ levels:
       owner: 0
     - type: base
       position:
-      - 14.881725
-      - -1.2390528
+      - 30.199903
+      - -1.580452
       owner: 1
     - type: spawn
       position:
-      - 19.392673
-      - -5.54002
+      - 41.45513
+      - -13.182251
       owner: 1
     - texture: base-blue.png
       type: sprite
       position:
-      - 8.930656
-      - 0.48346138
+      - 25.223286
+      - -0.14117432
     - texture: base-yellow.png
       type: sprite
       position:
       - -12.66565
       - -2.5721245
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 9.928878
-      - -7.66922
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 10.457351
-      - -8.630955
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 10.842426
-      - -9.456206
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 11.368743
-      - -10.248204
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 11.837514
-      - -11.221337
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 12.387717
-      - -11.981736
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 12.882797
-      - -11.922546
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 13.383688
-      - -11.892155
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 13.882818
-      - -12.052639
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 14.407556
-      - -12.145948
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 14.999694
-      - -12.096741
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 15.452206
-      - -12.147369
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 15.946366
-      - -12.149101
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 16.427351
-      - -12.270933
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 17.035542
-      - -12.250692
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 17.62988
-      - -12.250216
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 18.185785
-      - -12.3083
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 18.693123
-      - -12.362066
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 19.34436
-      - -12.451164
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 19.96491
-      - -12.350645
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 20.498259
-      - -12.387342
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 10.849076
-      - 0.54240227
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 11.216827
-      - 0.85783577
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 11.565403
-      - 1.1220894
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 11.932305
-      - 1.4288931
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 12.374413
-      - 1.6570415
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 12.715801
-      - 1.9488564
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 13.20384
-      - 1.9214802
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 13.701715
-      - 1.9630604
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 14.18554
-      - 1.9291677
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 14.67122
-      - 1.9566097
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 15.101215
-      - 2.0710716
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 15.539416
-      - 2.05696
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 16.045279
-      - 2.0090942
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 16.565546
-      - 2.038847
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 17.087828
-      - 1.9282188
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 17.61
-      - 1.8733463
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 18.102612
-      - 1.9377785
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 18.588394
-      - 1.9058647
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 19.090015
-      - 1.8409538
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 19.659468
-      - 1.7949944
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 20.203512
-      - 1.8001766
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 20.835732
-      - 1.7811747
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 21.469263
-      - 1.7850809
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 21.998722
-      - 1.7326317
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 22.530716
-      - 1.7388659
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 23.072102
-      - 1.1905403
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 21.674404
-      - -12.557714
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 22.234913
-      - -12.606907
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 21.074553
-      - -12.347471
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 9.28326
-      - -7.579114
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 8.696151
-      - -7.5757
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 8.0917425
-      - -7.6467943
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 7.370993
-      - -7.4950743
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 6.9736867
-      - -7.188155
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 6.5400777
-      - -6.9619455
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 6.154055
-      - -6.7702494
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 6.068359
-      - -6.2334766
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 6.000478
-      - -5.725033
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 5.9440517
-      - -5.217654
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 6.011266
-      - -3.7142706
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 6.1610165
-      - -3.2158327
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 6.441647
-      - -2.560669
-    - texture: fence-blue.png
-      type: sprite
-      position:
-      - 6.6809573
-      - -2.0626116
-    - type: path
-      owner: 1
-      path:
-      - - 9.61376
-        - -4.3860416
-      - - -0.07163477
-        - -4.256935
-      - - -1.2170439
-        - -4.657564
-      - - -1.883259
-        - -5.506176
-      - - -1.922889
-        - -6.3266487
-      - - -1.3802645
-        - -7.071129
-      - - -0.29850864
-        - -7.4137583
-      - - 0.7655573
-        - -7.433632
-      - - 1.5779171
-        - -7.993391
-      - - 1.7605524
-        - -8.941114
-      - - 1.7298193
-        - -9.732632
-      - - 0.85042334
-        - -10.541365
-      - - -0.18165684
-        - -11.470737
-      - - -2.1600804
-        - -12.266443
-      - - -4.4012213
-        - -12.353683
-      - - -6.5983543
-        - -12.281118
-      - - -9.378734
-        - -11.480701
-      - - -10.208366
-        - -10.4826565
-      - - -10.145437
-        - -9.391296
-      - - -9.2191105
-        - -9.0695915
-      - - -8.198025
-        - -9.596834
-      - - -6.96122
-        - -10.335054
-      - - -5.620821
-        - -10.724216
-      - - -4.2148724
-        - -10.717901
-      - - -2.7391999
-        - -10.553839
-      - - -1.3406875
-        - -10.605789
-      - - -0.64924335
-        - -9.664764
-      - - -0.7614355
-        - -8.389547
-      - - -1.4699686
-        - -7.9018135
-      - - -3.8315873
-        - -9.365623
-      - - -5.112629
-        - -9.513498
-      - - -6.325927
-        - -8.395582
-      - - -6.9220743
-        - -6.9353294
-      - - -6.2768292
-        - -5.986393
-      - - -4.935491
-        - -6.168833
-      - - -4.221266
-        - -7.1556816
-      - - -3.270509
-        - -6.429081
-      - - -3.2507396
-        - -5.3413067
-      - - -4.2814436
-        - -4.324911
-      - - -5.7983704
-        - -4.1907043
-      - - -7.57354
-        - -4.828083
-      - - -8.207942
-        - -6.7378883
-      - - -8.884561
-        - -7.3176155
-      - - -10.930271
-        - -7.055809
-      - - -13.149933
-        - -5.3839703
     - type: path
       owner: 0
       path:
-      - - -13.39525
-        - -0.65176773
-      - - -4.928365
-        - -0.7430649
-      - - -3.7829561
-        - -0.34243584
-      - - -3.116741
-        - 0.506176
-      - - -3.077111
-        - 1.3266487
-      - - -3.6197355
-        - 2.0711288
-      - - -4.7014914
-        - 2.4137583
-      - - -5.7655573
-        - 2.433632
-      - - -6.577917
-        - 2.993391
-      - - -6.7605524
-        - 3.9411144
-      - - -6.7298193
-        - 4.7326317
-      - - -5.8504233
-        - 5.5413647
-      - - -4.818343
-        - 6.4707375
-      - - -2.8399196
-        - 7.2664433
-      - - -0.5987788
-        - 7.3536835
-      - - 1.5983545
-        - 7.2811184
-      - - 4.3787336
-        - 6.4807014
-      - - 5.2083664
-        - 5.4826565
-      - - 5.145437
-        - 4.3912964
-      - - 4.219111
-        - 4.0695915
-      - - 3.1980247
-        - 4.596834
-      - - 1.96122
-        - 5.3350544
-      - - 0.62082076
-        - 5.7242165
-      - - -0.7851279
-        - 5.717901
-      - - -2.2608001
-        - 5.5538387
-      - - -3.6593125
-        - 5.605789
-      - - -4.3507566
-        - 4.6647644
-      - - -4.2385645
-        - 3.3895473
-      - - -3.5300314
-        - 2.9018135
-      - - -1.1684127
-        - 4.3656235
-      - - 0.1126291
-        - 4.5134983
-      - - 1.3259268
-        - 3.3955822
-      - - 1.9220746
-        - 1.9353294
-      - - 1.2768291
-        - 0.986393
-      - - -0.06450901
-        - 1.1688328
-      - - -0.77873427
-        - 2.1556816
-      - - -1.729491
-        - 1.429081
-      - - -1.7492604
-        - 0.3413067
-      - - -0.71855646
-        - -0.6750889
-      - - 0.79837036
-        - -0.80929565
-      - - 2.5735402
-        - -0.17191696
-      - - 3.2079422
-        - 1.7378883
-      - - 3.8845603
-        - 2.3176155
-      - - 5.9302716
-        - 2.055809
-      - - 8.137384
-        - 0.16056252
+      - - -40.185753
+        - -1.9553032
+      - - -14.785095
+        - -2.2291946
+      - - -11.348868
+        - -1.0273075
+      - - -9.350223
+        - 1.518528
+      - - -9.231333
+        - 3.9799461
+      - - -10.859206
+        - 6.2133865
+      - - -14.104474
+        - 7.241275
+      - - -17.296673
+        - 7.3008957
+      - - -19.733751
+        - 8.980173
+      - - -20.281658
+        - 11.823343
+      - - -20.189457
+        - 14.197895
+      - - -17.55127
+        - 16.624094
+      - - -14.4550295
+        - 19.412212
+      - - -8.519758
+        - 21.79933
+      - - -1.7963364
+        - 22.06105
+      - - 4.7950635
+        - 21.843355
+      - - 13.136201
+        - 19.442104
+      - - 15.625099
+        - 16.44797
+      - - 15.43631
+        - 13.173889
+      - - 12.657333
+        - 12.208775
+      - - 9.594074
+        - 13.790503
+      - - 5.8836603
+        - 16.005163
+      - - 1.8624623
+        - 17.17265
+      - - -2.3553836
+        - 17.153704
+      - - -6.7824
+        - 16.661516
+      - - -10.977938
+        - 16.817368
+      - - -13.05227
+        - 13.994293
+      - - -12.715693
+        - 10.168642
+      - - -10.590095
+        - 8.7054405
+      - - -3.505238
+        - 13.09687
+      - - 0.3378873
+        - 13.540495
+      - - 3.9777803
+        - 10.186747
+      - - 5.766224
+        - 5.8059883
+      - - 3.8304873
+        - 2.959179
+      - - -0.19352704
+        - 3.5064983
+      - - -2.3362029
+        - 6.467045
+      - - -5.1884727
+        - 4.287243
+      - - -5.2477813
+        - 1.02392
+      - - -2.1556695
+        - -2.0252666
+      - - 2.395111
+        - -2.427887
+      - - 7.7206206
+        - -0.5157509
+      - - 9.623827
+        - 5.213665
+      - - 11.653681
+        - 6.9528465
+      - - 17.790815
+        - 6.167427
+      - - 24.412153
+        - 0.48168755
+    - type: path
+      owner: 1
+      path:
+      - - 28.84128
+        - -13.158125
+      - - -0.21490431
+        - -12.770805
+      - - -3.6511316
+        - -13.9726925
+      - - -5.6497774
+        - -16.518528
+      - - -5.768667
+        - -18.979946
+      - - -4.140794
+        - -21.213387
+      - - -0.89552593
+        - -22.241276
+      - - 2.2966719
+        - -22.300896
+      - - 4.7337513
+        - -23.980173
+      - - 5.281657
+        - -26.823343
+      - - 5.189458
+        - -29.197895
+      - - 2.55127
+        - -31.624094
+      - - -0.5449705
+        - -34.412212
+      - - -6.4802413
+        - -36.79933
+      - - -13.203664
+        - -37.06105
+      - - -19.795063
+        - -36.843353
+      - - -28.1362
+        - -34.442104
+      - - -30.6251
+        - -31.44797
+      - - -30.436312
+        - -28.17389
+      - - -27.657331
+        - -27.208775
+      - - -24.594074
+        - -28.790503
+      - - -20.88366
+        - -31.005163
+      - - -16.862463
+        - -32.17265
+      - - -12.644617
+        - -32.1537
+      - - -8.2176
+        - -31.661516
+      - - -4.0220623
+        - -31.817368
+      - - -1.9477301
+        - -28.994293
+      - - -2.2843065
+        - -25.168642
+      - - -4.4099054
+        - -23.70544
+      - - -11.494762
+        - -28.09687
+      - - -15.337887
+        - -28.540495
+      - - -18.97778
+        - -25.186747
+      - - -20.766224
+        - -20.805988
+      - - -18.830488
+        - -17.959179
+      - - -14.806473
+        - -18.506498
+      - - -12.663797
+        - -21.467045
+      - - -9.811527
+        - -19.287243
+      - - -9.752218
+        - -16.02392
+      - - -12.844331
+        - -12.974733
+      - - -17.395111
+        - -12.572113
+      - - -22.720621
+        - -14.484249
+      - - -24.623825
+        - -20.213665
+      - - -26.653683
+        - -21.952847
+      - - -32.790813
+        - -21.167427
+      - - -39.4498
+        - -16.15191
 towers:
-  electric-boss:
-    emoji: "\U0001F329"
-    name: electric-boss
-    title: Electric Record Player
-    combo:
-    - electric
-    - electric
-    texture: towers/boss-electric.png
-    range: 7.0
-    size: 3.0
-    cost: 500
-    reload: 1.0
-    instant_damage: 1500
-  machine:
-    emoji: "\U0001F52B"
-    name: machine
-    title: Machine Gun
-    combo: []
-    texture: towers/machine-gun.png
-    range: 4.0
-    size: 1.0
-    cost: 50
-    reload: 1.0
-    instant_damage: 25
-  fire-boss:
-    emoji: "\U0001F52B"
-    name: fire-boss
-    title: Flaming Barbeque
-    combo:
-    - fire
-    - fire
-    texture: towers/boss-fire.png
-    range: 5.0
-    size: 2.0
-    cost: 200
-    reload: 1.0
-    instant_damage: 150
-  fire:
-    emoji: "\U0001F525"
-    name: fire
-    title: Windy Candle
-    combo:
-    - machine
-    - cold
-    texture: towers/flame-thrower.png
-    range: 4.0
-    size: 1.0
-    cost: 100
-    reload: 0.5
-    instant_damage: 20
-    fire_damage_seconds: 3.0
-    fire_damage_interval: 0.5
-  laser:
-    emoji: "\U0001F3AF"
-    name: laser
-    title: Cat Laser Toy
-    combo:
-    - machine
-    - fire
-    texture: towers/laser-tower.png
-    range: 6.0
-    size: 1.0
-    cost: 100
-    reload: 1.0
-    instant_damage: 250
-  cold:
-    emoji: ❄️
-    name: cold
-    title: Ice Cream Gun
-    combo:
-    - machine
-    - machine
-    texture: towers/cold-tower.png
-    range: 4.0
-    size: 1.0
-    cost: 100
-    reload: 0.8
-    instant_damage: 10
-    cold_slowdown_amount: 1.0
-    cold_slowdown_duration: 3.0
-  electric:
-    emoji: ⚡
-    name: electric
-    title: Overloaded Mobile Cell Phone
-    combo:
-    - fire
-    - cold
-    texture: towers/electric-tower.png
-    range: 5.0
-    size: 2.0
-    cost: 100
-    reload: 1.0
-    instant_damage: 100
   cold-boss:
     emoji: "\U0001F976"
     name: cold-boss
@@ -1426,19 +1013,6 @@ towers:
     cold_slowdown_amount: 3.0
     cold_slowdown_duration: 5.0
     area: 1.0
-  laser-boss:
-    emoji: ✨
-    name: laser-boss
-    title: Pew Pew Surveillance Camera
-    combo:
-    - laser
-    - laser
-    texture: towers/boss-laser.png
-    range: 7.0
-    size: 2.0
-    cost: 400
-    reload: 1.0
-    instant_damage: 750
   missile:
     emoji: "\U0001F680"
     name: missile
@@ -1452,6 +1026,112 @@ towers:
     cost: 300
     reload: 0.5
     instant_damage: 250
+  fire-boss:
+    emoji: "\U0001F52B"
+    name: fire-boss
+    title: Flaming Barbeque
+    combo:
+    - fire
+    - fire
+    texture: towers/boss-fire.png
+    range: 5.0
+    size: 2.0
+    cost: 200
+    reload: 1.0
+    instant_damage: 150
+  laser-boss:
+    emoji: ✨
+    name: laser-boss
+    title: Pew Pew Surveillance Camera
+    combo:
+    - laser
+    - laser
+    texture: towers/boss-laser.png
+    range: 7.0
+    size: 2.0
+    cost: 400
+    reload: 1.0
+    instant_damage: 750
+  electric-boss:
+    emoji: "\U0001F329"
+    name: electric-boss
+    title: Electric Record Player
+    combo:
+    - electric
+    - electric
+    texture: towers/boss-electric.png
+    range: 7.0
+    size: 3.0
+    cost: 500
+    reload: 1.0
+    instant_damage: 1500
+  cold:
+    emoji: ❄️
+    name: cold
+    title: Ice Cream Gun
+    combo:
+    - machine
+    - machine
+    texture: towers/cold-tower.png
+    range: 4.0
+    size: 1.0
+    cost: 100
+    reload: 0.8
+    instant_damage: 10
+    cold_slowdown_amount: 1.0
+    cold_slowdown_duration: 3.0
+  fire:
+    emoji: "\U0001F525"
+    name: fire
+    title: Windy Candle
+    combo:
+    - machine
+    - cold
+    texture: towers/flame-thrower.png
+    range: 4.0
+    size: 1.0
+    cost: 100
+    reload: 0.5
+    instant_damage: 20
+    fire_damage_seconds: 3.0
+    fire_damage_interval: 0.5
+  electric:
+    emoji: ⚡
+    name: electric
+    title: Overloaded Mobile Cell Phone
+    combo:
+    - fire
+    - cold
+    texture: towers/electric-tower.png
+    range: 5.0
+    size: 2.0
+    cost: 100
+    reload: 1.0
+    instant_damage: 100
+  machine:
+    emoji: "\U0001F52B"
+    name: machine
+    title: Machine Gun
+    combo: []
+    texture: towers/machine-gun.png
+    range: 4.0
+    size: 1.0
+    cost: 50
+    reload: 1.0
+    instant_damage: 25
+  laser:
+    emoji: "\U0001F3AF"
+    name: laser
+    title: Cat Laser Toy
+    combo:
+    - machine
+    - fire
+    texture: towers/laser-tower.png
+    range: 6.0
+    size: 1.0
+    cost: 100
+    reload: 1.0
+    instant_damage: 250
 creeps:
   monster:
     name: monster
@@ -1459,17 +1139,6 @@ creeps:
     combo: []
     texture: creeps/m-front.png
     speed: 2.0
-    cost: 100
-    health: 100
-    size: 2.0
-  fast:
-    name: fast
-    title: Fast Monster
-    combo:
-    - monster
-    - monster
-    texture: creeps/mm-front.png
-    speed: 3.0
     cost: 100
     health: 100
     size: 2.0
@@ -1493,6 +1162,17 @@ creeps:
     cost: 100
     health: 250
     size: 2.0
+  fast:
+    name: fast
+    title: Fast Monster
+    combo:
+    - monster
+    - monster
+    texture: creeps/mm-front.png
+    speed: 3.0
+    cost: 100
+    health: 100
+    size: 2.0
   cold:
     name: cold
     title: Coldernetic
@@ -1505,22 +1185,134 @@ creeps:
     health: 250
     size: 2.0
 textures:
-  base-yellow.png:
+  creeps/bb-front.png:
     size:
-    - 993.0
-    - 816.0
-  menus/logo.png:
+    - 489.0
+    - 449.0
+  editor/path-start.png:
+    size:
+    - 256.0
+    - 256.0
+  tooltip.png:
+    size:
+    - 256.0
+    - 256.0
+  harold.png:
+    size:
+    - 846.0
+    - 1199.0
+  creeps/m-back.png:
+    size:
+    - 347.0
+    - 335.0
+  towers/boss-electric.png:
+    size:
+    - 524.0
+    - 536.0
+  AAAAA.png:
+    size:
+    - 352.0
+    - 523.0
+  towers/boss-laser.png:
+    size:
+    - 616.0
+    - 365.0
+  towers/machine-gun.png:
+    size:
+    - 334.0
+    - 444.0
+  creeps/m-side.png:
+    size:
+    - 347.0
+    - 333.0
+  towers/orbital-electric.png:
+    size:
+    - 719.0
+    - 498.0
+  editor/home.png:
+    size:
+    - 256.0
+    - 256.0
+  logo.png:
     size:
     - 700.0
     - 77.0
-  Yellow.png:
+  creeps/bb-back.png:
     size:
-    - 578.0
-    - 600.0
-  base-blue.png:
+    - 489.0
+    - 583.0
+  editor/path-end.png:
     size:
-    - 1000.0
-    - 816.0
+    - 256.0
+    - 256.0
+  fence-blue.png:
+    size:
+    - 133.0
+    - 301.0
+  hover.png:
+    size:
+    - 256.0
+    - 256.0
+  tower.png:
+    size:
+    - 280.0
+    - 311.0
+  creeps/b-front.png:
+    size:
+    - 558.0
+    - 436.0
+  fence-yellow.png:
+    size:
+    - 132.0
+    - 301.0
+  towers/electric-tower.png:
+    size:
+    - 556.0
+    - 452.0
+  towers/orbital-cold.png:
+    size:
+    - 785.0
+    - 488.0
+  animations/loading-animation.png:
+    size:
+    - 6262.0
+    - 2514.0
+  gnome.png:
+    size:
+    - 263.0
+    - 582.0
+  ui/top-icons.png:
+    size:
+    - 1715.0
+    - 73.0
+  fence-blue-5.png:
+    size:
+    - 665.0
+    - 301.0
+  creeps/mb-side.png:
+    size:
+    - 347.0
+    - 405.0
+  towers/boss-cold.png:
+    size:
+    - 488.0
+    - 617.0
+  creeps/bb-side.png:
+    size:
+    - 564.0
+    - 506.0
+  creeps/mm-back.png:
+    size:
+    - 347.0
+    - 362.0
+  towers/orbital-fire.png:
+    size:
+    - 540.0
+    - 498.0
+  towers/boss-fire.png:
+    size:
+    - 347.0
+    - 633.0
   towers/seeking-missile.png:
     size:
     - 510.0
@@ -1529,255 +1321,155 @@ textures:
     size:
     - 550.0
     - 230.0
-  props.png:
-    size:
-    - 4096.0
-    - 4096.0
-  animations/loading-animation.png:
-    size:
-    - 6262.0
-    - 2514.0
-  harold.png:
-    size:
-    - 846.0
-    - 1199.0
-  TESTDIS.png:
-    size:
-    - 572.0
-    - 600.0
-  creeps/m-front.png:
-    size:
-    - 347.0
-    - 335.0
-  editor/home.png:
-    size:
-    - 256.0
-    - 256.0
-  creeps/b-side.png:
-    size:
-    - 489.0
-    - 506.0
-  towers/flame-thrower.png:
-    size:
-    - 376.0
-    - 521.0
-  towers/boss-electric.png:
-    size:
-    - 524.0
-    - 536.0
-  menus/main-menu.png:
-    size:
-    - 1920.0
-    - 1080.0
-  fence-blue.png:
-    size:
-    - 133.0
-    - 301.0
-  tree.png:
-    size:
-    - 984.0
-    - 1120.0
-  creeps/m-back.png:
-    size:
-    - 347.0
-    - 335.0
-  creeps/bigboss-front.png:
-    size:
-    - 392.0
-    - 564.0
-  towers/boss-of-bosses.png:
-    size:
-    - 911.0
-    - 676.0
-  Outline.png:
-    size:
-    - 360.0
-    - 531.0
-  editor/path-start.png:
-    size:
-    - 256.0
-    - 256.0
-  creeps/m-side.png:
-    size:
-    - 347.0
-    - 333.0
-  fence-blue_1.png:
-    size:
-    - 132.0
-    - 301.0
-  hover.png:
-    size:
-    - 256.0
-    - 256.0
-  Blue.png:
-    size:
-    - 572.0
-    - 600.0
-  creeps/mb-front.png:
-    size:
-    - 347.0
-    - 423.0
-  editor/spawn-point.png:
-    size:
-    - 256.0
-    - 256.0
-  editor/path-end.png:
-    size:
-    - 256.0
-    - 256.0
-  ground.png:
-    size:
-    - 256.0
-    - 256.0
-  logo.png:
-    size:
-    - 700.0
-    - 77.0
-  AAAAA.png:
-    size:
-    - 352.0
-    - 523.0
-  creeps/bb-front.png:
-    size:
-    - 489.0
-    - 449.0
-  item-blue.png:
-    size:
-    - 296.0
-    - 338.0
-  editor/path-waypoint.png:
-    size:
-    - 256.0
-    - 256.0
-  ui/top-icons.png:
-    size:
-    - 1715.0
-    - 73.0
-  click-tooltip.png:
-    size:
-    - 256.0
-    - 256.0
-  menus/name.png:
-    size:
-    - 1920.0
-    - 1080.0
-  towers/orbital-fire.png:
-    size:
-    - 540.0
-    - 498.0
-  towers/electric-tower.png:
-    size:
-    - 556.0
-    - 452.0
-  creeps/mb-back.png:
-    size:
-    - 347.0
-    - 426.0
-  towers/boss-cold.png:
-    size:
-    - 488.0
-    - 617.0
-  creeps/b-front.png:
-    size:
-    - 558.0
-    - 436.0
-  towers/boss-laser.png:
-    size:
-    - 616.0
-    - 365.0
-  towers/boss-fire.png:
-    size:
-    - 347.0
-    - 633.0
-  tower.png:
-    size:
-    - 280.0
-    - 311.0
-  ui/loading-animation.png:
-    size:
-    - 6262.0
-    - 2514.0
-  gnome.png:
-    size:
-    - 263.0
-    - 582.0
-  creeps/mb-side.png:
-    size:
-    - 347.0
-    - 405.0
-  towers/machine-gun.png:
-    size:
-    - 334.0
-    - 444.0
-  menus/loading-animation.png:
-    size:
-    - 6262.0
-    - 2514.0
-  grass.png:
-    size:
-    - 256.0
-    - 256.0
-  creeps/mm-back.png:
-    size:
-    - 347.0
-    - 362.0
-  creeps/bigboss-back.png:
-    size:
-    - 391.0
-    - 841.0
-  menus/splash.png:
-    size:
-    - 933.0
-    - 526.0
-  creeps/bb-side.png:
-    size:
-    - 564.0
-    - 506.0
-  tooltip.png:
-    size:
-    - 256.0
-    - 256.0
-  creeps/bb-back.png:
-    size:
-    - 489.0
-    - 583.0
-  item-yellow.png:
-    size:
-    - 194.0
-    - 272.0
-  creeps/mm-front.png:
-    size:
-    - 347.0
-    - 362.0
-  towers/orbital-electric.png:
-    size:
-    - 719.0
-    - 498.0
-  creeps/mm-side.png:
-    size:
-    - 347.0
-    - 360.0
   creeps/b-back.png:
     size:
     - 559.0
     - 407.0
+  TESTDIS.png:
+    size:
+    - 572.0
+    - 600.0
+  menus/logo.png:
+    size:
+    - 700.0
+    - 77.0
+  ground.png:
+    size:
+    - 256.0
+    - 256.0
+  editor/spawn-point.png:
+    size:
+    - 256.0
+    - 256.0
+  fence-yellow-5.png:
+    size:
+    - 660.0
+    - 301.0
+  creeps/bigboss-back.png:
+    size:
+    - 391.0
+    - 841.0
   creeps/bigboss-side.png:
     size:
     - 914.0
     - 540.0
-  editor/buildable-circle.png:
-    size:
-    - 256.0
-    - 256.0
-  towers/laser-tower.png:
-    size:
-    - 334.0
-    - 287.0
   towers/cold-tower.png:
     size:
     - 334.0
     - 379.0
-  towers/orbital-cold.png:
+  menus/loading-animation.png:
     size:
-    - 785.0
-    - 488.0
+    - 6262.0
+    - 2514.0
+  Yellow.png:
+    size:
+    - 578.0
+    - 600.0
+  props.png:
+    size:
+    - 4096.0
+    - 4096.0
+  item-blue.png:
+    size:
+    - 296.0
+    - 338.0
+  click-tooltip.png:
+    size:
+    - 256.0
+    - 256.0
+  base-blue.png:
+    size:
+    - 1000.0
+    - 816.0
+  creeps/mb-back.png:
+    size:
+    - 347.0
+    - 426.0
+  creeps/bigboss-front.png:
+    size:
+    - 392.0
+    - 564.0
+  editor/buildable-circle.png:
+    size:
+    - 256.0
+    - 256.0
+  ui/loading-animation.png:
+    size:
+    - 6262.0
+    - 2514.0
+  editor/path-waypoint.png:
+    size:
+    - 256.0
+    - 256.0
+  item-yellow.png:
+    size:
+    - 194.0
+    - 272.0
+  creeps/m-front.png:
+    size:
+    - 347.0
+    - 335.0
+  Blue.png:
+    size:
+    - 572.0
+    - 600.0
+  towers/flame-thrower.png:
+    size:
+    - 376.0
+    - 521.0
+  towers/boss-of-bosses.png:
+    size:
+    - 911.0
+    - 676.0
+  creeps/b-side.png:
+    size:
+    - 489.0
+    - 506.0
+  menus/splash.png:
+    size:
+    - 933.0
+    - 526.0
+  creeps/mm-front.png:
+    size:
+    - 347.0
+    - 362.0
+  Outline.png:
+    size:
+    - 360.0
+    - 531.0
+  menus/name.png:
+    size:
+    - 1920.0
+    - 1080.0
+  creeps/mb-front.png:
+    size:
+    - 347.0
+    - 423.0
+  tree.png:
+    size:
+    - 984.0
+    - 1120.0
+  creeps/mm-side.png:
+    size:
+    - 347.0
+    - 360.0
+  grass.png:
+    size:
+    - 256.0
+    - 256.0
+  menus/main-menu.png:
+    size:
+    - 1920.0
+    - 1080.0
+  towers/laser-tower.png:
+    size:
+    - 334.0
+    - 287.0
+  base-yellow.png:
+    size:
+    - 993.0
+    - 816.0
+  fence-blue_1.png:
+    size:
+    - 132.0
+    - 301.0
