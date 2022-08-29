@@ -179,7 +179,7 @@ impl SharedGame {
     pub fn time_left(&self) -> TimeLeft {
         let release = self.next_release_ticks();
         let respawn = self.next_respawn_ticks();
-        if self.ticks < release {
+        if release < respawn {
             TimeLeft::ReleaseCreeps((release - self.ticks).to_duration().unwrap())
         } else if self.ticks < respawn {
             TimeLeft::RespawnCreeps((respawn - self.ticks).to_duration().unwrap())

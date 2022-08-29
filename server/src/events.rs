@@ -50,21 +50,12 @@ pub fn connection_event<'world, 'state>(
 
 pub fn disconnection_event(
     mut event_reader: EventReader<DisconnectionEvent>,
-    // mut global: ResMut<Global>,
     mut server: Server<Protocol, Channels>,
-    mut player_queue: ResMut<PlayerQueue>,
 ) {
     for event in event_reader.iter() {
         let DisconnectionEvent(user_key, user) = event;
         info!("Disconnected: {:?}", user.address);
         warn!("TODO: Cleanup");
-
-        // if let Some(entity) = global.user_to_prediction_map.remove(user_key) {
-        //     server
-        //         .entity_mut(&entity)
-        //         .leave_room(&global.main_room_key)
-        //         .despawn();
-        // }
     }
 }
 
