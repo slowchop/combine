@@ -28,7 +28,8 @@ use crate::states::playing::spawn_entities::{spawn_entities, SpawnEntityEvent};
 use crate::states::playing::time::add_ticks_to_game;
 use crate::states::playing::top_helper_text::top_helper_text;
 use crate::states::playing::ui::{
-    top_status_init, top_status_update, top_timer_number, top_timer_text, ui_egui,
+    top_gold, top_lives, top_names, top_status_init, top_status_update, top_timer_number,
+    top_timer_text, ui_egui,
 };
 use crate::states::playing::update_player::{update_player, UpdatePlayerEvent};
 use crate::states::playing::update_positions::{
@@ -273,6 +274,9 @@ pub fn play(args: &Args) {
             .with_system(top_status_update)
             .with_system(top_timer_number)
             .with_system(top_timer_text)
+            .with_system(top_names)
+            .with_system(top_gold)
+            .with_system(top_lives)
             .with_system(hover_stats)
             .with_system(console::handle_console_events)
             .with_system(console::update_console)

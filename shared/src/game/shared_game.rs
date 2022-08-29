@@ -117,7 +117,7 @@ impl SharedGame {
         id
     }
 
-    pub fn get_player(&mut self, owner: Owner) -> Option<&SharedPlayer> {
+    pub fn get_player(&self, owner: Owner) -> Option<&SharedPlayer> {
         self.players.iter().find(|p| p.owner == owner)
     }
 

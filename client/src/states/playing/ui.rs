@@ -4,6 +4,8 @@ use bevy::text::Text2dSize;
 use bevy_egui::{egui, EguiContext};
 use naia_bevy_client::Client;
 use shared::game::defs::Defs;
+use shared::game::owner::Owner;
+use shared::game::player::PlayerName;
 use shared::game::shared_game::{SharedGame, TimeLeft};
 use shared::protocol::Protocol;
 use shared::ticks::Ticks;
@@ -22,10 +24,23 @@ pub struct TopTimerNumber;
 #[derive(Component)]
 pub struct TopTimerText;
 
+#[derive(Component)]
+pub struct TopPlayerName;
+
+#[derive(Component)]
+pub struct TopGold;
+
+#[derive(Component)]
+pub struct TopLives;
+
 const TOP_BACKGROUND_GRADIENT: &str = "ui/top-background-gradient.png";
 const TOP_ICONS: &str = "ui/top-icons.png";
 
-pub fn top_status_init(mut commands: Commands, asset_server: Res<AssetServer>) {
+pub fn top_status_init(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    game: Query<&SharedGame>,
+) {
     commands
         .spawn_bundle(SpriteBundle {
             texture: asset_server.load(TOP_BACKGROUND_GRADIENT),
@@ -75,6 +90,72 @@ pub fn top_status_init(mut commands: Commands, asset_server: Res<AssetServer>) {
             ..Default::default()
         })
         .insert(TopTimerText);
+
+    for o in 0..2 {
+        let owner = Owner::new(o);
+        let alignment = match owner.0 {
+            0 => HorizontalAlign::Left,
+            1 => HorizontalAlign::Right,
+            _ => unreachable!(),
+        };
+        let player = game.get_single().unwrap().get_player(owner).unwrap();
+        commands
+            .spawn_bundle(Text2dBundle {
+                text: Text::from_section(
+                    player.name.0.clone(),
+                    TextStyle {
+                        font: asset_server.load(FONT),
+                        font_size: 80.0,
+                        color: Color::BLACK,
+                    },
+                )
+                .with_alignment(TextAlignment {
+                    vertical: VerticalAlign::Top,
+                    horizontal: alignment,
+                }),
+                ..Default::default()
+            })
+            .insert(TopPlayerName)
+            .insert(owner);
+
+        commands
+            .spawn_bundle(Text2dBundle {
+                text: Text::from_section(
+                    "1021asdfdsafsa",
+                    TextStyle {
+                        font: asset_server.load(FONT),
+                        font_size: 40.0,
+                        color: Color::hex("479f5f").unwrap(),
+                    },
+                )
+                .with_alignment(TextAlignment {
+                    vertical: VerticalAlign::Top,
+                    horizontal: alignment,
+                }),
+                ..Default::default()
+            })
+            .insert(TopGold)
+            .insert(owner);
+
+        commands
+            .spawn_bundle(Text2dBundle {
+                text: Text::from_section(
+                    "102112321321",
+                    TextStyle {
+                        font: asset_server.load(FONT),
+                        font_size: 40.0,
+                        color: Color::hex("e45b55").unwrap(),
+                    },
+                )
+                .with_alignment(TextAlignment {
+                    vertical: VerticalAlign::Top,
+                    horizontal: HorizontalAlign::Center,
+                }),
+                ..Default::default()
+            })
+            .insert(TopLives)
+            .insert(owner);
+    }
 }
 
 pub fn top_status_update(
@@ -121,13 +202,62 @@ pub fn top_timer_text(
     let game = shared_game.single();
     let time_left = game.time_left();
     let (mut transform, mut text, text_2d_size) = timer_text.single_mut();
-    transform.translation.x = -text_2d_size.size.x / 2.0 + 15.;
+    transform.translation.x = -text_2d_size.size.x / 2.0 + 20.;
     transform.translation.y = window.height() / 2.0 - 60.;
     transform.translation.z = 2.0;
     text.sections[0].value = match time_left {
         TimeLeft::ReleaseCreeps(_) => "release".to_string(),
         TimeLeft::RespawnCreeps(_) => "respawn".to_string(),
     };
+}
+
+pub fn top_names(
+    windows: Res<Windows>,
+    mut query: Query<(&mut Transform, &Owner), With<TopPlayerName>>,
+) {
+    let window = windows.get_primary().unwrap();
+    for (mut transform, owner) in query.iter_mut() {
+        let flip = if owner.0 == 1 { -1. } else { 1. };
+        transform.translation.x = 666.0 * flip;
+        transform.translation.y = window.height() / 2.0 - 10.;
+        transform.translation.z = 2.0;
+    }
+}
+
+pub fn top_gold(
+    windows: Res<Windows>,
+    mut query: Query<(&mut Transform, &mut Text, &Owner), With<TopGold>>,
+    shared_game: Query<&SharedGame>,
+) {
+    let window = windows.get_primary().unwrap();
+    let game = shared_game.single();
+    for (mut transform, mut text, owner) in query.iter_mut() {
+        let player = game.get_player(*owner).unwrap();
+        text.sections[0].value = format!("{}", player.gold);
+
+        let flip = if owner.0 == 1 { -1. } else { 1. };
+        transform.translation.x = 260.0 * flip;
+        transform.translation.y = window.height() / 2.0 - 30.;
+        transform.translation.z = 2.0;
+    }
+}
+
+pub fn top_lives(
+    windows: Res<Windows>,
+    mut query: Query<(&mut Transform, &mut Text, &Owner), With<TopLives>>,
+    shared_game: Query<&SharedGame>,
+) {
+    let window = windows.get_primary().unwrap();
+    let game = shared_game.single();
+    for (mut transform, mut text, owner) in query.iter_mut() {
+        let player = game.get_player(*owner).unwrap();
+        text.sections[0].value = format!("{}", player.lives);
+
+        let flip = if owner.0 == 1 { -1. } else { 1. };
+        transform.translation.x = 520.0 * flip;
+        transform.translation.y = window.height() / 2.0 - 30.;
+        transform.translation.z = 2.0;
+    }
 }
 
 pub fn ui_egui(
