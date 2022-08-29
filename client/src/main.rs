@@ -82,8 +82,8 @@ fn mirror_hack() -> miette::Result<()> {
         .as_ref()
         .unwrap();
 
-    let y = 500.0;
-    let x = 1000.0;
+    let y = -5.0;
+    let x = -5.0;
     let p2_path = p1_path
         .iter()
         .map(|p| NetVec2(Vec2::new(x - p.0.x, y - p.0.y)))
@@ -94,13 +94,12 @@ fn mirror_hack() -> miette::Result<()> {
             return;
         }
         if e.entity_type != EntityType::Path {
-            continue;
+            return;
         }
         e.path = Some(p2_path.clone());
     });
 
-    dbg!(p1_path);
-    dbg!(p2_path);
+    defs.save();
 
     Ok(())
 }

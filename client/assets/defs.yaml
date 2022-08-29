@@ -14,39 +14,39 @@ levels:
       - 0.0
     - type: base
       position:
-      - -14.434764
-      - -3.5148182
+      - -15.72278
+      - -4.0350094
       owner: 0
     - type: spawn
       position:
-      - -18.711561
-      - -4.7282085
+      - -18.406086
+      - -0.41342163
       owner: 0
     - type: base
       position:
-      - 16.66723
-      - 0.59443474
+      - 12.242303
+      - -0.70311165
       owner: 1
     - type: spawn
       position:
-      - 16.12781
-      - -3.1479836
+      - 15.2262335
+      - -3.6459808
       owner: 1
     - texture: base-blue.png
       type: sprite
       position:
-      - 19.576706
-      - -0.99320984
+      - 8.930656
+      - 0.48346138
     - texture: base-yellow.png
       type: sprite
       position:
-      - -11.199027
-      - -1.781496
+      - -12.66565
+      - -2.5721245
     - type: path
       owner: 0
       path:
-      - - -14.61376
-        - -0.61395836
+      - - -13.39525
+        - -0.65176773
       - - -4.928365
         - -0.7430649
       - - -3.7829561
@@ -133,21 +133,101 @@ levels:
         - 2.3176155
       - - 5.9302716
         - 2.055809
-      - - 8.149933
-        - 0.38397026
+      - - 8.137384
+        - 0.16056252
     - type: path
       owner: 1
       path:
-      - - 13.32969
-        - 0.75344086
-      - - 13.22996
-        - 1.656601
-      - - 14.0379095
-        - 2.7994099
-      - - 13.962062
-        - 3.8389778
-      - - 13.996617
-        - 4.815729
+      - - 9.61376
+        - -4.3860416
+      - - -0.07163477
+        - -4.256935
+      - - -1.2170439
+        - -4.657564
+      - - -1.883259
+        - -5.506176
+      - - -1.922889
+        - -6.3266487
+      - - -1.3802645
+        - -7.071129
+      - - -0.29850864
+        - -7.4137583
+      - - 0.7655573
+        - -7.433632
+      - - 1.5779171
+        - -7.993391
+      - - 1.7605524
+        - -8.941114
+      - - 1.7298193
+        - -9.732632
+      - - 0.85042334
+        - -10.541365
+      - - -0.18165684
+        - -11.470737
+      - - -2.1600804
+        - -12.266443
+      - - -4.4012213
+        - -12.353683
+      - - -6.5983543
+        - -12.281118
+      - - -9.378734
+        - -11.480701
+      - - -10.208366
+        - -10.4826565
+      - - -10.145437
+        - -9.391296
+      - - -9.2191105
+        - -9.0695915
+      - - -8.198025
+        - -9.596834
+      - - -6.96122
+        - -10.335054
+      - - -5.620821
+        - -10.724216
+      - - -4.2148724
+        - -10.717901
+      - - -2.7391999
+        - -10.553839
+      - - -1.3406875
+        - -10.605789
+      - - -0.64924335
+        - -9.664764
+      - - -0.7614355
+        - -8.389547
+      - - -1.4699686
+        - -7.9018135
+      - - -3.8315873
+        - -9.365623
+      - - -5.112629
+        - -9.513498
+      - - -6.325927
+        - -8.395582
+      - - -6.9220743
+        - -6.9353294
+      - - -6.2768292
+        - -5.986393
+      - - -4.935491
+        - -6.168833
+      - - -4.221266
+        - -7.1556816
+      - - -3.270509
+        - -6.429081
+      - - -3.2507396
+        - -5.3413067
+      - - -4.2814436
+        - -4.324911
+      - - -5.7983704
+        - -4.1907043
+      - - -7.57354
+        - -4.828083
+      - - -8.207942
+        - -6.7378883
+      - - -8.884561
+        - -7.3176155
+      - - -10.930271
+        - -7.055809
+      - - -13.149933
+        - -5.3839703
   jam:
     name: jam
     entities:
@@ -917,19 +997,19 @@ levels:
         - -3.6978683
       server_entity_id: 109
 towers:
-  fire-boss:
-    emoji: "\U0001F52B"
-    name: fire-boss
-    title: Flaming Barbeque
+  laser-boss:
+    emoji: ✨
+    name: laser-boss
+    title: Pew Pew Surveillance Camera
     combo:
-    - fire
-    - fire
-    texture: towers/boss-fire.png
-    range: 5.0
+    - laser
+    - laser
+    texture: towers/boss-laser.png
+    range: 7.0
     size: 2.0
-    cost: 200
+    cost: 400
     reload: 1.0
-    instant_damage: 150
+    instant_damage: 750
   fire:
     emoji: "\U0001F525"
     name: fire
@@ -945,6 +1025,19 @@ towers:
     instant_damage: 20
     fire_damage_seconds: 3.0
     fire_damage_interval: 0.5
+  fire-boss:
+    emoji: "\U0001F52B"
+    name: fire-boss
+    title: Flaming Barbeque
+    combo:
+    - fire
+    - fire
+    texture: towers/boss-fire.png
+    range: 5.0
+    size: 2.0
+    cost: 200
+    reload: 1.0
+    instant_damage: 150
   cold:
     emoji: ❄️
     name: cold
@@ -960,6 +1053,19 @@ towers:
     instant_damage: 10
     cold_slowdown_amount: 1.0
     cold_slowdown_duration: 3.0
+  electric:
+    emoji: ⚡
+    name: electric
+    title: Overloaded Mobile Cell Phone
+    combo:
+    - fire
+    - cold
+    texture: towers/electric-tower.png
+    range: 5.0
+    size: 2.0
+    cost: 100
+    reload: 1.0
+    instant_damage: 100
   machine:
     emoji: "\U0001F52B"
     name: machine
@@ -971,18 +1077,18 @@ towers:
     cost: 50
     reload: 1.0
     instant_damage: 25
-  laser:
-    emoji: "\U0001F3AF"
-    name: laser
-    title: Cat Laser Toy
+  missile:
+    emoji: "\U0001F680"
+    name: missile
+    title: Fireworks Launcher
     combo:
-    - machine
-    - fire
-    texture: towers/laser-tower.png
+    - electric
+    - cold
+    texture: towers/seeking-missile.png
     range: 6.0
-    size: 1.0
-    cost: 100
-    reload: 1.0
+    size: 2.0
+    cost: 300
+    reload: 0.5
     instant_damage: 250
   electric-boss:
     emoji: "\U0001F329"
@@ -997,45 +1103,6 @@ towers:
     cost: 500
     reload: 1.0
     instant_damage: 1500
-  electric:
-    emoji: ⚡
-    name: electric
-    title: Overloaded Mobile Cell Phone
-    combo:
-    - fire
-    - cold
-    texture: towers/electric-tower.png
-    range: 5.0
-    size: 2.0
-    cost: 100
-    reload: 1.0
-    instant_damage: 100
-  missile:
-    emoji: "\U0001F680"
-    name: missile
-    title: Fireworks Launcher
-    combo:
-    - electric
-    - cold
-    texture: towers/seeking-missile.png
-    range: 6.0
-    size: 2.0
-    cost: 300
-    reload: 0.5
-    instant_damage: 250
-  laser-boss:
-    emoji: ✨
-    name: laser-boss
-    title: Pew Pew Surveillance Camera
-    combo:
-    - laser
-    - laser
-    texture: towers/boss-laser.png
-    range: 7.0
-    size: 2.0
-    cost: 400
-    reload: 1.0
-    instant_damage: 750
   cold-boss:
     emoji: "\U0001F976"
     name: cold-boss
@@ -1052,6 +1119,19 @@ towers:
     cold_slowdown_amount: 3.0
     cold_slowdown_duration: 5.0
     area: 1.0
+  laser:
+    emoji: "\U0001F3AF"
+    name: laser
+    title: Cat Laser Toy
+    combo:
+    - machine
+    - fire
+    texture: towers/laser-tower.png
+    range: 6.0
+    size: 1.0
+    cost: 100
+    reload: 1.0
+    instant_damage: 250
 creeps:
   fast:
     name: fast
@@ -1064,15 +1144,6 @@ creeps:
     cost: 100
     health: 100
     size: 2.0
-  robot:
-    name: robot
-    title: Buggy Robot
-    combo: []
-    texture: creeps/b-front.png
-    speed: 2.0
-    cost: 100
-    health: 100
-    size: 2.0
   monster:
     name: monster
     title: Baby Monster
@@ -1082,16 +1153,14 @@ creeps:
     cost: 100
     health: 100
     size: 2.0
-  cold:
-    name: cold
-    title: Coldernetic
-    combo:
-    - monster
-    - robot
-    texture: creeps/mb-front.png
+  robot:
+    name: robot
+    title: Buggy Robot
+    combo: []
+    texture: creeps/b-front.png
     speed: 2.0
     cost: 100
-    health: 250
+    health: 100
     size: 2.0
   strong:
     name: strong
@@ -1104,236 +1173,55 @@ creeps:
     cost: 100
     health: 250
     size: 2.0
+  cold:
+    name: cold
+    title: Coldernetic
+    combo:
+    - monster
+    - robot
+    texture: creeps/mb-front.png
+    speed: 2.0
+    cost: 100
+    health: 250
+    size: 2.0
 textures:
-  ui/loading-animation.png:
+  Yellow.png:
     size:
-    - 6262.0
-    - 2514.0
-  ui/top-icons.png:
-    size:
-    - 1715.0
-    - 73.0
-  logo.png:
-    size:
-    - 700.0
-    - 77.0
-  towers/boss-cold.png:
-    size:
-    - 488.0
-    - 617.0
-  creeps/bigboss-side.png:
-    size:
-    - 914.0
-    - 540.0
-  ground.png:
-    size:
-    - 256.0
-    - 256.0
-  harold.png:
-    size:
-    - 846.0
-    - 1199.0
-  towers/boss-laser.png:
-    size:
-    - 616.0
-    - 365.0
-  grass.png:
-    size:
-    - 256.0
-    - 256.0
-  creeps/bb-side.png:
-    size:
-    - 564.0
-    - 506.0
-  creeps/m-back.png:
-    size:
-    - 347.0
-    - 335.0
-  TESTDIS.png:
-    size:
-    - 572.0
+    - 578.0
     - 600.0
-  props.png:
-    size:
-    - 4096.0
-    - 4096.0
-  tooltip.png:
-    size:
-    - 256.0
-    - 256.0
-  creeps/mm-side.png:
-    size:
-    - 347.0
-    - 360.0
-  base-blue.png:
-    size:
-    - 1000.0
-    - 816.0
-  menus/splash.png:
-    size:
-    - 933.0
-    - 526.0
-  creeps/mb-side.png:
-    size:
-    - 347.0
-    - 405.0
-  creeps/m-front.png:
-    size:
-    - 347.0
-    - 335.0
-  item-yellow.png:
-    size:
-    - 194.0
-    - 272.0
-  creeps/bigboss-back.png:
-    size:
-    - 391.0
-    - 841.0
-  animations/loading-animation.png:
-    size:
-    - 6262.0
-    - 2514.0
-  editor/path-start.png:
-    size:
-    - 256.0
-    - 256.0
-  click-tooltip.png:
-    size:
-    - 256.0
-    - 256.0
   towers/laser-tower.png:
     size:
     - 334.0
     - 287.0
-  towers/orbital-cold.png:
-    size:
-    - 785.0
-    - 488.0
-  tree.png:
-    size:
-    - 984.0
-    - 1120.0
-  menus/name.png:
-    size:
-    - 1920.0
-    - 1080.0
-  towers/cold-tower.png:
-    size:
-    - 334.0
-    - 379.0
-  fence-blue.png:
-    size:
-    - 133.0
-    - 301.0
-  fence-blue_1.png:
-    size:
-    - 132.0
-    - 301.0
-  creeps/mb-back.png:
-    size:
-    - 347.0
-    - 426.0
-  menus/logo.png:
-    size:
-    - 700.0
-    - 77.0
-  towers/machine-gun.png:
-    size:
-    - 334.0
-    - 444.0
-  creeps/bigboss-front.png:
-    size:
-    - 392.0
-    - 564.0
-  towers/seeking-missile.png:
-    size:
-    - 510.0
-    - 483.0
-  editor/buildable-circle.png:
-    size:
-    - 256.0
-    - 256.0
-  Outline.png:
-    size:
-    - 360.0
-    - 531.0
   editor/home.png:
     size:
     - 256.0
     - 256.0
-  creeps/b-front.png:
-    size:
-    - 558.0
-    - 436.0
-  hover.png:
-    size:
-    - 256.0
-    - 256.0
-  editor/path-end.png:
-    size:
-    - 256.0
-    - 256.0
-  creeps/mm-front.png:
-    size:
-    - 347.0
-    - 362.0
-  gnome.png:
-    size:
-    - 263.0
-    - 582.0
-  towers/orbital-electric.png:
-    size:
-    - 719.0
-    - 498.0
-  creeps/mb-front.png:
-    size:
-    - 347.0
-    - 423.0
-  tower.png:
-    size:
-    - 280.0
-    - 311.0
-  towers/boss-fire.png:
-    size:
-    - 347.0
-    - 633.0
-  creeps/bb-back.png:
-    size:
-    - 489.0
-    - 583.0
-  towers/orbital-fire.png:
-    size:
-    - 540.0
-    - 498.0
-  towers/boss-electric.png:
-    size:
-    - 524.0
-    - 536.0
-  creeps/b-back.png:
-    size:
-    - 559.0
-    - 407.0
-  ui/top-background-gradient.png:
-    size:
-    - 550.0
-    - 230.0
-  towers/electric-tower.png:
-    size:
-    - 556.0
-    - 452.0
   base-yellow.png:
     size:
     - 993.0
     - 816.0
-  AAAAA.png:
+  creeps/mb-back.png:
     size:
-    - 352.0
-    - 523.0
-  towers/boss-of-bosses.png:
+    - 347.0
+    - 426.0
+  ui/loading-animation.png:
     size:
-    - 911.0
-    - 676.0
-  editor/spawn-point.png:
+    - 6262.0
+    - 2514.0
+  creeps/b-back.png:
+    size:
+    - 559.0
+    - 407.0
+  animations/loading-animation.png:
+    size:
+    - 6262.0
+    - 2514.0
+  fence-blue_1.png:
+    size:
+    - 132.0
+    - 301.0
+  editor/path-start.png:
     size:
     - 256.0
     - 256.0
@@ -1341,43 +1229,235 @@ textures:
     size:
     - 572.0
     - 600.0
-  menus/main-menu.png:
-    size:
-    - 1920.0
-    - 1080.0
-  Yellow.png:
-    size:
-    - 578.0
-    - 600.0
-  item-blue.png:
-    size:
-    - 296.0
-    - 338.0
-  creeps/bb-front.png:
-    size:
-    - 489.0
-    - 449.0
-  towers/flame-thrower.png:
-    size:
-    - 376.0
-    - 521.0
-  creeps/m-side.png:
-    size:
-    - 347.0
-    - 333.0
   creeps/mm-back.png:
     size:
     - 347.0
     - 362.0
-  editor/path-waypoint.png:
+  logo.png:
+    size:
+    - 700.0
+    - 77.0
+  grass.png:
     size:
     - 256.0
     - 256.0
-  menus/loading-animation.png:
+  towers/boss-cold.png:
     size:
-    - 6262.0
-    - 2514.0
+    - 488.0
+    - 617.0
+  editor/spawn-point.png:
+    size:
+    - 256.0
+    - 256.0
+  towers/boss-laser.png:
+    size:
+    - 616.0
+    - 365.0
+  creeps/bigboss-back.png:
+    size:
+    - 391.0
+    - 841.0
+  creeps/bb-front.png:
+    size:
+    - 489.0
+    - 449.0
+  creeps/mm-front.png:
+    size:
+    - 347.0
+    - 362.0
+  towers/seeking-missile.png:
+    size:
+    - 510.0
+    - 483.0
+  creeps/m-front.png:
+    size:
+    - 347.0
+    - 335.0
+  hover.png:
+    size:
+    - 256.0
+    - 256.0
+  towers/boss-of-bosses.png:
+    size:
+    - 911.0
+    - 676.0
+  creeps/mb-front.png:
+    size:
+    - 347.0
+    - 423.0
+  creeps/m-side.png:
+    size:
+    - 347.0
+    - 333.0
+  Outline.png:
+    size:
+    - 360.0
+    - 531.0
+  TESTDIS.png:
+    size:
+    - 572.0
+    - 600.0
+  towers/cold-tower.png:
+    size:
+    - 334.0
+    - 379.0
+  item-yellow.png:
+    size:
+    - 194.0
+    - 272.0
+  towers/orbital-electric.png:
+    size:
+    - 719.0
+    - 498.0
+  creeps/bigboss-side.png:
+    size:
+    - 914.0
+    - 540.0
+  towers/electric-tower.png:
+    size:
+    - 556.0
+    - 452.0
   creeps/b-side.png:
     size:
     - 489.0
     - 506.0
+  fence-blue.png:
+    size:
+    - 133.0
+    - 301.0
+  creeps/bigboss-front.png:
+    size:
+    - 392.0
+    - 564.0
+  ground.png:
+    size:
+    - 256.0
+    - 256.0
+  menus/name.png:
+    size:
+    - 1920.0
+    - 1080.0
+  creeps/bb-side.png:
+    size:
+    - 564.0
+    - 506.0
+  creeps/mb-side.png:
+    size:
+    - 347.0
+    - 405.0
+  tooltip.png:
+    size:
+    - 256.0
+    - 256.0
+  click-tooltip.png:
+    size:
+    - 256.0
+    - 256.0
+  AAAAA.png:
+    size:
+    - 352.0
+    - 523.0
+  menus/loading-animation.png:
+    size:
+    - 6262.0
+    - 2514.0
+  towers/orbital-fire.png:
+    size:
+    - 540.0
+    - 498.0
+  menus/logo.png:
+    size:
+    - 700.0
+    - 77.0
+  creeps/bb-back.png:
+    size:
+    - 489.0
+    - 583.0
+  editor/path-waypoint.png:
+    size:
+    - 256.0
+    - 256.0
+  gnome.png:
+    size:
+    - 263.0
+    - 582.0
+  ui/top-background-gradient.png:
+    size:
+    - 550.0
+    - 230.0
+  menus/splash.png:
+    size:
+    - 933.0
+    - 526.0
+  base-blue.png:
+    size:
+    - 1000.0
+    - 816.0
+  props.png:
+    size:
+    - 4096.0
+    - 4096.0
+  tree.png:
+    size:
+    - 984.0
+    - 1120.0
+  harold.png:
+    size:
+    - 846.0
+    - 1199.0
+  tower.png:
+    size:
+    - 280.0
+    - 311.0
+  towers/orbital-cold.png:
+    size:
+    - 785.0
+    - 488.0
+  menus/main-menu.png:
+    size:
+    - 1920.0
+    - 1080.0
+  creeps/mm-side.png:
+    size:
+    - 347.0
+    - 360.0
+  creeps/m-back.png:
+    size:
+    - 347.0
+    - 335.0
+  towers/boss-electric.png:
+    size:
+    - 524.0
+    - 536.0
+  ui/top-icons.png:
+    size:
+    - 1715.0
+    - 73.0
+  editor/buildable-circle.png:
+    size:
+    - 256.0
+    - 256.0
+  editor/path-end.png:
+    size:
+    - 256.0
+    - 256.0
+  item-blue.png:
+    size:
+    - 296.0
+    - 338.0
+  towers/boss-fire.png:
+    size:
+    - 347.0
+    - 633.0
+  creeps/b-front.png:
+    size:
+    - 558.0
+    - 436.0
+  towers/flame-thrower.png:
+    size:
+    - 376.0
+    - 521.0
+  towers/machine-gun.png:
+    size:
+    - 334.0
+    - 444.0
